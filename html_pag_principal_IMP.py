@@ -2,6 +2,7 @@ import obj_sessao
 import obj_usuario
 import html_pag_generica
 import html_elem_span
+import html_elem_video
 from util_testes import erro_prog, mostra
 
 # Outras interfaces usadas por este módulo:
@@ -27,13 +28,7 @@ def gera(ses, erros):
 
   bloco_texto1 = html_elem_span.gera(estilo, texto1)
   bloco_texto2 = html_elem_span.gera(estilo, texto2)
-  bloco_video = \
-    '\n<br/>\n' + \
-    '  <video style="width:calc(20vw); height:calc(10vw + 160px); " controls>\n' + \
-    '    <source src="videos/virus.mp4" type="video/mp4">\n' + \
-    '    Your browser does not support the video tag.\n' + \
-    '  </video>\n<br/>\n'
-
+  bloco_video = html_elem_video.gera("virus.mp4", "virus", 400)
   bloco_texto3 = html_elem_span.gera(estilo, texto3)
   conteudo = bloco_texto1 + bloco_texto2 + bloco_video + bloco_texto3
   pagina = html_pag_generica.gera(ses, conteudo, erros)
