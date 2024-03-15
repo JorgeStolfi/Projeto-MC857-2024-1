@@ -1,5 +1,6 @@
 import obj_usuario
 import obj_sessao
+import obj_video
 from util_valida_campo import ErroAtrib
 
 import html_pag_ver_usuario
