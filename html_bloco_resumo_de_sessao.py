@@ -3,8 +3,8 @@ import html_bloco_resumo_de_sessao_IMP
 def gera(ses, bt_ver, bt_fechar):
   """Retorna HTML que descreve dados principais de uma
   sessão: identificador da sessão, usuário dono da sessão, um booleano
-  indicando se a sessão está aberta ou não, o cookie da sessão, o identificador
-  do carrinho associado à sessão e a data de criação da sessão. Além disso,
+  indicando se a sessão está aberta ou não, o cookie da sessão e
+  a data de criação da sessão. Além disso,
   botões para ver detalhes da sessão e para fechá-la (caso esteja aberta)
   também são retornados, de acordo com os valores dos parâmetros {bt_ver} e
   {bt_fechar}
