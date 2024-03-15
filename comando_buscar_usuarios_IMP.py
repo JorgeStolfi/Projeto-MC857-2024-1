@@ -30,7 +30,7 @@ def processa(ses, cmd_args):
       id_usr = obj_usuario.busca_por_nome(cmd_args['CPF'])
     else:
       # Deve haver um único usuário com esse email
-      lista_ids_usr = obj_usuario.busca_por_email(cmd_args['email'])
+      id_usr = obj_usuario.busca_por_email(cmd_args['email'])
  
     if id_usr != None:
       lista_ids_usr.append(id_usr)
