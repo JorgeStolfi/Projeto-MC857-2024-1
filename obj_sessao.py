@@ -1,8 +1,8 @@
 # Este módulo define a classe de objetos {obj_sessao.Classe}, que
-# representa uma sessão de 'login' de um cliente da loja virtual.
+# representa uma sessão de 'login' de um usuário do website.
 #
-# Nas funções abaixo, {usr} é um objeto da classe {obj_usuario.Classe}
-# que representa o cliente.
+# Nas funções abaixo, o parâmetro {usr} é um objeto da classe
+# {obj_usuario.Classe} que representa o usuario.
 
 # Implementaçao deste módulo:
 import obj_sessao_IMP
@@ -12,12 +12,11 @@ class Classe(obj_sessao_IMP.Classe_IMP):
   servidor.  Os atributos deste objeto, por enquanto, são:
 
     'usr'      {obj_usuario.Classe} o usuário que fez login na sessão.
-    'abrt'     {bool}       estado da sessao.
-    'cookie'   {str}        cookie da sessao.
-    'criacao'  {str}        data da criação da sessão no formato ISO 
-                            (aaaa-mm-dd hh:mm:ss fuso).
+    'abrt'     {bool}               estado da sessao.
+    'cookie'   {str}                cookie da sessao.
+    'criacao'  {str}                data da criação da sessão no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
 
-  Outros atributos (data, IP, etc.) poderão ser acrescentados no futuro.
+  Outros atributos (IP, etc.) poderão ser acrescentados no futuro.
 
   Além desses atributos, cada sessão também tem um identificador de
   sessão, uma string da forma "S-{NNNNNNNN}" onde {NNNNNNNN} é o índice
@@ -103,22 +102,22 @@ def eh_administrador(ses):
   é {None}."""
   return obj_sessao_IMP.eh_administrador(ses)
 
-def busca_por_identificador(id):
-  """Localiza uma sessao com identificador {id} (uma string da forma
+def busca_por_identificador(id_ses):
+  """Localiza uma sessao com identificador {id_ses} (uma string da forma
   "S-{NNNNNNNN}"), e devolve a mesma na forma de um objeto da classe {obj_sessao.Classe}.
-  Se {id} é {None} ou tal sessão não existe, devolve {None}."""
-  return obj_sessao_IMP.busca_por_identificador(id)
+  Se {id_ses} é {None} ou tal sessão não existe, devolve {None}."""
+  return obj_sessao_IMP.busca_por_identificador(id_ses)
 
 def busca_por_campo(campo, val):
   """Localiza todas as sessões cujo atributo {campo} seja {valor}. Retorna a lista de ids
   dessas sessões."""
   return obj_sessao_IMP.busca_por_campo(campo, val)  
 
-def busca_por_usuario(id):
-  """Localiza todas as sessões do usuário com identificador {id} (uma string da forma
+def busca_por_usuario(id_usr):
+  """Localiza todas as sessões do usuário com identificador {id_usr} (uma string da forma
   "U-{NNNNNNNN}")Retorna uma lista de identificadores dessas sessões.
-  Se {id} é {None} ou não existem tais sessões, devolve uma lista vazia."""
-  return obj_sessao_IMP.busca_por_usuario(id)
+  Se {id_usr} é {None} ou não existem tais sessões, devolve uma lista vazia."""
+  return obj_sessao_IMP.busca_por_usuario(id_usr)
 
 def muda_atributos(ses, atrs_mod_mem):
   """Recebe um dicionário Python {atrs_mod_mem} cujas chaves são um subconjunto
@@ -137,16 +136,20 @@ def fecha(ses):
 
 # DEPURAÇÂO
 
-def verifica(ses, id, atrs):
-  """Faz testes de consistência básicos de um objeto {ses} de classe {obj_sessao.Classe},
-  dados o identificador esperado {id}, e os atributos esperados {atrs}.
-
-  Especificamente, verifica as funções {obtem_identificador(ses)},
-  {obtem_atributos(obj)} e {busca_por_identificador(id)}.
+def verifica_criacao(ses, id_ses, atrs):
+  """Faz testes de consistência básicos de um objeto {ses} de classe {obj_sessao.Classe}.
+  Tipicamente usada para testar a função {cria}
+  
+  Especificamente, testa se {obtem_identificador(ses)} devolve
+  o identificador esperado {id_ses}, {obtem_atributos(ses)} devolve 
+  os atributos esperados {atrs}, e {busca_por_identificador(id_ses)}
+  devolve o próprio {ses}.
+  
+  Os atributos {atrs} NÃO devem incluir a data 'criacao'.
 
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
-  return obj_sessao_IMP.verifica(ses, id, atrs)
+  return obj_sessao_IMP.verifica_criacao(ses, id_ses, atrs)
 
 def cria_testes(verb):
   """Limpa a tabela de sessoes com {inicializa(True)}, e cria três sessões
@@ -161,8 +164,8 @@ def cria_testes(verb):
   para cada objeto criado."""
   obj_sessao_IMP.cria_testes(verb)
 
-def diagnosticos(val):
+def liga_diagnosticos(val):
   """Habilita (se {val=True}) ou desabilita (se {val=False}) a
   impressão em {sys.stderr} de mensagens de diagnóstico pelas
   funções deste módulo."""
-  obj_sessao_IMP.diagnosticos(val)
+  obj_sessao_IMP.liga_diagnosticos(val)

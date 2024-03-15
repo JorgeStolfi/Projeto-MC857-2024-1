@@ -12,14 +12,14 @@ import sys
 def msg_campo_obrigatorio(nome_do_campo):
   return "O campo %s é obrigatório." % nome_do_campo
 
-def processa(ses, args):
+def processa(ses, cmd_args):
   # Tenta criar o usuário:
   try:
-    obj_usuario.confere_e_elimina_conf_senha(args)
-    usr = obj_usuario.cria(args)
+    obj_usuario.confere_e_elimina_conf_senha(cmd_args)
+    usr = obj_usuario.cria(cmd_args)
     pag = html_pag_login.gera(ses, None)
   except ErroAtrib as ex:
     erros = ex.args[0]
     # Repete a página de cadastrar com os mesmos argumentos e mens de erro:
-    pag = html_pag_cadastrar_usuario.gera(ses, args, erros)
+    pag = html_pag_cadastrar_usuario.gera(ses, cmd_args, erros)
   return pag

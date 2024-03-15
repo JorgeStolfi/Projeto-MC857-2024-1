@@ -7,14 +7,14 @@ def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio)
   ht_linhas = " rows=\"" + "10" + "\""
   ht_maxCarac = " maxlength=\"" + "5000" + "\""
   ht_nome = " name=\"" + nome + "\""
-  ht_id = " id=\"" + nome + ("." + val_ini if val_ini != None else "") + "\""
+  ht_id_campo = " id=\"" + nome + ("." + val_ini if val_ini != None else "") + "\""
 
   if val_ini != None and dica != None:
     erro_prog("{val_ini} e {dica} são mutuamente exclusivos")
   if val_ini == None and not editavel:
     erro_prog("{val_ini} não pode ser {None} se o campo não é editável")
 
-  ht_val_ini = ( " value =\"" + str(val_ini) + "\"" if val_ini != None else "" )
+  ht_val_ini = ( " value =\"" + val_ini + "\"" if val_ini != None else "" )
 
   ht_obrigatorio = (" required" if obrigatorio else "")
   ht_readonly = ( " readonly" if not editavel else "" )
@@ -27,6 +27,7 @@ def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio)
       ht_linhas + \
       ht_maxCarac + \
       ht_nome + \
+      ht_id_campo + \
       ht_val_ini + \
       ht_readonly + \
       ht_readonlybackground + \

@@ -3,12 +3,12 @@
 
 import comando_cadastrar_usuario_IMP
 
-def processa(ses, args):
+def processa(ses, cmd_args):
   """Esta função é chamada quando o usuário aperta o botão "Cadastrar"
   em um formulário para cadastrar um novo usuário, após ter preenchido
   os campos do mesmo.
   
-  Os dados do novo usuário devem estar definidos no dicionário {args}.
+  Os dados do novo usuário devem estar definidos no dicionário {cmd_args}.
   Deve haver um campo 'senha' com valor não nulo e um campo 'conf_senha'
   com o mesmo valor.
   
@@ -21,4 +21,4 @@ def processa(ses, args):
   mesmo formulário de cadastrar usuário, com os mesmos
   dados nos campos preenchidos, com uma ou mais mensagens de erro
   adequadas."""
-  return comando_cadastrar_usuario_IMP.processa(ses, args)
+  return comando_cadastrar_usuario_IMP.processa(ses, cmd_args)

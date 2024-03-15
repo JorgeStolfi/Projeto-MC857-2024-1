@@ -13,7 +13,7 @@ import sys
 
 # VARIÁVEIS GLOBAIS DO MÓDULO
   
-raiz_diags = False
+orz_debug = False
   # Quando {True}, mostra comandos e resultados em {stderr}.
 
 class Classe_IMP:
@@ -25,8 +25,8 @@ class Classe_IMP:
 # Implementação das funções:
 
 def cria(atrs_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem):
-  global raiz_diags
-  if raiz_diags: mostra(0,"objeto_IMP.cria(" + str(atrs_mem) + ") ...")
+  global orz_debug
+  if orz_debug: mostra(0,"obj_raiz_IMP.cria(" + str(atrs_mem) + ") ...")
 
   # Converte atibutos para formato SQL.
   atrs_SQL = db_conversao_sql.dict_mem_para_dict_SQL(atrs_mem, colunas, False)
@@ -35,7 +35,6 @@ def cria(atrs_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem):
   return obj
 
 def muda_atributos(obj, mods_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem):
-  global raiz_diags
 
   # Converte valores de formato memória para formato SQL.
   mods_SQL = db_conversao_sql.dict_mem_para_dict_SQL(mods_mem, colunas, True)
@@ -44,36 +43,30 @@ def muda_atributos(obj, mods_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem
   return
 
 def obtem_identificador(obj):
-  global raiz_diags
   assert obj != None
   return obj.id
 
 def obtem_atributos(obj):
-  global raiz_diags
   return obj.atrs.copy()
 
 def obtem_atributo(obj, chave):
-  global raiz_diags
   return obj.atrs[chave]
 
-def busca_por_identificador(id, cache, nome_tb, letra_tb, colunas, def_obj_mem):
-  global raiz_diags
-  if id == None:
+def busca_por_identificador(id_obj, cache, nome_tb, letra_tb, colunas, def_obj_mem):
+  if id_obj == None:
     obj = None
   else:
-    obj = db_tabela_generica.busca_por_identificador(nome_tb, cache, letra_tb, colunas, def_obj_mem, id)
+    obj = db_tabela_generica.busca_por_identificador(nome_tb, cache, letra_tb, colunas, def_obj_mem, id_obj)
   return obj
 
 def busca_por_campo(chave, val, unico, cache, nome_tb, letra_tb, colunas):
-  global raiz_diags
-  ids = db_tabela_generica.busca_por_campo(nome_tb, letra_tb, colunas, chave, val, None)
+  lista_ids = db_tabela_generica.busca_por_campo(nome_tb, letra_tb, colunas, chave, val, None)
   if unico:
-    return util_identificador.unico_elemento(ids)
+    return util_identificador.unico_elemento(lista_ids)
   else:
-    return ids
+    return lista_ids
     
 def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
-  global raiz_diags
   res = db_tabela_generica.busca_por_campos(nome_tb, letra_tb, colunas, args, None)
   if res == None: res = [].copy() # Just in case.
   if type(res) is list or type(res) is tuple:
@@ -85,39 +78,44 @@ def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
 
 # FUNÇÕES PARA DEPURAÇÃO
 
-def diagnosticos(val):
-  global raiz_diags
-  raiz_diags = val
+def liga_diagnosticos(val):
+  global orz_debug
+  orz_debug = val
   return
 
-def verifica(obj, tipo, id, atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem): 
-  global raiz_diags
-  ok = True # Este teste deu OK?
+def verifica_criacao(obj, tipo, id_obj, atrs, ignore, cache, nome_tb, letra_tb, colunas, def_obj_mem): 
+  if orz_debug: sys.stderr.write("  > {obj_raiz.obtem_verifica_criacao()}:\n")
 
+  ok = True # Este teste deu OK?
   if obj == None:
-    if raiz_diags: sys.stderr.write("None\n")
+    if orz_debug: sys.stderr.write("    > obj == None\n")
     pass
   elif not type(obj) is tipo:
     aviso_prog("tipo do objeto " + str(type(obj)) + " inválido", True)
     ok = False
   else:
-    if raiz_diags: sys.stderr.write("  testando {obtem_identificador()}:\n")
-    id_cmp = obtem_identificador(obj)
-    if id_cmp != id:
-      aviso_prog("retornou " + str(id_cmp) + ", deveria ter retornado " + str(id), True)
+    if orz_debug: sys.stderr.write("    > testando {obj_raiz.obtem_identificador()}:\n")
+    id_obj_cmp = obtem_identificador(obj)
+    if id_obj_cmp != id_obj:
+      aviso_prog("retornou " + str(id_obj_cmp) + ", deveria ter retornado " + str(id_obj), True)
       ok = False
 
-    if raiz_diags: sys.stderr.write("  testando {obtem_atributos()}:\n")
+    if orz_debug: sys.stderr.write("    > testando {obj_raiz.obtem_atributos()}:\n")
     atrs_cmp = obtem_atributos(obj)
     atrs_esp = atrs.copy()
-    if 'criacao' in atrs_cmp: del atrs_cmp['criacao'] # Introduzido por {cria}.
-    if 'criacao' in atrs_esp: del atrs_esp['criacao'] # Introduzido por {cria}.
+    
+    # Remove atributos que podem diferir:
+    if ignore != None:
+      for chave in ignore:
+        if chave in atrs_cmp: del atrs_cmp[chave]
+        if chave in atrs_esp: del atrs_esp[chave]
+      
     if atrs_cmp != atrs_esp:
       aviso_prog("retornou " + str(atrs_cmp) + ", deveria ter retornado " + str(atrs_esp), True)
       ok = False
     
-    if raiz_diags: sys.stderr.write("testando {busca_por_identificador()}:\n")
-    obj1 = busca_por_identificador(id, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+    if orz_debug: sys.stderr.write("  > testando {obj_raiz.busca_por_identificador()}:\n")
+    obj1 = busca_por_identificador(id_obj, cache, nome_tb, letra_tb, colunas, def_obj_mem)
     if obj1 != obj:
       aviso_prog("retornou " + str(obj1) + ", deveria ter retornado " + str(obj), True)
       ok = False

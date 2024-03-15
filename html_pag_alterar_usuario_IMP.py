@@ -2,13 +2,13 @@ import html_form_criar_alterar_usuario
 import html_pag_generica
 import html_elem_button_simples
 
-def gera(ses, id_usuario, atrs, admin, erros):
+def gera(ses, id_usr, atrs, admin, erros):
   # Constrói formulário com dados:
-  ht_form = html_form_criar_alterar_usuario.gera(id_usuario, atrs, admin, "Confirmar alterações", 'alterar_usuario')
+  ht_form = html_form_criar_alterar_usuario.gera(id_usr, atrs, admin, "Confirmar alterações", 'alterar_usuario')
 
   # Constroi botões de ações adicionais na página
-  if admin and id_usuario != None:
-    ht_botao_sessoes = html_elem_button_simples.gera("Ver sessões", "ver_sessoes", {'id_usuario': id_usuario}, '#eeee55')
+  if admin and id_usr != None:
+    ht_botao_sessoes = html_elem_button_simples.gera("Ver sessões", "ver_sessoes", {'id_usr': id_usr}, '#eeee55')
   else:
     ht_botao_sessoes = ""
     

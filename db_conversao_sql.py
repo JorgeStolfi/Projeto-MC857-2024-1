@@ -24,7 +24,7 @@ def valor_mem_para_valor_SQL(nome, val_mem, tipo_mem, tipo_SQL, nulo_ok):
   em particular, se o tipo de {val_mem} for uma lista, tupla, ou dicionário."""
   return db_conversao_sql_IMP.valor_mem_para_valor_SQL(nome, val_mem, tipo_mem, tipo_SQL, nulo_ok)
  
-def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, id_para_objeto):
+def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, identificador_para_objeto):
   """Converte um valor de atributo {val_SQL} do tipo {tipo_SQL} usado na base 
   de dados para um valor Python de tipo {tipo_mem}, como ficaria na 
   memória.
@@ -34,7 +34,7 @@ def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, id_para
   convenção 0={False}, 1={True}. Se {tipo_mem} é uma subclasse de {obj_raiz.Classe}, o 
   {tipo_SQL} deve ser 'TEXT', e seu valor deve ser o identificador "{L}-{NNNNNNNN}"
   de um objeto dessa classe, que será devolvido.  Neste último caso,
-  o objeto será obtido pela função {id_para_objeto(val_SQL)}.
+  o objeto será obtido pela função {identificador_para_objeto(val_SQL)}.
   
   Se o parametro {nulo_ok} for {True}, o valor {val_mem} pode ser {None},
   e nesse caso o resultado será {None}.  Se {nulo_ok} for {False}, o
@@ -43,7 +43,7 @@ def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, id_para
   O parâmetro {nome} é usado apenas para formar mensagens de erro.
   Esta função aborta com erro se os dados forem inválidos;
   em particular, se o {tipo_mem} for lista, tupla, ou dicionário."""
-  return db_conversao_sql_IMP.valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, id_para_objeto)
+  return db_conversao_sql_IMP.valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, identificador_para_objeto)
   
 # CONVERSÂO DE DICIONÁRIOS
 # 
@@ -77,7 +77,7 @@ def dict_mem_para_dict_SQL(dic_mem, cols, falta_ok):
   correspondente. """
   return db_conversao_sql_IMP.dict_mem_para_dict_SQL(dic_mem, cols, falta_ok)
   
-def dict_SQL_para_dict_mem(dic_SQL, cols, falta_ok, id_para_objeto):
+def dict_SQL_para_dict_mem(dic_SQL, cols, falta_ok, identificador_para_objeto):
   """Supõe que {dic_SQL} é um dicionário Python com nomes
   e valores extraídos de uma linha de uma tabela da 
   base de dados. Converte os mesmos para nomes e valores 
@@ -92,5 +92,5 @@ def dict_SQL_para_dict_mem(dic_SQL, cols, falta_ok, id_para_objeto):
   
   Se houver violações de limites de valores, ou valores forem indevidamente omitidos,
   a função aborta com erro."""
-  return db_conversao_sql_IMP.dict_SQL_para_dict_mem(dic_SQL, cols, falta_ok, id_para_objeto)
+  return db_conversao_sql_IMP.dict_SQL_para_dict_mem(dic_SQL, cols, falta_ok, identificador_para_objeto)
   

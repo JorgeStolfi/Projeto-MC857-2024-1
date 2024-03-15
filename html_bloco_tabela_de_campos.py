@@ -17,7 +17,7 @@ def gera(dados_linhas, atrs, admin, ignora_admin=False):
   dicionário {atrs}.
   
   O parâmetro booleano {admin} diz se o usuário
-  que pediu o formulário é administrador ({True}) ou cliente ({False}).
+  que pediu o formulário é administrador ({True}) ou usuário comum ({False}).
   
   O parâmetro {ignora_admin} tem valor default {False}. Se o seu valor for passado
   como {True}, o valor do parâmetro {admin} será ignorado.

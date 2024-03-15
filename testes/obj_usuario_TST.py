@@ -7,11 +7,11 @@ import sys
 from util_testes import erro_prog, aviso_prog, mostra
 
 # ----------------------------------------------------------------------
-sys.stderr.write("Conectando com base de dados...\n")
+sys.stderr.write("  Conectando com base de dados...\n")
 db_base_sql.conecta("DB",None,None)
 
 # ----------------------------------------------------------------------
-sys.stderr.write("Inicializando módulo {usuario}, limpando tabela:\n")
+sys.stderr.write("  Inicializando módulo {usuario}, limpando tabela:\n")
 obj_usuario.inicializa_modulo(True)
 
 # ----------------------------------------------------------------------
@@ -24,13 +24,13 @@ def verifica_usuario(rotulo, usr, ident, atrs):
   {ident} e {atrs} esperados."""
   global ok_global
 
-  sys.stderr.write("%s\n" % ("-" * 70))
-  sys.stderr.write("verificando usuário %s\n" % rotulo)
-  ok = obj_usuario.verifica(usr, ident, atrs)
+  sys.stderr.write("  %s\n" % ("-" * 70))
+  sys.stderr.write("  verificando usuário %s\n" % rotulo)
+  ok = obj_usuario.verifica_criacao(usr, ident, atrs)
 
   if usr != None and type(usr) is obj_usuario.Classe:   
     # ----------------------------------------------------------------------
-    sys.stderr.write("testando {busca_por_email()}:\n")
+    sys.stderr.write("  testando {obj_usuario.busca_por_email()}:\n")
     em1 = atrs['email']
     ident1 = obj_usuario.busca_por_email(em1)
     if ident1 != ident:
@@ -41,7 +41,7 @@ def verifica_usuario(rotulo, usr, ident, atrs):
     aviso_prog("teste falhou",True)
     ok_global = False
 
-  sys.stderr.write("%s\n" % ("-" * 70))
+  sys.stderr.write(  "%s\n" % ("-" * 70))
   return
  
 def testa_cria_usuario(rotulo, ident, atrs):
@@ -51,7 +51,7 @@ def testa_cria_usuario(rotulo, ident, atrs):
   return usr
  
 # ----------------------------------------------------------------------
-sys.stderr.write("testando {obj_usuario.cria}:\n")
+sys.stderr.write("  testando {obj_usuario.cria}:\n")
 usr1_atrs = {
   'nome': "José Primeiro", 
   'senha': "11111111", 
@@ -73,11 +73,12 @@ uident2 = "U-00000002"
 usr2 = testa_cria_usuario("usr2", uident2, usr2_atrs)
 
 # ----------------------------------------------------------------------
-sys.stderr.write("testando {obj_usuario.muda_atributos}:\n")
+sys.stderr.write("  testando {obj_usuario.muda_atributos}:\n")
 
+# Alteração OK
 usr1_mods = {
   'nome': "Josegrosso de Souza",
-  'email': "grosso@hotmail.com"
+  'senha': "10101010"
 }
 obj_usuario.muda_atributos(usr1, usr1_mods)
 usr1_d_atrs = usr1_atrs
@@ -102,6 +103,6 @@ if type(usr2) is obj_usuario.Classe:
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Teste terminou sem detectar erro\n")
+  sys.stderr.write("Testes terminados normalmente.\n")
 else:
   erro_prog("- teste falhou")

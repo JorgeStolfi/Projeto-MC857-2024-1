@@ -108,10 +108,10 @@ def acrescenta(nome_tb, cache, let, cols, def_obj, atrs_SQL):
   deve ser consistente com os tipo SQL especificado no parâmetro {cols}. 
   Devolve o objeto criado {obj}.
   
-  O identificador {id} do objeto será "{let}-{ind}", onde {ind} é o
+  O identificador {id_obj} do objeto será "{let}-{ind}", onde {ind} é o
   índice da linha correspondente na tabela, formatado em 8 dígitos. 
   
-  A função chamará {obj=def_obj(None,id,atrs_SQL)} para criar o objeto
+  A função chamará {obj=def_obj(None,id_obj,atrs_SQL)} para criar o objeto
   {obj} na memória, depois de acrescentar a linha no banco de dados mas
   antes de atualizar o cache."""
   return db_tabela_generica_IMP.acrescenta(nome_tb, cache, let, cols, def_obj, atrs_SQL)

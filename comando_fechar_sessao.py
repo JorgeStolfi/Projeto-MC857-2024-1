@@ -2,15 +2,15 @@
 
 import comando_fechar_sessao_IMP
 
-def processa(ses, args):
+def processa(ses, cmd_args):
   """Esta função é chamada quando um administrador aperta o botão "Fechar sessão"
   durante a visualização de um objeto sessão.
   
   A sessão {ses} não pode ser {None}, e deve estar aberta. O dicionário
-  {args} deve conter o campo 'id_sessao' com o ID da sessão a ser fechada.
+  {cmd_args} deve conter o campo 'id_ses' com o ID da sessão a ser fechada.
   
-  A função fecha a sessão cujo ID é args['id_sessao'] e retorna o HTML da página 
-  principal (homepage) da loja. 
+  A função fecha a sessão cujo ID é {cmd_args['id_ses']}
+  e retorna o HTML da página principal (homepage) da loja. 
 
   Caso a sessão a ser fechada seja a sessão atual do usuário, redireciona pra homepage após encerrar."""
-  return comando_fechar_sessao_IMP.processa(ses, args)
+  return comando_fechar_sessao_IMP.processa(ses, cmd_args)

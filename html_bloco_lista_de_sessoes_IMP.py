@@ -7,7 +7,7 @@ import sys
 import html_estilo_cabecalho_de_tabela
 import html_bloco_cabecalho
 
-def gera(ids_sessoes, bt_ver, bt_fechar):
+def gera(lista_ids_ses, bt_ver, bt_fechar):
 
   # Linha de cabeçalho:
   cabs_raw = ['Sessão', 'Usuário', 'Aberta?', 'Cookie', 'Data de Criação']
@@ -16,8 +16,8 @@ def gera(ids_sessoes, bt_ver, bt_fechar):
     cabs_div.append(html_elem_div.gera(html_estilo_cabecalho_de_tabela.gera(), cb))
 
   linhas = [].copy()
-  for id_ses in ids_sessoes:
-    # busca por id da sessao no banco
+  for id_ses in lista_ids_ses:
+    # busca por identificador da sessao no banco
     ses = obj_sessao.busca_por_identificador(id_ses)
 
     # Gera uma lista de fragmentos HTML com as informacoes dessa sessao

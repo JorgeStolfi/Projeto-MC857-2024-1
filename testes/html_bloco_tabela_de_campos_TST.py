@@ -9,7 +9,7 @@ import util_testes
 
 import sys
 
-def testa(rotulo, *args):
+def testa_html_bloco_tabela_de_campos(rotulo, *args):
   """Testa {funcao(*args)}, grava resultado 
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
   
@@ -17,7 +17,7 @@ def testa(rotulo, *args):
   funcao = modulo.gera
   frag = False # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-  util_testes.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 dados_linhas = [("Nome",          "text",     "entradaNome",   "", True),
                 ("Idade",         "number",   "entradaIdade",  "XX", True),
@@ -33,6 +33,8 @@ atrs = {"entradaNome":"João Pedro II",
         "entradaCarro":"Cybertruck-2019",
         "checkboxAdmin":True}
 
-testa("html_bloco_tabela_de_campos_campos_user", dados_linhas, atrs, False)
-testa("html_bloco_tabela_de_campos_campos_admin", dados_linhas, atrs, True)
+testa_html_bloco_tabela_de_campos("comum", dados_linhas, atrs, False)
+testa_html_bloco_tabela_de_campos("admin", dados_linhas, atrs, True)
 
+sys.stderr.write("Testes terminados normalmente.\n")
+ 

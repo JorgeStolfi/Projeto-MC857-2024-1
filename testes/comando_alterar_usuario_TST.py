@@ -6,41 +6,40 @@ import obj_usuario
 import obj_sessao
 import db_base_sql
 import util_testes
+from util_valida_campo import ErroAtrib
 
 import sys
 
 # Conecta no banco e carrega alimenta com as informações para o teste
 
-
-sys.stderr.write("Conectando com base de dados...\n")
+sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB", None, None)
 assert res is None
 
-sys.stderr.write("Criando alguns objetos...\n")
+sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
 # Sessao de teste
 ses = obj_sessao.busca_por_identificador("S-00000001")
 
-
-def testa_alteracao(rotulo, *args):
-    """Testa {funcao(*args)}, grava resultado
+def testa_comando_alterar_usuario(rotulo, *args):
+    """Testa {funcao(*cmd_args)}, grava resultado
     em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
     modulo = comando_alterar_usuario
     funcao = modulo.processa
     frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
     pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-    util_testes.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+    util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 
 def testa_atualiza_nome_com_sucesso():
     novo_nome = "John First"
-    args = {
-        'id_usuario': "U-00000001",
+    cmd_args = {
+        'id_usr': "U-00000001",
         'nome': novo_nome,
     }
-    testa_alteracao("Nom", ses, args)
+    testa_comando_alterar_usuario("Nom", ses, cmd_args)
 
     updated_user = obj_usuario.busca_por_identificador("U-00000001")
 
@@ -48,11 +47,11 @@ def testa_atualiza_nome_com_sucesso():
 
 def testa_atualiza_email_com_sucesso():
     email_novo = "banana@nanica.com"
-    args = {
-        'id_usuario': "U-00000001",
+    cmd_args = {
+        'id_usr': "U-00000001",
         'email': email_novo,
     }
-    testa_alteracao("Ema", ses, args)
+    testa_comando_alterar_usuario("Ema", ses, cmd_args)
 
     updated_user = obj_usuario.busca_por_identificador("U-00000001")
 
@@ -60,11 +59,16 @@ def testa_atualiza_email_com_sucesso():
 
 def testa_atualiza_email_repetido_falha():
     email_dup = "segundo@ic.unicamp.br"
-    args = {
-        'id_usuario': "U-00000001",
+    cmd_args = {
+        'id_usr': "U-00000001",
         'email': email_dup,
     }
-    testa_alteracao("Dup", ses, args)
+    try:
+      testa_comando_alterar_usuario("Dup", ses, cmd_args)
+    except ErroAtrib as ex:
+      msg = ex.atrs[0]
+      mostra(4, f"testa_comando_alterar_usuario: erro = \"{str(msg)}\"")
+      sys.stderr.write("    (erro esperado)\n")
 
     updated_user = obj_usuario.busca_por_identificador("U-00000001")
 
@@ -75,3 +79,5 @@ def testa_atualiza_email_repetido_falha():
 testa_atualiza_nome_com_sucesso()
 testa_atualiza_email_com_sucesso()
 testa_atualiza_email_repetido_falha()
+
+sys.stderr.write("Testes terminados normalmente.\n")

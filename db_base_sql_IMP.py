@@ -10,32 +10,32 @@ db_conexao = None
   # O objeto retornado por {sqlite3.connect(...)}.  
   # Os métodos deste objeto permitem acessar a base no disco."""
   
-db_diags = False
+db_debug = False
   # Quando {True}, mostra comandos e resultados em {stderr}.
 
 # IMPLEMENTAÇÔES
 
 def conecta(dir, uid, senha):
   # Ignora {uid} e {senha} por enquanto.
-  global db_conexao, db_diags
+  global db_conexao
   mostra(4,"db_base_sql_IMP.conecta: conectando com a base")
   if db_conexao != None: 
     mostra(6,"db_base_sql_IMP.conecta: !! Já conectada")
     return None
   try:
     db_conexao = sqlite3.connect(dir + "/MC857.sqlite3")
-    if db_diags: mostra(6,"db_base_sql_IMP.conecta: base {sqlite3}, versao = " + sqlite3.version)
+    if db_debug: mostra(6,"db_base_sql_IMP.conecta: base {sqlite3}, versao = " + sqlite3.version)
     return None
   except sqlite3.Error as msg:
     mostra(4,"db_base_sql_IMP.conecta: ** erro = \"" + str(msg) + "\"")
     return msg
 
 def executa_comando_CREATE_TABLE(nome_tb, descr_cols):
-  global db_conexao, db_diags
+  global db_conexao
   try:
     cursor = db_conexao.cursor()
     cmd = "CREATE TABLE IF NOT EXISTS " + nome_tb + "( " + descr_cols + " )"
-    if db_diags: mostra(4,"db_base_sql_IMP.executa_comando_CREATE_TABLE: cmd = \"" + str(cmd) + "\"")
+    if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_CREATE_TABLE: cmd = \"" + str(cmd) + "\"")
     cursor.execute(cmd)
     return None
   except sqlite3.Error as msg:
@@ -43,14 +43,14 @@ def executa_comando_CREATE_TABLE(nome_tb, descr_cols):
     return msg
 
 def num_entradas(nome_tb, nome_indice):
-  global db_conexao, db_diags
+  global db_conexao
   try:
     cursor = db_conexao.cursor()
     cmd = 'SELECT max(' + nome_indice + ') FROM ' + nome_tb
-    if db_diags: mostra(4,"db_base_sql_IMP.num_entradas: cmd = \"" + str(cmd) + "\"")
+    if db_debug: mostra(4,"db_base_sql_IMP.num_entradas: cmd = \"" + str(cmd) + "\"")
     cursor.execute(cmd)
     max_ind = cursor.fetchone()[0]
-    if db_diags: mostra(6,"max_ind = " + str(max_ind))
+    if db_debug: mostra(6,"max_ind = " + str(max_ind))
     if max_ind == None:
       max_ind = 0
     return max_ind
@@ -59,7 +59,7 @@ def num_entradas(nome_tb, nome_indice):
     return msg
 
 def executa_comando_INSERT(nome_tb, atrs):
-  global db_conexao, db_diags
+  global db_conexao
   chaves = ""
   valores = ""
   for ch in atrs.keys():
@@ -71,20 +71,20 @@ def executa_comando_INSERT(nome_tb, atrs):
     if valores != "": valores = valores + ","
     valores = valores + val
   cmd = "INSERT INTO " + nome_tb + " ( " + chaves + " ) VALUES (" + valores + ")"
-  if db_diags: mostra(4,"db_base_sql_IMP.executa_comando_INSERT: cmd = \"" + str(cmd) + "\"")
+  if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_INSERT: cmd = \"" + str(cmd) + "\"")
   try:
     cursor = db_conexao.cursor()
     cursor.execute(cmd)
     db_conexao.commit()
     ind = cursor.lastrowid
-    if db_diags: mostra(6,"lastrowid = " + str(ind))
+    if db_debug: mostra(6,"lastrowid = " + str(ind))
     return ind
   except sqlite3.Error as msg:
     mostra(4,"db_base_sql_IMP.executa_comando_INSERT: ** erro = \"" + str(msg) + "\"")
     return msg
 
 def executa_comando_UPDATE(nome_tb, cond, atrs):
-  global db_conexao, db_diags
+  global db_conexao
   pares = ""
   for ch in atrs.keys():
     val = codifica_valor(atrs[ch]);
@@ -92,7 +92,7 @@ def executa_comando_UPDATE(nome_tb, cond, atrs):
     if pares != "": pares = pares + ","
     pares = pares + ch + " = " + val
   cmd = "UPDATE " + nome_tb + " SET " + pares + " WHERE " + cond
-  if db_diags: mostra(4,"db_base_sql_IMP.executa_comando_UPDATE: cmd = \"" + str(cmd) + "\"")
+  if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_UPDATE: cmd = \"" + str(cmd) + "\"")
   try:
     cursor = db_conexao.cursor()
     cursor.execute(cmd)
@@ -103,7 +103,7 @@ def executa_comando_UPDATE(nome_tb, cond, atrs):
     return msg
 
 def executa_comando_SELECT(nome_tb, cond, nomes_cols):
-  global db_conexao, db_diags
+  global db_conexao
   cols = ""
   for cn in nomes_cols:
     # Acrescenta "{cn} à lista de nomes de colunas:
@@ -111,13 +111,13 @@ def executa_comando_SELECT(nome_tb, cond, nomes_cols):
     cols = cols + cn
 
   cmd = "SELECT " + cols + " FROM " + nome_tb + " WHERE " + cond
-  if db_diags: mostra(4,"db_base_sql_IMP.executa_comando_SELECT: cmd = \"" + str(cmd) + "\"")
+  if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_SELECT: cmd = \"" + str(cmd) + "\"")
   try:
     cursor = db_conexao.cursor()
     iterador = cursor.execute(cmd)
     res = cursor.fetchall() # Converte o iterador em lista.
     cursor.close()
-    if db_diags: mostra(6,"db_base_sql_IMP.executa_comando_SELECT: len(res) = " + str(len(res)))
+    if db_debug: mostra(6,"db_base_sql_IMP.executa_comando_SELECT: len(res) = " + str(len(res)))
     return res
   except sqlite3.Error as msg:
     mostra(4,"db_base_sql_IMP.executa_comando_SELECT: ** erro = \"" + str(msg) + "\"")
@@ -125,9 +125,9 @@ def executa_comando_SELECT(nome_tb, cond, nomes_cols):
     return msg
 
 def executa_comando_DELETE(nome_tb, cond):
-  global db_conexao, db_diags
+  global db_conexao
   cmd = "DELETE FROM " + nome_tb + " WHERE " + cond
-  if db_diags: mostra(4,"db_base_sql_IMP.executa_comando_DELETE: cmd = \"" + str(cmd) + "\"")
+  if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_DELETE: cmd = \"" + str(cmd) + "\"")
   try:
     cursor = db_conexao.cursor()
     cursor.execute(cmd)
@@ -139,9 +139,9 @@ def executa_comando_DELETE(nome_tb, cond):
     return msg
 
 def executa_comando_DROP_TABLE(nome_tb):
-  global db_conexao, db_diags
+  global db_conexao
   cmd = "DROP TABLE IF EXISTS " + nome_tb
-  if db_diags: mostra(4,"db_base_sql_IMP.executa_comando_DROP_TABLE: cmd = \"" + str(cmd) + "\"")
+  if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_DROP_TABLE: cmd = \"" + str(cmd) + "\"")
   try:
     cursor = db_conexao.cursor()
     cursor.execute(cmd)
@@ -154,7 +154,7 @@ def executa_comando_DROP_TABLE(nome_tb):
     
 def codifica_valor(val):
   # !!! (MAIS TARDE) Deveria proteger caracteres especiais em {val}, como ';'. !!!
-  global db_conexao, db_diags
+  global db_conexao
   if val == None:
     return "NULL"
   elif type (val) is int:
@@ -172,7 +172,7 @@ def codifica_valor(val):
     erro_prog("valor " + str(val) + " tipo = " + str(type(val)) + " invalido")
     return None
 
-def mostra_comandos(val):
-  global db_conexao, db_diags
-  db_diags = val
+def liga_diagnosticos(val):
+  global db_debug
+  db_debug = val
   return

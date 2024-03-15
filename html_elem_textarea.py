@@ -40,8 +40,8 @@ def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio=
   servidor via POST, quando o usuário alterar este campo, em vez do
   "action" default do formulário.
   
-  O elemento terá também um atributo {id} ("<input ... id='{id}' .../>") que
-  é "{nome}.{val_ini}", ou apenas "{nome}" se {val_ini} for {None}.
+  O elemento terá também um atributo 'id' ("<input ... id='{id_campo}' .../>") 
+  cujo valoe {id_campo} é  "{nome}.{val_ini}", ou apenas "{nome}" se {val_ini} for {None}.
 
   O parâmetro {obrigatorio} indica se o campo deve ser obrigatóriamente preenchido ou não.
   Isso altera visualmente a forma como o campo é exibido para o usuário pelo navegador. O valor

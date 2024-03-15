@@ -79,21 +79,11 @@ def gera_botoes_linha_2():
   geral.  Estes botões são mostrados apenas se o usuário está logado
   e é um administrador."""
 
-  ht_input = html_elem_input.gera(None, "text", "id_objeto", None, None, True, "Id do objeto", None)
-  ht_bt_submit = html_elem_button_submit.gera("Checar Objeto", "ver_objeto", None, '#ffdd22')
-  form_content = \
-    ht_input + \
-    ht_bt_submit
-
-  botoes = (
-    html_elem_button_simples.gera("Acrescentar trecho", "solicitar_pag_acrescentar_trecho", None, '#ffdd22'),
-    html_elem_button_simples.gera("Trafego", "comando_relatorio_de_trafego", None, '#FF00FF'),
-    html_elem_form.gera(form_content)
-
-    # html_elem_button_simples.gera("Alterar trecho", "solicitar_pag_alterar_trecho", None, '#ffdd22'),
-    # html_elem_form_passageiros.gera(),
-    # html_elem_form_buscar_objeto.gera(),
-  )
+  ht_busca_obj_input = html_elem_input.gera(None, "text", "id_objeto", None, None, True, "Id do objeto", None)
+  ht_busca_obj_bt = html_elem_button_submit.gera("Checar Objeto", "ver_objeto", None, '#ffdd22')
+  ht_busca_obj_form = html_elem_form.gera(ht_busca_obj_input + ht_busca_obj_bt)
+  botoes = \
+    ht_busca_obj_form 
   return botoes
 
 def gera_nome_usuario(nome_usuario):

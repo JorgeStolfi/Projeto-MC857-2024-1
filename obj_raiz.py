@@ -7,14 +7,14 @@ import obj_raiz_IMP
 class Classe(obj_raiz_IMP.Classe_IMP):
   """Um objeto genérico. Possui os seguintes campos privados:
   
-    {identificador}   uma string da forma "{X}-{NNNNNNNN}" onde
-                      {X} é uma letra que identifica o tipo do objeto
-                      ('U' para {obj_usuario.Classe}, 'S' para {obj_sessao.Classe}, etc)
-                      e {NNNNNNNN} é o índice na tabela correspondente
-                      da base de dados, formatado em 8 algarismos
+    {id}     o identificador do objeto: uma string da forma "{X}-{NNNNNNNN}" onde
+             {X} é uma letra que identifica o tipo do objeto
+             ('U' para {obj_usuario.Classe}, 'S' para {obj_sessao.Classe}, etc)
+             e {NNNNNNNN} é o índice na tabela correspondente
+             da base de dados, formatado em 8 algarismos
                       
-    {atrs}            um dicionário Python que contém os atributos 
-                      do objeto, específicos para cada classe.
+    {atrs}   um dicionário Python que contém os atributos 
+             do objeto, específicos para cada classe.
   """
   pass
 
@@ -22,7 +22,7 @@ class Classe(obj_raiz_IMP.Classe_IMP):
 def cria(atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem):
   """Cria um novo objeto da classe {Objeto} com atributos {atrs}
   e acrescenta-o à tabela {nome_tb}, que deve ter as {colunas} especificadas.
-  O identificador será "{L}-{NNNNNNNN}" onde {L} é {letra_tb}
+  O identificador {id} será "{L}-{NNNNNNNN}" onde {L} é {letra_tb}
   e {NNNNNNNN} é o índice da linha na tabela, formatada em 8 dígitos decimais.
   Também acrescenta o objeto no {cache} na memória.
   
@@ -58,11 +58,11 @@ def obtem_atributo(obj, chave):
   Não serve para obter o identificador."""
   return obj_raiz_IMP.obtem_atributo(obj, chave)
 
-def busca_por_identificador(id, cache, nome_tb, letra_tb, colunas, def_obj_mem):
-  """Localiza um objeto com identificador {id} (uma string da forma
+def busca_por_identificador(id_obj, cache, nome_tb, letra_tb, colunas, def_obj_mem):
+  """Localiza um objeto com identificador {id_obj} (uma string da forma
   "{X}-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {Objeto}.
-  Se {id} é {None} ou tal objeto não existe, devolve {None}."""
-  return obj_raiz_IMP.busca_por_identificador(id, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+  Se {id_obj} é {None} ou tal objeto não existe, devolve {None}."""
+  return obj_raiz_IMP.busca_por_identificador(id_obj, cache, nome_tb, letra_tb, colunas, def_obj_mem)
 
 def busca_por_campo(chave, val, unico, cache, nome_tb, letra_tb, colunas):
   """Procura objetos cujo atributo {chave} tem valor {val}. 
@@ -91,22 +91,27 @@ def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
   
 # FUNÇÕES PARA DEPURAÇÃO
 
-def verifica(obj, tipo, id, atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem):
+def verifica_criacao(obj, tipo, id_obj, atrs, ignore, cache, nome_tb, letra_tb, colunas, def_obj_mem):
   """Faz testes de consistência básicos de um objeto {obj} de classe {tipo}, 
-  que deve ser uma sublcasse de {Objeto}, dados o identificador esperado 
-  {id}, e os atributos esperados {atrs}.
+  que deve ser uma sublcasse de {Classe}.  Tipicamente usada para 
+  testar a função {cria}
   
-  Especificamente, verifica as funções {obtem_identificador(obj)},
-  {obtem_atributos(obj)} e {busca_por_identificador(id)}
-  do {modulo} dado.
+  Especificamente, testa se {obtem_identificador(obj)} devolve
+  o identificador esperado {id_obj}, {obtem_atributos(obj)} devolve 
+  os atributos esperados {atrs}, e {busca_por_identificador(id_obj)}
+  devolve o próprio {obj}.  
+  
+  O parâmetro {ignore} deve ser {None}, ou uma lista de chaves
+  de campos que não estão em {atrs} mas podem estar presentes no 
+  objeto {obj}.
   
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
-  return obj_raiz_IMP.verifica(obj, tipo, id, atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+  return obj_raiz_IMP.verifica_criacao(obj, tipo, id_obj, atrs, ignore, cache, nome_tb, letra_tb, colunas, def_obj_mem)
 
-def diagnosticos(val):
+def liga_diagnosticos(val):
   """Habilita (se {val=True}) ou desabilita (se {val=False}) a
   impressão em {sys.stderr} de mensagens de diagnóstico pelas 
   funções deste módulo."""
-  obj_raiz_IMP.diagnosticos(val)
+  obj_raiz_IMP.liga_diagnosticos(val)
 

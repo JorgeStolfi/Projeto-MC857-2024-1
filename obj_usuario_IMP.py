@@ -34,7 +34,7 @@ colunas = \
   )
   # Descrição das colunas da tabela na base de dados.
   
-usr_diags = True
+usr_debug = False
   # Quando {True}, mostra comandos e resultados em {stderr}.
 
 # Definição interna da classe {obj_usuario.Classe}:
@@ -48,15 +48,15 @@ class Classe_IMP(obj_raiz.Classe):
 # Implementação das funções:
 
 def inicializa_modulo(limpa):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
   if limpa:
     db_tabela_generica.limpa_tabela(nome_tb, colunas)
   else:
     db_tabela_generica.cria_tabela(nome_tb, colunas)
 
 def cria(atrs_mem):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
-  if usr_diags: mostra(0,"obj_usuario_IMP.cria({str(atrs_mem)}) ...")
+  global cache, nome_tb, letra_tb, colunas
+  if usr_debug: mostra(0,"obj_usuario_IMP.cria({str(atrs_mem)}) ...")
 
   erros = valida_atributos(None, atrs_mem)
   if len(erros) != 0: raise ErroAtrib(erros)
@@ -66,58 +66,54 @@ def cria(atrs_mem):
   return usr
 
 def muda_atributos(usr, mods_mem):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
-
+  global cache, nome_tb, letra_tb, colunas
+  if usr_debug: sys.stderr.write("  > {obj_usuario.muda_atributos}:\n")
+  
   erros = valida_atributos(usr, mods_mem)
   if len(erros) != 0: raise ErroAtrib(erros)
   
-  if usr_diags:
-    sys.stderr.write("\n")
-    sys.stderr.write(f"usr antes = {str(usr)}\n")
-    sys.stderr.write(f"mods_mem = {str(mods_mem)}\n")
+  if usr_debug: sys.stderr.write(f"    > usr antes = {str(usr)} mods_mem = {str(mods_mem)}\n")
   obj_raiz.muda_atributos(usr, mods_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem)
-  if usr_diags:
-    sys.stderr.write(f"usr depois = {str(usr)}\n")
-    sys.stderr.write("\n")
+  if usr_debug: sys.stderr.write(f"    > usr depois = {str(usr)}\n")
   return
 
 def obtem_identificador(usr):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
   assert usr != None
   return obj_raiz.obtem_identificador(usr)
 
 def obtem_atributos(usr):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
   return obj_raiz.obtem_atributos(usr)
 
 def obtem_atributo(usr, chave):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
   return obj_raiz.obtem_atributo(usr,chave)
 
-def busca_por_identificador(id):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
-  usr = obj_raiz.busca_por_identificador(id, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+def busca_por_identificador(id_usr):
+  global cache, nome_tb, letra_tb, colunas
+  usr = obj_raiz.busca_por_identificador(id_usr, cache, nome_tb, letra_tb, colunas, def_obj_mem)
   assert usr == None or type(usr) is obj_usuario.Classe
   return usr
 
 def busca_por_email(em):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
   unico = True
-  if usr_diags: sys.stderr.write(f"  >> obj_usuario_IMP.busca_por_email: email = {em}\n");
-  id  = obj_raiz.busca_por_campo('email', em, unico, cache, nome_tb, letra_tb, colunas)
-  if usr_diags: sys.stderr.write(f"  >> obj_usuario_IMP.busca_por_email: id encontrado = {id}\n");
-  return id
+  if usr_debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_email}: email = {em}\n");
+  id_usr = obj_raiz.busca_por_campo('email', em, unico, cache, nome_tb, letra_tb, colunas)
+  if usr_debug: sys.stderr.write(f"    > id encontrado = {id_usr}\n");
+  return id_usr
 
 def sessoes_abertas(usr):  
   id_usr = obj_usuario.obtem_identificador(usr)
-  ids_sessoes_usr = obj_sessao.busca_por_usuario(id_usr) # IDs das sessões deste usuário.
-  sessoes_usr = map(lambda id: obj_sessao.busca_por_identificador(id), ids_sessoes_usr) # Pega objetos.
+  lista_ids_ses = obj_sessao.busca_por_usuario(id_usr) # IDs das sessões deste usuário.
+  lista_ses = map(lambda id: obj_sessao.busca_por_identificador(id), lista_ids_ses) # Pega objetos.
   # Filtra apenas as Sessoes que estao abertas
-  abertas_usr = list(filter(lambda ses: obj_sessao.aberta(ses), sessoes_usr))
-  return abertas_usr
+  lista_ses_abertas = list(filter(lambda ses: obj_sessao.aberta(ses), lista_ses))
+  return lista_ses_abertas
   
 def cria_testes(verb):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
   inicializa_modulo(True)
   lista_atrs = \
     [ 
@@ -125,24 +121,24 @@ def cria_testes(verb):
         'nome': "José Primeiro", 
         'senha': "11111111", 
         'email': "primeiro@gmail.com",
-        'administrador': False,
+        'administrador': True,
       },
       { # U-00000002
         'nome': "João Segundo", 
-        'senha': "222222222", 
-        'email': "segundo@ic.unicamp.br",
+        'senha': "22222222", 
+        'email': "segundo@gmail.com",
         'administrador' : False,
       },
       { # U-00000003
         'nome': "Juca Terceiro", 
-        'senha': "333333333", 
+        'senha': "33333333", 
         'email': "terceiro@gmail.com",
-        'administrador' : True,
+        'administrador' : False,
       },
       { # U-00000004
         'nome': "Jurandir Quarto", 
         'senha': "44444444", 
-        'email': "quarto@ic.unicamp.br",
+        'email': "quarto@gmail.com",
         'administrador' : False,
       },
       { # U-00000005
@@ -173,7 +169,7 @@ def cria_testes(verb):
         'nome': "Jonas Nono", 
         'senha': "99999999", 
         'email': "nono@ic.unicamp.br",
-        'administrador' : True,
+        'administrador' : False,
       },
 
     ]
@@ -182,7 +178,7 @@ def cria_testes(verb):
     assert usr != None and type(usr) is obj_usuario.Classe
     id_usr = obj_usuario.obtem_identificador(usr)
     nome = obj_usuario.obtem_atributo(usr,'nome')
-    if verb: sys.stderr.write("usuário %s = \"%s\" criado\n" % (id_usr, nome))
+    if verb: sys.stderr.write("  usuário %s = \"%s\" criado\n" % (id_usr, nome))
   return
 
 def confere_e_elimina_conf_senha(args):
@@ -200,12 +196,12 @@ def confere_e_elimina_conf_senha(args):
   if 'conf_senha' in args: del args['conf_senha']
   return
 
-def verifica(usr, id, atrs):
-  return obj_raiz.verifica(usr, obj_usuario.Classe, id, atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+def verifica_criacao(usr, id_usr, atrs):
+  return obj_raiz.verifica_criacao(usr, obj_usuario.Classe, id_usr, atrs, None, cache, nome_tb, letra_tb, colunas, def_obj_mem)
 
-def diagnosticos(val):
-  global cache, nome_tb, letra_tb, colunas, usr_diags
-  usr_diags = val
+def liga_diagnosticos(val):
+  global usr_debug
+  usr_debug = val
   return
 
 # FUNÇÕES INTERNAS
@@ -221,7 +217,7 @@ def valida_atributos(usr, atrs_mem):
   
   Em qualquer caso, não pode haver na base nenhum usuário
   com mesmo email."""
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
   
   erros = [].copy();
   
@@ -276,20 +272,21 @@ def verifica_email_em_uso(em, usr_dado):
   Em caso de erro devolve uma mensagem informando a 
   repetição. Senão, retorna {None}."""
   id_usr_dado = usr_dado.id if usr_dado != None else None
-  if usr_diags: sys.stderr.write(f"  verifica_email_em_uso: email = '{em}' id_usr_dado = '{str(id_usr_dado)}'\n")
+  if usr_debug: sys.stderr.write(f"  > {obj_usuario.verifica_email_em_uso}: email = '{em}' id_usr_dado = '{str(id_usr_dado)}'\n")
   id_usr_atual = busca_por_email(em)
-  if usr_diags: sys.stderr.write(f"  verifica_email_em_uso: id_usr_atual = '{str(id_usr_atual)}'\n")
-  if ((id_usr_dado == None) and (id_usr_atual != None)) \
-  or ((id_usr_dado != None) and (id_usr_atual == None or id_usr_atual != id_usr_dado)):
+  if usr_debug: sys.stderr.write(f"    > id_usr_atual = '{str(id_usr_atual)}'\n")
+  if id_usr_dado == None and id_usr_atual != None:
     erro = "usuário com 'email' = '" + em + "' já existe: " + id_usr_atual
+  elif id_usr_dado != None and id_usr_atual != None and id_usr_atual != id_usr_dado:
+    erro = "usuário com 'email' = '" + em + "' não encontrado, devia ser " + id_usr_dado
   else:
     erro = None
-  if usr_diags: sys.stderr.write(f"  verifica_email_em_uso: resultado = '{erro}'\n")
+  if usr_debug: sys.stderr.write(f"    > resultado = '{erro}'\n")
   return erro
 
-def def_obj_mem(usr, id, atrs_SQL):
+def def_obj_mem(usr, id_usr, atrs_SQL):
   """Se {usr} for {None}, cria um novo objeto da classe {obj_usuario.Classe} com
-  identificador {id} e atributos {atrs_SQL}, tais como extraidos
+  identificador {id_usr} e atributos {atrs_SQL}, tais como extraidos
   da tabela de sessoes. O objeto *NÃO* é inserido na base de dados.
 
   Se {usr} não é {None}, deve ser um objeto da classe {obj_usuario.Classe}; nesse
@@ -298,29 +295,29 @@ def def_obj_mem(usr, id, atrs_SQL):
 
   Em qualquer caso, os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
-  global cache, nome_tb, letra_tb, colunas, usr_diags
-  if usr_diags: mostra(0,"obj_usuario_IMP.def_obj_mem(" + str(usr) + ", " + id + ", " + str(atrs_SQL) + ") ...")
+  global cache, nome_tb, letra_tb, colunas
+  if usr_debug: mostra(0,"obj_usuario_IMP.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
   if usr == None:
-    usr = cria_obj_mem(id, atrs_SQL)
+    usr = cria_obj_mem(id_usr, atrs_SQL)
   else:
-    assert usr.id == id
+    assert usr.id == id_usr
     modifica_obj_mem(usr, atrs_SQL)
-  if usr_diags: mostra(2,"usr = " + str(usr))
+  if usr_debug: mostra(2,"usr = " + str(usr))
   return usr
     
-def cria_obj_mem(id, atrs_SQL):
+def cria_obj_mem(id_usr, atrs_SQL):
   """Cria um novo objeto da classe {obj_usuario.Classe} com
-  identificador {id} e atributos {atrs_SQL}, tais como extraidos
+  identificador {id_usr} e atributos {atrs_SQL}, tais como extraidos
   da tabela de sessoes. O objeto *NÃO* é inserido na base de dados.
   
   Os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
   
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
 
   # Converte atributos para formato na memória.  Todos devem estar presentes:
-  atrs_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, False, db_tabelas.id_para_objeto)
-  if usr_diags: mostra(2,"criando objeto, atrs_mem = " + str(atrs_mem))
+  atrs_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, False, db_tabelas.identificador_para_objeto)
+  if usr_debug: mostra(2,"criando objeto, atrs_mem = " + str(atrs_mem))
   assert type(atrs_mem) is dict
   if len(atrs_mem) != len(colunas):
     erro_prog("numero de atributos = " + str(len(atrs_mem)) + " devia ser " + str(len(colunas)))
@@ -329,7 +326,7 @@ def cria_obj_mem(id, atrs_SQL):
   erro_email_dup = verifica_email_em_uso(atrs_mem['email'], None) if 'email' in atrs_mem else None
   if erro_email_dup != None: erro_prog(erro_email_dup)
 
-  usr = obj_usuario.Classe(id, atrs_mem)
+  usr = obj_usuario.Classe(id_usr, atrs_mem)
   return usr
   
 def modifica_obj_mem(usr, atrs_mod_SQL):
@@ -339,11 +336,11 @@ def modifica_obj_mem(usr, atrs_mod_SQL):
 
   Os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
-  global cache, nome_tb, letra_tb, colunas, usr_diags
+  global cache, nome_tb, letra_tb, colunas
 
   # Converte atributos para formato na memória. Pode ser subconjunto:
-  atrs_mod_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_mod_SQL, colunas, True, db_tabelas.id_para_objeto)
-  if usr_diags: mostra(2,"modificando objeto, atrs_mod_mem = " + str(atrs_mod_mem))
+  atrs_mod_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_mod_SQL, colunas, True, db_tabelas.identificador_para_objeto)
+  if usr_debug: mostra(2,"modificando objeto, atrs_mod_mem = " + str(atrs_mod_mem))
   assert type(atrs_mod_mem) is dict
   if len(atrs_mod_mem) > len(colunas):
     erro_prog("numero de atributos a alterar = " + str(len(atrs_mod_mem)) + " excessivo")

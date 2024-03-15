@@ -17,13 +17,13 @@ import sys
 def dispara():
   """Esta função inicia a execução do servidor."""
   
-  sys.stderr.write("conectando com a base de dados...\n")
+  sys.stderr.write("  {servidor}: conectando com a base de dados...\n")
   dir = "DB"
   usr = None
   senha = None
   res = db_base_sql.conecta(dir,usr,senha); assert res == None
   
-  sys.stderr.write("inicializando as tabelas de objetos...\n")
+  sys.stderr.write("  {servidor}: inicializando as tabelas de objetos...\n")
   testando = True # Que base de dados deve usar?
   if testando:
     # Inicializa a base com algumas entradas para testes:
@@ -32,12 +32,12 @@ def dispara():
     # Usa a base de dados existente:
     limpa = False # Começa com tabelas vazias?
     db_tabelas.inicializa_todas(limpa)
-  sys.stderr.write("criando o objeto servidor...\n")
+  sys.stderr.write("  {servidor}: criando o objeto servidor...\n")
   host = '0.0.0.0' # Aceita pedidos de qualquer IP.
   porta = 8081 # Porta 8081 em vez de 80, para não precisar de acesso "root"
   objeto_servidor = processa_comando_http.cria_objeto_servidor(host,porta)
   
-  sys.stderr.write("disparando o processo servidor...\n")
+  sys.stderr.write("  {servidor}: disparando o processo servidor...\n")
   objeto_servidor.serve_forever()
 
 # Programa principal do servidor:

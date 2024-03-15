@@ -15,8 +15,8 @@ def gera(usr):
   email = atrs['email']
   ht_email = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, email))
 
-  # solicitar_pag_alterar_usuario precisa ser um dicionário com um único campo id_usuario
-  bt_arg = {'id_usuario': obj_usuario.obtem_identificador(usr)}
+  # solicitar_pag_alterar_usuario precisa ser um dicionário com um único campo id_usr
+  bt_arg = {'id_usr': obj_usuario.obtem_identificador(usr)}
   bt_ver = html_elem_button_simples.gera("Ver", "solicitar_pag_alterar_usuario", bt_arg, "#eeeeee")
 
   ht_final = ht_nome + ht_email + bt_ver

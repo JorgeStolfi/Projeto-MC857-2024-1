@@ -33,7 +33,7 @@ def aviso_prog(mens, grave):
 def mostra(ind,mens):
   sys.stderr.write("%*s%s\n" % (ind,'',mens))
 
-def testa_modulo_html(modulo, rotulo, res, frag, pretty):
+def escreve_resultado_html(modulo, rotulo, res, frag, pretty):
   prefixo = "testes/saida/"
   nome_mod = modulo.__name__
   nome_arq = nome_mod + "." + rotulo
@@ -58,7 +58,7 @@ def testa_modulo_html(modulo, rotulo, res, frag, pretty):
   f.buffer.write(str(pag).encode('utf-8'))
   f.close()
 
-def testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args):
+def testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args):
   nome_fn = funcao.__name__
   func_rot = nome_fn + "." + rotulo
   try:
@@ -71,22 +71,18 @@ def testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args):
         else:
           res1 += " [" + str(type(item)) + "]" + str(item)
       res = res1
-    testa_modulo_html(modulo, func_rot, res, frag, pretty)
+    escreve_resultado_html(modulo, func_rot, res, frag, pretty)
   except Exception as ex:
     fr = inspect.stack()[2]
     msg = ("File %s, line %d, in %s\n" % (fr[1], fr[2], str(fr[3])))
     msg += ("** erro em testa(%s): %s\n" % (func_rot, str(ex)))
     sys.stderr.write(msg + "\n")
     res = str(msg)
-    testa_modulo_html(modulo, func_rot, res, True, pretty)
+    escreve_resultado_html(modulo, func_rot, res, True, pretty)
     raise
 
 def formata_dict(dados):
-  """Esta função de depuração recebe um dicionário {dados}
-  e devolve um string é um fragmento HTML5 que mostra esses
-  dados em formato relativamente legível (JSON com quebras de
-  linha e indentação)."""
-  dados_lin = json.dumps(dados, indent='&nbsp;&nbsp;', sort_keys=True, separators=(',<br/>', ': '))
+  dados_lin = json.dumps(dados, indent='&nbsp;&nbsp;', sort_keys=True, separators=(',<br/>', ': '), ensure_ascii=False)
   dados_lin = re.sub(r'\[', '[<br/>', dados_lin)
   dados_lin = re.sub(r'\{', '{<br/>', dados_lin)
   dados_lin = re.sub(r'\},', '  \},', dados_lin)

@@ -27,9 +27,9 @@ def de_lista_de_indices(let, indices):
   lista ou tupla de tamanho 1 cujo único elemento é um inteiro."""
   return util_identificador_IMP.de_lista_de_indices(let,indices)
 
-def unico_elemento(ids):
-  """O parâmetro {ids} deve ser {None}  ou uma lista ou tupla de identificadores
-  de objetos.  Se {ids} for {None} ou vazia, devolve {None}.  Se
-  {ids} tiver um único elemento, devolve esse elemento que tem 
+def unico_elemento(lista_ids):
+  """O parâmetro {lista_ids} deve ser {None}  ou uma lista ou tupla de identificadores
+  de objetos.  Se {lista_ids} for {None} ou vazia, devolve {None}.  Se
+  {lista_ids} tiver um único elemento, devolve esse elemento que tem 
   esse identificador.  Em todos os outros casos, termina o programa com erro."""
-  return util_identificador_IMP.unico_elemento(ids)
+  return util_identificador_IMP.unico_elemento(lista_ids)

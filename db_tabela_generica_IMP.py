@@ -8,7 +8,7 @@ import sys # Para depuração.
 
 # FUNÇÕES INTERNAS
 
-tbg_diags = True
+tbg_debug = False
 
 def constroi_colunas_SQL(cols):
   """Constrói a descrição SQL das colunas de uma tabela, 
@@ -43,7 +43,7 @@ def cria_tabela(nome_tb, cols):
   colunas = constroi_colunas_SQL(cols)
   res = db_base_sql.executa_comando_CREATE_TABLE(nome_tb, colunas);
   if res != None:
-    sys.stderr.write("CREATE TABLE = \"%s\"\n" % str(res))
+    sys.stderr.write("  CREATE TABLE = \"%s\"\n" % str(res))
     assert type(res) is str
     erro_prog("CREATE_TABLE falhou " + str(res))
   return
@@ -101,7 +101,7 @@ def busca_por_identificador_e_indice(nome_tb, cache, let, cols, def_obj, ident, 
   cond = "indice = " + str(ind)
   col_nomes = extrai_nomes_de_colunas_SQL(cols)
   res = db_base_sql.executa_comando_SELECT(nome_tb, cond, col_nomes)
-  if tbg_diags: sys.stderr.write("busca_por_identificador_e_indice: res = " + str(res) + "\n")
+  if tbg_debug: sys.stderr.write("  > busca_por_identificador_e_indice: res = " + str(res) + "\n")
   if res == None:
     return None
   res = list(res)
@@ -118,7 +118,7 @@ def busca_por_identificador_e_indice(nome_tb, cache, let, cols, def_obj, ident, 
 
 def busca_por_campo(nome_tb, let, cols, chave, valor, res_cols):
   # Converte {valor} para string na linguagem SQL:
-  if tbg_diags: sys.stderr.write(f"  >> db_tabela_generica.busca_por_campo_IMP: chave = {chave} valor = {str(valor)}\n");
+  if tbg_debug: sys.stderr.write(f"  > db_tabela_generica.busca_por_campo_IMP: chave = {chave} valor = {str(valor)}\n");
   valor = db_base_sql.codifica_valor(valor)
 
   # Supõe que o cache é um subconjuto da base em disco, então procura só na última:
@@ -172,7 +172,7 @@ def busca_por_semelhanca(nome_tb, let, cols, chaves, valores):
   res = db_base_sql.executa_comando_SELECT(nome_tb, cond, ['indice'])
   if res != None and type(res) is str:
     erro_prog("SELECT falhou " + str(res))
-  if tgb_diags: sys.stderr.write("busca_por_semelhanca: res = " + str(res) + "\n")
+  if tgb_debug: sys.stderr.write("  > busca_por_semelhanca: res = " + str(res) + "\n")
   res = util_identificador.de_lista_de_indices(let, res)
   return res
 

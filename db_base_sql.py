@@ -111,8 +111,8 @@ def codifica_valor(val):
   """
   return db_base_sql_IMP.codifica_valor(val)
 
-def mostra_comandos(val):
+def liga_diagnosticos(val):
   """Habilita (se {val=True}) ou desabilita (se {val=False}) a
   impressão em {sys.stderr} dos comandos SQL montados pelas funções 
   deste módulo, e dos resultados dos mesmos."""
-  db_base_sql_IMP.mostra_comandos(val)
+  db_base_sql_IMP.liga_diagnosticos(val)

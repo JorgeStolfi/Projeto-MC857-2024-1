@@ -2,7 +2,7 @@ import obj_usuario_IMP
 
 class Classe(obj_usuario_IMP.Classe_IMP):
   """Um objeto desta classe representa um usuário
-  do sistema (administrador ou cliente) e
+  do sistema (administrador ou comum) e
   armazena seus atributos.  É uma subclasse de {Objeto}.
   
   O identificador de um usuário é uma string da forma
@@ -15,7 +15,7 @@ class Classe(obj_usuario_IMP.Classe_IMP):
     'nome'           (obr) nome completo do usuário.
     'email'          (obr) email para identificacao no login.
     'senha'          (obr) senha do usuário.
-    'administrador'  (obr) {True} se o usuário é administrador, {False} se cliente.
+    'administrador'  (obr) {True} sse o usuário é administrador. 
    
   Atributos marcados (obr) são obrigatórios.
     
@@ -25,7 +25,7 @@ class Classe(obj_usuario_IMP.Classe_IMP):
   
   REPRESENTAÇÃO NA BASE DE DADOS
 
-  Cada usuário do sistema -- cliente ou funcionário, ativo ou bloqueado
+  Cada usuário do sistema -- comum ou administrador, ativo ou bloqueado
   -- é representado por uma linha na tabela "usuarios" da base SQL em
   disco. Apenas algumas dessas linhas são representadas também na memória por objetos
   da classe {obj_usuario.Classe}.
@@ -82,11 +82,11 @@ def obtem_atributo(usr, chave):
   Equivale a {obtem_atributos(usr)[chave]}"""
   return obj_usuario_IMP.obtem_atributo(usr, chave)
 
-def busca_por_identificador(id_usuario):
-  """Localiza um usuario com identificador {id_usuario} (uma string da forma
+def busca_por_identificador(id_usr):
+  """Localiza um usuario com identificador {id_usr} (uma string da forma
   "U-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_usuario.Classe}.
-  Se {id_usuario} é {None} ou tal usuário não existe, devolve {None}."""
-  return obj_usuario_IMP.busca_por_identificador(id_usuario)
+  Se {id_usr} é {None} ou tal usuário não existe, devolve {None}."""
+  return obj_usuario_IMP.busca_por_identificador(id_usr)
 
 def busca_por_email(em):
   """Localiza um usuário cujo endereço de email é {em} (um string da forma
@@ -114,16 +114,18 @@ def confere_e_elimina_conf_senha(args):
 
 # FUNÇÕES PARA DEPURAÇÃO
 
-def verifica(usr, id, atrs):
-  """Faz testes de consistência básicos de um objeto {usr} de classe {obj_usuario.Classe}, 
-  dados o identificador esperado {id}, e os atributos esperados {atrs}.
+def verifica_criacao(usr, id_usr, atrs):
+  """Faz testes de consistência básicos de um objeto {usr} de classe 
+  {obj_usuario.Classe}.  Tipicamente usada para testar a função {cria}
   
-  Especificamente, verifica as funções {obtem_identificador(usr)},
-  {obtem_atributos(usr)} e {busca_por_identificador(id)}.
+  Especificamente, testa se {obtem_identificador(usr)} devolve
+  o identificador esperado {id_usr}, {obtem_atributos(usr)} devolve 
+  os atributos esperados {atrs}, e {busca_por_identificador(id_usr)}
+  devolve o próprio {usr}.
   
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
-  return obj_usuario_IMP.verifica(usr, id, atrs)
+  return obj_usuario_IMP.verifica_criacao(usr, id_usr, atrs)
 
 def cria_testes(verb):
   """Limpa a tabela de usuários com {inicializa(True)}, e cria pelo menos três usuários
@@ -136,8 +138,8 @@ def cria_testes(verb):
   para cada objeto criado.""" 
   obj_usuario_IMP.cria_testes(verb)
 
-def diagnosticos(val):
+def liga_diagnosticos(val):
   """Habilita (se {val=True}) ou desabilita (se {val=False}) a
   impressão em {sys.stderr} de mensagens de diagnóstico pelas 
   funções deste módulo."""
-  obj_usuario_IMP.diagnosticos(val)
+  obj_usuario_IMP.liga_diagnosticos(val)

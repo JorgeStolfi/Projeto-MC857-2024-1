@@ -4,9 +4,9 @@ import html_elem_button_simples
 import html_elem_button_submit
 
 
-def gera(id_usuario, atrs, admin, texto_bt, comando_bt):
+def gera(id_usr, atrs, admin, texto_bt, comando_bt):
   # Constrói tabela com dados:
-  ht_table = html_bloco_dados_de_usuario.gera(id_usuario, atrs, admin)
+  ht_table = html_bloco_dados_de_usuario.gera(id_usr, atrs, admin)
 
   # Constrói formulário com botões 'Confirmar' e 'Cancelar':
   ht_submit = html_elem_button_submit.gera(texto_bt, comando_bt, None, '#55ee55')

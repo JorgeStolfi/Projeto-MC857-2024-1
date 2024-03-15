@@ -22,7 +22,7 @@ def gera(ses, bt_ver, bt_fechar):
 
   ht_campos = [ ht_ses_id, ht_codigo_usuario, ht_estado, ht_cookie, ht_data ]
   
-  args_bt = {'id_sessao': ses_id} # Argumentos para os botões.
+  args_bt = {'id_ses': ses_id} # Argumentos para os botões.
   cor_bt_admin = '#FFA700' # Cor para botões de adminstrador.
 
   # O comando para tratar a url "ver_detalhes_sessao" ainda não existe, e deverá ser implementado

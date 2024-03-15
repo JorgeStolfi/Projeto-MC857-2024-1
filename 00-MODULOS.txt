@@ -7,14 +7,14 @@ db_base_sql
 db_conversao_sql
 db_tabela_generica
 
-obj_raiz
-
+util_valida_campo
 util_identificador
 
-obj_sessao
-obj_usuario
+obj_raiz
 
-util_valida_campo
+obj_usuario
+obj_sessao
+obj_video
 
 db_tabelas
 
@@ -45,6 +45,7 @@ html_bloco_sessao
 html_bloco_tabela_de_campos
 html_bloco_dados_de_sessao
 html_bloco_dados_de_usuario
+html_bloco_dados_de_video
 
 html_form_login
 html_form_criar_alterar_usuario
@@ -57,14 +58,18 @@ html_pag_mensagem_de_erro
 html_pag_principal
 html_pag_ver_sessao
 html_pag_ver_usuario
+html_pag_ver_video
 
 comando_alterar_usuario
 comando_cadastrar_usuario
+comando_buscar_usuarios
 comando_fazer_login
 comando_fazer_logout
 comando_fechar_sessao
 comando_solicitar_pag_alterar_usuario
 comando_solicitar_pag_cadastrar_usuario
+comando_solicitar_pag_buscar_usuarios
+comando_solicitar_pag_upload_video
 comando_solicitar_pag_login
 comando_ver_objeto
 comando_ver_sessao

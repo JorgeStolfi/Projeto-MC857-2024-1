@@ -11,18 +11,18 @@ import comando_fazer_login
 
 import sys
 
-sys.stderr.write("Conectando com base de dados...\n")
+sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
-sys.stderr.write("Criando alguns objetos...\n")
+sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
 # ----------------------------------------------------------------------
 # Função de teste:
 
-def verifica_login(rotulo, email, senha, deveria_logar):
+def testa_comando_fazer_login(rotulo, email, senha, deveria_logar):
   global ok_global
   dados = {
     "email": email,
@@ -41,17 +41,17 @@ def verifica_login(rotulo, email, senha, deveria_logar):
     
   frag = False     # Resultado não é fragmento, é página completa.
   pretty = False   # Não tente deixar o HTML legível.
-  util_testes.testa_modulo_html(modulo, rotulo, pag, frag, pretty)
+  util_testes.escreve_resultado_html(modulo, rotulo, pag, frag, pretty)
 
 # ----------------------------------------------------------------------
 # Executa chamadas
-verifica_login("OK", "primeiro@gmail.com", "11111111", True)
-verifica_login("Erro", "nao_existo@gmail.com", "123456789", False)
+testa_comando_fazer_login("OK", "primeiro@gmail.com", "11111111", True)
+testa_comando_fazer_login("Erro", "nao_existo@gmail.com", "123456789", False)
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Teste terminou sem detectar erro\n")
+  sys.stderr.write("Testes terminados normalmente.\n")
 else:
   erro_prog("- teste falhou")

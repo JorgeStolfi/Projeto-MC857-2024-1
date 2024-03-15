@@ -4,7 +4,7 @@ import html_pag_principal
 import html_pag_mensagem_de_erro
 import obj_sessao
 
-def processa(ses, args):
+def processa(ses, cmd_args):
   if ses == None or not obj_sessao.aberta(ses):
     # Isto nunca deveria acontecer, mas em todo caso:
     pag = html_pag_mensagem_de_erro.gera(ses, "Precisa entrar no site antes de sair")

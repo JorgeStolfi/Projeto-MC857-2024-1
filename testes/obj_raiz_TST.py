@@ -11,7 +11,7 @@ from util_testes import erro_prog, aviso_prog, mostra
 import sys
 
 # ----------------------------------------------------------------------
-sys.stderr.write("Conectando com base de dados...\n")
+sys.stderr.write("  Conectando com base de dados...\n")
 db_base_sql.conecta("DB", None, None)
 
 # ----------------------------------------------------------------------
@@ -30,9 +30,9 @@ class ClasseDeTeste(obj_raiz.Classe):
 obj0 = ClasseDeTeste("X-00000000", { }) # An object just to get its type
 
 # ----------------------------------------------------------------------
-sys.stderr.write("tabela para teste:\n")
 
 nome_tb = "objtestes"
+sys.stderr.write(f"  Criando uma tabela '{nome_tb} para teste':\n")
 
 letra_tb = "X"
   # Prefixo dos identificadores de testes
@@ -53,15 +53,15 @@ colunas = \
 db_tabela_generica.limpa_tabela(nome_tb, colunas)
 
 # ----------------------------------------------------------------------
-def def_obj_mem(obj, id, atrs_SQL):
+def def_obj_mem(obj, id_obj, atrs_SQL):
   """Função que cria ou modifica objeto na memória."""
   global cache, nome_tb, letra_tb, colunas
   if obj == None:
-    atrs_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, False, db_tabelas.id_para_objeto)
-    obj = ClasseDeTeste(id, atrs_mem)
+    atrs_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, False, db_tabelas.identificador_para_objeto)
+    obj = ClasseDeTeste(id_obj, atrs_mem)
   else:
-    assert obj.id == id
-    mods_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, True, db_tabelas.id_para_objeto)
+    assert obj.id == id_obj
+    mods_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, True, db_tabelas.identificador_para_objeto)
     # Modifica os atributos:
     for chave, val in mods_mem.items():
       val_velho = obj.atrs[chave]
@@ -71,30 +71,30 @@ def def_obj_mem(obj, id, atrs_SQL):
 # ----------------------------------------------------------------------
 # Funções auxiliares de teste
 
-def verifica_objeto(rotulo, obj, id, atrs):
+def verifica_objeto(rotulo, obj, id_obj, atrs, ignore):
   """Testes básicos de consistência do objeto {obj} da classe {ClasseDeTeste}, dados 
-  {id} e {atrs} esperados."""
+  {id_obj} e {atrs} esperados."""
   global ok_global
 
-  sys.stderr.write("%s\n" % ("-" * 70))
-  sys.stderr.write("verificando usuário %s\n" % rotulo)
-  ok = obj_raiz.verifica(obj, type(obj0), id, atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+  sys.stderr.write("  %s\n" % ("-" * 70))
+  sys.stderr.write("  verificando usuário %s\n" % rotulo)
+  ok = obj_raiz.verifica_criacao(obj, type(obj0), id_obj, atrs, ignore, cache, nome_tb, letra_tb, colunas, def_obj_mem)
 
   if not ok:
     aviso_prog("teste falhou", True)
     ok_global = False
 
-  sys.stderr.write("%s\n" % ("-" * 70))
+  sys.stderr.write("  %s\n" % ("-" * 70))
   return
  
-def testa_cria_objeto(rotulo, id, atrs):
+def testa_cria_objeto(rotulo, id_obj, atrs):
   """Testa criação de objeto com atributos com {atrs}. Retorna o usuário."""
   obj = obj_raiz.cria(atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem)
-  verifica_objeto(rotulo, obj, id, atrs)
+  verifica_objeto(rotulo, obj, id_obj, atrs, None)
   return obj
 
 # ----------------------------------------------------------------------
-sys.stderr.write("testando {obj_raiz.cria}:\n")
+sys.stderr.write("  testando {obj_raiz.cria}:\n")
 obj1_atrs = { 'coisa': 100, 'treco': 101, 'lhufas': "cem" }
 obj1_ind = 1
 obj1_id = ("X-%08d" % obj1_ind)
@@ -111,7 +111,7 @@ obj3_id = ("X-%08d" % obj3_ind)
 obj3 = testa_cria_objeto("obj3", obj3_id, obj3_atrs)
 
 # ----------------------------------------------------------------------
-sys.stderr.write("testando {obj_raiz.muda_atributos}:\n")
+sys.stderr.write("  testando {obj_raiz.muda_atributos}:\n")
 
 obj1_mods = {
   'coisa': 109,
@@ -121,19 +121,19 @@ obj_raiz.muda_atributos(obj1, obj1_mods, cache, nome_tb, letra_tb, colunas, def_
 obj1_atrs_m = obj1_atrs
 for k, v in obj1_mods.items():
   obj1_atrs_m[k] = v
-verifica_objeto("obj1_d", obj1, obj1_id, obj1_atrs_m)
+verifica_objeto("obj1_d", obj1, obj1_id, obj1_atrs_m, None)
 
 obj_raiz.muda_atributos(obj2, obj2_atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem) # Não deveria mudar os atributos
-verifica_objeto("obj2", obj2, obj2_id, obj2_atrs)
+verifica_objeto("obj2", obj2, obj2_id, obj2_atrs, ('coisa',))
 
 obj2_atrs_m = obj3_atrs.copy()
 obj_raiz.muda_atributos(obj2, obj2_atrs_m, cache, nome_tb, letra_tb, colunas, def_obj_mem) # Deveria assumir os valores do obj3
-verifica_objeto("obj2_m", obj2, obj2_id, obj2_atrs_m)
+verifica_objeto("obj2_m", obj2, obj2_id, obj2_atrs_m, None)
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Teste terminou sem detectar erro\n")
+  sys.stderr.write("Testes terminados normalmente.\n")
 else:
   erro_prog("- teste falhou")

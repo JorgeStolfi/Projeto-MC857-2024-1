@@ -11,11 +11,11 @@ import comando_ver_objeto
 
 import sys
 
-sys.stderr.write("Conectando com base de dados...\n")
+sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
-sys.stderr.write("Criando alguns objetos...\n")
+sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
 # Obtem uma sessao de um usuario que é de administrador:
@@ -26,30 +26,28 @@ ok_global = True # Vira {False} se um teste falha.
 # ----------------------------------------------------------------------
 # Função de teste:
 
-def testa(rotulo, *args):
-  """Testa {funcao(*args)}, grava resultado 
+def testa_comando_ver_objeto(rotulo, *cmd_args):
+  """Testa {funcao(*cmd_args)}, grava resultado 
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
   modulo = comando_ver_objeto
   funcao = modulo.processa
   frag = False
   pretty = False
-  util_testes.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *cmd_args)
   
-for tag, id in ( \
+for tag, id_obj in ( \
     ("U", "U-00000001"),
     ("S", "S-00000001"),
-    ("T", "T-00000001"),
-    ("C", "C-00000001"),
-    ("A", "A-00000001"),
+    ("V", "V-00000001"),
     ("invalid_class", "sthiuhtaiuhfa"),
     ("item_not_found", "U-aighdiuhfsdiuhdvsiu"),
     ("blank", ""),
   ):
-  testa(tag, ses1, {'id_objeto': id})
+  testa_comando_ver_objeto(tag, ses1, {'id_obj': id_obj})
 
 # ----------------------------------------------------------------------
 # Veredito final:
 if ok_global:
-  sys.stderr.write("Teste terminou sem detectar erro\n")
+  sys.stderr.write("Testes terminados normalmente.\n")
 else:
   erro_prog("- teste falhou")

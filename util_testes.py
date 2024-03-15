@@ -9,7 +9,7 @@ def erro_prog(mens):
   e a palavra " ** erro: ", e aborta a execução com {assert False}.
   
   Esta função deve ser chamada apenas para informar erros do programa. 
-  Erros em dados fornecidos pelo usuário (cliente ou administrador) devem ser enviados ao
+  Erros em dados fornecidos pelo usuário (comum ou administrador) devem ser enviados ao
   browser na forma de uma página HTML com a mensagem de erro (vide {html_pag_mensagem_de_erro.gera})."""
   util_testes_IMP.erro_prog(mens)
 
@@ -19,7 +19,7 @@ def aviso_prog(mens, grave):
   Não aborta a execução e não retorna nada.  
   
   Esta função deve ser chamada apenas para depuração do programa. 
-  Avisos destinados ao usuário (cliente ou administrador) devem ser enviados ao browser na forma
+  Avisos destinados ao usuário (comum ou administrador) devem ser enviados ao browser na forma
   de uma página HTML com a mensagem de erro (vide {html_pag_mensagem_de_erro.gera})."""
   util_testes_IMP.aviso_prog(mens, grave)
 
@@ -30,7 +30,7 @@ def mostra(ind,mens):
   
 # VERIFICAÇÃO DE FUNÇÕES QUE GERAM HTML
 
-def testa_modulo_html(modulo, rotulo, res, frag, pretty):
+def escreve_resultado_html(modulo, rotulo, res, frag, pretty):
   """Escreve o string {res} em "testes/saida/{modulo}.{rotulo}.html".
   Supõe que {res} é um string HTML5 que é o resultado de 
   testar uma ou mais funções do {modulo} especificado.
@@ -46,23 +46,23 @@ def testa_modulo_html(modulo, rotulo, res, frag, pretty):
   depuração por inspeção direta do código HTML5 com editor de texto.
   Porém, esse filtro pode inserir espaços em branco em textos, por
   exemplo em "A<b>C</b>D" vira "A B C" no browser em vez de "ABC"."""
-  util_testes_IMP.testa_modulo_html(modulo, rotulo, res, frag, pretty)
+  util_testes_IMP.escreve_resultado_html(modulo, rotulo, res, frag, pretty)
 
-def testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args):
+def testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args):
   """Chama a função {funcao} do módulo {modulo} com os argumentos {*args}.
   A funçao deve devolver um string que é um fragmento HTML, ou 
   uma lista ou tupla de tais fragmentos.  (No segundo caso, {frag} 
   deve ser {True}).
   
   Grava o resultado {res} da chamada em "testes/saida/{modulo}.{funcao}.{rotulo}.html",
-  usando {testa_modulo_html}."""
-  util_testes_IMP.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  usando {escreve_resultado_html}."""
+  util_testes_IMP.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # FORMATAÇÃO DE DADOS PARA DIAGNÓSTICO
 
 def formata_dict(dados):
   """Esta função de depuração recebe um dicionário {dados}
-  e devolve um string é um fragmento HTML5 que mostra esses
+  e devolve um fragmento HTML5 que mostra esses
   dados em formato relativamente legível (JSON com quebras de
   linha e indentação)."""
   return util_testes_IMP.formata_dict(dados)

@@ -168,8 +168,8 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
 
   def extrai_cookies(self, dados):
     """Analisa a cadeia {cook_str} que é o campo 'Cookie'
-        do dicionário {dados}, que veio com os headers HTTP, convertendo-a
-    em um dicionário Python.
+    do dicionário {dados}, que veio com os headers HTTP, convertendo-a
+    em um dicionário Python.  Retorna esse dicionário.
 
     Supõe que {cook_str} é uma cadeia com formato '{chave1}={valor1};
     {chave2}={valor2}; {...}'. Os campos de valor não podem conter ';'
@@ -220,9 +220,9 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
       # Não temos cookies?
       return None
     cookies = dados['cookies']
-    if 'id_sessao' in cookies:
-      id_sessao = cookies['id_sessao']
-      ses = obj_sessao.busca_por_identificador(id_sessao)
+    if 'id_ses' in cookies:
+      id_ses = cookies['id_ses']
+      ses = obj_sessao.busca_por_identificador(id_ses)
     else:
       ses = None
     return ses
@@ -258,17 +258,17 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
 
     # Manda cookies que identificam usuário e sessão:
     if ses != None:
-      id_sessao = obj_sessao.obtem_identificador(ses)
+      id_ses = obj_sessao.obtem_identificador(ses)
       cookie = obj_sessao.obtem_cookie(ses)
       usr = obj_sessao.obtem_usuario(ses)
-      id_usuario = obj_usuario.obtem_identificador(usr)
+      id_usr = obj_usuario.obtem_identificador(usr)
     else:
-      id_sessao = ""
+      id_ses = ""
       cookie = ""
       usr = None
-      id_usuario = ""
-    self.send_header('Set-Cookie', 'id_usuario=' + id_usuario)
-    self.send_header('Set-Cookie', 'id_sessao=' + id_sessao)
+      id_usr = ""
+    self.send_header('Set-Cookie', 'id_usr=' + id_usr)
+    self.send_header('Set-Cookie', 'id_ses=' + id_ses)
     self.send_header('Set-Cookie', 'cookie_sessao=' + cookie)
 
     self.end_headers()
@@ -328,22 +328,21 @@ def processa_comando(tipo, ses, dados):
     # Obtem os argumentos do comando:
     if tipo == 'GET':
       # Comando causado por acesso inicial ou botão simples:
-      args = dados['query_data']; del dados['query_data'] # Argumentos do comando "GET", no próprio URL "cmd?n1=v1&n2=v2...".
+      cmd_args = dados['query_data']; del dados['query_data'] # Argumentos do comando "GET", no próprio URL "cmd?n1=v1&n2=v2...".
     elif tipo == 'POST':
       # Comando causado por botão do tipo "submit" dentro de um <form>...</form>:
-      args = dados['form_data']; del dados['form_data'] # Campos do formulário.
+      cmd_args = dados['form_data']; del dados['form_data'] # Campos do formulário.
     else:
       assert False
 
-    # Remove parenteses e colchetes supérfluos em {args}:
-    args = descasca_argumentos(args)
+    # Remove parenteses e colchetes supérfluos em {cmd_args}:
+    cmd_args = descasca_argumentos(cmd_args)
 
     # Despacha o comando:
     # !!! Completar a lista abaixo com todos os módulos {comando_*.py} que existem. !!!
 
-    sys.stderr.write("!! processa_comando: cmd = %s\n" % cmd)
-    sys.stderr.write("!! processa_comando: ses = %s\n" % \
-      (obj_sessao.obtem_identificador(ses) if ses != None else "None"))
+    id_ses = obj_sessao.obtem_identificador(ses) if ses != None else "None"
+    sys.stderr.write("  !! {processa_comando_hhtp.processa_comando}: " + f"ses = {id_ses} cmd = {str(cmd)}\n")
 
     # --- comandos gerais ------------------------------------------------
 
@@ -353,54 +352,64 @@ def processa_comando(tipo, ses, dados):
 
     elif cmd == '/ver_objeto':
       # Quer ver os atributos de um objeto:
-      pag = comando_ver_objeto.processa(ses, args)
+      pag = comando_ver_objeto.processa(ses, cmd_args)
 
     # --- comandos referentes a {obj_usuario.Classe} ------------------------
 
     elif cmd == '/solicitar_pag_cadastrar_usuario':
       # Quer formumlário para cadastrar novo usuário:
-      pag = comando_solicitar_pag_cadastrar_usuario.processa(ses, args)
+      pag = comando_solicitar_pag_cadastrar_usuario.processa(ses, cmd_args)
 
     elif cmd == '/solicitar_pag_alterar_usuario':
       # Quer formumlário para alterar novo usuário:
-      pag = comando_solicitar_pag_alterar_usuario.processa(ses, args)
+      pag = comando_solicitar_pag_alterar_usuario.processa(ses, cmd_args)
 
     elif cmd == '/cadastrar_usuario':
       # Preencheu atributos de novo usuário e quer executar a criação:
-      pag = comando_cadastrar_usuario.processa(ses, args)
+      pag = comando_cadastrar_usuario.processa(ses, cmd_args)
 
     elif cmd == '/alterar_usuario':
       # Alterou atributos de usuário no formulário e quer executar as mudanças:
-      pag = comando_alterar_usuario.processa(ses, args)
+      pag = comando_alterar_usuario.processa(ses, cmd_args)
 
     # --- comandos referentes a {obj_sessao.Classe} -----------------------
 
     elif cmd == '/solicitar_pag_login':
       # Qer formulário para fazer "login":
       # ATENÇÃO: Este comando só mostra o formulário de login, não muda a sessão ainda.
-      pag = comando_solicitar_pag_login.processa(ses, args)
+      pag = comando_solicitar_pag_login.processa(ses, cmd_args)
 
     elif cmd == '/fazer_login':
       # Preencheu o formulário de login e quer entrar (criar nova sessão):
       # ATENÇÃO: devolve também a nova sessão (que pode ser {None} se o login não deu certo).
-      pag, ses_nova = comando_fazer_login.processa(ses, args)
+      pag, ses_nova = comando_fazer_login.processa(ses, cmd_args)
 
     elif cmd == '/fazer_logout':
       # Quer fazer "logout" (fechar a sessão corrente):
       # ATENÇÃO: devolve também a nova sessão (que geralmente vai ser {None}).
-      pag, ses_nova = comando_fazer_logout.processa(ses, args)
+      pag, ses_nova = comando_fazer_logout.processa(ses, cmd_args)
 
     elif cmd == '/fechar_sessao':
       # Quer encerrar uma sessão dada:
-      pag, ses_nova = comando_fechar_sessao.processa(ses, args)
+      pag, ses_nova = comando_fechar_sessao.processa(ses, cmd_args)
 
     elif cmd == '/ver_sessoes':
       # !!! ESCLARECER !!!
       # Quer ver sessões:
-      pag = comando_ver_sessoes.processa(ses, args)
+      pag = comando_ver_sessoes.processa(ses, cmd_args)
 
     elif cmd == '/ver_sessao':
-      pag = comando_ver_sessao.processa(ses, args)
+      pag = comando_ver_sessao.processa(ses, cmd_args)
+
+    # --- comandos referentes a {obj_video.Classe} -----------------------
+
+    elif cmd == '/fazer_upload_video':
+      # Preencheu o formulário de upload de video e quer fazer o upload:
+      pag = comando_fazer_upload_video.processa(ses, cmd_args)
+
+    elif cmd == '/solicitar_pag_upload_video':
+      # Quer formumlário para fazer upload de um video:
+      pag = comando_solicitar_pag_upload_video(ses, cmd_args)
 
     else:
       # Comando não identificado
@@ -409,47 +418,51 @@ def processa_comando(tipo, ses, dados):
   elif tipo == 'HEAD':
     # Comando emitido por proxy server:
     # !!! (MAIS TARDE) Tratar este caso !!!
-    args = {}.copy()
+    cmd_args = {}.copy()
     pag =  html_pag_mensagem_de_erro.gera(ses, ("** comando HEAD \"%s\" não implementado" % cmd))
   else:
     # Tipo de comando inválido:
-    args = {}.copy()
+    cmd_args = {}.copy()
     pag =  html_pag_mensagem_de_erro.gera(ses, ("** comando \"%s\" não implementado" % tipo))
 
-  sys.stderr.write("!! processa_comando: pag = %s\n" % pag)
+  sys.stderr.write("    pag resultado = %s\n" % pag)
 
   if mostra_cmd:
     # Acrescenta os dados para depuração:
-    pag = re.sub(r'</body>', ("<br/>%s<br/><br/></body>" % formata_dados_http(cmd,args,dados)), pag)
+    ht_cmd = formata_dados_http(cmd,cmd_args,dados)
+    sys.stderr.write(f"{'~'*70}\n{ht_cmd}\n{'~'*70}\n")
+    # Must use {re.compile} first to avoid 'bad escape' error.
+    re_cmp = re.compile(r'</body>') 
+    pag = re_cmp.sub(("<br/>%s<br/><br/></body>" % ht_cmd), pag)
 
   return pag, ses_nova
 
-def formata_dados_http(cmd,args,resto):
+def formata_dados_http(cmd,cmd_args,resto):
   """Esta função de depuração devolve um string que é um trecho de HTML5 a ser inserido
-  no final de uma página.  Ele mostra a função {cmd} que foi executada, o dicionário {args}
+  no final de uma página.  Ele mostra a função {cmd} que foi executada, o dicionário {cmd_args}
   com os argumentos da mesma, e o dicionário {resto} com os demais parâmetros do comando
   HTTP recebido, num formato razoavelmente legível."""
   resto_d = resto.copy()
   tipo = resto_d['command']; del resto_d['command'] # 'GET', 'POST', ou 'HEAD'
   # Dados principais:
-  args_lin = util_testes.formata_dict(args)
+  args_lin = util_testes.formata_dict(cmd_args)
   resto_lin = util_testes.formata_dict(resto_d)
 
   # Monta um bloco HTML com os dados de depuração:
   texto = ("Resposta a comando HTTP \"%s\" recebido com dados principais:" % tipo)
-  texto = texto + ("<br/>cmd = \"%s\"<br/>args =<br/>%s" % (cmd, args_lin))
+  texto = texto + ("<br/>cmd = \"%s\"<br/>cmd_args =<br/>%s" % (cmd, args_lin))
   texto = texto + ("<br/><hr/>Outros dados:<br/>%s" % resto_lin)
   estilo = f"font-family: Courier; font-size: 18px; font-weight: normal; padding: 5px; text-align: left;"
   conteudo = html_elem_span.gera(estilo, texto)
   conteudo = "<hr/>\n" + html_elem_div.gera("background-color:#bbbbbb;", conteudo) + "<hr/>\n"
   return conteudo
 
-def descasca_argumentos(args):
+def descasca_argumentos(cmd_args):
   """Dado um dicionário de argumentos extraídos de um comando GET ou POST,
-  devolve uma cópia do mesmo onde cada valor que é uma tupla ou lista de 1
-  é substituído por esse elemento."""
+  devolve uma cópia do mesmo onde cada valor que é uma tupla (ou lista) de 
+  comprimento 1 é substituído por seu único elemento."""
   args_new = {}.copy()
-  for ch, val in args.items():
+  for ch, val in cmd_args.items():
     if val != None and (type(val) is list or type(val) is tuple):
       if len(val) == 1:
         val = val[0]

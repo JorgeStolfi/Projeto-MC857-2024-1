@@ -5,14 +5,15 @@ import html_elem_textarea
 from util_testes import erro_prog
 import sys
 
+tbc_debug = False;
+
 def gera(dados_linhas, atrs, admin, ignora_admin=False):
-  # sys.stderr.write("{html_bloco_tabela_de_campos_IMP.gera}: atrs = %s\n" %str(atrs))
+  if tbc_debug: sys.stderr.write("  > {html_bloco_tabela_de_campos_IMP.gera}: atrs = %s\n" %str(atrs))
 
   # Converte os dados brutos das linhas para fragmentos HTML:
   linhas = [].copy()
   for rot, tipo, chave, dica, adm_only in dados_linhas:
-    # sys.stderr.write("admin: "+str(admin)+"\n")
-    # sys.stderr.write("adm_only: "+str(adm_only)+"\n")
+    if tbc_debug: sys.stderr.write("  > admin: " + str(admin) + " adm_only: " + str(adm_only) + "\n")
     if ignora_admin:
       prepara_para_gerar_campo(atrs, chave, dica, linhas, rot, tipo, not adm_only)
     elif admin or not adm_only:

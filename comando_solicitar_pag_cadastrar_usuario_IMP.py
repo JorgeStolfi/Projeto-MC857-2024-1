@@ -2,7 +2,7 @@
 
 import html_pag_cadastrar_usuario
 
-def processa(ses, args):
+def processa(ses, cmd_args):
   pag = html_pag_cadastrar_usuario.gera(ses, None, None)
   return pag
     

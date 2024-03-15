@@ -21,11 +21,11 @@ def inicializa_todas(limpa):
   servidor, depois de executar {basesql.conecta(...)}."""
   db_tabelas_IMP.inicializa_todas(limpa)
 
-def id_para_objeto(id):
-  """Converte um identificador de objeto ("U-{NNNNNNNN}", "S-{NNNNNNNN}" etc.)
+def identificador_para_objeto(id_obj):
+  """Converte um identificador de objeto {id_obj} ("U-{NNNNNNNN}", "S-{NNNNNNNN}" etc.)
   para o objeto correspondente, com {{modulo}.busca_por_identificador}
   onde {modulo} é o módulo indicado pela letra ({usuario}, {sessao}, etc.)."""
-  return db_tabelas_IMP.id_para_objeto(id)
+  return db_tabelas_IMP.identificador_para_objeto(id_obj)
 
 def cria_todos_os_testes(verb):
   """Limpa todas as tabelas com {inicializa_todas(True)}, e cria três 

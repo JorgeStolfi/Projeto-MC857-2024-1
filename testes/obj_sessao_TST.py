@@ -10,18 +10,18 @@ import util_testes
 from util_testes import erro_prog, mostra, aviso_prog
 
 # ----------------------------------------------------------------------
-sys.stderr.write("Conectando com base de dados...\n")
+sys.stderr.write("  Conectando com base de dados...\n")
 db_base_sql.conecta("DB",None,None)
 
 # ----------------------------------------------------------------------
-sys.stderr.write("Inicializando módulo {usuario}, limpando tabela, criando usuários para teste:\n")
+sys.stderr.write("  Inicializando módulo {usuario}, limpando tabela, criando usuários para teste:\n")
 obj_usuario.cria_testes(True)
 
-sys.stderr.write("Inicializando módulo {sessao}, limpando tabela:\n")
+sys.stderr.write("  Inicializando módulo {sessao}, limpando tabela:\n")
 obj_sessao.inicializa_modulo(True)
 
 # ----------------------------------------------------------------------
-sys.stderr.write("Obtendo dois usuários para teste:\n")
+sys.stderr.write("  Obtendo dois usuários para teste:\n")
 
 usr1 = obj_usuario.busca_por_identificador("U-00000001")
 usr2 = obj_usuario.busca_por_identificador("U-00000002")
@@ -36,26 +36,26 @@ def verifica_sessao(rotulo, ses, ident, usr, abrt, cookie):
   {ident} e {atrs} esperados."""
   global ok_global
 
-  sys.stderr.write("%s\n" % ("-" * 70))
-  sys.stderr.write("verificando sessão %s\n" % rotulo)
+  sys.stderr.write("  %s\n" % ("-" * 70))
+  sys.stderr.write("  verificando sessão %s\n" % rotulo)
   atrs = { 'usr': usr, 'abrt': abrt, 'cookie': cookie }
-  ok = obj_sessao.verifica(ses, ident, atrs)
+  ok = obj_sessao.verifica_criacao(ses, ident, atrs)
   
   if ses != None and type(ses) is obj_sessao.Classe:
     
-    sys.stderr.write("testando {obtem_usuario()}:\n")
+    sys.stderr.write("  testando {obj_sessao.obtem_usuario()}:\n")
     usr1 = obj_sessao.obtem_usuario(ses)
     if usr1 != usr:
       aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(usr),True)
       ok = False
       
-    sys.stderr.write("testando {aberta()}:\n")
+    sys.stderr.write("  testando {obj_sessao.aberta()}:\n")
     abrt1 = obj_sessao.aberta(ses)
     if abrt1 != abrt:
       aviso_prog("retornou " + str(abrt1) + ", deveria ter retornado " + str(abrt),True)
       ok = False
        
-    sys.stderr.write("testando {obtem_cookie()}:\n")
+    sys.stderr.write("  testando {obj_sessao.obtem_cookie()}:\n")
     cookie1 = obj_sessao.obtem_cookie(ses)
     if cookie1 != cookie:
       aviso_prog("retornou " + str(cookie1) + ", deveria ter retornado " + str(cookie),True)
@@ -65,11 +65,11 @@ def verifica_sessao(rotulo, ses, ident, usr, abrt, cookie):
     aviso_prog("teste falhou",True)
     ok_global = False
 
-  sys.stderr.write("%s\n" % ("-" * 70))
+  sys.stderr.write("  %s\n" % ("-" * 70))
   return
 
 # ----------------------------------------------------------------------
-sys.stderr.write("testando {obj_sessao.cria}:\n")
+sys.stderr.write("  testando {obj_sessao.cria}:\n")
 scook1 = "ABCDEFGHIJK"
 s1 = obj_sessao.cria(usr1, scook1)
 sindice1 = 1
@@ -95,6 +95,6 @@ verifica_sessao("fecha s1", s1, sident1, usr1, False, scook1)
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Teste terminou sem detectar erro\n")
+  sys.stderr.write("Testes terminados normalmente.\n")
 else:
   erro_prog("- teste falhou")

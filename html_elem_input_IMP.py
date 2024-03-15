@@ -6,14 +6,14 @@ def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio)
   ht_rotulo = html_elem_label.gera(rotulo, ": ")
   ht_tipo = " type =\"" + tipo + "\""
   ht_nome = " name=\"" + nome + "\""
-  ht_id = " id=\"" + nome + ("." + val_ini if val_ini != None else "") + "\""
+  ht_id_campo = " id=\"" + nome + ("." + val_ini if val_ini != None else "") + "\""
 
   if val_ini != None and dica != None:
     erro_prog("{val_ini} e {dica} são mutuamente exclusivos")
   if val_ini == None and not editavel:
     erro_prog("{val_ini} não pode ser {None} se o campo não é editável")
 
-  ht_val_ini = ( " value =\"" + str(val_ini) + "\"" if val_ini != None else "" )
+  ht_val_ini = ( " value =\"" + val_ini + "\"" if val_ini != None else "" )
   if val_ini == 'on' and tipo == 'checkbox':
     ht_val_ini += ' checked '
 
@@ -33,6 +33,7 @@ def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio)
     "<input" + \
       ht_tipo + \
       ht_nome + \
+      ht_id_campo + \
       ht_val_ini + \
       ht_readonly + \
       ht_readonlybackground + \

@@ -31,13 +31,13 @@ def valor_mem_para_valor_SQL(nome, val_mem, tipo_mem, tipo_SQL, nulo_ok):
   elif type(val_mem) is list or type(val_mem) is tuple or type(val_mem) is dict:
     erro_prog("valor " + str(val_mem) + " não pode ser convertido")
   else:
-    # Supõe que é objeto.  Obtem o id:
+    # Supõe que é objeto.  Obtem o identificador:
     if tipo_SQL != 'TEXT':
       erro_prog("tipo SQL do atributo '" + nome + "' deveria ser 'TEXT' mas é '" + tipo_SQL + "'") 
     val_SQL = obj_raiz.obtem_identificador(val_mem)
   return val_SQL
 
-def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, id_para_objeto):
+def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, identificador_para_objeto):
   if val_SQL == None:
     if nulo_ok:
       return None
@@ -47,7 +47,7 @@ def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, id_para
     erro_prog("valor " + str(val_SQL) + " não pode ser convertido para tipo " + str(tipo_mem))
   if tipo_SQL == 'TEXT':
     if issubclass(tipo_mem, obj_raiz.Classe):
-      val_mem = id_para_objeto(val_SQL)
+      val_mem = identificador_para_objeto(val_SQL)
     else:
       assert type(val_SQL) is str
       val_mem = val_SQL
@@ -90,14 +90,14 @@ def dict_mem_para_dict_SQL(dic_mem, cols, falta_ok):
     erro_prog("atributos espúrios em " + str(dic_mem))
   return dic_SQL
 
-def dict_SQL_para_dict_mem(dic_SQL, cols, falta_ok, id_para_objeto):
+def dict_SQL_para_dict_mem(dic_SQL, cols, falta_ok, identificador_para_objeto):
   if len(dic_SQL) > len(cols):
     erro_prog("numero excessivo de atributos em " + str(dic_SQL))
   dic_mem = {}.copy()
   for chave, tipo_mem, tipo_SQL, nulo_ok in cols:
     if chave in dic_SQL: 
       val_SQL = dic_SQL[chave]
-      val_mem = valor_SQL_para_valor_mem(chave, val_SQL, tipo_SQL, tipo_mem, nulo_ok, id_para_objeto)
+      val_mem = valor_SQL_para_valor_mem(chave, val_SQL, tipo_SQL, tipo_mem, nulo_ok, identificador_para_objeto)
       dic_mem[chave] = val_mem
     elif not falta_ok:
       erro_prog("atributo '" + chave + "' faltando")
