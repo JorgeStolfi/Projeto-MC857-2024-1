@@ -21,16 +21,16 @@ def processa(ses, cmd_args):
     lista_ids_usr = [].copy()
     if 'id_usr' in cmd_args:
       # Deve haver um único usuário com esse identificador:
-      id_usr = obj_usuario.busca_por_identificador(cmd_args['id_usr'])
+      id_usr = obj_usr.busca_por_identificador(cmd_args['id_usr'])
     elif 'email' in cmd_args:
       # Deve haver um único usuário com esse email
-      id_usr = obj_usuario.busca_por_email(cmd_args['email'])
+      id_usr = obj_usr.busca_por_email(cmd_args['email'])
     elif 'nome' in cmd_args:
       # Pode haver vários usuários:
-      id_usr = obj_usuario.busca_por_nome(cmd_args['CPF'])
+      id_usr = obj_usr.busca_por_nome(cmd_args['CPF'])
     else:
       # Deve haver um único usuário com esse email
-      lista_ids_usr = obj_usuario.busca_por_email(cmd_args['email'])
+      lista_ids_usr = obj_usr.busca_por_email(cmd_args['email'])
  
     if id_usr != None:
       lista_ids_usr.append(id_usr)

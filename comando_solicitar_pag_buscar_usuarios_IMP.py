@@ -2,8 +2,8 @@
 
 import html_pag_buscar_usuarios
 import html_pag_mensagem_de_erro
-import obj_sessao
-import obj_usuario
+import sessao
+import usuario
 
 def processa(ses, args):
   if ses == None:
