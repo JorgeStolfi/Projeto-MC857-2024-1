@@ -35,6 +35,6 @@ db_tabelas.cria_todos_os_testes(True)
 # Testes das funções de {gera_html_elem_form}:
 usr1 = obj_usuario.busca_por_identificador("U-00000001")
 assert usr1 != None
-testa_gera("N", obtem_identificador(usr1), obtem_atributos(usr1), None, "MeuTexto", "http://google.com")
+testa_gera("N", obtem_identificador(usr1), obtem_atributos(usr1), None, "Confirmar", "http://google.com")
 
 sys.stderr.write("Testes terminados normalmente.\n")
