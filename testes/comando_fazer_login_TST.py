@@ -49,7 +49,6 @@ testa_comando_fazer_login("OK", "primeiro@gmail.com", "11111111", True)
 testa_comando_fazer_login("Erro_Email", "nao_existo@gmail.com", "123456789", False)
 testa_comando_fazer_login("Erro_Senha", "primeiro@gmail.com", "123456789", False)
 
-
 # ----------------------------------------------------------------------
 # Veredito final:
 
