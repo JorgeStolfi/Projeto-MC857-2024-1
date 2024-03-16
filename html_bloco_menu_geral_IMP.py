@@ -50,19 +50,18 @@ def gera_botoes_linha_1_logado(nome_usuario, admin):
   geral, para um usuário que está logado."""
   botoes_sempre = (
       html_elem_button_simples.gera("Minha Conta", 'solicitar_pag_alterar_usuario', None, '#eeeeee'),
-      html_elem_button_simples.gera("Minhas Sessões", 'ver_sessoes', None, '#eeeeee'),
+      html_elem_button_simples.gera("Minhas Sessões", 'ver_minhas_sessoes', None, '#eeeeee'),
       html_elem_button_simples.gera("Sair", 'fazer_logout', None, '#eeeeee'),
       gera_nome_usuario(nome_usuario)
     )
   if admin:
     botoes_sempre += (
-      html_elem_button_simples.gera("Buscar usuários", 'solicitar_pag_buscar_usuarios', None, '#eeeeee'),
-      html_elem_button_simples.gera("Buscar Videos", 'solicitar_pag_buscar_videos', None, '#eeeeee'),
+      html_elem_button_simples.gera("Buscar usuários", 'buscar_usuarios', None, '#eeeeee'),
     )
     botoes_videos = ( )
   else:
     botoes_videos = (
-      html_elem_button_simples.gera("Meus Videos", 'ver_videos', None, '#eeeeee'),
+      html_elem_button_simples.gera("Meus Videos", 'ver_meus_videos', None, '#eeeeee'),
     )
   return botoes_sempre + botoes_videos
 
@@ -83,7 +82,8 @@ def gera_botoes_linha_2():
   ht_busca_obj_input = html_elem_input.gera(None, "text", "id_objeto", None, None, True, "Id do objeto", None)
   ht_busca_obj_bt = html_elem_button_submit.gera("Checar Objeto", "ver_objeto", None, '#ffdd22')
   ht_busca_obj_form = html_elem_form.gera(ht_busca_obj_input + ht_busca_obj_bt)
-  botoes = ( ht_busca_obj_form, )
+  botoes = \
+    ht_busca_obj_form 
   return botoes
 
 def gera_nome_usuario(nome_usuario):

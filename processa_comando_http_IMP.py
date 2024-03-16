@@ -7,10 +7,7 @@ import obj_usuario
 import comando_solicitar_pag_login
 import comando_solicitar_pag_cadastrar_usuario
 import comando_solicitar_pag_alterar_usuario
-import comando_solicitar_pag_buscar_usuarios
 
-import comando_buscar_usuarios
-import comando_fazer_login
 import comando_fazer_login
 import comando_fazer_logout
 import comando_fechar_sessao
@@ -375,14 +372,6 @@ def processa_comando(tipo, ses, dados):
       # Alterou atributos de usuário no formulário e quer executar as mudanças:
       pag = comando_alterar_usuario.processa(ses, cmd_args)
 
-    elif cmd == '/solicitar_pag_buscar_usuarios':
-      # Quer formumlário para cadastrar novo usuário:
-      pag = comando_solicitar_pag_buscar_usuarios.processa(ses, cmd_args)
-
-    elif cmd == '/buscar_usuarios':
-      # Quer formumlário para cadastrar novo usuário:
-      pag = comando_buscar_usuarios.processa(ses, cmd_args)
-
     # --- comandos referentes a {obj_sessao.Classe} -----------------------
 
     elif cmd == '/solicitar_pag_login':
@@ -405,6 +394,7 @@ def processa_comando(tipo, ses, dados):
       pag, ses_nova = comando_fechar_sessao.processa(ses, cmd_args)
 
     elif cmd == '/ver_sessoes':
+      # !!! ESCLARECER !!!
       # Quer ver sessões:
       pag = comando_ver_sessoes.processa(ses, cmd_args)
 
@@ -420,10 +410,6 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/solicitar_pag_upload_video':
       # Quer formumlário para fazer upload de um video:
       pag = comando_solicitar_pag_upload_video(ses, cmd_args)
-
-    elif cmd == '/ver_meus_videos':
-      # Solicita página com lista de vídeos do usuário:
-      pag = comando_ver_meus_videos.processa(ses, cmd_args)
 
     else:
       # Comando não identificado
