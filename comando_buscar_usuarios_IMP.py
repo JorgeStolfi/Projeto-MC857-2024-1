@@ -20,17 +20,15 @@ def processa(ses, cmd_args):
     id_usr = None
     lista_ids_usr = [].copy()
     if 'id_usr' in cmd_args:
-      # Deve haver um único usuário com esse identificador:
-      id_usr = obj_usuario.busca_por_identificador(cmd_args['id_usr'])
+      # Deve haver um único usuário com esse identificador
+      obj_usr = obj_usuario.busca_por_identificador(cmd_args['id_usr'])
+      id_usr = obj_usuario.obtem_identificador(obj_usr)
     elif 'email' in cmd_args:
       # Deve haver um único usuário com esse email
       id_usr = obj_usuario.busca_por_email(cmd_args['email'])
     elif 'nome' in cmd_args:
-      # Pode haver vários usuários:
-      id_usr = obj_usuario.busca_por_nome(cmd_args['CPF'])
-    else:
-      # Deve haver um único usuário com esse email
-      lista_ids_usr = obj_usuario.busca_por_email(cmd_args['email'])
+      # Pode haver vários usuários com este nome
+      lista_ids_usr = obj_usuario.busca_por_nome(cmd_args['nome'])
  
     if id_usr != None:
       lista_ids_usr.append(id_usr)
@@ -46,7 +44,7 @@ def processa(ses, cmd_args):
   except ErroAtrib as ex:
     erros = ex.args[0]
     # Repete a página com mensagem de erro:
-    pag = html_pag_buscar_usuarios.gera(ses, args, obj_sessao.eh_administrador(ses), erros)
+    pag = html_pag_buscar_usuarios.gera(ses, ex.args, obj_sessao.eh_administrador(ses), erros)
     return pag
 
 def verifica_pelo_menos_um_campo(campos_busc, cmd_args):
