@@ -37,7 +37,7 @@ def verifica_login(rotulo, email, senha, deveria_logar):
 
   if ((not deveria_logar) and ses != None):
     ok_global = False
-    aviso_prog("Gerou gerou a sessão quando não deveria para o email " + str(email), True)
+    aviso_prog("Gerou gerou a sessão quando não deveria para o email " + str(email) + " com senha " + str(senha), True)
     
   frag = False     # Resultado não é fragmento, é página completa.
   pretty = False   # Não tente deixar o HTML legível.
@@ -46,12 +46,13 @@ def verifica_login(rotulo, email, senha, deveria_logar):
 # ----------------------------------------------------------------------
 # Executa chamadas
 verifica_login("OK", "primeiro@gmail.com", "11111111", True)
-verifica_login("Erro", "nao_existo@gmail.com", "123456789", False)
+verifica_login("Erro_Email", "nao_existo@gmail.com", "123456789", False)
+verifica_login("Erro_Senha", "primeiro@gmail.com", "123456789", False)
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Teste terminou sem detectar erro\n")
+  sys.stderr.write("Teste terminou sem detectar erro na geração da sessão\n")
 else:
   erro_prog("- teste falhou")
