@@ -1,1 +1,6 @@
-222333 Testar módulos {comando_ver_sessao} {html_pag_ver_sessao}
+Os módulos que alterei durante a aula foram: {comando_ver_sessao} {html_pag_ver_sessao} 
+Um primeiro ponto observado é que o {comando_ver_sessao} não chamava o {html_pag_ver_sessao} - ao invés disso, ele gerava um HTML próprio. Por isso, uma das mudanças feitas foi para que o {comando_ver_sessao} chamasse diretamente o arquivo {html_pag_ver_sessao}.
+Além disso, o botão de fechar sessão estava da cor verde, inadequada para sinalizar o que deveria fazer. Por isso, mudou-se para um tom amarelado.
+Finalmente, um último erro observado foi com relação às mensagens de erro na tela. Os dados da sessão eram carregados mesmo que houvesse algum erro de validação, fornecendo uma visualização inadequada. O código arrumou isso, de modo que caso haja algum erro identificado, apenas a mensagem de erro é exibida e os dados da sessão não são exibidos.
+É importante ressaltar que o botão "Fechar Sessão" não demonstrou um comportamento adequado, porém ao analisar o erro notou-se que o erro foi causado devido a alguma integração ainda não finalizada em outro módulo do projeto. Por isso, não foi possível corrigir e validar o funcionamento de tal botão, ficando para uma próxima tarefa.
+Com relação às validações, também experimentou-se cenários em que algum usuário não-admin acessasse dados da sessão e também cenários onde uma sessão já fechada era visualizada. Em ambos os cenários, o comportamento foi o esperado - o botão de "Fechar Sessão" não era exibido, apenas os dados da mesma.
