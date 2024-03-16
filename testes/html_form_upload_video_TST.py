@@ -3,7 +3,7 @@
 # Este programa pode ser usado para testar funções que
 # escrevem formulários HTML5.
 
-import html_form_criar_alterar_usuario
+import html_form_upload_video
 import obj_usuario
 import util_identificador
 import db_base_sql
@@ -18,7 +18,7 @@ def testa_gera(rotulo, *args):
   """Testa {funcao(*args)}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
-  modulo = html_form_criar_alterar_usuario
+  modulo = html_form_upload_video
   funcao = modulo.gera
   frag = True  # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
@@ -35,6 +35,6 @@ db_tabelas.cria_todos_os_testes(True)
 # Testes das funções de {gera_html_elem_form}:
 usr1 = obj_usuario.busca_por_identificador("U-00000001")
 assert usr1 != None
-testa_gera("N", obtem_identificador(usr1), obtem_atributos(usr1), None, "MeuTexto", "http://google.com")
+testa_gera("N", obtem_identificador(usr1))
 
 sys.stderr.write("Testes terminados normalmente.\n")
