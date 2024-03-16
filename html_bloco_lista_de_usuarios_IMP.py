@@ -7,7 +7,7 @@ import sys
 import html_estilo_cabecalho_de_tabela
 import html_bloco_cabecalho
 
-def gera(lista_ids_usr, bt_ver, bt_fechar):
+def gera(lista_ids_usr):
 
   # Linha de cabeçalho:
   cabs_raw = ['Usuário', 'Email']
@@ -18,10 +18,10 @@ def gera(lista_ids_usr, bt_ver, bt_fechar):
   linhas = [].copy()
   for id_usr in lista_ids_usr:
     # busca por identificador da usuario no banco
-    ses = obj_usuario.busca_por_identificador(id_usr)
+    usr = obj_usuario.busca_por_identificador(id_usr)
 
     # Gera uma lista de fragmentos HTML com as informacoes dessa usuario
-    res_campos = html_bloco_resumo_de_usuario.gera(ses, bt_ver, bt_fechar)
+    res_campos = html_bloco_resumo_de_usuario.gera(usr)
 
     # Adiciona essa lista à lista de linhas para a tabela HTML:
     linhas.append(res_campos)
