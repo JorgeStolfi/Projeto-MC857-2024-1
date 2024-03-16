@@ -10,11 +10,11 @@ import util_testes
 
 import sys
 
-sys.stderr.write("Conectando com base de dados...\n")
+sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
-sys.stderr.write("Criando alguns objetos...\n")
+sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
 # Sessao de teste:
@@ -28,7 +28,7 @@ assert usr1 != None
 usr1_id = obj_usuario.obtem_identificador(usr1)
 usr1_atrs = obj_usuario.obtem_atributos(usr1)
 
-def testa(rotulo, *args):
+def testa_gera(rotulo, *args):
   """Testa {funcao(*args)}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
@@ -36,7 +36,7 @@ def testa(rotulo, *args):
   funcao = modulo.gera
   frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-  util_testes.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # Testes com erros em vários formatos:
 for tag, erros in (
@@ -45,4 +45,6 @@ for tag, erros in (
     ("E", ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",])
   ):
   rotulo = tag
-  testa(rotulo, ses, usr1, erros)
+  testa_gera(rotulo, ses, usr1, erros)
+
+sys.stderr.write("Testes terminados normalmente.\n")
