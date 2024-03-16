@@ -7,7 +7,7 @@ import html_elem_button_submit
 def gera(id_usr, atrs, admin, texto_bt, comando_bt):
   # Constrói tabela com dados:
   ht_table = html_bloco_dados_de_usuario.gera(id_usr, atrs, admin)
-  
+
   # Constrói formulário com botões 'Confirmar' e 'Cancelar':
   ht_submit = html_elem_button_submit.gera(texto_bt, comando_bt, None, '#55ee55')
   ht_cancel = html_elem_button_simples.gera("Cancelar", 'principal', None, '#ee5555')
