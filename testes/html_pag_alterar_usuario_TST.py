@@ -1,5 +1,8 @@
 #! /usr/bin/env python3
 
+import sys #mudança de linha
+sys.path.insert (0, "/home/cc2018-ceb/ra074126/Downloads/Projeto_2024_03_15/Projeto-MC857-2024-1") #linha acrescentada
+
 import html_pag_alterar_usuario
 import db_tabelas
 import obj_usuario
@@ -7,13 +10,13 @@ import obj_sessao
 import db_base_sql
 import util_testes
 
-import sys
+#import sys #linha original
 
-sys.stderr.write("Conectando com base de dados...\n")
+sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
-sys.stderr.write("Criando alguns objetos...\n")
+sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
 # Sessao de teste usuario 1:
@@ -36,7 +39,7 @@ assert usr2 != None
 usr2_id = obj_usuario.obtem_identificador(usr2)
 usr2_atrs = obj_usuario.obtem_atributos(usr2)
 
-def testa(rotulo, *args):
+def testa_gera(rotulo, *args):
   """Testa {funcao(*args)}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
@@ -44,7 +47,7 @@ def testa(rotulo, *args):
   funcao = modulo.gera
   frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = True # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-  util_testes.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 for admin in (False, True):
   ad = "-adm"+str(admin)
@@ -56,4 +59,6 @@ for admin in (False, True):
       ("LB"+ad, ["Mensagem UM-A\nMensagem UM-B", "Mensagem DOIS", "Mensagem TRÊS",]),
     ):
     rotulo = tag
-    testa(rotulo, ses, usr1_id, usr1_atrs, admin, erros)
+    testa_gera(rotulo, ses, usr1_id, usr1_atrs, admin, erros)
+
+sys.stderr.write("Testes terminados normalmente.\n")
