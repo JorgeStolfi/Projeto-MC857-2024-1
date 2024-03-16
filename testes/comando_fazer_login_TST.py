@@ -37,7 +37,7 @@ def testa_comando_fazer_login(rotulo, email, senha, deveria_logar):
 
   if ((not deveria_logar) and ses != None):
     ok_global = False
-    aviso_prog("Gerou gerou a sessão quando não deveria para o email " + str(email) + " com senha " + str(senha), True)
+    aviso_prog("Gerou a sessão quando não deveria para o email " + str(email) + " com senha " + str(senha), True)
     
   frag = False     # Resultado não é fragmento, é página completa.
   pretty = False   # Não tente deixar o HTML legível.
