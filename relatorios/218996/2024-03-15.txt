@@ -1,0 +1,3 @@
+Alterei o arquivo html_form_upload_video_IMP.py para passar o id do usuario e chamar a funcao gera
+Alterei o arquivo html_pag_upload_video.py para passar a sessao do usuario
+Criei o arquivo de teste html_form_criar_alterar_usuario_TST.py pois estava faltando
