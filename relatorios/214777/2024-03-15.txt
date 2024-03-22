@@ -1,6 +1,0 @@
-Não foi necessário ser realizado nenhuma alteração no código pois os testes já funcionavam como deveriam:
-- Usuários administradores estão vendo páginas com a opção de criar usuários administradores;
-- Usuários comuns e usuários não logados estão vendo páginas sem a opção de criar usuários administradores.
-
-Os dois primeiros testes são com as sessões "S-00000001" e "S-00000002", que são do usuário com e-mail "primeiro@gmail.com", que é um administrador. Ambas as vezes é possível ver a opção no HTML gerado para cadastrar um usuário administrador.
-O terceiro teste  é com a sessão "S-00000003", que é do usuário com e-mail "segundo@gmail.com", que não é um administrador. Não é possível ver a opção no HTML gerado para cadastrar um usuário administrador.
