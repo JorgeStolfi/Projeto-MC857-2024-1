@@ -3,3 +3,6 @@ Tive de realizar rebase com a master para deixar as brachs alinhadas
 O professor disse que existe uma forma de fazer com que apareça um label de busca,
 mas que nem ele consegue fazer aparecer. Eu tentei um pouco também, mas foi sem
 sucesso.
+
+Reparei que para fazer essa barra aparecer, provavelmente terei de mexer no 
+componente de outra pessoa
