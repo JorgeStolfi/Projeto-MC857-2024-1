@@ -104,6 +104,15 @@ def busca_por_email(em):
   if usr_debug: sys.stderr.write(f"    > id encontrado = {id_usr}\n");
   return id_usr
 
+def busca_por_nome(nome):
+  global cache, nome_tb, letra_tb, colunas
+  unico = False
+  if usr_debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_nome}: nome = {nome}\n");
+  lista_ids = obj_raiz.busca_por_campo('nome', nome, unico, cache, nome_tb, letra_tb, colunas)
+  if usr_debug: sys.stderr.write(f"    > lista de ids encontrada = {lista_ids.join(',')}\n");
+  sys.stdout.write(",".join(lista_ids))
+  return lista_ids
+
 def sessoes_abertas(usr):  
   id_usr = obj_usuario.obtem_identificador(usr)
   lista_ids_ses = obj_sessao.busca_por_usuario(id_usr) # IDs das sessões deste usuário.
