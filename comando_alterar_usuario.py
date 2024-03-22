@@ -25,3 +25,4 @@ def processa(ses, cmd_args):
     formulário de alterar usuário, com os mesmos dados nos campos
     preenchidos, com uma ou mais mensagens de erro adequadas."""
     return comando_alterar_usuario_IMP.processa(ses, cmd_args)
+  
