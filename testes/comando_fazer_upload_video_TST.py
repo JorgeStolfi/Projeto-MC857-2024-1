@@ -58,6 +58,7 @@ dados_ok = { \
   'arq': "banana",
   'titulo': "Bananas ciberbnéticas",
 }
+
 testa_comando_fazer_upload_video("OK", dados_ok)
 
 # Testa com arquivo repetido:
