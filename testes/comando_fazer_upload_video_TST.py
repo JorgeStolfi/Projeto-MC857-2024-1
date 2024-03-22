@@ -31,7 +31,7 @@ def testa_comando_fazer_upload_video(rotulo, dados):
   frag = False     # Resultado não é fragmento, é página completa.
   pretty = False   # Não tente deixar o HTML legível.
   util_testes.escreve_resultado_html(modulo, rotulo, pag, frag, pretty)
-
+  
   vid_criado_id = obj_video.busca_por_arquivo(dados["arq"])
   vid_criado_obj = obj_video.busca_por_identificador(vid_criado_id)
   vid_criado_atrs = obj_video.obtem_atributos(vid_criado_obj) if vid_criado_obj != None else None

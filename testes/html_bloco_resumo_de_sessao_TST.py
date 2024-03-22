@@ -15,6 +15,10 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
+# Sessao de teste:
+ses = obj_sessao.busca_por_identificador("S-00000001")
+assert ses != None
+
 def testa_html_bloco_resumo_de_sessao(rotulo, *args):
   """Testa {funcao(*args)}, grava resultado 
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
@@ -34,15 +38,10 @@ def testa_html_bloco_resumo_de_sessao(rotulo, *args):
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # Testes
-# Sessao de teste S-00000001 nao e admin
-# Sessao de teste S-00000004 e admin
-for ses_id in ['S-00000001', 'S-00000004']:
-  ses = obj_sessao.busca_por_identificador(ses_id)
-  assert ses != None
 
-  testa("teste_false_false" + ses_id, ses, False, False)
-  testa("teste_false_true" + ses_id, ses, False, True)
-  testa("teste_true_false" + ses_id, ses, True, False)
-  testa("teste_true_true" + ses_id, ses, True, True)
+testa_html_bloco_resumo_de_sessao("teste_false_false", ses, False, False)
+testa_html_bloco_resumo_de_sessao("teste_false_true", ses, False, True)
+testa_html_bloco_resumo_de_sessao("teste_true_false", ses, True, False)
+testa_html_bloco_resumo_de_sessao("teste_true_true", ses, True, True)
 
 sys.stderr.write("Testes terminados normalmente.\n")

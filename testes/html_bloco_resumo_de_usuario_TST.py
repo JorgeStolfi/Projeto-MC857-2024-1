@@ -41,6 +41,4 @@ testa_html_bloco_resumo_de_usuario("TUSER1",  usr1)
 testa_html_bloco_resumo_de_usuario("TUSER2",  usr2)
 testa_html_bloco_resumo_de_usuario("TUSER5",  usr5)
 
-
-
 sys.stderr.write("Testes terminados normalmente.\n")

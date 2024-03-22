@@ -20,9 +20,9 @@ def gera(ses):
   status_clr = "green" if ses_abrt else "red"
   status_txt = "Aberta" if ses_abrt else "Fechada"
   linha_formatada = \
-    '<hr/><p><b>ID sessao:</b> {ses_id} | ' + \
-    '<b>ID usuario:</b> {ses_usr_id} | ' + \
-    '<b>criacao:</b> {data_login} | ' + \
-    '<b>Status sessao:</b> <font color="{status_clr}">{status_txt}</font><p>'
+    f'<hr/><p><b>ID sessao:</b> {ses_id} | ' + \
+    f'<b>ID usuario:</b> {ses_usr_id} | ' + \
+    f'<b>criacao:</b> {data_login} | ' + \
+    f'<b>Status sessao:</b> <font color="{status_clr}">{status_txt}</font><p>'
 
   return linha_formatada
