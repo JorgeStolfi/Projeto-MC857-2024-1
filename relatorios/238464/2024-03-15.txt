@@ -1,0 +1,22 @@
+O desafio foi bem interessante.
+
+A primeira coisa que precisei concertar foram as variaveis em meu teste.
+
+Apesar de estar trabalhando com o `html_bloco_lista_de_usuarios`, as variaveis no arquivo apontavem
+para o `html_bloco_lista_de_sessoes`.
+
+Depois de corrigir isso, identifiquei que precisava passar os argumentos corretos para o teste.
+Nesse caso, criar uma lista de ids de usuarios consistente com a fase de seed do banco.
+Depois disso os testes rodaram sem erros.
+
+Entretanto ainda havia um problema. As paginas html geradas estavam quebradas e a tabela de usuarios
+nao estava renderizando os elementos html propriamente. Verifiquei que isso acontecia porque o
+`html_bloco_resumo_de_usuario` retorna um bloco html, mas a `html_elem_table_IMP` espera que
+a descricao do usuario seja uma lista.
+
+A solucao ideal seria quebrar esse bloco de resumo em uma lista contendo o nome, email e o botao 'ver',  
+ao inves de retornar os tres em um unico bloco. Como isso mudaria a consistencia de outros lugares 
+do programa decidi nao faze-lo. Mas para melhorar a renderizacao, removi um for loop na 
+`html_elem_table_IMP` para que pelo menos a renderizacao fique bonita. Se o problema de compatibilidade 
+entre a saida de `html_bloco_resumo_de_usuario` e a entrada de `html_elem_table` for resolvido, entao 
+esse for loop deve ser retomado.
