@@ -4,9 +4,9 @@ def processa(ses, args):
   """
   Esta função é chamada quando o usuário aperta o botão "Buscar" em uma
   formulário de busca de usuario (vide {html_form_buscar_usuarios.gera}).
-
+  
   O parâmetro {ses} é uma sessão atualmente aberta.
-
+  
   O parâmetro {args} é um dicionário que contém um subconjunto dos
   atributos de um {Objeto_usuario} (vide {obj_usuario.py}). Por exemplo,
   {{'nome': "João", 'email': "joao@email.com"}}. Campos de {args} com

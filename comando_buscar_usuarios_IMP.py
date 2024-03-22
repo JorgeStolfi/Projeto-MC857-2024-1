@@ -20,7 +20,7 @@ def processa(ses, cmd_args):
     id_usr = None
     lista_ids_usr = [].copy()
     if 'id_usr' in cmd_args:
-      # Deve haver um único usuário com esse identificador
+      # Deve haver um único usuário com esse identificador:
       obj_usr = obj_usuario.busca_por_identificador(cmd_args['id_usr'])
       id_usr = obj_usuario.obtem_identificador(obj_usr)
     elif 'email' in cmd_args:
