@@ -1,0 +1,12 @@
+    O arquivo html_estilo_cabecalho_de_tabela.py possui uma função chamada gera cuja execução consiste em realizar a chamada da função gera implementada 
+no arquivo html_estilo_cabecalho_de_tabela_IMP.py que possui algumas variáveis definidas para realizar a estilização de um cabeçalho, dados os
+atributos definidos um estilo inline é retornado para poder ser importado dentro do atributo style de um elemento que representa o cabeçalho de uma tabela.
+Esse arquivo está sendo importado para estilizar os cabeçalhos da tabela da página de ver sessões que é acessada através do item "Minhas Sessões"
+e também é importado na lista de usuários cuja funcionalidade será implementada futuramente, ao realizar uma mudança no arquivo ela será 
+refletida em ambas as tabelas. 
+    Para rodar o teste eu executei a função ./testa.sh html_estilo_cabecalho_de_tabela, mudando a variável pretty para True, 
+de modo que o arquivo gerado esteja formatado. O arquivo retornado da execução do teste foi html_estilo_cabecalho_de_tabela.gera.1.html,
+ele se encontra dentro da pasta saída, dentro de testes. Para verificar se a saída estava correta eu o abri no browser através da url
+file:///home/cc2019-fra/ra224956/MC857/Projeto-MC857-2024-1/testes/saida/html_estilo_cabecalho_de_tabela.gera.1.html, onde eu pude ver o texto
+e também verifiquei o seu uso na url http://127.0.0.0:8081/ver_sessoes, onde ele é utilizado no cabeçalho das colunas "Sessão", "Usuário, 
+"Aberta?", "Cookie" e "Data de Criação"

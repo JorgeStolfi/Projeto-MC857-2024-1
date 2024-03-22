@@ -1,0 +1,8 @@
+relatorio 
+
+na função Comando fazer upload video continha os seguintes problmas :
+ausencia de um importe para o obj_video e passar 3 paremetros na hora que chamava testa_comando_fazer_upload_video e 
+tambem foi constatato um erro de escrita busca por e-mail quando deveria ser busca por arquivo por fim foi constato ainda que um erro
+que será resolvido provavelmente em atualizações do coddigo futuras
+
+na função html_pag_ver_video estava funcionando corretamente
