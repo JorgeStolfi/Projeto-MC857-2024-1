@@ -6,9 +6,10 @@ import db_base_sql
 import db_tabelas
 import obj_usuario
 import obj_sessao
+import obj_video
 import util_testes; from util_testes import erro_prog, aviso_prog, mostra
 import comando_fazer_upload_video
-import obj_video
+
 import sys
 
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -65,6 +66,7 @@ dados_erro = { \
   'fruta': "banana",
   'titulo': "Bananas ciberbnéticas",
 }
+
 testa_comando_fazer_upload_video("Erro", dados_erro)
 
 # ----------------------------------------------------------------------
