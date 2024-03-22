@@ -1,0 +1,6 @@
+Gustavo Purcena 198594
+
+- Verifiquei que todos os métodos do modulo comando_fechar_sessao.py eram chamados no teste comando_fechar_sessao_TST.py
+- rodei os testes com ./testa.sh comando_fechar_sessao
+- verifiquei que todos os testes passaram
+- verifiquei os arquivos html de saída gerados
