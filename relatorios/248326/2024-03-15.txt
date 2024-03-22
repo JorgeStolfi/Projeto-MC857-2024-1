@@ -1,0 +1,3 @@
+Minha tarefa era testar o módulo 'html_form_login'.
+Conferi que o arquivo html_form_login_TST.py testa a única função definida no html_form_login_IMP.py e o html gerado não apresenta nenhum erro aparente.
+Acredito que posteriormente seja necessário ver como esse módulo se integra com o resto da aplicação.
