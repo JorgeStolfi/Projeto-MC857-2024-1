@@ -1,0 +1,7 @@
+Relatório de 15/03/2024:
+
+    A tarefa diária que me foi designada consistia em testar o módulo html_elem_video. Após o download local do repositório da aula, verifiquei se o arquivo de teste
+html_elem_video_TST.py chamava todas as funções definidas em html_elem_video.py, o que já acontecia, visto que o segundo tem apenas uma função - gera - e o
+arquivo de teste a chama corretamente. 
+    Após executar teste.sh, o arquivo html_elem_video.gera.1.html foi gerado no repositório de saídas, checando-o, pude verificar no navegador que a página
+estava correta e o elemento HTML reprodutor de vídeo foi gerado com êxito pela função, que não possuia nenhum erro ou bug.
