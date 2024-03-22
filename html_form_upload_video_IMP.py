@@ -5,8 +5,9 @@ import html_elem_button_submit
 
 def gera(id_usr):
   # Constrói tabela com dados:
-  atrs = { 'usr': obj_usuario.busca_por_identificador(id_usr) } 
-  ht_table = html_bloco_dados_de_video.gera(None, atrs)
+
+  atrs = { 'usr': id_usr } 
+  ht_table = html_bloco_dados_de_video.gera(None, atrs, None, None)
 
   # Constrói formulário com botões 'Entrar' e 'Cancelar':
   ht_submit = html_elem_button_submit.gera("Enviar", "fazer_upload_video", None, '#55ee55')
