@@ -15,8 +15,7 @@ def gera(ses, ses1, erros):
   if (obj_sessao.eh_administrador(ses) and obj_sessao.aberta(ses1)):
     cmd_args = {}
     cmd_args['id_ses'] = obj_sessao.obtem_identificador(ses1)
-
-    fecha_btn = html_elem_button_simples.gera('Fechar sessão', 'fechar_sessao', cmd_args, '#FFA700')
+    fecha_btn = html_elem_button_simples.gera('Fechar sessão', 'fechar_sessao', cmd_args, '#FF7700')
     ht_bloco_ses += fecha_btn
     
   ht_form_ses = html_elem_form.gera(ht_bloco_ses)

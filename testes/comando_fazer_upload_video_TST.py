@@ -41,7 +41,7 @@ def testa_comando_fazer_upload_video(rotulo, dados):
     if chave == 'id_usr': 
       val_criado = obj_usuario.obtem_identificador(val_criado_args['usr'])
     else:
-      val_criado = vid_criado_atrs[chave] if vid_criado_obj != None else None
+      val_criado = vid_criado_atrs[chave] if vid_criado_obj != None else 
     val_dados = dados[chave]
     if val_criado != val_dados:
       ok_global = False

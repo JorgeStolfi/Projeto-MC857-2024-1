@@ -2,7 +2,7 @@ import sys
 
 import db_base_sql
 import html_bloco_lista_de_usuarios
-import obj_sessao
+import obj_usuario
 import db_tabelas
 import util_testes
 

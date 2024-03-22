@@ -11,7 +11,7 @@ def testa_gera(rotulo, *args):
   modulo = html_estilo_cabecalho_de_tabela
   funcao = modulo.gera
   frag = True  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-  pretty = True # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 testa_gera("1")
