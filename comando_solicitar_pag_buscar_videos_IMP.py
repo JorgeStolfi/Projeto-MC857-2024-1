@@ -1,4 +1,4 @@
-import html_pag_buscar_video
+import html_pag_buscar_videos
 import html_pag_mensagem_de_erro
 import obj_sessao
 import obj_video
