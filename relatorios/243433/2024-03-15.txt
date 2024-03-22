@@ -1,0 +1,22 @@
+Inicialmente ao tentar rodar o comando "./testa.sh html_form_buscar_usuarios"
+houve um problema de importação de módulo.
+
+Corrigi o nome do módulo que estava sendo importado para o que era alvo da minha tarefa.
+
+Depois removi uma gama de imports no arquivo de teste que não estavam sendo utilizados.
+Também removi na "html_form_buscar_usuarios_IMP" um import que não era utilizado.
+
+Em seguida rodei o comando "./testa.sh html_form_buscar_usuarios" e deu certo, exibindo 
+os atributos que eram passados como parâmetros, além da formatação da página parecer certa. 
+
+Analisando as páginas HTML quis adicionar um caso de teste onde todas os campos do formulário
+eram preenchidos, para garantir que todos os campos eram exibidos corretamente.
+
+Depois rodei o servidor e criei um usuário. No entanto por meu usuário nao ser ADMIN,
+ele não tinha acesso a página de "Buscar usuários". Dessa maneira, busquei no projeto as
+credenciais de um usuário ADMIN, e achei a seguinte credencial:
+usuário: primeiro@gmail.com
+senha: 11111111
+
+Agora com acesso a página de "Buscar usuários" verifiquei que o alvo da minha tarefa 
+- html_form_buscar_usuarios - parecia estar funcionando bem e finalizei minha tarefa.

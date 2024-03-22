@@ -1,0 +1,8 @@
+Eu estava usando notebook pessoal, então boa parte da aula eu estava tentando configurar o projeto (python, sqlite, etc). Após passar um bom tempo nisso, 
+eu alterei o desenvolvimento para o computador do IC que já estava configurado com todas as bibliotecas.
+No computador do IC, eu subi o servidor e rodei os testes do arquivo que eu fiquei responsável (html_bloco_dados_de_sessao)
+O teste correu bem, mas como eu não estava entendendo muito bem o projeto, passei a andar pelos arquivos e alterar os componentes para ver o que estava 
+fora do lugar.
+Após passar um bom tempo perdido alterando componentes (kkkkkkkkkk) eu então resolvi chamar o professor, que me mostrou que meu teste estava funcionando 
+desde o começo
+Com isso, vou commitar apenas esse relatório e a alteração no resultado do teste :)
