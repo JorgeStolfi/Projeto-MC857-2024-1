@@ -1,0 +1,7 @@
+1-Inicialmente verifiquei se html_form_criar_alterar_usuario_TST.py estava chamando todas as funções contidas no módulo, de forma que notei que isso acontecia normalmente.
+2 - Notei que o botão de submeter estava com o texto errado, mudei para "Enviar"
+3 - Verifiquei se os elementos estavam em torno de um <form> <form>
+4 - Substui no teste o valor da variavel admin para True, a fim de verificar se a checkbox aparecia corretamente
+5 - Observa-se que o indentificador do usuário não aparece independente do id_usr ser None ou não e existe um bug no qual ao passar o admin para True o campo Indentificador aparece corretamente.
+6 - Verificado que quando clica-se em cancelar de fato é feito o comando principal
+7 - Verificado que quando clicamos em confirmar somos levados corretamente para a página em questão
