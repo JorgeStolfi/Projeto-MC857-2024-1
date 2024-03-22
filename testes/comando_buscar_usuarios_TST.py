@@ -29,7 +29,7 @@ def testa_processa(rotulo, *args):
     util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # Sessão em que o usuário dela é o administrador.
-ses_adm_id = "S-00000004"
+ses_adm_id = "S-00000001"
 ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
 assert obj_sessao.eh_administrador(ses_adm), f"sessão {ses_adm_id} não é de administrador" 
 
@@ -40,7 +40,7 @@ args_id_usr = {'id_usr': "U-00000002"}
 args_email = {'email': "primeiro@gmail.com"}
 
 # Testa com busca por nome que existe:
-args_nome = {'nome': "Segundo"}
+args_nome = {'nome': "João Segundo"}
 
 # Testa com busca por email que não existe:
 args_email_no = {'email': "naoexiste@email.com"}
