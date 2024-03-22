@@ -40,7 +40,6 @@ args_id_usr = {'id_usr': "U-00000002"}
 args_email = {'email': "primeiro@gmail.com"}
 
 # Testa com busca por nome que existe:
-
 args_nome = {'nome': "João Segundo"}
 
 # Testa com busca por email que não existe:
@@ -52,4 +51,3 @@ testa_processa("email_no",      ses_adm, args_email_no)
 testa_processa("nome",          ses_adm, args_nome)
 
 sys.stderr.write("Testes terminados normalmente.")
-
