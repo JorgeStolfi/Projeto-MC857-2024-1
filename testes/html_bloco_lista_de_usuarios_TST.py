@@ -29,7 +29,7 @@ def testa_html_bloco_lista_de_usuarios(rotulo, *args):
     """Testa {funcao(*args)}, grava resultado
     em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
-    modulo = html_bloco_lista_de_usuarios    
+    modulo = html_bloco_lista_de_usuarios   
     funcao = modulo.gera
     frag = True     # {True} se for apenas um fragmento HTML, {False} se for página completa.
     pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).

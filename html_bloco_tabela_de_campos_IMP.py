@@ -19,6 +19,8 @@ def gera(dados_linhas, atrs, admin, ignora_admin=False):
     elif admin or not adm_only:
       # Valor corrente do atributo:
       prepara_para_gerar_campo(atrs, chave, dica, linhas, rot, tipo, True)
+    elif not admin and adm_only:
+      prepara_para_gerar_campo(atrs, chave, dica, linhas, rot, tipo, False)
 
   # Monta a tabela com os fragmentos HTML:
   ht_table = html_elem_table.gera(linhas, None)
@@ -68,6 +70,7 @@ def gera_campo(tipo, chave, val, vmin, dica, editavel):
     ht_valor = ("%d" % val)
   else:
     erro_prog("valor inválido = \"" + str(val) + "\"")
+  
 
   # Dica e valor inicial são mutuamente exclusivos:
   if ht_valor == None:

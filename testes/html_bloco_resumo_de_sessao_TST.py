@@ -38,7 +38,6 @@ def testa_html_bloco_resumo_de_sessao(rotulo, *args):
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # Testes
-
 testa_html_bloco_resumo_de_sessao("teste_false_false", ses, False, False)
 testa_html_bloco_resumo_de_sessao("teste_false_true", ses, False, True)
 testa_html_bloco_resumo_de_sessao("teste_true_false", ses, True, False)
