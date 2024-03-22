@@ -30,7 +30,7 @@ def testa_comando_alterar_usuario(rotulo, *args):
     frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
     pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
     util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
-
+    
 def testa_atualiza_nome_com_sucesso():
     novo_nome = "John First"
     cmd_args = {

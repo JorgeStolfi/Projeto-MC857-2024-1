@@ -5,7 +5,6 @@ import html_elem_button_submit
 
 def gera(id_usr):
   # Constrói tabela com dados:
-
   atrs = { 'usr': id_usr } 
   ht_table = html_bloco_dados_de_video.gera(None, atrs, None, None)
 
