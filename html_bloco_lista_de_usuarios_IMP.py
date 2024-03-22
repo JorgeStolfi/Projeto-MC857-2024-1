@@ -8,7 +8,6 @@ import html_estilo_cabecalho_de_tabela
 import html_bloco_cabecalho
 
 def gera(lista_ids_usr):
-
   # Linha de cabeçalho:
   cabs_raw = ['Usuário', 'Email']
   cabs_div = [].copy()

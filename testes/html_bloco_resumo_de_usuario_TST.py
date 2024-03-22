@@ -30,9 +30,17 @@ def testa_html_bloco_resumo_de_usuario(rotulo, *args):
 
 usr1_ident = "U-00000001"
 usr1 = obj_usuario.busca_por_identificador(usr1_ident)
-usr2_ident = "U-00000002"
-usr5_ident = "U-00000005"
 
-testa_html_bloco_resumo_de_usuario("N",  usr1)
+usr2_ident = "U-00000002"
+usr2 = obj_usuario.busca_por_identificador(usr2_ident)
+
+usr5_ident = "U-00000005"
+usr5 = obj_usuario.busca_por_identificador(usr5_ident)
+
+testa_html_bloco_resumo_de_usuario("TUSER1",  usr1)
+testa_html_bloco_resumo_de_usuario("TUSER2",  usr2)
+testa_html_bloco_resumo_de_usuario("TUSER5",  usr5)
+
+
 
 sys.stderr.write("Testes terminados normalmente.\n")

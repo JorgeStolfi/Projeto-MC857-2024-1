@@ -19,10 +19,4 @@ def gera(usr):
   bt_arg = {'id_usr': obj_usuario.obtem_identificador(usr)}
   bt_ver = html_elem_button_simples.gera("Ver", "solicitar_pag_alterar_usuario", bt_arg, "#eeeeee")
 
-  ht_final = ht_nome + ht_email + bt_ver
-  bloco_final = html_elem_span.gera("\n display: inline-block;", ht_final)
-
-  width_pct = ("33%")
-  estilo_final = f"width: {width_pct}; padding: 15px; border-radius: 15px 50px 20px; display: flex; align-items: center;"
-  bloco_final = html_elem_span.gera(estilo_final, bloco_final)
-  return bloco_final
+  return [ht_nome, ht_email, bt_ver]
