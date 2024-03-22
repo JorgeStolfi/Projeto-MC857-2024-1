@@ -1,8 +1,8 @@
 import sys
 
 import db_base_sql
-import html_bloco_lista_de_sessoes
-import obj_sessao
+import html_bloco_lista_de_usuarios
+import obj_usuario
 import db_tabelas
 import util_testes
 
@@ -13,13 +13,23 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
-sessoes = ["S-00000001", "S-00000002", "S-00000003"]
+ids_usuarios = [
+  "U-00000001",
+  "U-00000002",
+  "U-00000003",
+  "U-00000004",
+  "U-00000005",
+  "U-00000006",
+  "U-00000007",
+  "U-00000008",
+  "U-00000009",
+]
 
-def testa_html_bloco_lista_de_sessoes(rotulo, *args):
+def testa_html_bloco_lista_de_usuarios(rotulo, *args):
     """Testa {funcao(*args)}, grava resultado
     em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
-    modulo = html_bloco_lista_de_sessoes
+    modulo = html_bloco_lista_de_usuarios
     funcao = modulo.gera
     frag = True     # {True} se for apenas um fragmento HTML, {False} se for página completa.
     pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
@@ -28,5 +38,5 @@ def testa_html_bloco_lista_de_sessoes(rotulo, *args):
 for ver in (False, True):
   for fechar in (False, True):
     tag = "ver" + str(ver)[0] + "-fechar" + str(fechar)[0] 
-    testa_html_bloco_lista_de_sessoes("muitas-" + tag, sessoes, ver, fechar)
-    testa_html_bloco_lista_de_sessoes("lhufas-" + tag, [], ver, fechar)
+    testa_html_bloco_lista_de_usuarios("muitas-" + tag, ids_usuarios)
+    testa_html_bloco_lista_de_usuarios("lhufas-" + tag, ids_usuarios)
