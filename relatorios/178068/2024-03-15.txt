@@ -1,0 +1,6 @@
+Fiquei responsável pelo teste do módulo comando_fazer_logout.
+O teste (comando_fazer_logout_TST.py) chama a função "processa", a única nesse módulo (comando_fazer_logout.py e comando_fazer_logout_IMP.py).
+./testa.sh comando_fazer_logout não apresentou anomalias no terminal, sem Assertion Error.
+HTML gerado corretamente pelo teste, criou a página principal sem sessão. Os botões fazem os pedidos corretos.
+Verificado também o comportamento do botão "Sair" interativamente pelo servidor, após login do usuário "primeiro@gmail.com".
+Testado em todos os menus, confirmado precisa estar logado para poder sair.
