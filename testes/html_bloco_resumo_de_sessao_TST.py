@@ -44,4 +44,3 @@ testa_html_bloco_resumo_de_sessao("teste_true_false", ses, True, False)
 testa_html_bloco_resumo_de_sessao("teste_true_true", ses, True, True)
 
 sys.stderr.write("Testes terminados normalmente.\n")
-
