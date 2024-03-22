@@ -10,10 +10,11 @@ import html_bloco_cabecalho
 def gera(lista_ids_ses, bt_ver, bt_fechar):
 
   # Linha de cabeçalho:
+  est_cab = html_estilo_cabecalho_de_tabela.gera()
   cabs_raw = ['Sessão', 'Usuário', 'Aberta?', 'Cookie', 'Data de Criação']
-  cabs_div = [].copy()
+  cabecalho = [].copy()
   for cb in cabs_raw:
-    cabs_div.append(html_elem_div.gera(html_estilo_cabecalho_de_tabela.gera(), cb))
+    cabecalho.append(html_elem_div.gera(est_cab, cb))
 
   linhas = [].copy()
   for id_ses in lista_ids_ses:
@@ -26,12 +27,12 @@ def gera(lista_ids_ses, bt_ver, bt_fechar):
     # Adiciona essa lista à lista de linhas para a tabela HTML:
     linhas.append(res_campos)
   # Gera a tabela HTML a partir da lista de linhas
-  ht_itens = html_elem_table.gera(linhas, cabs_div)
+  ht_tabela = html_elem_table.gera(linhas, cabecalho)
 
-  ht_cabe = html_bloco_cabecalho.gera("Minhas Sessões", False)
+  ht_titulo = html_bloco_cabecalho.gera("Minhas Sessões", False)
   ht_conteudo = \
-      ht_cabe + "<br/>\n" + \
-      ht_itens
+      ht_titulo + "<br/>\n" + \
+      ht_tabela
 
   # Devolve a tabela HTML
   return ht_conteudo

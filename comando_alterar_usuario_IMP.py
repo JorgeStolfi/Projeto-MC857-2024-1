@@ -27,9 +27,9 @@ def processa(ses, cmd_args):
     admin = obj_usuario.obtem_atributos(usr_ses)['administrador']
     
     # Determina o usuário {usr} a alterar:
-    if 'id_usr' in cmd_args:
-      id_usr = cmd_args['id_usr']
-      cmd_args.pop('id_usr')
+    if 'id_usuario' in cmd_args:
+      id_usr = cmd_args['id_usuario']
+      cmd_args.pop('id_usuario')
       usr = obj_usuario.busca_por_identificador(id_usr)
       if usr == None:
         erros.append(f"usuario {id_usr} não existe")

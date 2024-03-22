@@ -80,7 +80,7 @@ def gera_botoes_linha_2():
   geral.  Estes botões são mostrados apenas se o usuário está logado
   e é um administrador."""
 
-  ht_busca_obj_input = html_elem_input.gera(None, "text", "id_objeto", None, None, True, "Id do objeto", None)
+  ht_busca_obj_input = html_elem_input.gera(None, "text", "id_objeto", None, None, True, "Id do objeto", None, False)
   ht_busca_obj_bt = html_elem_button_submit.gera("Checar Objeto", "ver_objeto", None, '#ffdd22')
   ht_busca_obj_form = html_elem_form.gera(ht_busca_obj_input + ht_busca_obj_bt)
   botoes = ( ht_busca_obj_form, )

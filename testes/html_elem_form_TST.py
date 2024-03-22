@@ -19,7 +19,7 @@ def testa_form_simples(rot_teste, modulo, rotulo, tipo, nome, val_ini, val_min, 
   ht_table = html_elem_table.gera(linhas, ["TIPO", "ELEMENTO"])
 
   # Cria botao de interacao com o ht_form
-  ht_botao = html_elem_button_submit.gera("Botao", 'url test', None, '#55ee55')
+  ht_botao = html_elem_button_submit.gera("Botao", 'urltest', None, '#55ee55', obrigatorio)
 
   # Counteudo do formulário:
   ht_campos = \
@@ -34,56 +34,54 @@ def testa_form_simples(rot_teste, modulo, rotulo, tipo, nome, val_ini, val_min, 
   
   # cria campo de texto com valor inicial
   ht_rotulo = html_elem_label.gera("campo de texto", ": ")
-  ht_campo = html_elem_input.gera(None, "text", "texto1", "blabla", None, True, None, None)
+  ht_campo = html_elem_input.gera(None, "text", "texto1", "blabla", None, True, None, None, False)
 
   # cria campo de texto sem valor inicial, com dica
   ht_rotulo = html_elem_label.gera("campo de texto", ": ")
-  ht_campo = html_elem_input.gera(None, "text", "texto2", None, None, True, "Lorem ipusm", None)
+  ht_campo = html_elem_input.gera(None, "text", "texto2", None, None, True, "Lorem ipusm", None, False)
   linhas.append((ht_rotulo, ht_campo,))
 
   # cria campo de senha
   ht_rotulo = html_elem_label.gera("campo de senha", ": ")
-  ht_campo = html_elem_input.gera(None, "password", "senha", None, None, True, None, None)
+  ht_campo = html_elem_input.gera(None, "password", "senha", None, None, True, None, None, False)
   linhas.append((ht_rotulo, ht_campo,))
 
   # cria campo numerico
   ht_rotulo = html_elem_label.gera("campo numerico", ": ")
-  ht_campo = html_elem_input.gera(None, "number", "pernas", "17", "5", True, None, None)
+  ht_campo = html_elem_input.gera(None, "number", "pernas", "17", "5", True, None, None, False)
   linhas.append((ht_rotulo, ht_campo,))
 
   # cria campo escondido
   ht_rotulo = html_elem_label.gera("campo escondido", ": ")
-  ht_campo = html_elem_input.gera(None, "hidden", "segredo", "boo", None, True, None, None)
+  ht_campo = html_elem_input.gera(None, "hidden", "segredo", "boo", None, True, None, None, False)
   linhas.append((ht_rotulo, ht_campo,))
-
-
 
 def testa_form_tabela(rot_teste):
   linhas = [].copy()
   
   # cria campo de texto com valor inicial
   ht_rotulo = html_elem_label.gera("campo de texto", ": ")
-  ht_campo = html_elem_input.gera(None, "text", "texto1", "blabla", None, True, None, None)
+  ht_campo = html_elem_input.gera(None, "text", "texto1", "blabla", None, True, None, None, False)
   linhas.append((ht_rotulo, ht_campo,))
 
   # cria campo de texto sem valor inicial, com dica
   ht_rotulo = html_elem_label.gera("campo de texto", ": ")
-  ht_campo = html_elem_input.gera(None, "text", "texto2", None, None, True, "Lorem ipusm", None)
+  ht_campo = html_elem_input.gera(None, "text", "texto2", None, None, True, "Lorem ipusm", None, False)
   linhas.append((ht_rotulo, ht_campo,))
 
   # cria campo de senha
   ht_rotulo = html_elem_label.gera("campo de senha", ": ")
-  ht_campo = html_elem_input.gera(None, "password", "senha", None, None, True, None, None)
+  ht_campo = html_elem_input.gera(None, "password", "senha", None, None, True, None, None, False)
   linhas.append((ht_rotulo, ht_campo,))
 
   # cria campo numerico
   ht_rotulo = html_elem_label.gera("campo numerico", ": ")
-  ht_campo = html_elem_input.gera(None, "number", "pernas", "17", "5", True, None, None)
+  ht_campo = html_elem_input.gera(None, "number", "pernas", "17", "5", True, None, None, False)
   linhas.append((ht_rotulo, ht_campo,))
 
   # cria campo escondido
   ht_rotulo = html_elem_label.gera("campo escondido", ": ")
-  ht_campo = html_elem_input.gera(None, "hidden", "segredo", "boo", None, True, None, None)
+  ht_campo = html_elem_input.gera(None, "hidden", "segredo", "boo", None, True, None, None, False)
   linhas.append((ht_rotulo, ht_campo,))
 
   # Monta a tabela com os fragmentos HTML:

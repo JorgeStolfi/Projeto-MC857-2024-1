@@ -48,7 +48,7 @@ def inicializa_modulo(limpa):
     (
       ( "usr",          obj_usuario.Classe,     'TEXT',    False ),  # Objeto/id do usuário logado na sessão.
       ( "criacao",      type("foo"),            'TEXT',    False ),  # Momento de criação da sessão.
-      ( "abrt",         type(False),            'INTEGER', False ),  # Estado da sessao (1 = aberta).
+      ( "aberta",       type(False),            'INTEGER', False ),  # Estado da sessao (1 = aberta).
       ( "cookie",       type("foo"),            'TEXT',    False ),  # Cookie da sessao.
     )
   if limpa:
@@ -62,7 +62,7 @@ def cria(usr, cookie):
   atrs_cria = {
     'usr': usr,
     'criacao': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %z"),
-    'abrt': True,
+    'aberta': True,
     'cookie': cookie
   }
 
@@ -101,7 +101,7 @@ def obtem_data_de_criacao(ses):
 def aberta(ses):
   global cache, nome_tb, letra_tb, colunas
   assert (ses != None) and type(ses) is obj_sessao.Classe
-  return obj_raiz.obtem_atributo(ses, 'abrt')
+  return obj_raiz.obtem_atributo(ses, 'aberta')
 
 def obtem_cookie(ses):
   global cache, nome_tb, letra_tb, colunas
@@ -142,8 +142,8 @@ def muda_atributos(ses, atrs_mod_mem):
 
 def fecha(ses):
   global cache, nome_tb, letra_tb, colunas
-  if (ses is not None) and (obj_sessao.obtem_atributo(ses,'abrt')):
-    atrs_mod_mem = { 'abrt': False }
+  if (ses is not None) and (obj_sessao.obtem_atributo(ses,'aberta')):
+    atrs_mod_mem = { 'aberta': False }
     muda_atributos(ses, atrs_mod_mem)
 
 def cria_testes(verb):

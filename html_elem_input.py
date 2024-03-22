@@ -1,6 +1,6 @@
 import html_elem_input_IMP
 
-def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio=False):
+def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio):
   """
   Gera o HTML para um campo de dados "<input ... />" com atributos dados.
   Este fragmento geralmente é incluído em um formulário "<form>...</form>".
@@ -45,7 +45,6 @@ def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio=
   ou apenas "{nome}" se {val_ini} for {None}.
 
   O parâmetro {obrigatorio} indica se o campo deve ser obrigatóriamente preenchido ou não.
-  Isso altera visualmente a forma como o campo é exibido para o usuário pelo navegador. O valor
-  default deste parâmetro é False, por questões de compatibilidade.
+  Isso altera visualmente a forma como o campo é exibido para o usuário pelo navegador.
   """  
   return html_elem_input_IMP.gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio)

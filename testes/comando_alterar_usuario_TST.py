@@ -34,7 +34,7 @@ def testa_comando_alterar_usuario(rotulo, *args):
 def testa_atualiza_nome_com_sucesso():
     novo_nome = "John First"
     cmd_args = {
-        'id_usr': "U-00000001",
+        'id_usuario': "U-00000001",
         'nome': novo_nome,
     }
     testa_comando_alterar_usuario("Nom", ses, cmd_args)
@@ -46,7 +46,7 @@ def testa_atualiza_nome_com_sucesso():
 def testa_atualiza_email_com_sucesso():
     email_novo = "banana@nanica.com"
     cmd_args = {
-        'id_usr': "U-00000001",
+        'id_usuario': "U-00000001",
         'email': email_novo,
     }
     testa_comando_alterar_usuario("Ema", ses, cmd_args)
@@ -58,7 +58,7 @@ def testa_atualiza_email_com_sucesso():
 def testa_atualiza_email_repetido_falha():
     email_dup = "segundo@ic.unicamp.br"
     cmd_args = {
-        'id_usr': "U-00000001",
+        'id_usuario': "U-00000001",
         'email': email_dup,
     }
     try:

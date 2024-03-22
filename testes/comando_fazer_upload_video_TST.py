@@ -38,7 +38,7 @@ def testa_comando_fazer_upload_video(rotulo, dados):
   sys.stderr.write(f"  video criado = {vid_criado_id} atrs = {vid_criado_atrs}\n")
 
   for chave in dados.keys():
-    if chave == 'id_usr': 
+    if chave == 'id_usuario': 
       val_criado = obj_usuario.obtem_identificador(val_criado_args['usr'])
     else:
       val_criado = vid_criado_atrs[chave] if vid_criado_obj != None else 

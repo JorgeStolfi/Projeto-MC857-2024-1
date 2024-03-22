@@ -12,7 +12,7 @@ class Classe(obj_sessao_IMP.Classe_IMP):
   servidor.  Os atributos deste objeto, por enquanto, são:
 
     'usr'      {obj_usuario.Classe} o usuário que fez login na sessão.
-    'abrt'     {bool}               estado da sessao.
+    'aberta'     {bool}               estado da sessao.
     'cookie'   {str}                cookie da sessao.
     'criacao'  {str}                data da criação da sessão no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
 
@@ -80,7 +80,7 @@ def obtem_usuario(ses):
 
 def aberta(ses):
   """Retorna o estado da sessão {ses}: {True} se a sessao ainda esta aberta,
-  {False} se o usuário deu logout.  Equivale a {obj_sessao.obtem_atributo(ses,'abrt')}.
+  {False} se o usuário deu logout.  Equivale a {obj_sessao.obtem_atributo(ses,'aberta')}.
   Dá erro se {ses} é {None}."""
   return obj_sessao_IMP.aberta(ses)
 
@@ -129,7 +129,7 @@ def muda_atributos(ses, atrs_mod_mem):
   obj_sessao_IMP.muda_atributos(ses, atrs_mod_mem)
 
 def fecha(ses):
-  """Registra o logout do usuário na sessão {ses}, mudando o atributo 'abrt'
+  """Registra o logout do usuário na sessão {ses}, mudando o atributo 'aberta'
   permanentemente para {False}. Também altera esse campo na base de dados.
   A sessão não pode ser {None} e deve estar aberta.  Não retorna nenum resultado."""
   obj_sessao_IMP.fecha(ses)

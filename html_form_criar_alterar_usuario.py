@@ -13,7 +13,7 @@ def gera(id_usr, atrs, admin, texto_bt, comando_bt):
   e ainda não tem identificador.  Se {id_usr} não é {None},
   supõe que os dados do usuário estão sendo alterados, e 
   a página vai mostrar o campo {id_usr} como "readonly"
-  e rótulo (para POST) 'id_usr'.
+  e rótulo (para POST) 'id_usuario'.
   
   Se {admin} for {True}, supõe que a página foi pedida por um
   administrador. Nesse caso o formulário vai mostrar um checkbox para
@@ -28,7 +28,7 @@ def gera(id_usr, atrs, admin, texto_bt, comando_bt):
   Quando o usuário clicar nesse botão, será emitido um comando POST com ação
   {comando_bt}.  Os argumentos desse POST são todos os atributos da classe
   {obj_usuario.Classe}, com os valores de {atrs} a menos de alterações feitas pelo
-  usuário, mais os atributos 'conf_senha' e 'id_usr'.
+  usuário, mais os atributos 'conf_senha' e 'id_usuario'.
 
   O formulário também terá um botão simples 'Cancelar',
   que, quando clicado, emite o comando 'principal'."""

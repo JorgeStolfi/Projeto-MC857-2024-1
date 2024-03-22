@@ -11,7 +11,7 @@ from util_valida_campo import ErroAtrib
 def processa(ses, cmd_args):
   try:
     # Campos que podem ser usados na busca:
-    campos_busc = ['id_usr', 'email', 'nome']
+    campos_busc = ['id_usuario', 'email', 'nome']
 
     # Garante que existe pelo menos um campo:
     if not verifica_pelo_menos_um_campo(campos_busc, cmd_args):
@@ -19,9 +19,9 @@ def processa(ses, cmd_args):
 
     id_usr = None
     lista_ids_usr = [].copy()
-    if 'id_usr' in cmd_args:
+    if 'id_usuario' in cmd_args:
       # Deve haver um único usuário com esse identificador:
-      obj_usr = obj_usuario.busca_por_identificador(cmd_args['id_usr'])
+      obj_usr = obj_usuario.busca_por_identificador(cmd_args['id_usuario'])
       id_usr = obj_usuario.obtem_identificador(obj_usr)
     elif 'email' in cmd_args:
       # Deve haver um único usuário com esse email

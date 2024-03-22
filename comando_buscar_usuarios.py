@@ -11,7 +11,7 @@ def processa(ses, args):
   atributos de um {Objeto_usuario} (vide {obj_usuario.py}). Por exemplo,
   {{'nome': "João", 'email': "joao@email.com"}}. Campos de {args} com
   valor {None} devem ser ignorados. O campo {args} deve conter pelos
-  menos um dos atributos do {obj_usuario.Classe}, e/ou o campo 'id_usr'
+  menos um dos atributos do {obj_usuario.Classe}, e/ou o campo 'id_usuario'
   com o identificador do usuário. A função deve procurar na base de
   dados os usuários que casam estes dados.
 

@@ -31,14 +31,14 @@ usr2 = obj_usuario.busca_por_identificador("U-00000002")
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_sessao(rotulo, ses, ident, usr, abrt, cookie):
+def verifica_sessao(rotulo, ses, ident, usr, aberta, cookie):
   """Testes básicos de consistência do objeto {ses} da classe {obj_sessao.Classe}, dados
   {ident} e {atrs} esperados."""
   global ok_global
 
   sys.stderr.write("  %s\n" % ("-" * 70))
   sys.stderr.write("  verificando sessão %s\n" % rotulo)
-  atrs = { 'usr': usr, 'abrt': abrt, 'cookie': cookie }
+  atrs = { 'usr': usr, 'aberta': aberta, 'cookie': cookie }
   ok = obj_sessao.verifica_criacao(ses, ident, atrs)
   
   if ses != None and type(ses) is obj_sessao.Classe:
@@ -50,9 +50,9 @@ def verifica_sessao(rotulo, ses, ident, usr, abrt, cookie):
       ok = False
       
     sys.stderr.write("  testando {obj_sessao.aberta()}:\n")
-    abrt1 = obj_sessao.aberta(ses)
-    if abrt1 != abrt:
-      aviso_prog("retornou " + str(abrt1) + ", deveria ter retornado " + str(abrt),True)
+    aberta1 = obj_sessao.aberta(ses)
+    if aberta1 != aberta:
+      aviso_prog("retornou " + str(aberta1) + ", deveria ter retornado " + str(aberta),True)
       ok = False
        
     sys.stderr.write("  testando {obj_sessao.obtem_cookie()}:\n")

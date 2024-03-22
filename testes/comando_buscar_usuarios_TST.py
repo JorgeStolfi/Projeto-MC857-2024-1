@@ -34,7 +34,7 @@ ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
 assert obj_sessao.eh_administrador(ses_adm), f"sessão {ses_adm_id} não é de administrador" 
 
 # Testa com busca por identificador_que existe:
-args_id_usr = {'id_usr': "U-00000002"}
+args_id_usr = {'id_usuario': "U-00000002"}
 
 # Testa com busca por email que existe:
 args_email = {'email': "primeiro@gmail.com"}
@@ -45,7 +45,7 @@ args_nome = {'nome': "João Segundo"}
 # Testa com busca por email que não existe:
 args_email_no = {'email': "naoexiste@email.com"}
 
-testa_processa("id_usr",        ses_adm, args_id_usr)
+testa_processa("id_usuario",        ses_adm, args_id_usr)
 testa_processa("email_ok",      ses_adm, args_email)
 testa_processa("email_no",      ses_adm, args_email_no)
 testa_processa("nome",          ses_adm, args_nome)

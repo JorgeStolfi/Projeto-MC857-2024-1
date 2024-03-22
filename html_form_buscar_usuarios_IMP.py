@@ -8,7 +8,7 @@ import html_elem_form
 def gera(atrs, admin):
 
   dados_linhas = (
-      ( "ID",         "text",   "id_usr",        "U-nnnnnnnn",            False, ),
+      ( "ID",         "text",   "id_usuario",    "U-nnnnnnnn",            False, ),
       ( "Nome",       "text",   "nome",          "Fulano de tal",         False, ),
       ( "email",      "email",  "email",         "fulano@gmail.com",      False, ),
     )

@@ -6,7 +6,7 @@ def gera(texto, URL, cmd_args, cor_fundo):
   if cmd_args != None:
     # Acrescenta argumentos ao {args_html}:
     for key, val in cmd_args.items():
-      kv_html = html_elem_input.gera(None, 'hidden', key, val, None, False, None, None)
+      kv_html = html_elem_input.gera(None, 'hidden', key, val, None, False, None, None, False)
       args_html += kv_html
 
   # O botão propriamente dito:

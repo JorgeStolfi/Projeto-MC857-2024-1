@@ -4,13 +4,13 @@ import html_bloco_erro
 import html_elem_table
 import html_elem_label
 import html_elem_input
+import html_elem_paragraph
 import html_elem_button_simples
 import util_testes
 
 import sys
 
-
-def testa_gera(rotulo, *args):
+def testa_html_table_gera(rotulo, *args):
     """Testa {funcao(*args)}, grava resultado
     em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
@@ -22,19 +22,20 @@ def testa_gera(rotulo, *args):
 
 linhas = [].copy()
 
-label_de_teste_input = html_elem_label.gera("Teste das funcionalidades de html_elem_table, coloque um input aqui embaixo", ":")
-input_de_teste = html_elem_input.gera(None, "text", "input", None, None, True, "Me edite!", None)
-
-label_de_teste_botao = html_elem_label.gera("Aperte o botão para ser redirecionado à URL principal", "!")
-botao_de_teste = html_elem_button_simples.gera("OK", 'principal', None, '#55ee55')
-
 erro_de_teste_html = html_bloco_erro.gera("Houston, we've got a problem. Nevermind, this is just a Test!")
 
 cabecalho=("Coluna 1", "Coluna 2")
-linhas.append((label_de_teste_input, input_de_teste))
-linhas.append((label_de_teste_botao, botao_de_teste))
-linhas.append((erro_de_teste_html, botao_de_teste))
+for i in range(3):
+  ht_lab = html_elem_label.gera(f"Teste {i:03d}", ":")
+  if i == 0:
+    ht_val = html_elem_input.gera(None, "text", f"input_{i:03d}", None, None, True, "Me edite!", None, False)
+  elif i == 1:
+    ht_val = html_elem_button_simples.gera("OK", 'principal', None, '#55ee55')
+  elif i == 2:
+    ht_val = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
 
-testa_gera("Teste", linhas, cabecalho)
+  linhas.append((ht_lab, ht_val))
+
+testa_html_table_gera("Teste", linhas, cabecalho)
 
 sys.stderr.write("Testes terminados normalmente.");

@@ -14,25 +14,24 @@ def testa_gera(rotulo, *args):
   pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
   util_testes.testa_funcao_que_gera_html(modulo, modulo.gera, rotulo, frag, pretty, *args)
    
-testa_gera("text_dica",   "Peso", "text", "peso", None,    None, True,  "Máximo 50 kg", "vade_retro")
-testa_gera("text_vini",   "Peso", "text", "peso", "30 kg", None, True,  None,           "vade_retro")
-testa_gera("text_rdonly", "Peso", "text", "peso", "30 kg", None, False, None,           "vade_retro")
+testa_gera("text_dica_obrig_F",   "Peso", "text", "peso", None,    None, True,  "Máximo 50 kg", "vade_retro", False)
+testa_gera("text_vini_obrig_F",   "Peso", "text", "peso", "30 kg", None, True,  None,           "vade_retro", False)
+testa_gera("text_rdonly_obrig_F", "Peso", "text", "peso", "30 kg", None, False, None,           "vade_retro", False)
 
-testa_gera("num_dica",   "Peso (kg)", "number", "peso", None, None,  True, "Máximo 50", "vade_retro")
-testa_gera("num_vini",   "Peso (kg)", "number", "peso", "30", None,  True, None,        "vade_retro")
-testa_gera("num_vmin",   "Peso (kg)", "number", "peso", "30", "3",   True, None,        "vade_retro")
-testa_gera("num_rdonly", "Peso (kg)", "number", "peso", "30", None,  False,None,        "vade_retro")
+testa_gera("num_dica_obrig_F",   "Peso (kg)", "number", "peso", None, None,  True, "Máximo 50", "vade_retro", False)
+testa_gera("num_vini_obrig_F",   "Peso (kg)", "number", "peso", "30", None,  True, None,        "vade_retro", False)
+testa_gera("num_vmin_obrig_F",   "Peso (kg)", "number", "peso", "30", "3",   True, None,        "vade_retro", False)
+testa_gera("num_rdonly_obrig_F", "Peso (kg)", "number", "peso", "30", None,  False,None,        "vade_retro", False)
 
-testa_gera("email_dica",  "Email", "email", "email", None,               None,  True, "{user}@{host}", "do_it")
-testa_gera("email_vini",  "Email", "email", "email", "jose@tatu.gov.br", None,  True, None,            "do_it")
+testa_gera("email_dica_obrig_F",  "Email", "email", "email", None,               None,  True, "{user}@{host}", "do_it", False)
+testa_gera("email_vini_obrig_F",  "Email", "email", "email", "jose@tatu.gov.br", None,  True, None,            "do_it", False)
 
-testa_gera("senha_dica",  "Senha", "password", "senha", None, None,  True, "Máximo 2 letras", "do_it")
-testa_gera("senha_vini",  "Senha", "password", "senha", "99", None,  True, None,              "do_it")
+testa_gera("senha_dica_obrig_F",  "Senha", "password", "senha", None, None,  True, "Máximo 2 letras", "do_it", False)
+testa_gera("senha_vini_obrig_F",  "Senha", "password", "senha", "99", None,  True, None,              "do_it", False)
 
-testa_gera("hidden_vini",  None, "hidden", "user", "U-12345678", None, False, None,   "do_it")
+testa_gera("hidden_vini_obrig_F",  None, "hidden", "user", "U-12345678", None, False, None,   "do_it", False)
 
-testa_gera("text_obrigatorio",  None, "text", "user", "U-12345678", None, True, None,   "do_it", True)
-testa_gera("text_not_obrigatorio",  None, "text", "user", "U-12345678", None, True, None,   "do_it", False)
-testa_gera("text_not_obrigatorio_default",  None, "text", "user", "U-12345678", None, True, None,   "do_it")
+testa_gera("text_obrig_T",  None, "text", "user", "U-12345678", None, True, None,   "do_it", True)
+testa_gera("text_obrig_F",  None, "text", "user", "U-12345678", None, True, None,   "do_it", False)
 
 sys.stderr.write("Testes terminados normalmente.");

@@ -10,9 +10,9 @@ def processa(ses, cmd_args):
   usr_ses = obj_sessao.obtem_usuario(ses)
   id_usr_ses = obj_usuario.obtem_identificador(usr_ses)
   assert usr_ses != None
-  if 'id_usr' in cmd_args:
+  if 'id_usuario' in cmd_args:
     # Alguém quer ver sessões de usuário específico:
-    id_usr = cmd_args['id_usr']
+    id_usr = cmd_args['id_usuario']
     assert (id_usr == id_usr_ses) or obj_sessao.eh_administrador(ses) # Deveria ser o caso.
     bt_ver = True
     bt_fechar = True

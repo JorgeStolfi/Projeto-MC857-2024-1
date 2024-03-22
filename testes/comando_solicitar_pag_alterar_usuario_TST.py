@@ -34,7 +34,7 @@ cmd_args1 = {}
 # Teste mostra os dados do dono da sessão
 testa_processa("SucVazio", sessao1, cmd_args1)
 
-cmd_args1['id_usr'] = "U-00000002"
+cmd_args1['id_usuario'] = "U-00000002"
 # Teste mostra os dados do dono do identificador passado
 testa_processa("SucPreenchido", sessao1, cmd_args1)
 

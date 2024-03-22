@@ -38,9 +38,9 @@ def testa_html_bloco_resumo_de_sessao(rotulo, *args):
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # Testes
-testa_html_bloco_resumo_de_sessao("teste_false_false", ses, False, False)
-testa_html_bloco_resumo_de_sessao("teste_false_true", ses, False, True)
-testa_html_bloco_resumo_de_sessao("teste_true_false", ses, True, False)
-testa_html_bloco_resumo_de_sessao("teste_true_true", ses, True, True)
+testa_html_bloco_resumo_de_sessao("F_F", ses, False, False)
+testa_html_bloco_resumo_de_sessao("F_T", ses, False, True)
+testa_html_bloco_resumo_de_sessao("T_F", ses, True,  False)
+testa_html_bloco_resumo_de_sessao("T_T", ses, True,  True)
 
 sys.stderr.write("Testes terminados normalmente.\n")

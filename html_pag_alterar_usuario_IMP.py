@@ -8,7 +8,7 @@ def gera(ses, id_usr, atrs, admin, erros):
 
   # Constroi botões de ações adicionais na página
   if admin and id_usr != None:
-    ht_botao_sessoes = html_elem_button_simples.gera("Ver sessões", "ver_sessoes", {'id_usr': id_usr}, '#eeee55')
+    ht_botao_sessoes = html_elem_button_simples.gera("Ver sessões", "ver_sessoes", {'id_usuario': id_usr}, '#eeee55')
   else:
     ht_botao_sessoes = ""
     

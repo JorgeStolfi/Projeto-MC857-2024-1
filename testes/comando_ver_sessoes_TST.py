@@ -37,13 +37,13 @@ assert not obj_sessao.eh_administrador(ses1)
 usr1 = obj_sessao.obtem_usuario(ses1)
 usr1_id = obj_usuario.obtem_identificador(usr1)
 testa_comando_ver_sessoes("teste1-N", ses1, {} )  
-testa_comando_ver_sessoes("teste1-U", ses1, {'id_usr': usr1_id } )  
+testa_comando_ver_sessoes("teste1-U", ses1, {'id_usuario': usr1_id } )  
 
 # Administrador olhando suas sessões:
 ses2 = obj_sessao.busca_por_identificador("S-00000002")
 assert obj_sessao.eh_administrador(ses2)
 usr2_id = "U-00000002"
 testa_comando_ver_sessoes("teste2-N", ses2, {} )  
-testa_comando_ver_sessoes("teste2-U", ses2, {'id_usr': usr2_id } )  
+testa_comando_ver_sessoes("teste2-U", ses2, {'id_usuario': usr2_id } )  
 
 sys.stderr.write("Testes terminados normalmente.\n")

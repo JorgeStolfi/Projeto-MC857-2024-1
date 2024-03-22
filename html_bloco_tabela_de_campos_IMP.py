@@ -7,36 +7,25 @@ import sys
 
 tbc_debug = False;
 
-def gera(dados_linhas, atrs, admin, ignora_admin=False):
+def gera(dados_linhas, atrs, privilegio):
   if tbc_debug: sys.stderr.write("  > {html_bloco_tabela_de_campos_IMP.gera}: atrs = %s\n" %str(atrs))
 
   # Converte os dados brutos das linhas para fragmentos HTML:
   linhas = [].copy()
-  for rot, tipo, chave, dica, adm_only in dados_linhas:
-    if tbc_debug: sys.stderr.write("  > admin: " + str(admin) + " adm_only: " + str(adm_only) + "\n")
-    if ignora_admin:
-      prepara_para_gerar_campo(atrs, chave, dica, linhas, rot, tipo, not adm_only)
-    elif admin or not adm_only:
-      # Valor corrente do atributo:
-      prepara_para_gerar_campo(atrs, chave, dica, linhas, rot, tipo, True)
-    elif not admin and adm_only:
-      prepara_para_gerar_campo(atrs, chave, dica, linhas, rot, tipo, False)
+  for rot, tipo, chave, dica, prot in dados_linhas:
+    if tbc_debug: sys.stderr.write("  > privilegio: " + str(privilegio) + " prot: " + str(prot) + "\n")
+    val = (atrs[chave] if chave in atrs else None)
+    chmin = chave + '_min'
+    vmin = (atrs[chmin] if chmin in atrs else None)
+    ht_rotulo = html_elem_label.gera(rot, ": ")
+    editavel = privilegio or not prot
+    ht_campo = gera_campo(tipo, chave, val, vmin, dica, editavel)
+    if ht_campo != None:
+      linhas.append((ht_rotulo, ht_campo,))
 
   # Monta a tabela com os fragmentos HTML:
   ht_table = html_elem_table.gera(linhas, None)
   return ht_table
-
-def prepara_para_gerar_campo(atrs, chave, dica, linhas, rot, tipo, campo_editavel):
-  val = (atrs[chave] if chave in atrs else None)
-  chmin = chave + '_min'
-  vmin = (atrs[chmin] if chmin in atrs else None)
-  # Converte {rot} para rótulo HTML:
-  ht_rotulo = html_elem_label.gera(rot, ": ")
-  # Cria o elemento "<input .../>":
-  ht_campo = gera_campo(tipo, chave, val, vmin, dica, campo_editavel)
-  if ht_campo != None:
-    linhas.append((ht_rotulo, ht_campo,))
-
 
 def gera_campo(tipo, chave, val, vmin, dica, editavel):
   """Retorna o HTML de um item "input" do formulário
@@ -70,7 +59,6 @@ def gera_campo(tipo, chave, val, vmin, dica, editavel):
     ht_valor = ("%d" % val)
   else:
     erro_prog("valor inválido = \"" + str(val) + "\"")
-  
 
   # Dica e valor inicial são mutuamente exclusivos:
   if ht_valor == None:
@@ -79,7 +67,7 @@ def gera_campo(tipo, chave, val, vmin, dica, editavel):
     ht_dica = None
 
   if tipo != "textarea":
-    ht_campo = html_elem_input.gera(None, tipo, chave, ht_valor, ht_vmin, editavel, ht_dica, None)
+    ht_campo = html_elem_input.gera(None, tipo, chave, ht_valor, ht_vmin, editavel, ht_dica, None, False)
   else:
     ht_campo = html_elem_textarea.gera(None, tipo, chave, ht_valor, ht_vmin, editavel, ht_dica, None)
   

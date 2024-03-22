@@ -22,7 +22,7 @@ def gera(id_usr, atrs, admin):
   Se {id_usuário} não é {None}, retorma uma tabela de campos adequada
   para alterar os dados do usuário {usr} cujo identificador é
   {id_usr}, que supostamente já existe. O identificador será visível
-  se {admin} for {True}. Num POST, será enviado com rótulo 'id_usr'.
+  se {admin} for {True}. Num POST, será enviado com rótulo 'id_usuario'.
   Todos os campos serão editáveis, exceto o identificador.
   
   Em qualquer caso, o formulário terá um campo adicional 
