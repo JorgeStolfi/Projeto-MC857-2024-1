@@ -1,4 +1,0 @@
-Nome: Lucas Jacinto Gonçalves
-RA: 240013
-Eu fiquei encarregado de analisar o módulo html_bloco_menu_geral e realizar testes nessa função para verificar se foi coberta todas as chamadas de funções. Como resultado dos testes realizados, foi necessário a correção da função gera_nome_usuario(nome_usuario) para printar Oi + nome_usuario que não estava printando, devido a ausência do return res na função.
-Foi testado as posssibilidades de usuário logado, usuário deslogado e usuário com acesso de administrador. Após a correção da função, a implementação do módulo html_bloco_menu_geral começou a operar corretamente.
