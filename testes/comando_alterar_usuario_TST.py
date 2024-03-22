@@ -1,9 +1,5 @@
 #! /usr/bin/python3
 
-import sys #mudança de linha
-sys.path.insert (0, "/home/cc2018-ceb/ra074126/Downloads/Projeto_2024_03_15/Projeto-MC857-2024-1") #linha acrescentada
-
-
 import comando_alterar_usuario
 import db_tabelas
 import obj_usuario
@@ -12,11 +8,9 @@ import db_base_sql
 import util_testes
 from util_valida_campo import ErroAtrib
 
-#import sys #linha original
+import sys #linha original
 
-
-# Conecta no banco e carrega alimenta com as informações para o teste
-
+# Conecta o banco e carrega as informações para o teste
 sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB", None, None)
 assert res is None
@@ -24,7 +18,7 @@ assert res is None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
-# Sessao de teste
+# Obtem sessao de teste
 ses = obj_sessao.busca_por_identificador("S-00000001")
 
 def testa_comando_alterar_usuario(rotulo, *args):
@@ -36,7 +30,6 @@ def testa_comando_alterar_usuario(rotulo, *args):
     frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
     pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
     util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
-
 
 def testa_atualiza_nome_com_sucesso():
     novo_nome = "John First"
@@ -79,18 +72,8 @@ def testa_atualiza_email_repetido_falha():
 
     assert obj_usuario.obtem_atributo(updated_user, "email") != email_dup, "email duplicado aceito"
 
-'''
-#acrescentei o teste da função msg_campo_obrigatorio(nome_do_campo) *falta implementar
-def testa_msg_campo_obrigatorio():
-    modulo = comando_alterar_usuario
-    funcao = modulo.msg_campo_obrigatorio
-    nome_do_campo = "campo_teste"
-    msg_campo_obrigatorio(nome_do_campo)
-'''
-
 # Executa os testes
 
-#testa_msg_campo_obrigatorio() # acrescentei
 testa_atualiza_nome_com_sucesso()
 testa_atualiza_email_com_sucesso()
 testa_atualiza_email_repetido_falha()
