@@ -94,6 +94,12 @@ def busca_por_email(em):
   ou {None} se não existir tal usuário."""
   return obj_usuario_IMP.busca_por_email(em)
 
+def busca_por_nome(nome):
+  """Localiza usuarios usuário cujo nome é {nome} e devolve o uma lista
+  com os identificadores dos mesmos (não os objetos);
+  ou {None} se não existir nenhum usuário."""
+  return obj_usuario_IMP.busca_por_nome(nome)
+
 def sessoes_abertas(usr):
   """Devolve a lista com todo {obj_sessao.Classe} do usuário {usr} que
   ainda está aberta."""

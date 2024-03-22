@@ -6,6 +6,7 @@ import db_base_sql
 import db_tabelas
 import obj_usuario
 import obj_sessao
+import obj_video
 import util_testes; from util_testes import erro_prog, aviso_prog, mostra
 import comando_fazer_upload_video
 
@@ -31,16 +32,16 @@ def testa_comando_fazer_upload_video(rotulo, dados):
   pretty = False   # Não tente deixar o HTML legível.
   util_testes.escreve_resultado_html(modulo, rotulo, pag, frag, pretty)
 
-  vid_criado_id = obj_video.busca_por_email(dados["arq"])
+  vid_criado_id = obj_video.busca_por_arquivo(dados["arq"])
   vid_criado_obj = obj_video.busca_por_identificador(vid_criado_id)
   vid_criado_atrs = obj_video.obtem_atributos(vid_criado_obj) if vid_criado_obj != None else None
   sys.stderr.write(f"  video criado = {vid_criado_id} atrs = {vid_criado_atrs}\n")
-  
+
   for chave in dados.keys():
     if chave == 'id_usr': 
       val_criado = obj_usuario.obtem_identificador(val_criado_args['usr'])
     else:
-      val_criado = vid_criado_atrs[chave]
+      val_criado = vid_criado_atrs[chave] if vid_criado_obj != None else None
     val_dados = dados[chave]
     if val_criado != val_dados:
       ok_global = False
@@ -48,7 +49,7 @@ def testa_comando_fazer_upload_video(rotulo, dados):
  
 # Obtém um usuário comum (não administrador):
 usr1 = obj_usuario.busca_por_identificador("U-00000003")
-assert not obj_usuario.objtem_atributo(usr1, 'administrador')
+assert not obj_usuario.obtem_atributo(usr1, 'administrador')
 
 # ----------------------------------------------------------------------
 # Testa com dados OK:
@@ -57,7 +58,7 @@ dados_ok = { \
   'arq': "banana",
   'titulo': "Bananas ciberbnéticas",
 }
-testa_comando_fazer_upload_video("OK", dados_ok, True)
+testa_comando_fazer_upload_video("OK", dados_ok)
 
 # Testa com arquivo repetido:
 dados_erro = { \
@@ -65,7 +66,7 @@ dados_erro = { \
   'fruta': "banana",
   'titulo': "Bananas ciberbnéticas",
 }
-testa_comando_fazer_upload_video("Erro", dados_erro, False)
+testa_comando_fazer_upload_video("Erro", dados_erro)
 
 # ----------------------------------------------------------------------
 # Veredito final:

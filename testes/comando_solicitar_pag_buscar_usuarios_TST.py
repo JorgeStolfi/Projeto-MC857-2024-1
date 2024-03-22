@@ -22,7 +22,7 @@ ses_comum = obj_sessao.busca_por_identificador("S-00000001")
 # Obtém um usuário administrador
 admin = obj_usuario.busca_por_identificador("U-00000001")
 assert obj_usuario.obtem_atributo(admin, 'administrador')
-ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX", None)
+ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX")
 
 def testa_processa(rotulo, *args):
     """Testa {funcao(*args)}, grava resultado
@@ -32,8 +32,7 @@ def testa_processa(rotulo, *args):
     funcao = modulo.processa
     frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
     pretty = True  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-    util_testes.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
-
+    util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 testa_processa("NL-e0", None, None)
 testa_processa("NA-e2", ses_comum, ["banana", "abacate"])
