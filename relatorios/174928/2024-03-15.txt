@@ -1,0 +1,4 @@
+174928 Testar módulos {comando_fazer_login} {html_pag_login}
+
+Os testes dos módulos {comando_fazer_login} e {html_pag_login} foram finalizados com sucesso, com arquivos html de resultado que indicaram que as implementações de ambos os módulos estavam corretas.
+As únicas modificações feitas foram em um comentário errado no arquivo comando_fazer_login.py e no arquivo comando_fazer_login_TST.py, no qual foi adicionado mais um caso de teste, para conferir se o reusltado de erro com senha incorreta também ocorreria.
