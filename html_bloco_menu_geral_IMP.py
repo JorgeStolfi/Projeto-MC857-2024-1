@@ -89,3 +89,4 @@ def gera_botoes_linha_2():
 def gera_nome_usuario(nome_usuario):
   """Gera o texto "Oi {nome}" para o menu geral."""
   res = html_elem_span.gera(None, "Oi " + nome_usuario)
+  return res

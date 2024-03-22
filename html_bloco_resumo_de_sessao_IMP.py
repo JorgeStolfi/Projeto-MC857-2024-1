@@ -25,15 +25,19 @@ def gera(ses, bt_ver, bt_fechar):
   args_bt = {'id_ses': ses_id} # Argumentos para os botões.
   cor_bt_admin = '#FFA700' # Cor para botões de adminstrador.
 
-  # O comando para tratar a url "ver_detalhes_sessao" ainda não existe, e deverá ser implementado
-  # no futuro.
-  if bt_ver:
-    ht_bt_fechar = html_elem_button_simples.gera("Ver", 'ver_sessao', args_bt, cor_bt_admin)
-    ht_campos.append(ht_bt_fechar)
+  usr_ses = obj_sessao.obtem_usuario(ses)
+  admin = obj_usuario.obtem_atributos(usr_ses)['administrador']
 
-  if bt_fechar and ses_aberta:
-    ht_bt_fechar = html_elem_button_simples.gera("Fechar", 'fechar_sessao', args_bt, cor_bt_admin)
-    ht_campos.append(ht_bt_fechar)
+  if admin:
+    # O comando para tratar a url "ver_detalhes_sessao" ainda não existe, e deverá ser implementado
+    # no futuro.
+    if bt_ver:
+      ht_bt_fechar = html_elem_button_simples.gera("Ver", 'ver_sessao', args_bt, cor_bt_admin)
+      ht_campos.append(ht_bt_fechar)
+
+    if bt_fechar and ses_aberta:
+      ht_bt_fechar = html_elem_button_simples.gera("Fechar", 'fechar_sessao', args_bt, cor_bt_admin)
+      ht_campos.append(ht_bt_fechar)
 
   return ht_campos
 
