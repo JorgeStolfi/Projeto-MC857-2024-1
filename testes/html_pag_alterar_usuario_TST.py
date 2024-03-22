@@ -1,5 +1,8 @@
 #! /usr/bin/env python3
 
+import sys #mudança de linha
+sys.path.insert (0, "/home/cc2018-ceb/ra074126/Downloads/Projeto_2024_03_15/Projeto-MC857-2024-1") #linha acrescentada
+
 import html_pag_alterar_usuario
 import db_tabelas
 import obj_usuario
@@ -7,7 +10,7 @@ import obj_sessao
 import db_base_sql
 import util_testes
 
-import sys
+#import sys #linha original
 
 sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB",None,None)
