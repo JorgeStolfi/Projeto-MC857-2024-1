@@ -1,0 +1,4 @@
+Objetivo: Mover o título de {html_bloco_lista_de_usuarios_IMP.gera} para os módulos que chamam essa função
+
+Mudança do local onde a função html_bloco_cabecalho.gera é chamada foi alterada do arquivo html_bloco_lista_de_usuarios_IMP.py
+para o arquivo comando_buscar_usuarios_IMP.py.O comando_buscar_usuarios_IMP foi sujeito a testes e passou em todos
