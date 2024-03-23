@@ -8,3 +8,8 @@ def processa(ses, cmd_args):
 
   A função retorna uma página HTML com a lista resumida das sessões."""
   return comando_ver_sessoes_IMP.processa(ses, cmd_args)
+
+def extrai_titulo(ht_conteudo):
+  """Dado {ht_conteudo} como um conteudo em HTML, extrai o título da página
+  a partir da tag <title></title>, com auxilio do BeautifulSoup."""
+  return comando_ver_sessoes_IMP.extrai_titulo(ht_conteudo)
