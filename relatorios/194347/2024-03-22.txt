@@ -1,0 +1,7 @@
+Relatório dia 22/03/24
+
+Como solicitado implementei a "função solicitar_pag_buscar_videos" de maneira a cnsidera que exite um modulo ja implemnetado semelhante a html_pag_buscar_usuarios fiz a primeira alteração 
+para ficar com a ortografia de "solicitar_pag_buscar_videos" para "comando_solicitar_pag_buscar_videos" e "comando_solicitar_pag_buscar_videos_imp" feito a implementação eu comecei a 
+realizar a elaboração do teste automatizado do modulo implementado feito isso iniciei o relatório e realizei os upload dos arquivos porfim terminei minhas operações
+
+Atenciosamente Arimã Batista
