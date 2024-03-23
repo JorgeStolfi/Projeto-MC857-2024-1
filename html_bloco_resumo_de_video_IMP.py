@@ -30,7 +30,7 @@ def gera(vid):
   altura = atrs['altura']
   ht_altura = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, altura))
 
-  # solicitar_pag_alterar_usuario precisa ser um dicionário com um único campo 'id_usuario'
+  # TODO: ver_video precisa ser implementado
   bt_arg = {'id_video': obj_video.obtem_identificador(vid)}
   bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_arg, "#eeeeee")
 
