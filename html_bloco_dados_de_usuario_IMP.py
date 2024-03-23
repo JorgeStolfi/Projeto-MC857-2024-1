@@ -17,6 +17,12 @@ def gera(id_usr, atrs, admin):
       ( "E-mail",           "email",    "email",         "xxx@xxx.xxx.xx",      False, ),
       ( "Senha",            "password", "senha",         None,                  False, ),
       ( "Confirmar senha",  "password", "conf_senha",    None,                  False, ),
+    )
+
+  # Só adiciona a linha de administrador se o usuário tiver permissão de administrador
+  if admin:
+    dados_linhas += \
+    (
       ( "Administrador",    "checkbox", "administrador", None,                  True,  ),
     )
     
