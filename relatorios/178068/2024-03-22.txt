@@ -1,0 +1,5 @@
+Implementação do módulo {html_bloco_resumo_de_video} semelhante a {html_bloco_resumo_de_usuario}
+Constatei as funções do {html_bloco_resumo_de_usuario}, que gera um fragmento HTML com dois atributos do usuário, no caso nome e email,
+e um botão "Ver" com o comando "solicitar_pag_alterar_usuario".
+Repliquei esse comportamento para o {html_bloco_resumo_de_video}, nos arquivos  que gera um fragmento HTML com todos os atributos do vídeo,
+e um botão "Ver" com o comando "ver_video", que poderá ser implementado.
