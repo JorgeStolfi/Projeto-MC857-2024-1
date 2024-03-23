@@ -22,6 +22,7 @@ import comando_alterar_usuario
 import comando_ver_objeto
 import comando_ver_sessoes
 import comando_ver_sessao
+import comando_ver_videos
 
 import html_elem_span
 import html_elem_div
@@ -423,7 +424,11 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/solicitar_pag_upload_video':
       # Quer formumlário para fazer upload de um video:
       pag = comando_solicitar_pag_upload_video(ses, cmd_args)
-
+      
+    elif cmd == '/ver_videos':
+      # Solicita página com lista de vídeos de algum usuário:
+      pag = comando_ver_videos.processa(ses, cmd_args)
+      
     elif cmd == '/ver_meus_videos':
       # Solicita página com lista de vídeos do usuário:
       pag = comando_ver_meus_videos.processa(ses, cmd_args)
@@ -431,7 +436,6 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/solicitar_pag_buscar_videos':
       # Quer formumlário para cadastrar novo usuário:
       pag = comando_solicitar_pag_buscar_videos.processa(ses, cmd_args)
-
 
     else:
       # Comando não identificado
