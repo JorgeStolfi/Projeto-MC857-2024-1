@@ -90,11 +90,11 @@ def obtem_data_de_upload(vid):
   Dá erro se {vid} é {None}."""
   return obj_video_IMP.obtem_data_de_upload(vid)
 
-def busca_por_identificador(id_usr):
-  """Localiza um video com identificador {id_usr} (uma string da forma
+def busca_por_identificador(id_vid):
+  """Localiza um video com identificador {id_vid} (uma string da forma
   "V-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_video.Classe}.
-  Se {id_usr} é {None} ou tal vídeo não existe, devolve {None}."""
-  return obj_video_IMP.busca_por_identificador(id_usr)
+  Se {id_vid} é {None} ou tal vídeo não existe, devolve {None}."""
+  return obj_video_IMP.busca_por_identificador(id_vid)
 
 def busca_por_campo(campo, val):
   """Localiza todos os vídeos cujo {campo} seja {valor}. Retorna a lista de ids

@@ -24,7 +24,7 @@ def processa(ses, cmd_args):
       id_usr = cmd_args['id_usuario']
       usr = obj_usuario.busca_por_identificador(id_usr)
       if usr == None:
-        erros.append(f"usuario '{id_usuario}' não existe")
+        erros.append(f"usuario '{id_usr}' não existe")
     else:
       erros.append("usuário não especificado")
 

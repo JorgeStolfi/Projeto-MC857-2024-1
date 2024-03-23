@@ -1,9 +1,7 @@
-#! /usr/bin/python3
-
-import comando_solicitar_pag_buscar_usuarios
+import comando_solicitar_pag_buscar_videos
 import db_tabelas
 import obj_sessao
-import obj_usuario
+import obj_video
 import db_base_sql
 import util_testes
 
@@ -17,24 +15,24 @@ sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
 # Sessões de teste
-ses_comum = obj_sessao.busca_por_identificador("S-00000003")
+ses_comum = obj_sessao.busca_por_identificador("S-00000001")
 
 # Obtém um usuário administrador
-admin = obj_usuario.busca_por_identificador("U-00000001")
-assert obj_usuario.obtem_atributo(admin, 'administrador')
+admin = obj_video.busca_por_identificador("U-00000001")
+assert obj_video.obtem_atributo(admin, 'administrador')
 ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX")
 
 def testa_processa(rotulo, *args):
     """Testa {funcao(*args)}, grava resultado
     em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
-    modulo = comando_solicitar_pag_buscar_usuarios
+    modulo = comando_solicitar_pag_buscar_videos
     funcao = modulo.processa
     frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
     pretty = True  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
     util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
-testa_processa("NA-e2", None, None)
-testa_processa("NL-e0", ses_comum, ["banana", "abacate"])
+testa_processa("NL-e0", None, None)
+testa_processa("NA-e2", ses_comum, ["banana", "abacate"])
 testa_processa("OK-e0", ses_admin, None)
 testa_processa("OK-e2", ses_admin, ["Roubar", "Mentir"])

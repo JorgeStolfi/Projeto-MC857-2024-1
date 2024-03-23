@@ -3,6 +3,7 @@ import html_pag_generica
 import html_pag_mensagem_de_erro
 import obj_sessao
 import obj_usuario
+from bs4 import BeautifulSoup
 
 def processa(ses, cmd_args):
   assert ses != None
@@ -26,5 +27,11 @@ def processa(ses, cmd_args):
   # Com o identificador do usuário, podemos buscar suas sessões no banco:
   lista_ids_ses = obj_sessao.busca_por_campo('usr', id_usr)
   ht_conteudo = html_bloco_lista_de_sessoes.gera(lista_ids_ses, bt_ver, bt_fechar)
-  pag = html_pag_generica.gera(ses, ht_conteudo, None)
+  titulo_pagina = extrai_titulo(ht_conteudo)
+  pag = html_pag_generica.gera(ses, titulo_pagina, None)
   return pag
+
+def extrai_titulo(ht_conteudo):
+  soup = BeautifulSoup(ht_conteudo, 'html.parser')
+  title = soup.title.text
+  return title

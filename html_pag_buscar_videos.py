@@ -1,8 +1,8 @@
-import html_pag_buscar_usuarios_IMP
+import html_pag_buscar_videos_IMP
 
 
 def gera(ses, atrs, admin, erros):
-  """ Retorna uma página contendo o formulário para buscar usuários.
+  """ Retorna uma página contendo o formulário para buscar videos.
   Normalmente é usada por administradores. Os campos do formulário são 
   um subconjuto dos atributos de um objeto da classe {Class}.
 
@@ -12,7 +12,7 @@ def gera(ses, atrs, admin, erros):
   com os valores já preenchidos.
   
   A página terá um botão de tipo 'submit' com texto "Buscar" que,
-  quando acionado, emite uma ação POST com comando 'buscar_trechos'. 
+  quando acionado, emite uma ação POST com comando 'buscar_trechos. 
   Haverá também um botão simples com texto "Cancelar" que emite
   o comando 'principal'."""
-  return html_pag_buscar_usuarios_IMP.gera(ses, atrs, admin, erros)
+  return html_pag_buscar_videos_IMP.gera(ses, atrs, admin, erros)

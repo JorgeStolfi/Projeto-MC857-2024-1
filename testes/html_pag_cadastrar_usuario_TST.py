@@ -27,7 +27,7 @@ def testa_gera(rotulo, *args):
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # Sessao de teste cujo usuario não é admin:
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.busca_por_identificador("S-00000004")
 assert ses != None
 
 # Atributos de usuario para teste:
@@ -50,7 +50,7 @@ for tag, atrs, erros in (
   testa_gera(rotulo, ses, atrs, erros)
 
 # Sessao de teste cujo usuario é admin:
-ses = obj_sessao.busca_por_identificador("S-00000004")
+ses = obj_sessao.busca_por_identificador("S-00000001")
 assert ses != None
 
 for tag, atrs, erros in ( 

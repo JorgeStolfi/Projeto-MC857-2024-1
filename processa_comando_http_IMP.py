@@ -9,6 +9,9 @@ import comando_solicitar_pag_cadastrar_usuario
 import comando_solicitar_pag_alterar_usuario
 import comando_solicitar_pag_buscar_usuarios
 
+import comando_solicitar_pag_buscar_videos
+
+
 import comando_buscar_usuarios
 import comando_fazer_login
 import comando_fazer_login
@@ -403,7 +406,7 @@ def processa_comando(tipo, ses, dados):
 
     elif cmd == '/fechar_sessao':
       # Quer encerrar uma sessão dada:
-      pag, ses_nova = comando_fechar_sessao.processa(ses, cmd_args)
+      pag = comando_fechar_sessao.processa(ses, cmd_args)
 
     elif cmd == '/ver_sessoes':
       # Quer ver sessões:
@@ -421,10 +424,18 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/solicitar_pag_upload_video':
       # Quer formumlário para fazer upload de um video:
       pag = comando_solicitar_pag_upload_video(ses, cmd_args)
-
+      
     elif cmd == '/ver_videos':
       # Solicita página com lista de vídeos de algum usuário:
       pag = comando_ver_videos.processa(ses, cmd_args)
+      
+    elif cmd == '/ver_meus_videos':
+      # Solicita página com lista de vídeos do usuário:
+      pag = comando_ver_meus_videos.processa(ses, cmd_args)
+    
+    elif cmd == '/solicitar_pag_buscar_videos':
+      # Quer formumlário para cadastrar novo usuário:
+      pag = comando_solicitar_pag_buscar_videos.processa(ses, cmd_args)
 
     else:
       # Comando não identificado
