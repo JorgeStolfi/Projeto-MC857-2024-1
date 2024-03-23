@@ -56,7 +56,7 @@ def testa_atualiza_email_com_sucesso():
     assert obj_usuario.obtem_atributo(updated_user, "email") == email_novo, "email não atualizado"
 
 def testa_atualiza_email_repetido_falha():
-    email_dup = "segundo@ic.unicamp.br"
+    email_dup = "segundo@gmail.com"
     cmd_args = {
         'id_usuario': "U-00000001",
         'email': email_dup,
@@ -69,7 +69,6 @@ def testa_atualiza_email_repetido_falha():
       sys.stderr.write("    (erro esperado)\n")
 
     updated_user = obj_usuario.busca_por_identificador("U-00000001")
-
     assert obj_usuario.obtem_atributo(updated_user, "email") != email_dup, "email duplicado aceito"
 
 # Executa os testes
