@@ -5,7 +5,7 @@ import html_elem_div
 import html_elem_span
 import sys
 import html_estilo_cabecalho_de_tabela
-import html_bloco_cabecalho
+
 
 def gera(lista_ids_usr):
   # Linha de cabeçalho:
@@ -29,10 +29,8 @@ def gera(lista_ids_usr):
   # Gera a tabela HTML a partir da lista de linhas
   ht_tabela = html_elem_table.gera(linhas, cabecalho)
 
-  ht_titulo = html_bloco_cabecalho.gera("Usuários", False)
-  ht_conteudo = \
-      ht_titulo + "<br/>\n" + \
-      ht_tabela
+  # ht_titulo = html_bloco_cabecalho.gera("Usuários", False)
+  ht_conteudo = ht_tabela
 
   # Devolve a tabela HTML
   return ht_conteudo
