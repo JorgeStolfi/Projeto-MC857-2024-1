@@ -1,0 +1,8 @@
+Para corrigir o problema foi necessário fazer apenas uma mudança (que não foi a única feita):
+- O arquivo "processa_comando_http_IMP.py" estava esperando que a função chamada devolvesse 2 valores de retorno, porém a função retorna apenas 1, que é a próxima página que o usuário vai ver em sua tela após clicar no botão "Fechar sessão". Para corrigir foi necessário apenas remover esse retorno extra que o método estava esperando.
+
+Após essa modificação o código funcionou como esperado.
+
+OBS 1: Foi alterado também o arquivo "comando_fechar_sessao_IMP.py", sendo adicionado uma verificação extra que estava faltando para ter certeza que o usuário em questão é administrador antes de executar a ação.
+
+OBS 2: Os testes foram feitos com o comando "./testa.sh comando_fechar_sessao" e também com a URL "http://127.0.0.1:8081/ver_objeto?id_objeto=S-00000001" no servidor rodando. Ambos tiveram êxito. Mas clicar no botão "Ver" da lista de "Minhas sessões" ia para uma página que não funcionava, esse fluxo completo então não foi testado, apenas o de deleção como mencionado anteriormente.

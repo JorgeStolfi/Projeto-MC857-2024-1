@@ -402,7 +402,7 @@ def processa_comando(tipo, ses, dados):
 
     elif cmd == '/fechar_sessao':
       # Quer encerrar uma sessão dada:
-      pag, ses_nova = comando_fechar_sessao.processa(ses, cmd_args)
+      pag = comando_fechar_sessao.processa(ses, cmd_args)
 
     elif cmd == '/ver_sessoes':
       # Quer ver sessões:
