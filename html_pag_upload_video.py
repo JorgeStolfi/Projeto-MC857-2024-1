@@ -10,4 +10,4 @@ def gera(ses, cmd_args):
   Quando o usuário clicar no botão 'Entrar', será emitido um comando POST
   com ação {fazer_upload_video}.  Os argumentos desse
   POST são { 'email': {email}, 'senha': {senha} }."""
-  return html_form_upload_video_IMP.gera(ses, cmd_args)
+  return html_form_upload_video_IMP.gera(ses)
