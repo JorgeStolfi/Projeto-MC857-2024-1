@@ -1,0 +1,8 @@
+A minha tarefa consistiu em implementar o comando 'ver_videos_de_usuario' e colocá-lo no botão 'Meus Videos'.
+
+Para realizar isso eu fiz o seguinte:
+1) Criei dois arquivos "comando_ver_videos.py" e "comando_ver_videos_IMP.py";
+2) Realizei a implementação baseada no já existente "comando_ver_sessoes_IMP.py", realizando as modificações necessárias para poder puxar os vídeos do banco ao invés das sessões;
+3) Modifiquei o arquivo "processa_comando_http_IMP.py" para chamar o comando ver_videos quando o usuário clica no botão 'Meus Videos'.
+
+Desta maneira basta apenas a implementação de obj_video e html_bloco_lista_de_videos que foram utilizados em comando_ver_videos_IMP.
