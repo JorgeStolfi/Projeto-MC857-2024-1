@@ -1,9 +1,9 @@
 #! /usr/bin/python3
 
 import html_pag_buscar_usuarios
-import tabelas
-import sessao
-import usuario
+import db_tabelas
+import obj_sessao
+import obj_usuario
 import db_base_sql
 import util_testes
 
@@ -14,7 +14,7 @@ res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
 sys.stderr.write("Criando alguns objetos...\n")
-db_tabelas.cria_todos_os_testes()
+db_tabelas.cria_todos_os_testes(True)
 
 # Sessao de teste:
 ses = obj_sessao.busca_por_identificador("S-00000001")
@@ -34,10 +34,11 @@ def testa_gera(rotulo, *args):
   funcao = modulo.gera
   frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-  util_testes.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 for admin in (False, True):
   ad = "-a" + str(admin)
   testa_gera("N-e0" + ad, ses, {},                                           admin, None) # Sem defaults
-  testa_gera("D-e0" + ad, ses, { 'nome': "Primeiro", 'documento': "Lenço" }, admin, None) # Com defaults
-  testa_gera("D-e1" + ad, ses, { 'nome': "Primeiro", 'documento': "Lenço" }, admin, "Tente novamente") # Com defaults e erro
+  testa_gera("D-e0" + ad, ses, { 'id_usuario': "UAD8291-20", 'nome': "Primeiro", 'email': "fulano@gmail.com" }, admin, None) # Com defaults
+  testa_gera("D-e1" + ad, ses, { 'id_usuario': "UAD8291-20", 'nome': "Primeiro", 'email': "fulano@gmail.com" }, admin, "Tente novamente") # Com defaults e erro
+  testa_gera("D-e2" + ad, ses, { 'id_usuario': "UAD8291-20", 'nome': "Primeiro", 'email': "fulano@gmail.com", 'documento': "Lenço" }, admin, "Tente novamente") # Com defaults e erro

@@ -4,7 +4,10 @@ import html_elem_button_simples
 
 def gera(ses, id_usr, atrs, admin, erros):
   # Constrói formulário com dados:
-  ht_form = html_form_criar_alterar_usuario.gera(id_usr, atrs, admin, "Confirmar alterações", 'alterar_usuario')
+  if (erros == None or len(erros) == 0):
+    ht_form = html_form_criar_alterar_usuario.gera(id_usr, atrs, admin, "Confirmar alterações", 'alterar_usuario')
+  else:
+    ht_form = ""
 
   # Constroi botões de ações adicionais na página
   if admin and id_usr != None:

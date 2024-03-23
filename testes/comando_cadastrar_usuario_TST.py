@@ -17,6 +17,28 @@ ok_global = True # Vira {False} se um teste falha.
 # ----------------------------------------------------------------------
 # Função de teste:
 
+def testa_msg_campo_obrigatorio(nome_do_campo):
+  global ok_global
+
+  sys.stderr.write(f"  ----------------------------------------------------------------------\n")
+  sys.stderr.write(f"  testando mensagem de campo obrigatóro para {nome_do_campo}\n")
+
+  resposta = comando_cadastrar_usuario.msg_campo_obrigatorio(nome_do_campo)
+
+  sys.stderr.write(f"  mensagem retornada = {resposta}\n")
+
+  if (resposta != "O campo %s é obrigatório." % nome_do_campo):
+    ok_global = False
+    aviso_prog("Mensagem retornada errada", True)
+
+  sys.stderr.write(f"  ----------------------------------------------------------------------\n")
+
+nome_campo_1 = "Nome"
+testa_msg_campo_obrigatorio(nome_campo_1)
+
+nome_campo_2 = "Senha"
+testa_msg_campo_obrigatorio(nome_campo_2)
+
 def testa_comando_cadastrar_usuario(ses, dados, deveria_cadastrar):
   global ok_global
 
@@ -44,6 +66,9 @@ def testa_comando_cadastrar_usuario(ses, dados, deveria_cadastrar):
     aviso_prog("Não cadastrou usuario quando deveria cadastrar", True)
     
   sys.stderr.write(f"  ----------------------------------------------------------------------\n")
+
+# Limpar as tabelas antes de executar os testes
+obj_usuario.inicializa_modulo(True)
 
 # ----------------------------------------------------------------------
 # Testa chamada OK:

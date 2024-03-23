@@ -6,7 +6,7 @@ import html_pag_principal
 import obj_sessao
 
 def processa(ses, cmd_args):
-  if ses == None or not obj_sessao.aberta(ses):
+  if ses == None or not obj_sessao.aberta(ses) or not obj_sessao.eh_administrador(ses):
     # Isto nunca deveria acontecer, mas em todo caso:
     pag = html_pag_mensagem_de_erro.gera(ses, "Precisa entrar como administrador antes de fechar a sessão de outro usuário")
   else:

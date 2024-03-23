@@ -1,0 +1,20 @@
+- Na primeira tarefa chamada 'comando_solicitar_pag_buscar_usuarios',
+precisei alterar o ID da sessão comum, pois o ID original era de uma sessão de
+administrador. Também precisei alterar o rótulo dos dois primeiros testes, onde
+o primeiro era o caso de o usuário não ser administrador do sistema, e o segundo
+caso era de o usuário não estar logado no sistema. Inicialmente, os rótulos vieram
+alternados, o que fazia os HTML serem referenciados erroneamente.
+
+- Na segunda tarefa, denominada 'html_pag_buscar_usuarios', Inicialmente
+foi preciso consertar alguns imports do teste, que estavam com os nomes errados,
+como 'db_tabelas', 'obj_sessao' e 'obj_usuario'. Depois, eu precisei alterar a
+chamada de 2 funções específicas, a primeira delas a função 'cria_todos_os_testes'
+passando o valor do argumento como True que estava faltando, e na segunda função
+'testa_funcao_que_gera_html', que estava com o nome errado.
+No final, completei os dicionários com dados de busca do usuário como e-mail e 
+ID, para que a busca sempre viesse com os campos pré preenchidos, mesmo em
+casos de erro de busca. 
+
+- No terceiro arquivo 'comando_buscar_usuarios', não foi preciso executar nenhuma
+mudança, pois ao avaliar o arquivo e seus testes, todos os resultados se comportaram
+da maneira esperada.

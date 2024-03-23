@@ -17,7 +17,7 @@ sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
 # Sessões de teste
-ses_comum = obj_sessao.busca_por_identificador("S-00000001")
+ses_comum = obj_sessao.busca_por_identificador("S-00000003")
 
 # Obtém um usuário administrador
 admin = obj_usuario.busca_por_identificador("U-00000001")
@@ -34,7 +34,7 @@ def testa_processa(rotulo, *args):
     pretty = True  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
     util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
-testa_processa("NL-e0", None, None)
-testa_processa("NA-e2", ses_comum, ["banana", "abacate"])
+testa_processa("NA-e2", None, None)
+testa_processa("NL-e0", ses_comum, ["banana", "abacate"])
 testa_processa("OK-e0", ses_admin, None)
 testa_processa("OK-e2", ses_admin, ["Roubar", "Mentir"])

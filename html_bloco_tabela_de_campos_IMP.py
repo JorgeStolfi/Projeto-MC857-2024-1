@@ -19,6 +19,8 @@ def gera(dados_linhas, atrs, privilegio):
     vmin = (atrs[chmin] if chmin in atrs else None)
     ht_rotulo = html_elem_label.gera(rot, ": ")
     editavel = privilegio or not prot
+    if (tipo == 'checkbox' and not editavel and val == None):
+      val = False
     ht_campo = gera_campo(tipo, chave, val, vmin, dica, editavel)
     if ht_campo != None:
       linhas.append((ht_rotulo, ht_campo,))

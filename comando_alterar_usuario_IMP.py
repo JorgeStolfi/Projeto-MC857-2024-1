@@ -36,7 +36,15 @@ def processa(ses, cmd_args):
     else:
       usr = usr_ses
       assert usr is not None
-      id_usr = obj_usuario.obtem_identificador(usr)
+      id_usr = obj_usuario.obtem_identificador(usr)  
+  
+    # Se desejarmos atualizar o email, validamos se o mesmo não é duplicado:
+    if 'email' in cmd_args:
+      novo_email = cmd_args['email']
+      id_usuario_com_email_atual = obj_usuario.busca_por_email(novo_email)
+      # Se o usuário atual deseja alterar o seu email para o mesmo que ele já usa, permitimos também
+      if (id_usuario_com_email_atual != None and id_usuario_com_email_atual != id_usr):
+        erros.append(f"já existe um usuário com o email {novo_email}")
 
   if len(erros) == 0:
     # Tenta editar o usuário:

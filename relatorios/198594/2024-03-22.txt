@@ -1,0 +1,5 @@
+Gustavo Purcena 198594
+
+- Verifiquei como o modulo de buscar usuarios era montado e como ele era chamado
+- Criei os arquivos html_pag_buscar_video e html_form_buscar_videos baseados nos modulos de buscar usuarios e no obj_video
+- Criei o arquivo do comando de solicitar a pagina de buscar videos e adicionei o comando no arquivo de processa_comando_http_IMP
