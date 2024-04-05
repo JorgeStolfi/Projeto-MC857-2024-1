@@ -1,4 +1,4 @@
-import comando_ver_videos_IMP
+import comando_ver_videos_de_usuario_IMP
 
 def processa(ses, cmd_args):
   """Esta função é chamada quando um usuário aperta o botão "Ver vídeos"
@@ -7,4 +7,4 @@ def processa(ses, cmd_args):
   Do contrário, mostra os vídeos do usuário da sessão {ses}.
 
   A função retorna uma página HTML com a lista resumida dos vídeos."""
-  return comando_ver_videos_IMP.processa(ses, cmd_args)
+  return comando_ver_videos_de_usuario_IMP.processa(ses, cmd_args)
