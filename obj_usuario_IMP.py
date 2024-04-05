@@ -109,9 +109,8 @@ def busca_por_email(em):
 
 def busca_por_nome(nome):
   global cache, nome_tb, letra_tb, colunas
-  unico = False
   if usr_debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_nome}: nome = {nome}\n");
-  lista_ids = obj_raiz.busca_por_campo('nome', nome, unico, cache, nome_tb, letra_tb, colunas)
+  lista_ids = obj_raiz.busca_por_semelhanca(nome_tb, letra_tb, ['nome'], [nome])
   if usr_debug: sys.stderr.write(f"    > lista de ids encontrada = {lista_ids.join(',')}\n");
   sys.stdout.write(",".join(lista_ids))
   return lista_ids
