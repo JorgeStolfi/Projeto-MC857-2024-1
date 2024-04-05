@@ -1,4 +1,4 @@
-import comando_ver_comentarios_IMP
+import comando_ver_comentarios_de_video_IMP
 
 def processa(ses, id_video):
   """
@@ -8,7 +8,7 @@ def processa(ses, id_video):
   
   O parâmetro {id_video} é o id do video aberto.
 
-  O resultado deve ser uma página com os comentarios encontrados, gerada
-  por {html_pag_lista_de_comentarios.gera}.
+  O resultado deve ser uma página com os comentarios encontrados.
+  Veja {html_bloco_lista_de_comentarios.gera}.
   """
-  return comando_ver_comentarios_IMP.processa(ses, id_video)
+  return comando_ver_comentarios_de_video_IMP.processa(ses, id_video)

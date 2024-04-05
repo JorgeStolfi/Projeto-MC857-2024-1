@@ -12,7 +12,7 @@ class Classe(obj_sessao_IMP.Classe_IMP):
   servidor.  Os atributos deste objeto, por enquanto, são:
 
     'usr'      {obj_usuario.Classe} o usuário que fez login na sessão.
-    'aberta'     {bool}               estado da sessao.
+    'aberta'   {bool}               estado da sessao.
     'cookie'   {str}                cookie da sessao.
     'criacao'  {str}                data da criação da sessão no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
 

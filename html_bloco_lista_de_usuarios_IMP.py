@@ -6,7 +6,6 @@ import html_elem_span
 import sys
 import html_estilo_cabecalho_de_tabela
 
-
 def gera(lista_ids_usr):
   # Linha de cabeçalho:
   est_cab = html_estilo_cabecalho_de_tabela.gera()

@@ -7,7 +7,6 @@ import html_elem_form
 from util_testes import erro_prog
 
 # Outros módulos importados por esta implementação:
-from datetime import datetime, timezone
 import re
 import sys
 
@@ -34,7 +33,7 @@ def gera_botoes_linha_1(logado, nome_usuario, admin):
   usuário está logado."""
 
   # Botões da primeira linha que sempre aparecem:
-  ht_bt_principal = html_elem_button_simples.gera("Principal", 'principal', None, '#60a3bc')
+  ht_bt_principal = html_elem_button_simples.gera("Principal", 'pag_principal', None, '#60a3bc')
 
   botoes = ( ht_bt_principal, )
   if logado:
@@ -62,7 +61,7 @@ def gera_botoes_linha_1_logado(nome_usuario, admin):
     botoes_videos = ( )
   else:
     botoes_videos = (
-      html_elem_button_simples.gera("Meus Videos", 'ver_videos', None, '#eeeeee'),
+      html_elem_button_simples.gera("Meus Videos", 'ver_videos_de_usuario', None, '#eeeeee'),
     )
   return botoes_sempre + botoes_videos
 

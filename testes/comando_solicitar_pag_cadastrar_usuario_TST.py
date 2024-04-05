@@ -30,8 +30,8 @@ def testa_comando_solicitar_pag_cadastrar_usuario(rotulo, *cmd_args):
   
   modulo = comando_solicitar_pag_cadastrar_usuario
   funcao = modulo.processa
-  frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-  pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *cmd_args)
 
 for ses, rotulo, atrs in ( 

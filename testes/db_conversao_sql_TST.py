@@ -186,4 +186,4 @@ verifica_dict("dicionario {dic2}, T", dic2_mem, True, dic2_SQL)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")
