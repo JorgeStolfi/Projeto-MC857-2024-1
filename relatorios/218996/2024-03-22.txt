@@ -1,5 +1,0 @@
-- Criei a interface comando_ver_comentarios.py que contem a funcao processa recebendo a sessao e o id do video.
-- Criei o arquivo comando_ver_comentarios_IMP.py que implementa a interface comando_ver_comentarios.py.
-A funcao processa busca os comentarios que sao relacionados a um video em especifico. Como os modulos ainda nao existem no momento,
-precisei comentar os modulos para nao dar erro.
-- Criei o arquivo  comando_ver_comentarios_TST.py para testar o modulo.

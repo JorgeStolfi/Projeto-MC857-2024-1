@@ -1,5 +1,0 @@
-Bruno Rodrigues 232450
-
-Verifiquei que o teste html_bloco_dados_de_usuario_TST chama o único método (gera) do módulo html_bloco_dados_de_usuario;
-Rodei os testes com a função ./testa.sh html_bloco_dados_de_usuario e verifiquei que os testes rodaram com sucesso;
-Verifiquei também a saída html gerada (html_bloco_dados_de_usuario.gera.N.html) e confirmei que a saída era a esperada.

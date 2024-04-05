@@ -1,6 +1,0 @@
-Tarefa:
-- 203407 Mova o título de {html_bloco_lista_de_sessoes_IMP.gera} para os módulos que chamam essa função.
-
-Primeiro verifiquei quais os módulos que fazem uso da funçãa {html_bloco_lista_de_sessoes_IMP.gera}; Com a ajuda do VS Code, encontrei que o modulo {comando_ver_sessoes_IMP} chama essa função, e {html_bloco_lista_de_sessoes_TST} faz uso direto dessa função, sem argumentos. Assim, o arquivo que precisaria modificar seria {comando_ver_sessoes_IMP.py}.
-
-Dessa forma criei uma função que extrai o título do conteúdo HTML fazendo uso do BeautifulSoup; Para que ela fosse visível, adicionei a função na interface {comando_ver_sessoes}, junto com sua documentação. Executei o servidor e analisei os resultados, adicionando as screen shots no pull request como artefato.

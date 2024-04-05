@@ -1,4 +1,0 @@
-- Removida referência a "carrinho" na descrição do módulo html_bloco_resumo_de_sessao
-- Modulo html_bloco_resumo_de_sessao alterado para validar se o usuario é administrador ao exibir botões
-- Alterado o teste html_bloco_resumo_de_sessao para validar duas sessões, uma de usuário admin e outra de não-admin
-  (para o não-admin os botões não devem ser exibidos)

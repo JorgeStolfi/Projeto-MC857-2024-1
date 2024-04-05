@@ -1,9 +1,0 @@
-174928
-Implemente o módulo {html_bloco_lista_de_videos} semelhante a {html_bloco_lista_de_usuarios}.
-Suponha que existe {html_bloco_resumo_de_video} semelhante a {html_bloco_resumo_de_usuario}.
-
-Foram implementados os arquivos {html_bloco_lista_de_videos.py}, {html_bloco_lista_de_videos_IMP.py} e {html_bloco_lista_de_videos_TST.py}.
-Assumiu-se a existência do módulo {html_bloco_resumo_de_video}, considerando que o seu método {gera} terá como elementos do resumo todos os atributos de um obj_video.
-Desse modo, a nomenclatura para todos os atributos de um obj_video foi adicionada na lista de cabeçalhos {cabs_raw}, na ordem em que aparecem na descrição da classe.
-Para o teste do módulo, criou-se uma lista com ids de vídeos, devidamente indexados com a letra {V}.
-Por fim, também foi feita uma correção no arquivo {obj_video.py}, na definição do método {busca_por_identificador}, que deveria utilizar {id_vid} e não {id_usr}.

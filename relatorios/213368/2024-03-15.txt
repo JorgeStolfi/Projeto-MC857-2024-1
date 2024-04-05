@@ -1,5 +1,0 @@
-Objetivo : Testar módulos {comando_solicitar_pag_buscar_usuarios}
-
-arquivo comando_solicitar_pag_buscar_usuarios_TST.py alterado:
-        - linha 25: alterada de ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX", None) para ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX")
-        - linha 36: alterada de util_testes.testa_gera_html(modulo, funcao, rotulo, frag, pretty, *args) para util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)

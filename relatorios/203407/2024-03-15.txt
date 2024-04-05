@@ -1,8 +1,0 @@
-Primeiro verifiquei  se {testes/comando_solicitar_pag_alterar_usuario_TST.py} chamava todas as funções definidas em {comando_solicitar_pag_alterar_usuario.py}.
-Apenas a função {processa} existia e já estava sendo chamada, não precisando adicionar mais nenhuma função.
-
-Ao executar os testes verifiquei que os dados apareciam corretamente:-  O primeiro teste mostrava os dados de João Primeiro (dono da sessão).
-- O segundo teste mostrava os dados de  João Segundo (usuário de id U-00000002, definido no teste).
-
-Assim, adicionei as duas evidências geradas a partir do teste, na pasta testes/saida.
-

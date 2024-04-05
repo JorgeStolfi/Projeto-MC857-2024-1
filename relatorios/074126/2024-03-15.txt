@@ -1,5 +1,0 @@
-Para ser possível executar os testes:
-- Foi necessário alterar a linha de importação do módulo sys nos módulos de teste.
-- Foi necessário definir o caminho da pasta nos móduloes de teste da seguinte forma:
-sys.path.insert (0, "/home/cc2018-ceb/ra074126/Downloads/Projeto_2024_03_15/Projeto-MC857-2024-1")
-- faltou implementar o teste da função msg_campo_obrigatorio(nome_do_campo)

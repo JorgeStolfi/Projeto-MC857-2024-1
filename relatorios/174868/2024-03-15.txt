@@ -1,3 +1,0 @@
-A minha tarefa consisia em testar os módulos comando_cadastrar_usuario e html_pag_cadastrar_usuario.
-O módulo comando_cadastrar_usuario executou os testes normalmente, sem gerar html, com output apenas na linha de comando (como deveria ser) e com os dados corretos.
-O segundo módulo gerou os 6 arquivos html da maneira esperada, consistindo de 2 arquivos com mensagem de erro, 2 arquivos com mensagem de erro = None e 2 com a mensagem consistindo de um array vazio. Cada par de arquivos possuía um com dados pré-preenchidos e outro com os dados vazio, portanto os testes funcionaram como esperado.

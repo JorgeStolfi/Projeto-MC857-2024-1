@@ -1,9 +1,0 @@
--comando_cadastrar_usuario: Realizei o teste da função msg_campo_obrigatorio que estava implementada, mas não testada e nem presente na interface. Além disso,
-adicionei a linha obj_usuario.inicializa_modulo(True) para limpar o banco de dados antes da execução dos testes, já que estava dando erros quando eu tentava
-executar novamente.
-
--html_pag_cadastrar_usuario: O cenário NN dos testes estava falhando pois o checkbox de administrador não é editável caso o usuário que seja esteja tentando
-realizar o cadastro não seja e ele não estava recebendo nenhum valor default, para corrigir isso eu fiz uma alteração no arquivo html_pag_cadastrar_usuario_TST
-para que o valor fosse setado para False caso ele fosse None e o campo fosse um checkbox não editável.
-
--comando_solicitar_pag_cadastrar_usuario: Os cenários desse teste funcionaram corretamente após as correções nos outros arquivos

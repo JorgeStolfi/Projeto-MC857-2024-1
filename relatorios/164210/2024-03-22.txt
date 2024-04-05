@@ -1,8 +1,0 @@
-Tarefa de hoje:
-
-164210 Fazer sumir a linha "Adminstrador" da página "Minha Conta" quando o usuário não é administrador.
-
-O que foi feito:
-
-Em `html_bloco_dados_de_usuario_IMP.py` condicionei a inclusão da linha "Adminstrador" 
-no bloco de dados de usuario ao parâmetro `admin` recebido

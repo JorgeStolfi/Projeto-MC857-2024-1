@@ -1,7 +1,0 @@
-Rodei o teste usando o comando:
-./testes/testa.sh comando_solicitar_pag_login
-
-E gerou o arquivo:
-testes/saida/comando_solicitar_pag_login.processa.T1.html
-
-Verifiquei e está tudo OK.
