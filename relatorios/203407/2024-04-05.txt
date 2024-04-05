@@ -17,4 +17,9 @@ com o título e o arquivo do vídeo, fiz os tratamentos para criar o objeto corr
 O únicos pontos pendentes foram os campos de duração, largura e altura. Como não tinha essas informações,
 iniciei o objeto com "0" nesses campos.
 
+Finalizando a tarefa, percebi que havia mudanças na main, então fiz o merge na minha branch
+e percebi que haviam várias mudanças no arquivo que estava utilizando comando_fazer_upload_video_IMP.
+Essas mudanças facilitaram a criação do objeto vídeo. Com as mudanças também havia um método para escrita
+de arquivo local. Fiz as devidas mudanças, atualizando a classe.
+
 Após criar o objeto, chamei o comando de INSERT no banco de dados. Finalizando minha tarefa do dia.
