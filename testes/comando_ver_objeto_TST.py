@@ -19,7 +19,7 @@ sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
 # Obtem uma sessao de um usuario que é de administrador:
-ses1 = obj_sessao.busca_por_identificador("S-00000004")
+ses1 = obj_sessao.busca_por_identificador("S-00000001")
 assert obj_sessao.eh_administrador(ses1)
 
 ok_global = True # Vira {False} se um teste falha.
@@ -31,8 +31,8 @@ def testa_comando_ver_objeto(rotulo, *cmd_args):
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
   modulo = comando_ver_objeto
   funcao = modulo.processa
-  frag = False
-  pretty = False
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *cmd_args)
   
 for tag, id_obj in ( \
@@ -50,4 +50,4 @@ for tag, id_obj in ( \
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")

@@ -13,5 +13,5 @@ def gera(id_usr):
   {obj_video.Classe}.
 
   O formulário também terá um botão simples 'Cancelar',
-  que, quando clicado, emite o comando 'principal'."""
+  que, quando clicado, emite o comando 'pag_principal'."""
   return html_form_upload_video_IMP.gera(id_usr)

@@ -22,8 +22,8 @@ def testa_comando_solicitar_pag_login(rotulo, *cmd_args):
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
   modulo = comando_solicitar_pag_login
   funcao = modulo.processa
-  frag = False
-  pretty = False
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *cmd_args)
 
 testa_comando_solicitar_pag_login("T1", ses1, cmd_args1)

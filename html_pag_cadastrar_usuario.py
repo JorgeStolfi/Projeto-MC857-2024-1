@@ -20,5 +20,5 @@ def gera(ses, atrs, erros):
   adicional 'conf_senha' conterá a confirmação de senha.
 
   O formulário também terá um botão simples 'Cancelar',
-  que, quando clicado, emite o comando 'principal'."""
+  que, quando clicado, emite o comando 'pag_principal'."""
   return html_pag_cadastrar_usuario_IMP.gera(ses, atrs, erros)

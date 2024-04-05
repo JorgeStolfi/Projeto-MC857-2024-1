@@ -5,5 +5,5 @@ def gera(ses, erros):
   que pode ser um string ou uma lista de strings.
 
   A página terá um botão "OK" que, quando clicado, gera um comando
-  "GET" com URL "principal"."""
+  "GET" com URL "pag_principal"."""
   return html_pag_mensagem_de_erro_IMP.gera(ses, erros)

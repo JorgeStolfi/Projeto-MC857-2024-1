@@ -6,7 +6,8 @@
 #
 # Cada tabela SQL tem uma columa de tipo inteiro, 'indice' que é a chave primária
 # Esta coluna é incrementada automaticamente pela biblioteca SQL 
-# sempre que um objeto é acrescentado à tabela.
+# sempre que um objeto é acrescentado à tabela.  A primeira entrada
+# em cada tabela tem índice 1.
 #
 # Este módulo supõe que cada objeto tem um identificador único da forma 
 # "{X}-{NNNNNNNN}", onde {X} é uma letra que indica o tipo dos objetos
@@ -181,6 +182,11 @@ def busca_por_semelhanca(nome_tb, let, cols, chaves, valores):
   # !!! Documentar interface !!!
   # Devolve lista de identificadores (não objetos)
   return db_tabela_generica_IMP.busca_por_semelhanca(nome_tb, let, cols, chaves, valores)
+
+def num_entradas(nome_tb):
+  """Retorna o número {N} de objetos presentes na tabla {nome_tb}.
+  Os índices dos objetos variam de 1 a {N}."""
+  return db_tabela_generica_IMP.num_entradas(nome_tb)
 
 def limpa_tabela(nome_tb, cols):
   """Apaga todas as entradas da tabela {nome_tb}, e reinicializa o
