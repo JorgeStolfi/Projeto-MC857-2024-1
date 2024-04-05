@@ -1,4 +1,4 @@
 Primeiramente eu adicionei o novo botão de "Meus comentários" no método gera_botoes_linha_1_logado da classe html_bloco_menu_geral_IMP, já que 
 só vai ser possível para o usuário ver os seus comentários caso ele esteja logado e ele poderá vê-los sendo admin ou não. Eu também defini 
-a url em que o usuário será redirecionado ao clicar no botão como 'ver_comentarios_de_usuario', já que esse é o comando usado para chamar o 
+a url que o usuário será redirecionado ao clicar no botão como 'ver_comentarios_de_usuario', já que esse é o comando usado para chamar o 
 módulo comando_ver_comentarios_de_video na classe processa_comando_http_IMP.
