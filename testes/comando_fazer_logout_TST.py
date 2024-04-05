@@ -23,8 +23,8 @@ def testa_comando_fazer_logout(rotulo, *cmd_args):
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
   modulo = comando_fazer_logout
   funcao = modulo.processa
-  frag = False
-  pretty = False
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *cmd_args)
 
 ses = obj_sessao.busca_por_identificador("S-00000001")

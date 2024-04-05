@@ -10,7 +10,7 @@ def gera(id_usr, atrs, admin, texto_bt, comando_bt):
 
   # Constrói formulário com botões 'Confirmar' e 'Cancelar':
   ht_submit = html_elem_button_submit.gera(texto_bt, comando_bt, None, '#55ee55')
-  ht_cancel = html_elem_button_simples.gera("Cancelar", 'principal', None, '#ee5555')
+  ht_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, '#ee5555')
   conteudo_form = \
     ( ht_table + "\n" ) + \
     ( "    " + ht_submit + "\n" ) + \

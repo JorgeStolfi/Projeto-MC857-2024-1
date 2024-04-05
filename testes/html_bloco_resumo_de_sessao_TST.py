@@ -33,8 +33,8 @@ def testa_html_bloco_resumo_de_sessao(rotulo, *args):
     assert type(campo) is str
 
   # Teste da função {gera} HTML
-  frag = True  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-  pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  frag = True  # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # Testes

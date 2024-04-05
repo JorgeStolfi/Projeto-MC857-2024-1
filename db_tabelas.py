@@ -4,9 +4,6 @@
 # Implementação desta interface:
 import db_tabelas_IMP
 
-# Os principais objetos:
-import obj_sessao
-
 def inicializa_todas(limpa):
   """Inicializa as tabelas da base de dados para os objetos
   das classes {obj_usuario.Classe} e {obj_sessao.Classe},

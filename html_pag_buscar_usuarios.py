@@ -14,5 +14,5 @@ def gera(ses, atrs, admin, erros):
   A página terá um botão de tipo 'submit' com texto "Buscar" que,
   quando acionado, emite uma ação POST com comando 'buscar_trechos'. 
   Haverá também um botão simples com texto "Cancelar" que emite
-  o comando 'principal'."""
+  o comando 'pag_principal'."""
   return html_pag_buscar_usuarios_IMP.gera(ses, atrs, admin, erros)

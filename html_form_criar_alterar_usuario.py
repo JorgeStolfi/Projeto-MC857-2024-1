@@ -31,5 +31,5 @@ def gera(id_usr, atrs, admin, texto_bt, comando_bt):
   usuário, mais os atributos 'conf_senha' e 'id_usuario'.
 
   O formulário também terá um botão simples 'Cancelar',
-  que, quando clicado, emite o comando 'principal'."""
+  que, quando clicado, emite o comando 'pag_principal'."""
   return html_form_criar_alterar_usuario_IMP.gera(id_usr, atrs, admin, texto_bt, comando_bt)

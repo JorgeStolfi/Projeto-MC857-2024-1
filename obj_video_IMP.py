@@ -1,16 +1,15 @@
-import obj_raiz
-import obj_video
-import obj_usuario
 
 import db_tabela_generica
 import db_tabelas
 import db_conversao_sql
 import util_identificador
-import util_valida_campo; from util_valida_campo import ErroAtrib
-from util_testes import erro_prog, mostra
-import sys
-
+import util_valida_campo
+import obj_raiz
+import obj_usuario
+import obj_video
+from util_testes import ErroAtrib, erro_prog, mostra
 from datetime import datetime, timezone
+import sys
 
 # VARIÁVEIS GLOBAIS DO MÓDULO
 
@@ -39,20 +38,21 @@ class Classe_IMP(obj_raiz.Classe):
     global cache, nome_tb, letra_tb, colunas
     obj_raiz.Classe.__init__(self, id_video, atrs)
 
-
 # Implementações:
 
 def inicializa_modulo(limpa):
   global cache, nome_tb, letra_tb, colunas
+  # Descrição das colunas da tabela na base de dados:
+  # Vide parâmetro {cols} de {db_tabela_generica.cria_tabela}.
   colunas = \
     (
-      ( "usr",          obj_usuario.Classe,     'TEXT',    False ),  # Objeto/id do usuário que fez upload.
-      ( "arq",          type("foo"),            'TEXT',    False ),  # Nome do arquivo no disco.
-      ( "titulo",       type("foo"),            'TEXT',    False ),  # Título do video.
-      ( "data",         type("foo"),            'TEXT',    False ),  # Momento do upload do video.
-      ( "duracao",      type(418),              'INTEGER', False ),  # Duração do video em milissegundos.
-      ( "largura",      type(418),              'INTEGER', False ),  # largura de cada frame, em pixels.
-      ( "altura",       type(418),              'INTEGER', False ),  # atura de cada frame, em pixels.
+      ( 'autor',        obj_usuario.Classe,     'TEXT',    False ),  # Objeto/id do usuário que fez upload.
+      ( 'arq',          type("foo"),            'TEXT',    False ),  # Nome do arquivo no disco.
+      ( 'titulo',       type("foo"),            'TEXT',    False ),  # Título do video.
+      ( 'data',         type("foo"),            'TEXT',    False ),  # Momento do upload do video.
+      ( 'duracao',      type(418),              'INTEGER', False ),  # Duração do video em milissegundos.
+      ( 'largura',      type(418),              'INTEGER', False ),  # largura de cada frame, em pixels.
+      ( 'altura',       type(418),              'INTEGER', False ),  # atura de cada frame, em pixels.
     )
   if limpa:
     db_tabela_generica.limpa_tabela(nome_tb, colunas)
@@ -61,6 +61,19 @@ def inicializa_modulo(limpa):
 
 def cria(atrs):
   global cache, nome_tb, letra_tb, colunas
+  atrs = atrs.copy() # Para alterar só localmente.
+
+  # Data de upload:
+  data_bin = datetime.now(timezone.utc)
+  data = data_bin.strftime("%Y-%m-%d %H:%M:%S %z")
+  atrs['data'] = data
+
+  # Obtem as dimensões:
+  arq = atrs['arq']
+  duracao, largura, altura = obtem_dimensoes_do_arquivo(arq)
+  atrs['duracao'] = duracao
+  atrs['largura'] = largura
+  atrs['altura'] = altura
 
   erros = valida_atributos(None, atrs)
   if len(erros) != 0: raise ErroAtrib(erros)
@@ -87,7 +100,7 @@ def obtem_atributo(vid, chave):
 def obtem_usuario(vid):
   global cache, nome_tb, letra_tb, colunas
   assert (vid != None) and type(vid) is obj_video.Classe
-  return obj_raiz.obtem_atributo(vid, 'usr')
+  return obj_raiz.obtem_atributo(vid, 'autor')
 
 def obtem_data_de_upload(vid):
   global cache, nome_tb, letra_tb, colunas
@@ -105,10 +118,10 @@ def busca_por_campo(chave, val):
     lista_ids = obj_raiz.busca_por_campo(chave, val, False, cache, nome_tb, letra_tb, colunas)
     return lista_ids
 
-def busca_por_usuario(id_usr):
+def busca_por_usuario(id_autor):
   global cache, nome_tb, letra_tb, colunas
-  if id_usr == None: return [].copy()
-  lista_ids_vid = obj_raiz.busca_por_campo('usr', id_usr, False, cache, nome_tb, letra_tb, colunas)
+  if id_autor == None: return [].copy()
+  lista_ids_vid = obj_raiz.busca_por_campo('autor', id_autor, False, cache, nome_tb, letra_tb, colunas)
   return lista_ids_vid
 
 def busca_por_arquivo(arq):
@@ -128,19 +141,19 @@ def muda_atributos(vid, atrs_mod_mem):
 def cria_testes(verb):
   global cache, nome_tb, letra_tb, colunas
   inicializa_modulo(True)
-  # Identificador de usuários e cookie de cada sessão:
+  # Identificadores esperados e atributos dos videos de teste:
   lista_ats = \
     [
-      ( "U-00000001", "eject ", "Ejetando o floppy",  "2024-03-09 19:07:49.14 UTC",   6200, 460, 344, ), # V-00000000
-      ( "U-00000002", "fukup ", "Explosão de reator", "2024-03-09 19:08:13.11 UTC",  13760, 640, 360, ), # V-00000001
-      ( "U-00000001", "pipoc ", "Pipoca",             "2024-03-09 19:08:27.92 UTC",   3200, 384, 384, ), # V-00000002
-      ( "U-00000004", "virus ", "Vírus",              "2024-03-06 14:56:40.24 UTC",   3000, 800, 800, ), # V-00000003
+      ( "V-00000001", "U-00000001", "eject ", "Ejetar",    "2024-03-09 19:07:49.14 UTC",   6200, 460, 344, ),
+      ( "V-00000002", "U-00000002", "fukup ", "Fukushima", "2024-03-09 19:08:13.11 UTC",  13760, 640, 360, ),
+      ( "V-00000003", "U-00000001", "pipoc ", "Pipoca",    "2024-03-09 19:08:27.92 UTC",   3200, 384, 384, ),
+      ( "V-00000004", "U-00000004", "virus ", "Vírus",     "2024-03-06 14:56:40.24 UTC",   3000, 800, 800, ),
     ]
-  for id_usr, arq, titulo, data, duracao, largura, altura in lista_ats:
-    usr = obj_usuario.busca_por_identificador(id_usr)
-    assert usr != None and type(usr) is obj_usuario.Classe
+  for id_vid_esp, id_autor, arq, titulo, data, duracao, largura, altura in lista_ats:
+    autor = obj_usuario.busca_por_identificador(id_autor)
+    assert autor != None and type(autor) is obj_usuario.Classe
     atrs_cria = {
-      'usr': usr,
+      'autor': autor,
       'arq': arq,
       'titulo': titulo, 
       'data': data,
@@ -151,10 +164,11 @@ def cria_testes(verb):
     vid = cria(atrs_cria)
     assert vid != None and type(vid) is obj_video.Classe
     id_vid = obj_video.obtem_identificador(vid)
-    usr_conf = obj_video.obtem_usuario(vid)
-    id_usr_conf = obj_usuario.obtem_identificador(usr_conf)
-    assert usr_conf == usr;
-    if verb: sys.stderr.write("  video %s de %s criado\n" % (id_vid, id_usr))
+    assert id_vid == id_vid_esp
+    autor_conf = obj_video.obtem_usuario(vid)
+    id_autor_conf = obj_usuario.obtem_identificador(autor_conf)
+    assert autor_conf == autor;
+    if verb: sys.stderr.write("  video %s de %s criado\n" % (id_vid, id_autor))
   return
 
 def verifica_criacao(vid, id_vid, atrs):
@@ -166,6 +180,15 @@ def liga_diagnosticos(val):
   return
 
 # FUNÇÕES INTERNAS
+
+
+def obtem_dimensoes_do_arquivo(arq):
+  """Analisa o arquivo "videos/{arq}" e devolve {duracao,largura,altura}."""
+  # !!! Usar "ffmpeg" ou similar para obter estes parâmetros !!!
+  duracao = 3600
+  largura = 320
+  altura = 240
+  return duracao,largura, altura
 
 def valida_atributos(vid, atrs_mem):
   """Faz validações específicas nos atributos {atrs_mem}. Devolve uma lista
@@ -205,12 +228,13 @@ def def_obj_mem(obj, id_vid, atrs_SQL):
       erro_prog("numero excessivo de atributos a alterar")
     for chave, val in atrs_mem.items():
       if not chave in obj.atrs:
-        erro_prog("chave '" + chave + "' inválida")
+        erro_prog(f"chave '{chave}' inválida")
       val_velho = obj.atrs[chave]
       if not type(val_velho) is type(val):
-        erro_prog("tipo do campo '" + chave + "' incorreto")
-      if chave == 'usr' and val != val_velho:
-        erro_prog("campo '" + chave + "' não pode ser alterado")
+        erro_prog(f"tipo do campo '{chave}' incorreto")
+      alteravel = False # No futuro pode haver campos alteraveis.
+      if (not alteravel) and val != val_velho:
+        erro_prog(f"campo '{chave}' não pode ser alterado - val = {str(val)} val_velho = {str(val_velho)}")
       obj.atrs[chave] = val
   if vid_debug: mostra(2, "obj = " + str(obj))
   return obj

@@ -39,8 +39,8 @@ def testa_comando_fazer_login(rotulo, email, senha, deveria_logar):
     ok_global = False
     aviso_prog("Gerou gerou a sessão quando não deveria para o email " + str(email), True)
     
-  frag = False     # Resultado não é fragmento, é página completa.
-  pretty = False   # Não tente deixar o HTML legível.
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.escreve_resultado_html(modulo, rotulo, pag, frag, pretty)
 
 # ----------------------------------------------------------------------
@@ -54,4 +54,4 @@ testa_comando_fazer_login("Erro", "nao_existo@gmail.com", "123456789", False)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")

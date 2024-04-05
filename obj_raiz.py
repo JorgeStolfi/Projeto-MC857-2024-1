@@ -70,9 +70,9 @@ def busca_por_campo(chave, val, unico, cache, nome_tb, letra_tb, colunas):
   Se {unico} for {False}, devolve uma lista, possivelmente vazia,
   com os identificadores dos objetos encontrados (NÃO os objetos).
   
-  Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,,
-  ou o identificador de um objeto (NÃO o objeto, NÃO uma lista) se encontrar apenas 
-  um. Em qualquer outro caso, aborta o programa com erro."""
+  Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
+  ou o identificador de um objeto (NÃO o objeto, NÃO uma lista) se 
+  encontrar apenas um. Em qualquer outro caso, aborta o programa com erro."""
   return obj_raiz_IMP.busca_por_campo(chave, val, unico, cache, nome_tb, letra_tb, colunas)
 
 def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
@@ -89,6 +89,13 @@ def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
   se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
   return obj_raiz_IMP.busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas)
   
+def ultimo_identificador(nome_tb, letra_tb):
+  """Retorna o identificador do último objeto na tabela {nome_tb},
+  no formato "{letra_tb}-{NNNNNNNN}" onde {NNNNNNNN} é o 
+  número de objetos atualemente armazenados nessa tabela.
+  Em particular, se a tabela estiver vazia, retorna "V-00000000"."""
+  return obj_raiz_IMP.ultimo_identificador(nome_tb, letra_tb)
+
 # FUNÇÕES PARA DEPURAÇÃO
 
 def verifica_criacao(obj, tipo, id_obj, atrs, ignore, cache, nome_tb, letra_tb, colunas, def_obj_mem):
