@@ -22,7 +22,8 @@ import comando_alterar_usuario
 import comando_ver_objeto
 import comando_ver_sessoes
 import comando_ver_sessao
-import comando_ver_videos
+# import comando_ver_videos -> estava impedindo o servidor de funcionar
+# e por consequência me impedindo de realizar minha tarefa do dia
 
 import html_elem_span
 import html_elem_div
