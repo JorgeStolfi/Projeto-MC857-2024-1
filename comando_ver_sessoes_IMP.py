@@ -27,8 +27,8 @@ def processa(ses, cmd_args):
   # Com o identificador do usuário, podemos buscar suas sessões no banco:
   lista_ids_ses = obj_sessao.busca_por_campo('usr', id_usr)
   ht_conteudo = html_bloco_lista_de_sessoes.gera(lista_ids_ses, bt_ver, bt_fechar)
-  titulo_pagina = extrai_titulo(ht_conteudo)
-  pag = html_pag_generica.gera(ses, titulo_pagina, None)
+  #titulo_pagina = extrai_titulo(ht_conteudo) -> estava deixando a página sem conteúdo
+  pag = html_pag_generica.gera(ses, ht_conteudo, None)
   return pag
 
 def extrai_titulo(ht_conteudo):
