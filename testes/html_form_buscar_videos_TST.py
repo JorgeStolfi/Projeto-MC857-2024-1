@@ -12,7 +12,7 @@ def testa_form_editavel(rot_teste):
   
 
   # Cria formulário:
-  ht_form = html_form_buscar_videos.gera({}, admin=True)
+  ht_form = html_form_buscar_videos.gera({}, True)
   
   frag = True
   pretty = False
@@ -22,7 +22,7 @@ def testa_form_editavel(rot_teste):
 def testa_form_readonly(rot_teste):
   
   # Cria formulário:
-  ht_form = html_form_buscar_videos.gera({}, admin=False)
+  ht_form = html_form_buscar_videos.gera({}, False)
   
   frag = True
   pretty = False
@@ -32,13 +32,13 @@ def testa_form_readonly(rot_teste):
 def testa_form_valores_iniciais(rot_teste):
   
   # Cria formulário:
-  ht_form = html_form_buscar_videos.gera({'ID': 'V-111111', 'titulo': 'La la land', 'usr': 'José Primeiro', 'arq': 'la_la_land.mp4'}, admin=False)
+  ht_form = html_form_buscar_videos.gera({'id_video': 'V-111111', 'titulo': 'La la land', 'usr': 'José Primeiro', 'arq': 'la_la_land.mp4'}, False)
   
   frag = True
   pretty = False
   util_testes.escreve_resultado_html(html_form_buscar_videos, rot_teste, ht_form, frag, pretty)
 
-testa_form_editavel("form editavel")
-testa_form_readonly("form readonly")
-testa_form_valores_iniciais(" form com valores iniciais")
+testa_form_editavel("form_editavel")
+testa_form_readonly("form_readonly")
+testa_form_valores_iniciais(" form_com_valores_iniciais")
 sys.stderr.write("Testes terminados normalmente.")
