@@ -29,8 +29,7 @@ def testa_html_bloco_lista_de_videos(rotulo, *args):
   pretty = False  # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
-for ver in (False, True):
-  for fechar in (False, True):
-    tag = "ver" + str(ver)[0] + "-fechar" + str(fechar)[0] 
-    testa_html_bloco_lista_de_videos("muitas-" + tag, ids_videos)
-    testa_html_bloco_lista_de_videos("lhufas-" + tag, ())
+testa_html_bloco_lista_de_videos("comVideos", ids_videos)
+testa_html_bloco_lista_de_videos("semVideos", ())
+
+sys.stderr.write("Testes terminados normalmente.\n")
