@@ -185,7 +185,7 @@ def liga_diagnosticos(val):
 def obtem_dimensoes_do_arquivo(arq):
   """Analisa o arquivo "videos/{arq}" e devolve {duracao,largura,altura}."""
   # !!! Usar "ffmpeg" ou similar para obter estes parâmetros !!!
-  duracao = 3600
+  duracao = 6000
   largura = 320
   altura = 240
   return duracao,largura, altura
@@ -200,6 +200,16 @@ def valida_atributos(vid, atrs_mem):
   global cache, nome_tb, letra_tb, colunas
   erros = [].copy();
   # !!! Completar !!!
+  if atrs_mem['duracao'] < 5000:
+    erros.append("O video não atinge a duração mínima de 5000 milisegundos")
+  elif atrs_mem['duracao'] > 600000:
+    erros.append("O video excede a duração máxima de 600000 milisegundos")
+  if atrs_mem['altura'] < 48 or atrs_mem['altura'] > 480:
+    erros.append("A altura do vídeo não está dentro da janela esperada(entre 48 e 480 pixels)")
+  if atrs_mem['largura'] < 64 or atrs_mem['largura'] > 640:
+    erros.append("A largura do vídeo não está dentro da janela esperada(entre 64 e 640 pixels)")
+  if atrs_mem['altura']/atrs_mem['largura'] != 3/4:
+    erros.append("O vídeo não está no formato esperado(3:4)")
   return erros
 
 def def_obj_mem(obj, id_vid, atrs_SQL):
