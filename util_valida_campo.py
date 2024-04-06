@@ -32,12 +32,16 @@ def nome_de_usuario(rotulo, val, nulo_ok):
   São permitidas letras acentuadas, brancos, hífen, ponto, e apóstrofe."""
   return util_valida_campo_IMP.nome_de_usuario(rotulo, val, nulo_ok)
   
-def senha(rotulo, val, nulo_ok):
-  """ !!! documentar !!! """
-  return util_valida_campo_IMP.senha(rotulo, val, nulo_ok)
+def senha(rotulo, val):
+  """Exige que o paramêtro {val} seja uma string e contenha no mínimo 8 e 
+  no máximo 16 caracteres, no minimo uma letra maúscula, uma minúscula, um 
+  número e um caracter especial"""
+  return util_valida_campo_IMP.senha(rotulo, val)
 
 def email(rotulo, val, nulo_ok):
-  """ !!! documentar !!! """
+  """ Exige que o parâmetro {val} seja uma string e valida se {val} está contido no contexto
+  De um email padrão, ou seja, inicio@dominio.domSuperior onde inicio permite letras maiúsculas ou minusculas, digitos e caracteres especiais. 
+  Dominio permite letras maiusculas, minusculas, numeros, . e _. domSuperior permite letras maiusculas ou minúsculas e deve conter no minimo 2 caracteres"""
   return util_valida_campo_IMP.email(rotulo, val, nulo_ok)
 
 # !!! A completar !!!
