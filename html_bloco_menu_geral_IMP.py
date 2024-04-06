@@ -50,6 +50,7 @@ def gera_botoes_linha_1_logado(nome_usuario, admin):
   botoes_sempre = (
       html_elem_button_simples.gera("Minha Conta", 'solicitar_pag_alterar_usuario', None, '#eeeeee'),
       html_elem_button_simples.gera("Minhas Sessões", 'ver_sessoes', None, '#eeeeee'),
+      html_elem_button_simples.gera("Meus Comentários", 'ver_comentarios_de_usuario', None, '#eeeeee'),
       html_elem_button_simples.gera("Sair", 'fazer_logout', None, '#eeeeee'),
       gera_nome_usuario(nome_usuario)
     )
