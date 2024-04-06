@@ -1,4 +1,5 @@
-A tarefa desenvolvida foi o programa de teste do arquivo "html_bloco_lista_de_videos_TST.py".
+A tarefa desenvolvida foi o programa de teste do arquivo "html_bloco_lista_de_videos_TST.py". De imediato, notou-se que o código do teste já estava completo - mas foram avistadas possíveis melhorias durante o decorrer da aula.
+
 O primeiro passo foi executar os testes como eles estavam para analisar como a página HTML estava. Assim, notou-se que haviam 8 testes: todas as variações: uma lista vazia e uma cheia de vídeos, o botão de "ver" visível ou não e o botão "fechar" visível ou não. 
 
 A primeira alteração feita foi adicionar uma saída ao executar os testes indicando que os mesmos finalizaram conforme o esperado. Em seguida, alterou-se a tag para indicar melhor o nome dos cenários de quando haviam vídeos e de quando não.
