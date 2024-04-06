@@ -13,15 +13,15 @@ def processa(ses, cmd_args):
   assert usr_ses != None
   if 'id_usuario' in cmd_args:
     # Alguém quer ver videos de usuário específico:
-    id_usr_a_ver = cmd_args['id_usuario']
-    usr_a_ver = obj_usuario.obtem_identificador(id_usr_a_ver)
+    id_usr = cmd_args['id_usuario']
+    assert (id_usr == id_usr_ses) or obj_sessao.eh_administrador(ses) # Deveria ser o caso.
   else:
     # Usuário da sessão {ses} quer ver os próprios videos:
-    usr_a_ver = usr_ses
-    id_usr_a_ver = id_usr_ses
+    usr = usr_ses
+    id_usr = id_usr_ses
 
   # Com o identificador do usuário, podemos buscar seus videos no banco:
-  lista_ids_videos = obj_video.busca_por_campo('autor', id_usr_a_ver)
+  lista_ids_videos = obj_video.busca_por_campo('usr', id_usr)
   ht_conteudo = html_bloco_lista_de_videos.gera(lista_ids_videos)
   pag = html_pag_generica.gera(ses, ht_conteudo, None)
   return pag

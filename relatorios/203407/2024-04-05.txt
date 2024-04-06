@@ -1,0 +1,25 @@
+Tarefa: 
+"comando_fazer_upload_video_IMP.processa": Pegar o conteúdo do arquivo e gravar no disco.
+
+
+Ao tentar iniciar o servidor, percebi que havia o erro ModuleNotFoundError: No module named 'comando_ver_videos'.
+Verifiquei que isso foi implementado na aula anterio pelo aluno João Victor Alexo.
+Assim, fiz um cherry-pick do commit dele bdffd67de607a6c78cd29970ac4e14a5f4fcc540. Com isso o projeto,
+voltou a funcionar corretamente.
+
+Lendo a interface comando_fazer_upload_video, percebi que o vídeo deveria ser inserido na 
+tabela de nome "video". Assim, em comando_fazer_upload_video, importei obj_video para poder
+criar o objeto e importei db_base_sql para o objeto poder ser inserido no banco de dados.
+
+Lendo as documentações de obj_video, percebi que era possível criar o objeto apenas chamando
+o método "criar". Como o método processa de comando_fazer_upload_video recebe um parametro "dados"
+com o título e o arquivo do vídeo, fiz os tratamentos para criar o objeto corretamente.
+O únicos pontos pendentes foram os campos de duração, largura e altura. Como não tinha essas informações,
+iniciei o objeto com "0" nesses campos.
+
+Finalizando a tarefa, percebi que havia mudanças na main, então fiz o merge na minha branch
+e percebi que haviam várias mudanças no arquivo que estava utilizando comando_fazer_upload_video_IMP.
+Essas mudanças facilitaram a criação do objeto vídeo. Com as mudanças também havia um método para escrita
+de arquivo local. Fiz as devidas mudanças, atualizando a classe.
+
+Após criar o objeto, chamei o comando de INSERT no banco de dados. Finalizando minha tarefa do dia.

@@ -11,7 +11,7 @@ def booleano(rotulo, val, nulo_ok):
   else:
     if not type(val) is bool:
       erros += [ "campo '%s' = \"%s\" deve ser booleano" % (rotulo, str(val)) ]
-  return []
+  return erros
   
 def identificador(rotulo, val, letra, nulo_ok):
   erros = []
@@ -40,16 +40,25 @@ def nome_de_usuario(rotulo, val, nulo_ok):
       if n < 6:
         erros += [ "campo '%s' (%d caracteres) muito curto" % (rotulo,n), ]
       elif n > 60:
-        erros += [ "nome de usuário (%d caracteres) muito longo" % (rotulo,n), ]
+        erros += [ "campo '%s' (%d caracteres) muito longo" % (rotulo,n), ]
       # !!! Verificar caracteres permitidos !!!
   return erros
   
 def senha(rotulo, val, nulo_ok):
   # !!! Implementar !!!
+  # O padrão {re} para caracter ASCII visível é [!-~], e para
+  # letra ou dígito é [A-Za-z0-9].
   return []
 
 def email(rotulo, val, nulo_ok):
   # !!! Implementar !!!
   return []
 
+def data(rotulo, val, nulo_ok):
+  # !!! Implementar !!!
+  return []
+
+def nome_de_arq_video(rotulo, val, nulo_ok):
+  # !!! Implementar !!!
+  return []
 

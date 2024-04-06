@@ -15,7 +15,7 @@ def processa(ses, args):
   com o identificador do usuário. A função deve procurar na base de
   dados os usuários que casam estes dados.
 
-  O resultado deve ser uma página com a lista dos usuários encontrados, gerada
-  por {html_pag_lista_de_usuarios.gera}.
+  O resultado deve ser uma página com a lista dos usuários encontrados.
+  Vide {html_bloco_lista_de_usuarios.gera}.
   """
   return comando_buscar_usuarios_IMP.processa(ses, args)
