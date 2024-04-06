@@ -178,10 +178,18 @@ def busca_por_campos(nome_tb, let, cols, args, res_cols):
   tenha valor {val}."""
   return db_tabela_generica_IMP.busca_por_campos(nome_tb, let, cols, args, res_cols)
 
-def busca_por_semelhanca(nome_tb, let, cols, chaves, valores):
-  # !!! Documentar interface !!!
-  # Devolve lista de identificadores (não objetos)
-  return db_tabela_generica_IMP.busca_por_semelhanca(nome_tb, let, cols, chaves, valores)
+def busca_por_semelhanca(nome_tb, let, chaves, valores):
+  """Procura linhas com certas colunas {chaves} com valores semelhantes a certos valores {valores}
+  e devolve seus identificadores.
+  
+  Se o valor de pelo menos uma coluna de {chaves} é semelhante a um valor de {valores}, o identificador
+  é retornado.
+
+  O valor A é semelhante ao valor B se o valor A contém o valor B, sem distinção de letras
+  maiúsculas e minúsculas.
+  O valor 'João da Silva' é semelhante aos valores 'João', 'joão', 'da', e 'Silva', por exemplo.
+  """
+  return db_tabela_generica_IMP.busca_por_semelhanca(nome_tb, let, chaves, valores)
 
 def num_entradas(nome_tb):
   """Retorna o número {N} de objetos presentes na tabla {nome_tb}.
