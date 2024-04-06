@@ -1,7 +1,7 @@
 # Implementação do módulo {util_identificador}.
 
 import sys
-from util_testes import erro_prog
+from util_testes import ErroAtrib, erro_prog
 
 def de_indice(let, indice):
   assert type(let) is str and len(let) == 1
@@ -42,6 +42,6 @@ def unico_elemento(lista_de_ids):
       id_obj = lista_de_ids[0];
       return id_obj
     else:
-      erro_prog("elemento não é único")
+      raise ErroAtrib([ f"argumento {str(lista_de_ids)} tem mais de um elemento" ])
   else:
-    erro_prog("argumento não é {None} ou lista")
+    raise ErroAtrib([ f"argumento {str(lista_de_ids)} não é {None} ou lista" ])

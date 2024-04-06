@@ -6,8 +6,8 @@ import db_tabela_generica
 import db_tabelas
 import db_conversao_sql
 import util_identificador
-import util_valida_campo; from util_valida_campo import ErroAtrib
-from util_testes import erro_prog, mostra
+import util_valida_campo 
+from util_testes import ErroAtrib, erro_prog, mostra
 import sys
 
 from datetime import datetime, timezone
@@ -38,18 +38,19 @@ class Classe_IMP(obj_raiz.Classe):
   def __init__(self, id, atrs):
     global cache, nome_tb, letra_tb, colunas
     obj_raiz.Classe.__init__(self, id, atrs)
-
-
+ 
 # Implementações:
 
 def inicializa_modulo(limpa):
   global cache, nome_tb, letra_tb, colunas
+  # Descrição das colunas da tabela na base de dados: 
+  # Vide parâmetro {cols} de {db_tabela_generica.cria_tabela}.
   colunas = \
     (
-      ( "usr",          obj_usuario.Classe,     'TEXT',    False ),  # Objeto/id do usuário logado na sessão.
-      ( "criacao",      type("foo"),            'TEXT',    False ),  # Momento de criação da sessão.
-      ( "aberta",       type(False),            'INTEGER', False ),  # Estado da sessao (1 = aberta).
-      ( "cookie",       type("foo"),            'TEXT',    False ),  # Cookie da sessao.
+      ( 'usr',          obj_usuario.Classe,     'TEXT',    False ),  # Objeto/id do usuário logado na sessão.
+      ( 'criacao',      type("foo"),            'TEXT',    False ),  # Momento de criação da sessão.
+      ( 'aberta',       type(False),            'INTEGER', False ),  # Estado da sessao (1 = aberta).
+      ( 'cookie',       type("foo"),            'TEXT',    False ),  # Cookie da sessao.
     )
   if limpa:
     db_tabela_generica.limpa_tabela(nome_tb, colunas)
@@ -149,23 +150,27 @@ def fecha(ses):
 def cria_testes(verb):
   global cache, nome_tb, letra_tb, colunas
   inicializa_modulo(True)
-  # Identificador de usuários e cookie de cada sessão:
+  # Dados de cada sessão:
   lista_ucs = \
     [
-      ( "U-00000001", "ABCDEFGHIJK" ), # S-00000001
-      ( "U-00000001", "BCDEFGHIJKL" ), # S-00000002
-      ( "U-00000002", "CDEFGHIJKLM" ), # S-00000003
-      ( "U-00000003", "DEFGHIJKLMN" ), # S-00000004
+      ( "S-00000001", "U-00000001", "ABCDEFGHIJK", True  ),
+      ( "S-00000002", "U-00000001", "BCDEFGHIJKL", True  ),
+      ( "S-00000003", "U-00000002", "CDEFGHIJKLM", False ),
+      ( "S-00000004", "U-00000003", "DEFGHIJKLMN", False ),
+      ( "S-00000005", "U-00000005", "EFGHIJKLMNO", False ),
+      ( "S-00000006", "U-00000008", "FGHIJKLMNOP", True  ),
     ]
-  for id_usr, cookie in lista_ucs:
+  for id_ses_esp, id_usr, cookie, admin_esp in lista_ucs:
     usr = obj_usuario.busca_por_identificador(id_usr)
     assert usr != None and type(usr) is obj_usuario.Classe
     ses = cria(usr, cookie)
-    assert ses != None and type(ses) is obj_sessao.Classe
     id_ses = obj_sessao.obtem_identificador(ses)
-    usr = obj_sessao.obtem_usuario(ses)
-    id_usr = obj_usuario.obtem_identificador(usr) if usr != None else "ninguém"
     if verb: sys.stderr.write("  sessão %s de %s criada\n" % (id_ses, id_usr))
+    # Paranóia:
+    assert id_ses == id_ses_esp
+    usr_cri = obj_sessao.obtem_usuario(ses)
+    assert usr_cri != None and usr_cri == usr
+    assert eh_administrador(ses) == admin_esp
   return
 
 def verifica_criacao(ses, id_ses, atrs):
@@ -188,6 +193,7 @@ def valida_atributos(ses, atrs_mem):
   sessão. """
   global cache, nome_tb, letra_tb, colunas
   erros = [].copy();
+  # !!! Implementar !!!
   return erros
 
 def def_obj_mem(obj, id_ses, atrs_SQL):
