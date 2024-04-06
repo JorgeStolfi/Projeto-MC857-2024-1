@@ -16,6 +16,6 @@ def processa(ses, cmd_args):
   if 'id_usuario' in cmd_args:
     return html_pag_mensagem_de_erro.gera(ses, "Vídeo com id nulo não encontrado!")
 
-  video_id = obj_video.busca_por_identificador(cmd_args['id']) #string no formato "NNNNNNNN"
-  pag = html_pag_ver_video.gera(ses, video_id, None)
+  video = obj_video.busca_por_identificador(cmd_args['id']) #string no formato "NNNNNNNN"
+  pag = html_pag_ver_video.gera(ses, video, None)
   return pag
