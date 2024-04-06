@@ -111,6 +111,14 @@ testa_funcao("email_E_bad",  False,  func_email, "X"+("a"*60)+"@gov.br",  True) 
 testa_funcao("email_N_ok",   True,   func_email, None,                  True)  # Valor {None}, {none_ok=True}. 
 testa_funcao("email_N_bad",  False,  func_email, None,                  False) # Valor {None}, {none_ok=False}.
 
+func_data = util_valida_campo.data
+testa_funcao("data_A_ok",   True,   func_data, "2024-04-05 20:10:05 UTC",   True)  # Data válida.
+testa_funcao("data_B_bad",  False,  func_data, "2024/04/05 20:10:05",       True)  # Data em formato inválido.
+testa_funcao("data_C_bad",  False,  func_data, "2024-13-32 20:10:05 UTC",   True)  # Data com range (date) inválido.
+testa_funcao("data_D_bad",  False,  func_data, "2024-04-05 20:62:05 UTC",   True)  # Data com range (hora) inválido.
+
+testa_funcao("senha_N_ok",   True,   func_data, None,                  True)  
+testa_funcao("senha_N_bad",  False,  func_data, None,                  False) # Valor {None}, {none_ok=True}. 
 # ----------------------------------------------------------------------
 # Veredito final:
 
