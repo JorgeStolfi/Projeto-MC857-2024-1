@@ -1,7 +1,7 @@
 import obj_usuario
 import obj_sessao
 import obj_video
-from util_valida_campo import ErroAtrib
+from util_testes import ErroAtrib
 
 import html_pag_ver_usuario
 import html_pag_ver_sessao

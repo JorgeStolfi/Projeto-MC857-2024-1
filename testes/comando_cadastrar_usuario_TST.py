@@ -39,20 +39,20 @@ testa_msg_campo_obrigatorio(nome_campo_1)
 nome_campo_2 = "Senha"
 testa_msg_campo_obrigatorio(nome_campo_2)
 
-def testa_comando_cadastrar_usuario(ses, dados, deveria_cadastrar):
+def testa_comando_cadastrar_usuario(ses, cmd_args, deveria_cadastrar):
   global ok_global
 
   sys.stderr.write(f"  ----------------------------------------------------------------------\n")
-  sys.stderr.write(f"  cadastrando usuario {dados['nome']} {dados['email']}\n")
+  sys.stderr.write(f"  cadastrando usuario {cmd_args['nome']} {cmd_args['email']}\n")
 
-  usr_old_id = obj_usuario.busca_por_email(dados["email"])
+  usr_old_id = obj_usuario.busca_por_email(cmd_args["email"])
   usr_old_obj = obj_usuario.busca_por_identificador(usr_old_id)
   usr_old_atrs = obj_usuario.obtem_atributos(usr_old_obj) if usr_old_obj != None else None
   sys.stderr.write(f"  usuario existente = {usr_old_id} atrs = {usr_old_atrs}\n")
 
-  comando_cadastrar_usuario.processa(ses, dados)
+  comando_cadastrar_usuario.processa(ses, cmd_args)
 
-  usr_new_id = obj_usuario.busca_por_email(dados["email"])
+  usr_new_id = obj_usuario.busca_por_email(cmd_args["email"])
   usr_new_obj = obj_usuario.busca_por_identificador(usr_new_id)
   usr_new_atrs = obj_usuario.obtem_atributos(usr_new_obj) if usr_new_obj != None else None
   sys.stderr.write(f"  usuario criado = {usr_new_id} atrs = {usr_new_atrs}\n")
@@ -117,4 +117,4 @@ testa_comando_cadastrar_usuario(None, dados4, True)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")

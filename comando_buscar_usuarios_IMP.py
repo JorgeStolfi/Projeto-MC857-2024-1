@@ -6,7 +6,7 @@ import html_bloco_lista_de_usuarios
 import html_pag_generica
 import html_pag_buscar_usuarios
 import html_bloco_cabecalho
-from util_valida_campo import ErroAtrib
+from util_testes import ErroAtrib
 
 def processa(ses, cmd_args):
   try:
