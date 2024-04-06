@@ -1,8 +1,7 @@
-# Implementação do módulo {comando_ver_comentarios}.
 
 import html_pag_generica
-#import html_bloco_lista_de_comentarios
-#import obj_comentario
+import html_bloco_lista_de_comentarios
+import obj_comentario
 
 def processa(ses, id_video):
   # Modulo que nao existem ainda foram comentados

@@ -50,9 +50,7 @@ def cria_tabela(nome_tb, cols):
 
 def acrescenta(nome_tb, cache, let, cols, def_obj, atrs_SQL):
   # Descobre o indice da última entrada na tabela:
-  num_ents = db_base_sql.num_entradas(nome_tb, 'indice')
-  if not type(num_ents) is int:
-    erro_prog("db_base_sql.num_entradas: result = '" + str(num_ents) + "'")
+  num_ents = num_entradas(nome_tb)
   # Tenta criar o objeto:
   ind = num_ents + 1 # Indice esperado do objeto na tabela.
   ident = util_identificador.de_indice(let, ind)
@@ -86,6 +84,7 @@ def busca_por_identificador(nome_tb, cache, let, cols, def_obj, ident):
     return cache[ident]
   else:
     ind = util_identificador.para_indice(let, ident)
+    if tbg_debug: sys.stderr.write("busca_por_identificador %s -> %s\n" % (fname, str(ident), str(ind)))
     return busca_por_identificador_e_indice(nome_tb, cache, let, cols, def_obj, ident, ind)
     
 def busca_por_indice(nome_tb, cache, let, cols, def_obj, ind):
@@ -98,6 +97,7 @@ def busca_por_indice(nome_tb, cache, let, cols, def_obj, ind):
 def busca_por_identificador_e_indice(nome_tb, cache, let, cols, def_obj, ident, ind):
   """Função interna: mesmo que {busca_por identificador}, mas exige o índice inteiro {ind}
   da linha da tabela, além do identificador {ident}."""
+  print('oiooi', ident)
   cond = "indice = " + str(ind)
   col_nomes = extrai_nomes_de_colunas_SQL(cols)
   res = db_base_sql.executa_comando_SELECT(nome_tb, cond, col_nomes)
@@ -175,6 +175,12 @@ def busca_por_semelhanca(nome_tb, let, cols, chaves, valores):
   if tgb_debug: sys.stderr.write("  > busca_por_semelhanca: res = " + str(res) + "\n")
   res = util_identificador.de_lista_de_indices(let, res)
   return res
+
+def num_entradas(nome_tb): 
+  num_ents = db_base_sql.num_entradas(nome_tb, 'indice')
+  if not type(num_ents) is int:
+    erro_prog("db_base_sql.num_entradas: result = '" + str(num_ents) + "'")
+  return num_ents
 
 def limpa_tabela(nome_tb, cols):
   res = db_base_sql.executa_comando_DROP_TABLE(nome_tb);
