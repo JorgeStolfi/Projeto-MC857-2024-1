@@ -76,7 +76,7 @@ def testa_obj_video_cria_muda(rotulo, valido, modif, id_vid, atrs):
   
   try:
     if modif:
-      sys.stderr.write(f"  testando obj_video.muda_atributos id = {id_video} atrs = {str(atrs)}\n")
+      sys.stderr.write(f"  testando obj_video.muda_atributos id = {id_vid} atrs = {str(atrs)}\n")
       vid = obj_video.busca_por_identificador(id_vid)
       obj_video.muda_atributos(vid, atrs)
     else:

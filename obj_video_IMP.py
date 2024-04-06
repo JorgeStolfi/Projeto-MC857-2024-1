@@ -199,7 +199,13 @@ def valida_atributos(vid, atrs_mem):
   sessão. """
   global cache, nome_tb, letra_tb, colunas
   erros = [].copy();
-  # !!! Completar !!!
+
+  vid_id = obtem_identificador(vid) if vid is not None else None
+
+  nome_arq = atrs_mem['arq']
+  if busca_por_arquivo(nome_arq) != vid_id:
+    erros.append(f"já existe um arquivo com o nome '{nome_arq}'")
+
   return erros
 
 def def_obj_mem(obj, id_vid, atrs_SQL):
