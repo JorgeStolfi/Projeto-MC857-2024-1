@@ -168,10 +168,10 @@ def cria_testes(verb):
   # Identificadores esperados e atributos dos videos de teste:
   lista_ats = \
     [
-      ( "V-00000001", "U-00000001", "eject ", "Ejetar",    "2024-03-09 19:07:49.14 UTC",   6200, 460, 344, ),
-      ( "V-00000002", "U-00000002", "fukup ", "Fukushima", "2024-03-09 19:08:13.11 UTC",  13760, 640, 360, ),
-      ( "V-00000003", "U-00000001", "pipoc ", "Pipoca",    "2024-03-09 19:08:27.92 UTC",   3200, 384, 384, ),
-      ( "V-00000004", "U-00000004", "virus ", "Vírus",     "2024-03-06 14:56:40.24 UTC",   3000, 800, 800, ),
+      ( "V-00000001", "U-00000001", "eject.mp4", "Ejetar",    "2024-03-09 19:07:49.14 UTC",   6200, 460, 344, ),
+      ( "V-00000002", "U-00000002", "fukup.mp4", "Fukushima", "2024-03-09 19:08:13.11 UTC",  13760, 640, 360, ),
+      ( "V-00000003", "U-00000001", "pipoc.mp4", "Pipoca",    "2024-03-09 19:08:27.92 UTC",   3200, 384, 384, ),
+      ( "V-00000004", "U-00000004", "virus.mp4", "Vírus",     "2024-03-06 14:56:40.24 UTC",   3000, 800, 800, ),
     ]
   for id_vid_esp, id_autor, arq, titulo, data, duracao, largura, altura in lista_ats:
     autor = obj_usuario.busca_por_identificador(id_autor)
@@ -222,14 +222,15 @@ def valida_atributos(vid, atrs_mem):
   Se {vid} não é {None}, supõe que {atrs} sao alterações a aplicar nessa
   sessão. """
   global cache, nome_tb, letra_tb, colunas
-  erros = [].copy();
+  erros = [].copy()
 
   vid_id = obtem_identificador(vid) if vid is not None else None
 
-  nome_arq = atrs_mem['arq']
-  if busca_por_arquivo(nome_arq) != vid_id:
-    erros.append(f"já existe um arquivo com o nome '{nome_arq}'")
-
+  if 'arq' in atrs_mem:
+    nome_arq = atrs_mem['arq']
+    erros += util_valida_campo.nome_de_arq_video('arq', nome_arq, False)
+    if busca_por_arquivo(nome_arq) != vid_id:
+      erros.append(f"já existe um arquivo com o nome '{nome_arq}'")
   return erros
 
 def def_obj_mem(obj, id_vid, atrs_SQL):
