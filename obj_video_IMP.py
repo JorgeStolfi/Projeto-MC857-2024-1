@@ -4,12 +4,12 @@ import db_tabelas
 import db_conversao_sql
 import util_identificador
 import util_valida_campo
-import obj_raiz
-import obj_usuario
-import obj_video
-from util_testes import ErroAtrib, erro_prog, mostra
-from datetime import datetime, timezone
+
 import sys
+import os
+import subprocess
+import json
+from datetime import datetime, timezone
 
 # VARIÁVEIS GLOBAIS DO MÓDULO
 
@@ -106,6 +106,30 @@ def obtem_data_de_upload(vid):
   global cache, nome_tb, letra_tb, colunas
   assert (vid != None) and type(vid) is obj_video.Classe
   return obj_raiz.obtem_atributo(vid, 'data')
+
+def obtem_dimensoes_do_arquivo(arq):
+  path = "videos/" + arq + ".mp4"
+  if not os.path.exists(path): return None
+
+  command = [
+    "ffprobe",
+    "-v", 
+    "error", 
+    "-select_streams",
+    "v:0",
+    "-show_entries",
+    "stream=width,height",
+    "-of",
+    "json",
+    path
+    ]
+
+  result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+  data = json.loads(result.stdout)
+  
+  width = data["streams"][0]["width"]
+  height = data["streams"][0]["height"]
+  return (width, height)
 
 def busca_por_identificador(id_vid):
   global cache, nome_tb, letra_tb, colunas
