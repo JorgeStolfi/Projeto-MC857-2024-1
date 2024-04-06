@@ -8,7 +8,7 @@ import util_testes
 import sys
 
 # deve criar um formulario editavel se admin == True
-def testa_form_editavel(rot_teste):
+def testa_form_editavel_admin_true(rot_teste):
   
 
   # Cria formulário:
@@ -18,8 +18,8 @@ def testa_form_editavel(rot_teste):
   pretty = False
   util_testes.escreve_resultado_html(html_form_buscar_videos, rot_teste, ht_form, frag, pretty)
 
-# deve criar um formulario readonly se admin == False
-def testa_form_readonly(rot_teste):
+# deve criar um formulario editavel se admin == False
+def testa_form_editavel_admin_false(rot_teste):
   
   # Cria formulário:
   ht_form = html_form_buscar_videos.gera({}, False)
@@ -38,7 +38,7 @@ def testa_form_valores_iniciais(rot_teste):
   pretty = False
   util_testes.escreve_resultado_html(html_form_buscar_videos, rot_teste, ht_form, frag, pretty)
 
-testa_form_editavel("form_editavel")
-testa_form_readonly("form_readonly")
+testa_form_editavel_admin_true("form_editavel_admin_true")
+testa_form_editavel_admin_false("form_editavel_admin_false")
 testa_form_valores_iniciais(" form_com_valores_iniciais")
 sys.stderr.write("Testes terminados normalmente.")
