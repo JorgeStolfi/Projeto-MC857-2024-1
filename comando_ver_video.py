@@ -12,7 +12,6 @@ def processa(ses, cmd_args):
   na tabela "videos" da base de dados.
   
   Se o comando completou com sucesso, a função devolve uma página que exibe o video, criada 
-  por {html_pag_ver_video.gera}.  Senão, devolve a página com o formulário de 
-  upload de vídeo, com os mesmos dados, mais as mensagens de erro."""
+  por {html_pag_ver_video.gera}. Senão, devolve a página inicial com uma mensagem de erro."""
   return comando_ver_video_IMP.processa(ses, cmd_args)
 
