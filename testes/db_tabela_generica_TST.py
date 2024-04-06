@@ -76,6 +76,8 @@ cols = (
   ('pernas', type(10),    'INTEGER',  2, 1000)
 )
 
+# numero de elementos que foram inseridos na tabela para o teste
+num_elementos = 0
 nome_tb = "bobs"
 let = "X"
 cache = {}.copy()
@@ -101,6 +103,7 @@ atrs1 = {
 }
 id_bob1 = "X-00000001"
 bob1 = db_tabela_generica.acrescenta(nome_tb, cache, let, cols, def_bob, atrs1)
+num_elementos +=1
 mostra_bob("bob1", bob1, id_bob1, atrs1)
 
 nome2 = "João Segundo"
@@ -114,6 +117,7 @@ atrs2 = {
 }
 id_bob2 = "X-00000002"
 bob2 = db_tabela_generica.acrescenta(nome_tb, cache, let, cols, def_bob, atrs2)
+num_elementos +=1
 mostra_bob("bob2", bob2, id_bob2, atrs2)
 
 nome3 = "Juca Terceiro"
@@ -127,6 +131,7 @@ atrs3 = {
 }
 id_bob3 = "X-00000003"
 bob3 = db_tabela_generica.acrescenta(nome_tb, cache, let, cols, def_bob, atrs3)
+num_elementos +=1
 mostra_bob("bob3", bob3, id_bob3, atrs3)
 
 # ----------------------------------------------------------------------
@@ -162,6 +167,15 @@ bob1_c = db_tabela_generica.busca_por_identificador(nome_tb, cache, let, cols, d
 for k, v in alts1.items():
   atrs1[k] = v
 mostra_bob("bob1_c", bob1_c, id_bob1, atrs1)
+
+# ----------------------------------------------------------------------
+sys.stderr.write("  testando {db_tabela_generica.num_entradas}:\n")
+res = db_tabela_generica.num_entradas(nome_tb)
+sys.stderr.write("   numero de entradas = \"" + str(res) + "\"\n")
+# verifica o tipo
+assert type(res) == int
+# verifica o valor
+assert res == num_elementos
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  destruindo a tabela com {db_base_sql.executa_comando_DROP_TABLE}:\n")
