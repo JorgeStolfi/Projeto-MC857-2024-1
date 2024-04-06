@@ -82,6 +82,16 @@ def ultimo_identificador(nome_tb, letra_tb):
   id_ult = util_identificador.de_indice(letra_tb, num_ents)
   return id_ult
 
+def busca_por_semelhanca(nome_tb, let, chaves, valores):
+  res = db_tabela_generica.busca_por_semelhanca(nome_tb, let, chaves, valores)
+  if res == None: res = [].copy() # Just in case.
+  if type(res) is list or type(res) is tuple:
+    return res
+  elif type(res) is str:
+    erro_prog("busca na tabela falhou, res = " + res)
+  else:
+    erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
+
 # FUNÇÕES PARA DEPURAÇÃO
 
 def liga_diagnosticos(val):

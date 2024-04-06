@@ -4,12 +4,12 @@ import db_tabelas
 import db_conversao_sql
 import util_identificador
 import util_valida_campo
-import obj_raiz
-import obj_usuario
-import obj_video
-from util_testes import ErroAtrib, erro_prog, mostra
-from datetime import datetime, timezone
+
 import sys
+import os
+import subprocess
+import json
+from datetime import datetime, timezone
 
 # VARIÁVEIS GLOBAIS DO MÓDULO
 
@@ -107,6 +107,30 @@ def obtem_data_de_upload(vid):
   assert (vid != None) and type(vid) is obj_video.Classe
   return obj_raiz.obtem_atributo(vid, 'data')
 
+def obtem_dimensoes_do_arquivo(arq):
+  path = "videos/" + arq + ".mp4"
+  if not os.path.exists(path): return None
+
+  command = [
+    "ffprobe",
+    "-v", 
+    "error", 
+    "-select_streams",
+    "v:0",
+    "-show_entries",
+    "stream=width,height",
+    "-of",
+    "json",
+    path
+    ]
+
+  result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+  data = json.loads(result.stdout)
+  
+  width = data["streams"][0]["width"]
+  height = data["streams"][0]["height"]
+  return (width, height)
+
 def busca_por_identificador(id_vid):
   global cache, nome_tb, letra_tb, colunas
   if id_vid == None: return None
@@ -144,10 +168,10 @@ def cria_testes(verb):
   # Identificadores esperados e atributos dos videos de teste:
   lista_ats = \
     [
-      ( "V-00000001", "U-00000001", "eject ", "Ejetar",    "2024-03-09 19:07:49.14 UTC",   6200, 460, 344, ),
-      ( "V-00000002", "U-00000002", "fukup ", "Fukushima", "2024-03-09 19:08:13.11 UTC",  13760, 640, 360, ),
-      ( "V-00000003", "U-00000001", "pipoc ", "Pipoca",    "2024-03-09 19:08:27.92 UTC",   3200, 384, 384, ),
-      ( "V-00000004", "U-00000004", "virus ", "Vírus",     "2024-03-06 14:56:40.24 UTC",   3000, 800, 800, ),
+      ( "V-00000001", "U-00000001", "eject.mp4", "Ejetar",    "2024-03-09 19:07:49.14 UTC",   6200, 460, 344, ),
+      ( "V-00000002", "U-00000002", "fukup.mp4", "Fukushima", "2024-03-09 19:08:13.11 UTC",  13760, 640, 360, ),
+      ( "V-00000003", "U-00000001", "pipoc.mp4", "Pipoca",    "2024-03-09 19:08:27.92 UTC",   3200, 384, 384, ),
+      ( "V-00000004", "U-00000004", "virus.mp4", "Vírus",     "2024-03-06 14:56:40.24 UTC",   3000, 800, 800, ),
     ]
   for id_vid_esp, id_autor, arq, titulo, data, duracao, largura, altura in lista_ats:
     autor = obj_usuario.busca_por_identificador(id_autor)
@@ -198,8 +222,16 @@ def valida_atributos(vid, atrs_mem):
   Se {vid} não é {None}, supõe que {atrs} sao alterações a aplicar nessa
   sessão. """
   global cache, nome_tb, letra_tb, colunas
+  
   erros = [].copy();
-  # !!! Completar !!!
+
+  vid_id = obtem_identificador(vid) if vid is not None else None
+  if 'arq' in atrs_mem:
+    nome_arq = atrs_mem['arq']
+    erros += util_valida_campo.nome_de_arq_video('arq', nome_arq, False)
+    if busca_por_arquivo(nome_arq) != vid_id:
+      erros.append(f"já existe um arquivo com o nome '{nome_arq}'")
+  
   if atrs_mem['duracao'] < 5000:
     erros.append("O video não atinge a duração mínima de 5000 milisegundos")
   elif atrs_mem['duracao'] > 600000:
@@ -210,6 +242,7 @@ def valida_atributos(vid, atrs_mem):
     erros.append("A largura do vídeo não está dentro da janela esperada(entre 64 e 640 pixels)")
   if atrs_mem['altura']/atrs_mem['largura'] != 3/4:
     erros.append("O vídeo não está no formato esperado(3:4)")
+    
   return erros
 
 def def_obj_mem(obj, id_vid, atrs_SQL):
