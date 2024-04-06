@@ -21,6 +21,7 @@ import comando_alterar_usuario
 import comando_ver_objeto
 import comando_ver_sessoes
 import comando_ver_sessao
+import comando_ver_video
 import comando_ver_comentarios_de_video
 import comando_ver_comentarios_de_usuario
 import comando_ver_videos_de_usuario

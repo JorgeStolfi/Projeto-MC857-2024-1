@@ -97,6 +97,7 @@ def busca_por_indice(nome_tb, cache, let, cols, def_obj, ind):
 def busca_por_identificador_e_indice(nome_tb, cache, let, cols, def_obj, ident, ind):
   """Função interna: mesmo que {busca_por identificador}, mas exige o índice inteiro {ind}
   da linha da tabela, além do identificador {ident}."""
+  print('oiooi', ident)
   cond = "indice = " + str(ind)
   col_nomes = extrai_nomes_de_colunas_SQL(cols)
   res = db_base_sql.executa_comando_SELECT(nome_tb, cond, col_nomes)

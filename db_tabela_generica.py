@@ -196,6 +196,11 @@ def num_entradas(nome_tb):
   Os índices dos objetos variam de 1 a {N}."""
   return db_tabela_generica_IMP.num_entradas(nome_tb)
 
+def num_entradas(nome_tb):
+  """Retorna o número {N} de objetos presentes na tabla {nome_tb}.
+  Os índices dos objetos variam de 1 a {N}."""
+  return db_tabela_generica_IMP.num_entradas(nome_tb)
+
 def limpa_tabela(nome_tb, cols):
   """Apaga todas as entradas da tabela {nome_tb}, e reinicializa o
   contador de linhas em 0.  Não retorna nenhum resultado.

@@ -28,33 +28,21 @@ def processa(ses, cmd_args):
     arq = cmd_args['arq'] if 'arq' in cmd_args else None
     
     # Título:
-    titulo = cmd_args['titulo'] if 'titulo' in cmd_args else None 
-
-    # Cria data no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
-    data = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    # Registra na tabela de vídeos e cria o objeto:
-    atrs = {
-      'autor': autor,             # {obj_usuario.Classe} o usuário que fez upload do vídeo.
-      'arq': arq,                 # {str} nome do arquivo de vídeo.
-      'titulo': titulo,           # {str} título do vídeo (max 60 caracteres)
-      'data': data,               # data de upload, no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
-      'duracao': 0,               # duração do vídeo em millissegundos.
-      'largura': 0,               # largura de cada frame, em pixels.
-      'altura': 0                 # altura de cada frame, em pixels.
-    }
-
-    vid = obj_video.cria(atrs)
-
+    titulo = cmd_args['titulo'] if 'titulo' in cmd_args else None
+    
     # Grava o conteudo do arquivo no disco:
     wr = open("videos/" + arq, 'wb')
-
-    wr.write(vid)
+    # !!! Implementar o upload e gravação no disco !!!
+    wr.close()
+    erros.append("!!! uppload do arquivo ainda não foi implementado !!!")    
     
-    wr.close()  
-
-    # Insere objeto video na tabela `video`.
-    db_base_sql.executa_comando_INSERT('video', vid)
+    # Registra na tabela de vídeos e cria o objeto:
+    atrs = {
+      'autor': autor,
+      'arq': arq,
+      'titulo': titulo,
+    }
+    vid = obj_video.cria(atrs)
     
   if vid != None:
     pag = html_pag_ver_video.gera(ses, vid, erros)
