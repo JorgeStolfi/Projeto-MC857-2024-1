@@ -29,15 +29,23 @@ def nome_de_usuario(rotulo, val, nulo_ok):
   São permitidas letras acentuadas, brancos, hífen, ponto, e apóstrofe."""
   return util_valida_campo_IMP.nome_de_usuario(rotulo, val, nulo_ok)
   
-def senha(rotulo, val, nulo_ok):
-  """A senha deve ser uma cadeia de caracteres visíveis do conjunto ASCII,
+def senha(rotulo, val):
+  """ALUNO: Exige que o paramêtro {val} seja uma string e contenha no mínimo 8 e 
+  no máximo 16 caracteres, no minimo uma letra maúscula, uma minúscula, um 
+  número e um caracter especial.
+  
+  MAIN: A senha deve ser uma cadeia de caracteres visíveis do conjunto ASCII,
   incluindo letras ou dígitos [A-Za-z0-9] e alguns caracteres especiais.  
   Deve ter pelo menos um caracter que não é letra ou dígito, no mínimo
   8 e no máximo 14 caracters."""
-  return util_valida_campo_IMP.senha(rotulo, val, nulo_ok)
+  return util_valida_campo_IMP.senha(rotulo, val)
 
 def email(rotulo, val, nulo_ok):
-  """Um endereço de email deve ser "{usuario}@{site}" onde {usuario} 
+  """ALUNO: Exige que o parâmetro {val} seja uma string e valida se {val} está contido no contexto
+  De um email padrão, ou seja, inicio@dominio.domSuperior onde inicio permite letras maiúsculas ou minusculas, digitos e caracteres especiais. 
+  Dominio permite letras maiusculas, minusculas, numeros, . e _. domSuperior permite 
+  letras maiusculas ou minúsculas e deve conter no minimo 2 caracteres.
+  MAIN: Um endereço de email deve ser "{usuario}@{host}" onde {usuario} 
   e {host} não podem ser vazios e devem ter só letras, dígitos, hifens, underscoeres, e pontos. 
   O {host} deve ter pelo menos um ponto. O comprimento total arbitrariamente limitado
   a 80 caracteres."""

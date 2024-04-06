@@ -7,13 +7,13 @@ def processa(ses, cmd_args):
   após ter preenchido os campos do mesmo.  Os novos dados do usuário 
   (possivelmente não alterados) devem estar definidos
   no dicionário {cmd_args}. 
-
+  
   O parâmetro {ses} não pode ser {None} e deve ser um objeto de tipo
   {obj_sessao.Class}. A sessão deve estar aberta. Se o dono da sessão
   {ses} for um administrador e {cmd_args} tiver um campo 'id_usuario'
   não nulo, este campo define o usuário {usr} a alterar. Caso
   contrário, o usuário {usr} será o próprio dono da sessão {ses}.
-
+  
   O dicionário {cmd_args} deve incluir um campo 'senha' com valor não
   nulo, e um campo 'conf_senha' com o mesmo valor.
 

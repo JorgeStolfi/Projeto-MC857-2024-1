@@ -1,0 +1,62 @@
+Relatório - aula 05/04/2024
+
+1 - Realizei a implementação da função validar senha, de modo que, uma senha é validada se, e somente se, ela contiver:
+    - No minimo 8 caracteres
+    - No minimo 1 caracter especial
+    - No minimo 1 Letra maiuscula
+    - No minimo 1 Letra minuscula
+    - No mínimo 1 numero
+Para a senha não concedi a opção da senha ser opcional, pois, em geral. Nenhuma senha é opcional e isso pode gerar brechas de segurança
+2 - Realizei a implementação da função validar email. Que recebendo um email valida para ver se o email é um string e se ele está no padrão esperado para um email, ou seja:
+    - r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' - caracteresASCII + @ + . + dominioASCII
+
+3 - Comecei a escrever os teste de modo que
+
+    3.1 - Função booleano
+        Testes Negativos
+        3.1.2 - Teste 1 enviar um não boolean 
+        3.1.2 - Teste 2 enviar um nulo_ok =False e um val = None
+        Testes Positivos
+        3.1.1 - Teste 2 envar um booleano e ver não deve retornar erro
+        3.1.3 - Teste 3 enviar o parametro nulo_ok = true com um valor nulo 
+    3.2 - Função identificador
+        teste negativos
+        3.2.1 - Teste 1 enviar uma Letra e um val onde val[0] diferente de Letra
+        3.2.2 - Teste 2 enviar uma val fora do padrão {L}-{NNNNNNNN}
+        3.2.4 - Teste 3 enviar uma val não string
+        3.2.5 - Teste 4 enviar um nulo_ok false e um val=None
+        Testes Positivos
+        3.2.6 - Teste 4 enviar uma Letra e um val onde val[0] igual a Letra e val dentro do padrão
+        3.2.7 - Teste 5 Enviar nulo_ok true e val None
+        3.2.8 - Teste 6 Enviar uma Letra none e uma val dentro do padrão
+    3.3 - Função nome_de_usuario:
+        Testes negativos:
+        3.3.1 - Teste 1 enviar um nome de usuário com menos de 10 digitos
+        3.3.2 - Teste 2 enviar um nome de usuário com mais de 60 dígitos
+        3.3.4 - Teste 3 enviar um nome de usuário que não é uma string
+        3.3.5 - Teste 4 enviar um nome de usuário que é uma string mas contem numeros
+        3.3.6 - Teste 5 enviar um nome de usuário que é uma string mas contem caracteres especiais
+        3.3.7 - Teste 6 enviar um nulo_ok false e um val=None
+        Teste Positivo
+        3.3.8 - Teste 7 enviar um nome de usuário nos padrões
+        3.3.9 - Teste 8 enviar um  nulo_ok = true e um nome=None
+    3.4 - Função senha:
+        Testes negativos:
+        3.4.1 - Teste 1 enviar uma senha com menos de 8 caracteres
+        3.4.2 - Teste 2 enviar uma senha com mais de 16 caracteres
+        3.4.3 = teste 3 enviar uma senha sem maíuscula
+        3.4.4 - Teste 4 enviar uma senha sem minúscula
+        3.4.5 - Teste 5 enviar uma senha sem número
+        3.4.6 - Teste 6 enviar uma senha sem caracter especial
+        3.4.7 - Teste 7 enviar uma senha que não é uma string
+        Testes positivos:
+        3.4.8 - Teste 7 enviar uma senha nos padrões
+    
+    3.5 - Função email:
+        Testes negativos:
+        3.5.1 - Teste 1 enviar um email None com nulo_ok = false
+        3.5.2 - Teste 2 enviar um email fora dos padrões esperados
+        3.5.3 - Teste 3 enviar um email que não é uma string
+        Testes Positivo
+        3.5.4 - Teste 4 - enviar um email dentro dos padrões
+        3.5.5 - Teste 5 - enviar um email None com nulo_ok=True

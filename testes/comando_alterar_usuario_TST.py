@@ -58,8 +58,8 @@ def testa_atualiza_email_com_sucesso():
 def testa_atualiza_email_repetido_falha():
   email_dup = "segundo@gmail.com"
   cmd_args = {
-      'id_usuario': "U-00000001",
-      'email': email_dup,
+    'id_usuario': "U-00000001",
+    'email': email_dup,
   }
   try:
     testa_comando_alterar_usuario("Dup", ses, cmd_args)
