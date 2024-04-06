@@ -2,8 +2,7 @@ import comando_alterar_usuario_IMP
 
 
 def processa(ses, cmd_args):
-  """
-  Esta função é chamada quando alguém aperta o botão "Alterar"
+  """Esta função é chamada quando alguém aperta o botão "Alterar"
   em um formulário para alterar os dados de um usuário {usr}, 
   após ter preenchido os campos do mesmo.  Os novos dados do usuário 
   (possivelmente não alterados) devem estar definidos
@@ -24,6 +23,5 @@ def processa(ses, cmd_args):
 
   Se os dados não forem aceitáveis, a função devolve o mesmo
   formulário de alterar usuário, com os mesmos dados nos campos
-  preenchidos, com uma ou mais mensagens de erro adequadas.
-  """
+  preenchidos, com uma ou mais mensagens de erro adequadas."""
   return comando_alterar_usuario_IMP.processa(ses, cmd_args)

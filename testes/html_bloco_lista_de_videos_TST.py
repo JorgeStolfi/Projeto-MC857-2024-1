@@ -17,11 +17,6 @@ ids_videos = [
   "V-00000002",
   "V-00000003",
   "V-00000004",
-  "V-00000005",
-  "V-00000006",
-  "V-00000007",
-  "V-00000008",
-  "V-00000009",
 ]
 
 def testa_html_bloco_lista_de_videos(rotulo, *args):
@@ -30,12 +25,13 @@ def testa_html_bloco_lista_de_videos(rotulo, *args):
 
   modulo = html_bloco_lista_de_videos   
   funcao = modulo.gera
-  frag = True     # {True} se for apenas um fragmento HTML, {False} se for página completa.
-  pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  frag = True     # Resultado é só um fragmento de página?
+  pretty = False  # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 for ver in (False, True):
-  for fechar in (False, True):
-    tag = "ver" + str(ver)[0] + "-fechar" + str(fechar)[0] 
-    testa_html_bloco_lista_de_videos("muitas-" + tag, ids_videos)
-    testa_html_bloco_lista_de_videos("lhufas-" + tag, ids_videos)
+  tag = "ver" + str(ver)[0] 
+  testa_html_bloco_lista_de_videos("ComVideos-" + tag, ids_videos)
+  testa_html_bloco_lista_de_videos("SemVideos-" + tag, ())
+  
+sys.stderr.write("Testes terminados normalmente.\n")

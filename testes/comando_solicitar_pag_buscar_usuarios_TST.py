@@ -25,14 +25,14 @@ assert obj_usuario.obtem_atributo(admin, 'administrador')
 ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX")
 
 def testa_processa(rotulo, *args):
-    """Testa {funcao(*args)}, grava resultado
-    em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  """Testa {funcao(*args)}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
 
-    modulo = comando_solicitar_pag_buscar_usuarios
-    funcao = modulo.processa
-    frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-    pretty = True  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-    util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  modulo = comando_solicitar_pag_buscar_usuarios
+  funcao = modulo.processa
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 testa_processa("NA-e2", None, None)
 testa_processa("NL-e0", ses_comum, ["banana", "abacate"])

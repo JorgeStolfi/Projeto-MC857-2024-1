@@ -97,4 +97,4 @@ verifica_sessao("fecha s1", s1, sident1, usr1, False, scook1)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")

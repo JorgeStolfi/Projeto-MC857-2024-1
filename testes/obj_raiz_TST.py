@@ -7,8 +7,8 @@ import db_base_sql
 import util_testes
 import db_conversao_sql
 from util_testes import erro_prog, aviso_prog, mostra
-
 import sys
+from obj_raiz import ultimo_identificador
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -131,9 +131,35 @@ obj_raiz.muda_atributos(obj2, obj2_atrs_m, cache, nome_tb, letra_tb, colunas, de
 verifica_objeto("obj2_m", obj2, obj2_id, obj2_atrs_m, None)
 
 # ----------------------------------------------------------------------
+
+# Adicione este import ao início do seu código de teste
+from obj_raiz import ultimo_identificador
+
+# ...
+
+# Adicione este bloco de código no final do seu script de teste
+
+# ----------------------------------------------------------------------
+sys.stderr.write("  testando {obj_raiz.ultimo_identificador}:\n")
+
+# Defina o nome da tabela e a letra do prefixo
+nome_tb = "objtestes"
+letra_tb = "X"
+
+# Chamada da função ultimo_identificador
+ultimo_id = ultimo_identificador(nome_tb, letra_tb)
+
+# Verificação do resultado
+if ultimo_id == "X-00000003":  # O identificador esperado com base no exemplo fornecido
+    sys.stderr.write("Teste passou: o último identificador foi obtido corretamente.\n")
+else:
+    erro_prog("Teste falhou: o último identificador não corresponde ao esperado.")
+
+# ----------------------------------------------------------------------
+
 # Veredito final:
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")

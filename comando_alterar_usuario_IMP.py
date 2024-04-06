@@ -5,7 +5,7 @@ import html_pag_mensagem_de_erro
 import html_pag_alterar_usuario
 import obj_usuario
 import obj_sessao
-from util_valida_campo import ErroAtrib
+from util_testes import ErroAtrib
 
 def msg_campo_obrigatorio(nome_do_campo):
   return "O campo %s é obrigatório." % nome_do_campo

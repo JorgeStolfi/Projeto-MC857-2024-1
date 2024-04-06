@@ -6,9 +6,9 @@ import obj_usuario
 import obj_sessao
 import db_base_sql
 import util_testes
-from util_valida_campo import ErroAtrib
+from util_testes import ErroAtrib
 
-import sys #linha original
+import sys
 
 # Conecta o banco e carrega as informações para o teste
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -27,15 +27,15 @@ def testa_comando_alterar_usuario(rotulo, *args):
 
   modulo = comando_alterar_usuario
   funcao = modulo.processa
-  frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-  pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
     
 def testa_atualiza_nome_com_sucesso():
   novo_nome = "John First"
   cmd_args = {
-    'id_usuario': "U-00000001",
-    'nome': novo_nome,
+      'id_usuario': "U-00000001",
+      'nome': novo_nome,
   }
   testa_comando_alterar_usuario("Nom", ses, cmd_args)
 
@@ -46,8 +46,8 @@ def testa_atualiza_nome_com_sucesso():
 def testa_atualiza_email_com_sucesso():
   email_novo = "banana@nanica.com"
   cmd_args = {
-    'id_usuario': "U-00000001",
-    'email': email_novo,
+      'id_usuario': "U-00000001",
+      'email': email_novo,
   }
   testa_comando_alterar_usuario("Ema", ses, cmd_args)
 

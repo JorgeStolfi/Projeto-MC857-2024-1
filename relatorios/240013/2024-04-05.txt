@@ -1,0 +1,4 @@
+Nome: Lucas
+RA: 240013
+
+O teste implementado verifica se a função obj_raiz.ultimo_identificador está retornando o último identificador esperado com base nos dados inseridos durante os testes anteriores. Ele simula o ambiente de teste definindo o nome da tabela e a letra do prefixo necessários para a função. Em seguida, chama a função ultimo_identificador com esses argumentos e verifica se o identificador retornado corresponde ao identificador esperado com base nos dados de teste anteriores. Se corresponder, o teste passa; caso contrário, o teste falha. Essa abordagem ajuda a garantir que a função ultimo_identificador esteja funcionando conforme o esperado em um ambiente controlado de teste.

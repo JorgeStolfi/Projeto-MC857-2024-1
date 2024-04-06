@@ -9,7 +9,7 @@ def de_indice(let, indice):
   valor {indice} formatado em 8 algarismos decimais, com zeros à esquerda. Por exemplo,
   `util_identificador_de_indice("U",20557)` devolve "U-00020557".
 
-  O índice {indice} deve estar em {0..99999999}. ({10^8-1})."""
+  O índice {indice} deve estar em {0..99999999} ({10^8-1})."""
   return util_identificador_IMP.de_indice(let,indice)
 
 def para_indice(let, ident):
@@ -31,5 +31,6 @@ def unico_elemento(lista_ids):
   """O parâmetro {lista_ids} deve ser {None}  ou uma lista ou tupla de identificadores
   de objetos.  Se {lista_ids} for {None} ou vazia, devolve {None}.  Se
   {lista_ids} tiver um único elemento, devolve esse elemento que tem 
-  esse identificador.  Em todos os outros casos, termina o programa com erro."""
+  esse identificador.  Em todos os outros casos, levanta a exceção {ArgsError}
+  com uma mensagem explicando o erro."""
   return util_identificador_IMP.unico_elemento(lista_ids)

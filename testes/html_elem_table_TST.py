@@ -16,8 +16,8 @@ def testa_html_table_gera(rotulo, *args):
 
   modulo = html_elem_table
   funcao = modulo.gera
-  frag = True  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-  pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  frag = True  # Resultado é só um fragmento de página?
+  pretty = False  # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 linhas = [].copy()
@@ -30,7 +30,7 @@ for i in range(3):
   if i == 0:
     ht_val = html_elem_input.gera(None, "text", f"input_{i:03d}", None, None, True, "Me edite!", None, False)
   elif i == 1:
-    ht_val = html_elem_button_simples.gera("OK", 'principal', None, '#55ee55')
+    ht_val = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
   elif i == 2:
     ht_val = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
 

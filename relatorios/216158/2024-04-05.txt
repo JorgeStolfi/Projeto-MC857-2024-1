@@ -1,0 +1,1 @@
+Implementei o teste do comando_ver_videos_de_usuario
