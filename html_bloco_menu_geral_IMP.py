@@ -7,7 +7,6 @@ import html_elem_form
 from util_testes import erro_prog
 
 # Outros módulos importados por esta implementação:
-from datetime import datetime, timezone
 import re
 import sys
 
@@ -35,8 +34,10 @@ def gera_botoes_linha_1(logado, nome_usuario, admin):
 
   # Botões da primeira linha que sempre aparecem:
   ht_bt_principal = html_elem_button_simples.gera("Principal", 'principal', None, '#60a3bc')
+  ht_bt_comentarios = html_elem_button_simples.gera("Buscar Comentários", 'solicitar_pag_buscar_comentarios', None, '#FF00FF')
+  ht_bt_sessoes = html_elem_button_simples.gera("Buscar Sessões", 'solicitar_pag_buscar_sessoes', None, '#008080')
 
-  botoes = ( ht_bt_principal, )
+  botoes = (ht_bt_principal, ht_bt_comentarios, ht_bt_sessoes)
   if logado:
     # Gera outros botões de usuario normal logado
     botoes += gera_botoes_linha_1_logado(nome_usuario, admin)
@@ -51,6 +52,7 @@ def gera_botoes_linha_1_logado(nome_usuario, admin):
   botoes_sempre = (
       html_elem_button_simples.gera("Minha Conta", 'solicitar_pag_alterar_usuario', None, '#eeeeee'),
       html_elem_button_simples.gera("Minhas Sessões", 'ver_sessoes', None, '#eeeeee'),
+      html_elem_button_simples.gera("Meus Comentários", 'ver_comentarios_de_usuario', None, '#eeeeee'),
       html_elem_button_simples.gera("Sair", 'fazer_logout', None, '#eeeeee'),
       gera_nome_usuario(nome_usuario)
     )
@@ -62,7 +64,7 @@ def gera_botoes_linha_1_logado(nome_usuario, admin):
     botoes_videos = ( )
   else:
     botoes_videos = (
-      html_elem_button_simples.gera("Meus Videos", 'ver_videos', None, '#eeeeee'),
+      html_elem_button_simples.gera("Meus Videos", 'ver_videos_de_usuario', None, '#eeeeee'),
     )
   return botoes_sempre + botoes_videos
 

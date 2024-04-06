@@ -1,8 +1,8 @@
 # Imlementação do módulo {util_valida_campo}
 
-import sys, re
-import util_valida_campo
-from math import floor
+import re
+
+
 
 def booleano(rotulo, val, nulo_ok):
   erros = []
@@ -11,7 +11,7 @@ def booleano(rotulo, val, nulo_ok):
   else:
     if not type(val) is bool:
       erros += [ "campo '%s' = \"%s\" deve ser booleano" % (rotulo, str(val)) ]
-  return []
+  return erros
   
 def identificador(rotulo, val, letra, nulo_ok):
   erros = []
@@ -40,16 +40,40 @@ def nome_de_usuario(rotulo, val, nulo_ok):
       if n < 6:
         erros += [ "campo '%s' (%d caracteres) muito curto" % (rotulo,n), ]
       elif n > 60:
-        erros += [ "nome de usuário (%d caracteres) muito longo" % (rotulo,n), ]
+        erros += [ "campo '%s' (%d caracteres) muito longo" % (rotulo,n), ]
       # !!! Verificar caracteres permitidos !!!
   return erros
   
 def senha(rotulo, val, nulo_ok):
   # !!! Implementar !!!
+  # O padrão {re} para caracter ASCII visível é [!-~], e para
+  # letra ou dígito é [A-Za-z0-9].
   return []
 
 def email(rotulo, val, nulo_ok):
   # !!! Implementar !!!
   return []
 
+def data(rotulo, val, nulo_ok):
+  # !!! Implementar !!!
+  return []
 
+def nome_de_arq_video(rotulo, val, nulo_ok):
+  erros = []
+  if val is None and not nulo_ok:
+    erros += ["campo '%s' não pode ser omitido" % rotulo]
+  elif not isinstance(val, str):
+    erros += ["campo '%s' = \"%s\" deve ser string" % (rotulo, str(val))]
+  else:
+    if not val.endswith(".mp4"):
+      erros += ["campo '%s' deve ser o nome de um arquivo de video .mp4" % rotulo]
+
+    nome_arq = val[:-4]
+
+    if nome_arq == "" or not val.endswith(".mp4"):
+      erros += ["campo '%s', cujo valor é '%s' deve ser o nome de um arquivo de video não vazio seguido da extensão .mp4"% (rotulo, val)]
+
+    if not re.match("^[A-Za-z0-9_-]*$", nome_arq):
+      erros += ["campo '%s' deve ser conter apenas apenas letras, dígitos, e underscores ASCII" % rotulo]
+
+  return erros

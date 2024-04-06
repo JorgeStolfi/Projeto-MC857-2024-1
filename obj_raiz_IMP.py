@@ -6,8 +6,8 @@ import db_tabela_generica
 import db_conversao_sql
 
 import util_identificador
-import util_valida_campo; from util_valida_campo import ErroAtrib
-from util_testes import erro_prog, aviso_prog, mostra
+import util_valida_campo
+from util_testes import ErroAtrib, erro_prog, aviso_prog, mostra
 
 import sys
 
@@ -27,6 +27,7 @@ class Classe_IMP:
 def cria(atrs_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem):
   global orz_debug
   if orz_debug: mostra(0,"obj_raiz_IMP.cria(" + str(atrs_mem) + ") ...")
+  assert colunas != None # Pega módulo não inicializado.
 
   # Converte atibutos para formato SQL.
   atrs_SQL = db_conversao_sql.dict_mem_para_dict_SQL(atrs_mem, colunas, False)
@@ -76,6 +77,21 @@ def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
   else:
     erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
 
+def ultimo_identificador(nome_tb, letra_tb):
+  num_ents = db_tabela_generica.num_entradas(nome_tb)
+  id_ult = util_identificador.de_indice(letra_tb, num_ents)
+  return id_ult
+
+def busca_por_semelhanca(nome_tb, let, chaves, valores):
+  res = db_tabela_generica.busca_por_semelhanca(nome_tb, let, chaves, valores)
+  if res == None: res = [].copy() # Just in case.
+  if type(res) is list or type(res) is tuple:
+    return res
+  elif type(res) is str:
+    erro_prog("busca na tabela falhou, res = " + res)
+  else:
+    erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
+
 # FUNÇÕES PARA DEPURAÇÃO
 
 def liga_diagnosticos(val):
@@ -110,9 +126,11 @@ def verifica_criacao(obj, tipo, id_obj, atrs, ignore, cache, nome_tb, letra_tb, 
         if chave in atrs_cmp: del atrs_cmp[chave]
         if chave in atrs_esp: del atrs_esp[chave]
       
-    if atrs_cmp != atrs_esp:
-      aviso_prog("retornou " + str(atrs_cmp) + ", deveria ter retornado " + str(atrs_esp), True)
-      ok = False
+    for chave in atrs_esp.keys():
+      assert chave in atrs_cmp
+      if atrs_cmp[chave] != atrs_esp[chave]:
+        aviso_prog("retornou " + str(atrs_cmp[chave]) + ", deveria ter retornado " + str(atrs_esp[chave]), True)
+        ok = False
     
     if orz_debug: sys.stderr.write("  > testando {obj_raiz.busca_por_identificador()}:\n")
     obj1 = busca_por_identificador(id_obj, cache, nome_tb, letra_tb, colunas, def_obj_mem)

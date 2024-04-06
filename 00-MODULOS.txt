@@ -1,20 +1,22 @@
 # Módulos em ordem de teste:
+# Last edited on 2024-04-05 17:48:46 by stolfi
 
 util_testes
-
-db_base_sql
-
-db_conversao_sql
-db_tabela_generica
 
 util_valida_campo
 util_identificador
 
+db_base_sql
+
 obj_raiz
+db_conversao_sql
+
+db_tabela_generica
 
 obj_usuario
 obj_sessao
 obj_video
+obj_comentario
 
 db_tabelas
 
@@ -36,19 +38,31 @@ html_elem_table
 html_elem_textarea
 
 html_bloco_cabecalho
+html_bloco_rodape
 html_bloco_erro
-html_bloco_lista_de_sessoes
 html_bloco_menu_geral
-html_bloco_resumo_de_sessao
-html_bloco_resumo_de_usuario
 html_bloco_sessao
 html_bloco_tabela_de_campos
 html_bloco_dados_de_sessao
 html_bloco_dados_de_usuario
 html_bloco_dados_de_video
+html_bloco_comentario
+
+html_bloco_resumo_de_sessao
+html_bloco_lista_de_sessoes
+html_bloco_resumo_de_usuario
+html_bloco_lista_de_usuarios
+html_bloco_resumo_de_video
+html_bloco_lista_de_videos
+html_bloco_resumo_de_comentario
+html_bloco_lista_de_comentarios
 
 html_form_login
 html_form_criar_alterar_usuario
+
+html_form_buscar_usuarios
+html_form_buscar_videos
+html_form_upload_video
 
 html_pag_alterar_usuario
 html_pag_cadastrar_usuario
@@ -56,9 +70,19 @@ html_pag_generica
 html_pag_login
 html_pag_mensagem_de_erro
 html_pag_principal
+html_pag_buscar_usuarios
+html_pag_buscar_videos
+html_pag_upload_video
 html_pag_ver_sessao
 html_pag_ver_usuario
 html_pag_ver_video
+
+comando_solicitar_pag_login
+comando_solicitar_pag_cadastrar_usuario
+comando_solicitar_pag_alterar_usuario
+comando_solicitar_pag_upload_video
+comando_solicitar_pag_buscar_usuarios
+comando_solicitar_pag_buscar_videos
 
 comando_alterar_usuario
 comando_cadastrar_usuario
@@ -66,15 +90,19 @@ comando_buscar_usuarios
 comando_fazer_login
 comando_fazer_logout
 comando_fechar_sessao
-comando_solicitar_pag_alterar_usuario
-comando_solicitar_pag_cadastrar_usuario
-comando_solicitar_pag_buscar_usuarios
-comando_solicitar_pag_upload_video
-comando_solicitar_pag_login
+comando_fazer_upload_video
+comando_buscar_videos
+
 comando_ver_objeto
 comando_ver_sessao
 comando_ver_sessoes
+comando_ver_comentarios_de_video
+comando_ver_comentarios_de_usuario
+comando_ver_video
+comando_ver_videos_de_usuario
 
-# Sem teste unitário (o teste é {servidor.py}):
-# processa_comando_http
-# servidor
+# Sem teste unitário:
+processa_comando_http
+
+# Sem implementação nem teste unitário (o teste é o próprio {servidor.py}):
+servidor

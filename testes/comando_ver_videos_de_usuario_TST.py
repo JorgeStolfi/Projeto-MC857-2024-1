@@ -1,4 +1,5 @@
 #! /usr/bin/python3
+
 import sys
 import comando_ver_videos_de_usuario
 import db_base_sql
