@@ -28,9 +28,9 @@ def testa_form_simples(rot_teste, modulo, rotulo, tipo, nome, val_ini, val_min, 
 
   # Cria formulário:
   ht_form = html_elem_form.gera(ht_campos)
-
-  util_testes.escreve_resultado_html(html_elem_form, "completo", ht_form, True, False)
-
+  frag = True # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  util_testes.escreve_resultado_html(html_elem_form, "completo", ht_form, frag, pretty)
   
   # cria campo de texto com valor inicial
   ht_rotulo = html_elem_label.gera("campo de texto", ": ")
@@ -98,8 +98,8 @@ def testa_form_tabela(rot_teste):
   # Cria formulário:
   ht_form = html_elem_form.gera(ht_campos)
   
-  frag = True
-  pretty = False
+  frag = True # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.escreve_resultado_html(html_elem_form, rot_teste, ht_form, frag, pretty)
 
 testa_form_tabela("tabela")

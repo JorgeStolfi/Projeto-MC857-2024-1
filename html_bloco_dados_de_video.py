@@ -7,7 +7,7 @@ def gera(vid, usr, mostra_usr, edita_titulo):
   portanto este bloco deve ser incluído em um elemento "<form>...</form>".  
   Veja o módulo {html_elem_form}
   
-  Em vez do atributo 'usr' do vídeo, a tabela incluirá um campo com nome 'id_usuario'
+  Em vez do atributo 'autor' do vídeo, a tabela incluirá um campo com nome 'id_autor'
   contendo o identificador do usuário.
   
   Se {vid} é {None}, supõe que o vídeo ainda não existe a tabela será

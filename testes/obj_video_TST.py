@@ -5,6 +5,7 @@ import db_base_sql
 import db_tabela_generica
 import db_tabelas
 import obj_video
+import obj_raiz
 import obj_usuario
 import util_testes
 from util_testes import erro_prog, mostra, aviso_prog
@@ -34,10 +35,8 @@ ok_global = True # Vira {False} se um teste falha.
 
 def verifica_video(rotulo, vid, id_vid, atrs):
   """Testes básicos de consistência do objeto {vid} da classe {obj_video.Classe}, dados
-  {id_vid} e atributos esperados {atrs}."""
-  global ok_global
+  {id_vid} e atributos esperados {atrs}.  Retorna {True} se não detectou erros."""
 
-  sys.stderr.write("  %s\n" % ("-" * 70))
   sys.stderr.write("  verificando video %s\n" % rotulo)
   ok = obj_video.verifica_criacao(vid, id_vid, atrs)
   
@@ -45,15 +44,12 @@ def verifica_video(rotulo, vid, id_vid, atrs):
     
     sys.stderr.write("  testando {obtem_usuario()}:\n")
     usr1 = obj_video.obtem_usuario(vid)
-    if usr1 != atrs['usr']:
+    if usr1 != atrs['autor']:
       aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(usr),True)
       ok = False
     
     sys.stderr.write("  testando {obtem_data_de_upload()}:\n")
     data1 = obj_video.obtem_data_de_upload(vid)
-    if data1 != atrs['data']:
-      aviso_prog("retornou " + str(data1) + ", deveria ter retornado " + str(data),True)
-      ok = False
     
     sys.stderr.write("  testando {busca_por_arquivo()}:\n")
     id_vid1 = obj_video.busca_por_arquivo(atrs['arq'])
@@ -61,62 +57,104 @@ def verifica_video(rotulo, vid, id_vid, atrs):
       aviso_prog("retornou " + str(id_vid1) + ", deveria ter retornado " + str(id_vid),True)
       ok = False
 
+  return ok
+  
+def testa_obj_video_cria_muda(rotulo, valido, modif, id_vid, atrs):
+  """Se {modif} é {False}, testa {obj_video.cria(atrs)} e ignora {id_vid}.
+  Se {modif} é {True}, testa {obj_video.muda_atributos(vid, atrs)}
+  onde {vid} é vídeo com identficador {id_vid}.
+  Também testa algumas outras funções no vídeo resultante.
+  Em ambos os casos, se {valido} for {true}, espera que a chamada dê certo.
+  Se for {False}, espera que dê erro."""
+  global ok_global
+
+  sys.stderr.write("  %s\n" % ("-" * 70))
+  
+  ok = True
+  ult_id_antes = obj_raiz.ultimo_identificador("videos", "V")
+  sys.stderr.write(f"  rotulo = {rotulo} ultimo id antes = {ult_id_antes}\n")
+  
+  try:
+    if modif:
+      sys.stderr.write(f"  testando obj_video.muda_atributos id = {id_video} atrs = {str(atrs)}\n")
+      vid = obj_video.busca_por_identificador(id_vid)
+      obj_video.muda_atributos(vid, atrs)
+    else:
+      sys.stderr.write(f"  testando obj_video.cria atrs = {str(atrs)}\n")
+      vid = obj_video.cria(atrs)
+    ult_id_depois = obj_raiz.ultimo_identificador("videos", "V")
+    sys.stderr.write(f"  chamada sem erro - ultimo id depois = {ult_id_depois}\n")
+    if not valido:
+      sys.stderr.write(f"  ** devia ter falhado!\n")
+      ok = False
+    if modif:
+      assert ult_id_depois == ult_id_antes, "mudou o número de vídeos na tabela"
+    else:
+      assert ult_id_depois > ult_id_antes, "não mudou o número de vídeos na tabela"
+    ok = ok and verifica_video(rotulo, vid, ult_id_depois, atrs)
+  except:
+    sys.stderr.write("  chamada falhou\n")
+    if valido:
+      sys.stderr.write(f"  ** devia ter dado certo!\n")
+      ok = False
+
   if not ok:
     aviso_prog("teste falhou",True)
     ok_global = False
 
   sys.stderr.write("  %s\n" % ("-" * 70))
+
   return
 
 # ----------------------------------------------------------------------
-sys.stderr.write("  testando {obj_video.cria}:\n")
-vid1_atrs = {
-  'usr': usr1,
+# Testando {obj_video.cria}:
+
+# Teste OK:
+atrs_cr1 = {
+  'autor': usr1,
   'arq': "arq1",
   'titulo': "Video Uno",
-  'data': "2024-03-09 19:07:49.14 UTC",
-  'duracao': 3100,
-  'largura': 540,
-  'altura': 330,
 }
-vid1 = obj_video.cria(vid1_atrs)
-vid1_indice = 1
-vid1_id = "V-00000001"
-verifica_video("v1", vid1, vid1_id, vid1_atrs)
+testa_obj_video_cria_muda("cr1_ok", True, False, None, atrs_cr1)
 
-sys.stderr.write("  testando {obj_video.cria}:\n")
-vid2_atrs = {
-  'usr': usr4,
+# Outro teste OK:
+atrs_cr2 = {
+  'autor': usr4,
   'arq': "arq2",
   'titulo': "Video Due",
-  'data': "2024-03-09 19:07:49.15 UTC",
-  'duracao': 3200,
-  'largura': 512,
-  'altura': 512,
 }
-vid2 = obj_video.cria(vid2_atrs)
-vid2_indice = 2
-vid2_id = "V-00000002"
-verifica_video("v2", vid2, vid2_id, vid2_atrs)
+testa_obj_video_cria_muda("cr2_ok", True, False, None, atrs_cr2)
+
+# Teste com erro (arquivo repetido):
+atrs_cr3 = {
+  'autor': usr2,
+  'arq': "arq2",
+  'titulo': "Video Due Bis",
+}
+testa_obj_video_cria_muda("cr3_bad", False, False, None, atrs_cr3)
 
 # ----------------------------------------------------------------------
-sys.stderr.write("  testando {obj_video.muda_atributos}:\n")
+# Testando {obj_video.muda_atributos}:
 
-# Alteração de alguns atributos:
-vid1_mods = {
+# Teste com erro - alteração de alguns atributos imutáveis:
+atrs_md1 = {
   'arq': "Video Ichi",
   'duracao': 4200
 }
-obj_video.muda_atributos(vid1, vid1_mods)
-vid1_d_atrs = vid1_atrs
-for k, v in vid1_mods.items():
-  vid1_d_atrs[k] = v
-verifica_video("v1_mod", vid1, vid1_id, vid1_d_atrs) 
+id_md1 = obj_video.busca_por_arquivo("arq1")
+assert id_md1 != None
+testa_obj_video_cria_muda("md1_bad", False, True, id_md1, atrs_md1)
 
-# Alteração nula:
-if type(vid2) is obj_video.Classe:
-  obj_video.muda_atributos(vid2, vid2_atrs) # Não deveria mudar os atributos
-  verifica_video("v2_mod", vid2, vid2_id, vid2_atrs)
+# Teste OK - alteração sem mudar nada:
+arq_md2 = atrs_cr2['arq']
+tit_md2 = atrs_cr2['titulo']
+atrs_md2 = {
+  'arq': arq_md2,
+  'titulo': tit_md2,
+}
+id_md2 = obj_video.busca_por_arquivo(arq_md2)
+assert id_md2 != None
+testa_obj_video_cria_muda("md2_bad", True, True, id_md2, atrs_md2)
 
 # ----------------------------------------------------------------------
 # Veredito final:
@@ -124,4 +162,4 @@ if type(vid2) is obj_video.Classe:
 if ok_global:
   sys.stderr.write("  Teste terminou sem detectar erro\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")

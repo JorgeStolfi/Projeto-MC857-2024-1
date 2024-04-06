@@ -8,8 +8,8 @@ import db_tabela_generica
 import db_tabelas
 import db_conversao_sql
 import util_identificador
-import util_valida_campo; from util_valida_campo import ErroAtrib
-from util_testes import erro_prog, mostra
+import util_valida_campo
+from util_testes import ErroAtrib, erro_prog, mostra
 import sys
 
 # VARIÁVEIS GLOBAIS DO MÓDULO
@@ -25,13 +25,7 @@ cache = {}.copy()
 letra_tb = "U"
   # Prefixo dos identificadores de usuários
 
-colunas = \
-  (
-    ( 'nome',          type("foo"), 'TEXT',    False ), # Nome completo.
-    ( 'senha',         type("foo"), 'TEXT',    False ), # Senha de login.
-    ( 'email',         type("foo"), 'TEXT',    False ), # Endereço de email
-    ( 'administrador', type(False), 'INTEGER', False ), # Define se o usuário é administrador (1=administrador)
-  )
+colunas = None
   # Descrição das colunas da tabela na base de dados.
   
 usr_debug = False
@@ -49,6 +43,15 @@ class Classe_IMP(obj_raiz.Classe):
 
 def inicializa_modulo(limpa):
   global cache, nome_tb, letra_tb, colunas
+  # Descrição das colunas da tabela na base de dados:
+  # Vide parâmetro {cols} de {db_tabela_generica.cria_tabela}.
+  colunas = \
+    (
+      ( 'nome',          type("foo"), 'TEXT',    False ), # Nome completo.
+      ( 'senha',         type("foo"), 'TEXT',    False ), # Senha de login.
+      ( 'email',         type("foo"), 'TEXT',    False ), # Endereço de email
+      ( 'administrador', type(False), 'INTEGER', False ), # Define se o usuário é administrador (1=administrador)
+    )
   if limpa:
     db_tabela_generica.limpa_tabela(nome_tb, colunas)
   else:
