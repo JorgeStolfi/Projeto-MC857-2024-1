@@ -80,7 +80,8 @@ def testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args):
       # Alguns comandos retornam outras informações além de 
       # uma página ou fragmento HTML.  Pegue só o primeiro
       # resultado:
-      ht_res = ht_res[0]
+      if len(ht_res) == 2 and not type(ht_res[1]) is str:
+        ht_res = ht_res[0]
     escreve_resultado_html(modulo, func_rot, ht_res, frag, pretty)
   except Exception as ex:
     fr = inspect.stack()[2]
