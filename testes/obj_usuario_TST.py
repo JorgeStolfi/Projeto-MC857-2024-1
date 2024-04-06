@@ -105,4 +105,4 @@ if type(usr2) is obj_usuario.Classe:
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")

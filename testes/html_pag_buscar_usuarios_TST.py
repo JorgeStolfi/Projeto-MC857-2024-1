@@ -32,8 +32,8 @@ def testa_gera(rotulo, *args):
 
   modulo = html_pag_buscar_usuarios
   funcao = modulo.gera
-  frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-  pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  frag = False  # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 for admin in (False, True):

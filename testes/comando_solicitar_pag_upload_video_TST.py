@@ -23,8 +23,8 @@ def testa_processa(rotulo, *cmd_args):
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
   modulo = comando_solicitar_pag_upload_video
   funcao = modulo.processa
-  frag = False
-  pretty = False
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *cmd_args)
 
 testa_processa("T1", ses1, cmd_args1)
