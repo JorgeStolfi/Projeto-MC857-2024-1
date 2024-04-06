@@ -1,4 +1,5 @@
 import html_bloco_resumo_de_comentario_IMP
 
-def gera(com):
-  return html_bloco_resumo_de_comentario_IMP.gera(com)
+def gera(comentario):
+  """!!! Documentar !!!"""
+  return html_bloco_resumo_de_comentario_IMP.gera(comentario)

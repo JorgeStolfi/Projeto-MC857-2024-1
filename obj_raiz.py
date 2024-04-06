@@ -88,6 +88,11 @@ def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
   ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
   se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
   return obj_raiz_IMP.busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas)
+
+def busca_por_semelhanca(nome_tb, let, chaves, valores):
+  """Procura objetos cujos valores {chaves} são semelhantes a certos valores {valores}.
+  A busca funciona com parte dos valores e não faz distinção de letras maiúsculas e minúsculas"""
+  return obj_raiz_IMP.busca_por_semelhanca(nome_tb, let, chaves, valores)
   
 def ultimo_identificador(nome_tb, letra_tb):
   """Retorna o identificador do último objeto na tabela {nome_tb},

@@ -1,8 +1,8 @@
 # Imlementação do módulo {util_valida_campo}
 
-import sys, re
-import util_valida_campo
-from math import floor
+import re
+
+
 
 def booleano(rotulo, val, nulo_ok):
   erros = []
@@ -59,6 +59,21 @@ def data(rotulo, val, nulo_ok):
   return []
 
 def nome_de_arq_video(rotulo, val, nulo_ok):
-  # !!! Implementar !!!
-  return []
+  erros = []
+  if val is None and not nulo_ok:
+    erros += ["campo '%s' não pode ser omitido" % rotulo]
+  elif not isinstance(val, str):
+    erros += ["campo '%s' = \"%s\" deve ser string" % (rotulo, str(val))]
+  else:
+    if not val.endswith(".mp4"):
+      erros += ["campo '%s' deve ser o nome de um arquivo de video .mp4" % rotulo]
 
+    nome_arq = val[:-4]
+
+    if nome_arq == "" or not val.endswith(".mp4"):
+      erros += ["campo '%s', cujo valor é '%s' deve ser o nome de um arquivo de video não vazio seguido da extensão .mp4"% (rotulo, val)]
+
+    if not re.match("^[A-Za-z0-9_-]*$", nome_arq):
+      erros += ["campo '%s' deve ser conter apenas apenas letras, dígitos, e underscores ASCII" % rotulo]
+
+  return erros

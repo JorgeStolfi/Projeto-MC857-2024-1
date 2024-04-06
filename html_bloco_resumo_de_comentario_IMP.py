@@ -1,6 +1,7 @@
 import obj_comentario
 import obj_usuario
 import obj_video
+
 import html_elem_paragraph
 import html_elem_span
 import html_elem_button_simples

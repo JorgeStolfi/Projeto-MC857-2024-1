@@ -30,7 +30,8 @@ def testa_html_bloco_lista_de_videos(rotulo, *args):
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 for ver in (False, True):
-  for fechar in (False, True):
-    tag = "ver" + str(ver)[0] + "-fechar" + str(fechar)[0] 
-    testa_html_bloco_lista_de_videos("muitas-" + tag, ids_videos)
-    testa_html_bloco_lista_de_videos("lhufas-" + tag, ())
+  tag = "ver" + str(ver)[0] 
+  testa_html_bloco_lista_de_videos("ComVideos-" + tag, ids_videos)
+  testa_html_bloco_lista_de_videos("SemVideos-" + tag, ())
+  
+sys.stderr.write("Testes terminados normalmente.\n")
