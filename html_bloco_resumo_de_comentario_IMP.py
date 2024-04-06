@@ -22,13 +22,16 @@ def gera(com):
   ht_data = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, data))
 
   pai = atrs['pai']
-  pai_id = obj_comentario.obtem_identificador(pai)
-  ht_pai = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, pai_id))
+  if pai != None:
+    pai_id = obj_comentario.obtem_identificador(pai)
+    ht_pai = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, pai_id))
+  else:
+    ht_pai = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, pai))
 
   texto = atrs['texto']
   ht_texto = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, texto))
 
   bt_arg = {'id_comentario': obj_comentario.obtem_identificador(com)}
-  bt_ver = html_elem_button_simples.gera("Ver", "solicitar_pag_alterar_comentario", bt_arg, "#eeeeee")
+  bt_ver = html_elem_button_simples.gera("Ver", "ver_comentarios_de_video", bt_arg, "#eeeeee")
 
   return [ht_video, ht_autor, ht_data, ht_pai, ht_texto, bt_ver]
