@@ -35,8 +35,8 @@ def cria_linha(texto):
   return linha
 
 pag = cria_pagina()
-frag = True  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+frag = True # Resultado é só um fragmento de página?
+pretty = False # Deve formatar o HTML para facilitar view source?
 util_testes.escreve_resultado_html(html_elem_span, "diversos", pag, frag, pretty)
 
 sys.stderr.write("Testes terminados normalmente.");

@@ -6,7 +6,8 @@
 #
 # Cada tabela SQL tem uma columa de tipo inteiro, 'indice' que é a chave primária
 # Esta coluna é incrementada automaticamente pela biblioteca SQL 
-# sempre que um objeto é acrescentado à tabela.
+# sempre que um objeto é acrescentado à tabela.  A primeira entrada
+# em cada tabela tem índice 1.
 #
 # Este módulo supõe que cada objeto tem um identificador único da forma 
 # "{X}-{NNNNNNNN}", onde {X} é uma letra que indica o tipo dos objetos
@@ -177,10 +178,23 @@ def busca_por_campos(nome_tb, let, cols, args, res_cols):
   tenha valor {val}."""
   return db_tabela_generica_IMP.busca_por_campos(nome_tb, let, cols, args, res_cols)
 
-def busca_por_semelhanca(nome_tb, let, cols, chaves, valores):
-  # !!! Documentar interface !!!
-  # Devolve lista de identificadores (não objetos)
-  return db_tabela_generica_IMP.busca_por_semelhanca(nome_tb, let, cols, chaves, valores)
+def busca_por_semelhanca(nome_tb, let, chaves, valores):
+  """Procura linhas com certas colunas {chaves} com valores semelhantes a certos valores {valores}
+  e devolve seus identificadores.
+  
+  Se o valor de pelo menos uma coluna de {chaves} é semelhante a um valor de {valores}, o identificador
+  é retornado.
+
+  O valor A é semelhante ao valor B se o valor A contém o valor B, sem distinção de letras
+  maiúsculas e minúsculas.
+  O valor 'João da Silva' é semelhante aos valores 'João', 'joão', 'da', e 'Silva', por exemplo.
+  """
+  return db_tabela_generica_IMP.busca_por_semelhanca(nome_tb, let, chaves, valores)
+
+def num_entradas(nome_tb):
+  """Retorna o número {N} de objetos presentes na tabla {nome_tb}.
+  Os índices dos objetos variam de 1 a {N}."""
+  return db_tabela_generica_IMP.num_entradas(nome_tb)
 
 def limpa_tabela(nome_tb, cols):
   """Apaga todas as entradas da tabela {nome_tb}, e reinicializa o

@@ -16,7 +16,7 @@ def gera(atrs, admin):
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs, admin)
   ht_submit = html_elem_button_submit.gera("Buscar", "buscar_videos", None, '#55ee55')
-  ht_cancel = html_elem_button_simples.gera("Cancelar", "principal", None, '#ff2200')
+  ht_cancel = html_elem_button_simples.gera("Cancelar", "pag_principal", None, '#ff2200')
 
   ht_conteudo = \
         ht_table + \

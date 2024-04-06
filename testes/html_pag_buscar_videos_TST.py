@@ -1,2 +1,44 @@
-from util_testes import erro_prog
-erro_prog('!!! programa de teste do modulo html_pag_buscar_videos ainda nao foi escrito !!!')
+#! /usr/bin/python3
+
+import html_pag_buscar_videos
+import db_tabelas
+import obj_sessao
+import obj_usuario
+import db_base_sql
+import util_testes
+
+import sys
+
+sys.stderr.write("Conectando com base de dados...\n")
+res = db_base_sql.conecta("DB",None,None)
+assert res == None
+
+sys.stderr.write("Criando alguns objetos...\n")
+db_tabelas.cria_todos_os_testes(True)
+
+# Sessao de teste:
+ses = obj_sessao.busca_por_identificador("S-00000001")
+assert ses != None
+
+# Usuario teste:
+usr1 = obj_sessao.obtem_usuario(ses)
+assert usr1 != None
+usr1_id = obj_usuario.obtem_identificador(usr1)
+usr1_atrs = obj_usuario.obtem_atributos(usr1)
+
+def testa_gera(rotulo, *args):
+  """Testa {funcao(*args)}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+
+  modulo = html_pag_buscar_videos
+  funcao = modulo.gera
+  frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
+  pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+
+for admin in (True,): # Nao há necessidade de testar com admin=false pois a página é identica para admins e não admins
+  ad = "-a" + str(admin)
+  testa_gera("N-e0" + ad, ses, {},                                           admin, None) # Sem defaults
+  testa_gera("D-e0" + ad, ses, { 'id_video': "V-123456789", 'usr': "Joaquim", 'titulo': "video maneiros", 'arq': 'pesadao.mp4' }, admin, None) # Com defaults
+  testa_gera("D-e1" + ad, ses, { 'id_video': "V-123456789", 'usr': "Joaquim", 'titulo': "video maneiros", 'arq': 'pesadao.mp4' }, admin, "Tente novamente") # Com defaults e erro
+  testa_gera("D-e2" + ad, ses, { 'id_video': "V-123456789", 'usr': "Joaquim", 'titulo': "video maneiros", 'arq': 'pesadao.mp4' }, admin, ["Tente novamente", "Servidor falhou"]) # Com defaults e erro

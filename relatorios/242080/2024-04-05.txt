@@ -1,0 +1,9 @@
+Vi que o método obj_video_IMP.cria já utilizava a função obj_video.valida_atributos para validar os parâmetros de `cria`.
+Então optei por modificar o obj_video_IMP.valida_atributos para checar se já existia um arquivo com o mesmo nome.
+
+Para fazer isso eu primeiro obtenho o id do video, pois caso `valida_atributos` tenha sido chamado de dentro de obj_video_IMP.modifica_atributos a validação ainda funciona.
+Em seguida uso o método obj_video.busca_por_arquivo para checar se existe um arquivo com o mesmo nome. Se ele retornar None significa que o nome está disponível, se ele retornar um identificador, checo se não é igual ao id que obtive anteriormente.
+
+Caso o nome não esteja disponível dou append no array de erros, no método obj_video.cria uma exceção é retornada se o array de erros não é vazio.
+
+Fiz também uma pequena correção de síntaxe no obj_video_TST.py.

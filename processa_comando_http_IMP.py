@@ -11,7 +11,6 @@ import comando_solicitar_pag_buscar_usuarios
 
 import comando_solicitar_pag_buscar_videos
 
-
 import comando_buscar_usuarios
 import comando_fazer_login
 import comando_fazer_login
@@ -22,6 +21,8 @@ import comando_alterar_usuario
 import comando_ver_objeto
 import comando_ver_sessoes
 import comando_ver_sessao
+import comando_ver_comentarios_de_video
+import comando_ver_comentarios_de_usuario
 import comando_ver_videos_de_usuario
 
 import html_elem_span
@@ -353,7 +354,7 @@ def processa_comando(tipo, ses, dados):
 
     # --- comandos gerais ------------------------------------------------
 
-    if cmd == '' or cmd == '/' or cmd == '/principal':
+    if cmd == '' or cmd == '/' or cmd == '/pag_principal':
       # Acesso sem comando, ou usuário apertou "Principal" no menu geral.
       pag =  html_pag_principal.gera(ses, [])
 
@@ -425,17 +426,33 @@ def processa_comando(tipo, ses, dados):
       # Quer formumlário para fazer upload de um video:
       pag = comando_solicitar_pag_upload_video(ses, cmd_args)
       
-    elif cmd == '/ver_videos':
+    elif cmd == '/ver_video':
+      # Página que mostra um detetrminado vídeo:
+      pag = comando_ver_video.processa(ses, cmd_args)
+      
+    elif cmd == '/ver_videos_de_usuario':
       # Solicita página com lista de vídeos de algum usuário:
       pag = comando_ver_videos_de_usuario.processa(ses, cmd_args)
       
-    elif cmd == '/ver_meus_videos':
-      # Solicita página com lista de vídeos do usuário:
-      pag = comando_ver_meus_videos.processa(ses, cmd_args)
-    
     elif cmd == '/solicitar_pag_buscar_videos':
       # Quer formumlário para cadastrar novo usuário:
       pag = comando_solicitar_pag_buscar_videos.processa(ses, cmd_args)
+    
+    elif cmd == '/buscar_videos':
+      # Busca de vídeos com certos atributos:
+      pag = comando_buscar_videos.processa(ses, cmd_args)
+
+    # --- comandos referentes a {obj_comentario.Classe} -----------------------
+      
+    elif cmd == '/ver_comentarios_de_video':
+      # Solicita página com lista de comentários de algum video ou usuário:
+      pag = comando_ver_comentarios_de_video.processa(ses, cmd_args)
+      
+    elif cmd == '/ver_comentarios_de_usuario':
+      # Solicita página com lista de comentários de algum video ou usuário:
+      pag = comando_ver_comentarios_de_usuario.processa(ses, cmd_args)
+
+    # --- outros comandos -----------------------
 
     else:
       # Comando não identificado

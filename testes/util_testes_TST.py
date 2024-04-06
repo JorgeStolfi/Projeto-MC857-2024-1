@@ -3,6 +3,28 @@ import util_testes
 import sys
 from util_testes import erro_prog, mostra
 
+def testa_escreve_resultado_html(rotulo, ht_res, frag):
+  modulo = util_testes
+  pretty = True # Deve formatar o HTML para facilitar view source?
+  modulo.escreve_resultado_html(modulo, "escreve_resultado_html." + rotulo, ht_res, frag, pretty)
+
+# ----------------------------------------------------------------------
+sys.stderr.write("  testando {util_testes.escreve_resultado_html}\n")
+testa_escreve_resultado_html("frag_vazio",  [],                   True); 
+testa_escreve_resultado_html("frag_string", "Banana",             True); 
+testa_escreve_resultado_html("frag_list",   ["Banana","Bacate",], True); 
+pag1 = \
+    "<!DOCTYPE HTML>\n" + \
+    "<html>\n" + \
+    "<head>\n" + \
+    "<meta charset=\"UTF-8\"/>\n" + \
+    "</head>\n" + \
+    "<body>\n" + \
+    "Página de teste\n" + \
+    "</body>\n" + \
+    "</html>\n"  
+testa_escreve_resultado_html("pag",   pag1, False); 
+
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {util_testes.mostra}\n")
 for p in range(10):

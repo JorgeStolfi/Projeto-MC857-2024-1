@@ -5,6 +5,7 @@ import html_bloco_cabecalho
 import html_bloco_menu_geral
 import html_bloco_erro
 import html_elem_span
+import html_bloco_rodape
 
 import re
 import sys
@@ -59,7 +60,7 @@ def gera(ses, ht_conteudo, erros):
     ht_erros = ""
 
   # Rodapé da página:
-  ht_roda = "" # html_rodape.gera()
+  ht_roda = html_bloco_rodape.gera()
 
   # Monta a página:
   pagina = \

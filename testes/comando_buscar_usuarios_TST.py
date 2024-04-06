@@ -24,8 +24,8 @@ def testa_processa(rotulo, *args):
 
     modulo = comando_buscar_usuarios
     funcao = modulo.processa
-    frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-    pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+    frag = False # Resultado é só um fragmento de página?
+    pretty = False # Deve formatar o HTML para facilitar view source?
     util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
 # Sessão em que o usuário dela é o administrador.
@@ -45,9 +45,30 @@ args_nome = {'nome': "João Segundo"}
 # Testa com busca por email que não existe:
 args_email_no = {'email': "naoexiste@email.com"}
 
+# Testa com busca por primeiro nome:
+args_primeiro_nome = {'nome': "João"}
+
+# Testa com busca por sobrenome:
+args_sobrenome = {'nome': "Segundo"}
+
+# Testa com nome aproximado:
+args_nome_aproximado = {'nome': "joão segundo"}
+
+# Testa com nome parcial:
+args_nome_parcial = {'nome': "jo"}
+
 testa_processa("id_usuario",        ses_adm, args_id_usr)
 testa_processa("email_ok",      ses_adm, args_email)
 testa_processa("email_no",      ses_adm, args_email_no)
+
+# Testes abaixo devem retornar somente "João Segundo"
 testa_processa("nome",          ses_adm, args_nome)
+testa_processa("primeiro_nome", ses_adm, args_primeiro_nome)
+testa_processa("sobrenome", ses_adm, args_sobrenome)
+testa_processa("nome_aproximado", ses_adm, args_nome_aproximado)
+
+# Teste abaixo deve retornar todos usuários que começam com "Jo"
+# (José Primeiro, João Segundo, Josenildo Quinto, Joaquim Oitavo e Jonas Nono)
+testa_processa("nome_parcial", ses_adm, args_nome_parcial)
 
 sys.stderr.write("Testes terminados normalmente.")

@@ -136,4 +136,4 @@ verifica_objeto("obj2_m", obj2, obj2_id, obj2_atrs_m, None)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("- teste falhou")
+  erro_prog("Teste falhou")
