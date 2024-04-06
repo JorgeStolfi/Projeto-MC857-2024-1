@@ -1,0 +1,10 @@
+Implementação da função obj_video.valida_atributos, especificamente da parte que verifica se os atributos duração, altura e largura do video
+tem valores razoáveis, ou seja, dentro das regras atuais.
+
+Para a realização da tarefa eu simplesmente fiz uma comparação dos atributos do video com os valores esperados e, caso estivessem fora do
+esperado, adicionei uma string na lista de erros descrevendo o erro em questão. Na função obj_video.obtem_dimensoes_do_arquivo eu precisei fazer uma
+alteração nos valores provisórios das dimensões(já que essa função ainda não implementada) para valores dentro do esperado.
+
+Executando "./testa.sh obj_video" consegui os resultados esperados para os casos cr1_ok, cr2_ok e m1_bad. Os casos cr3_bad e md2_bad estão dando erro, porém não
+estão relacionados a essa tarefa(função obj_video.valida_atributos) mas sim a outras tarefas que já foram atribuidas para outras pessoas(erro para criação de dois
+ videos com o mesmo nome e busca por arquivo).

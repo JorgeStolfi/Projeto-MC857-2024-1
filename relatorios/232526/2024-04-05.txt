@@ -1,0 +1,3 @@
+Implementado o programa de teste relevante em html_bloco_resumo_de_video_TST.py, seguindo padrão estabelecido em outros html_bloco_resumo_de_*_TST.py.
+
+Além disso, foi apontado e corrigido pelo professor um bug que impedia util_teste.testa_funcao_que_gera_html de lidar com listas de fragmentos, relevante para o programa de teste implementado.
