@@ -97,6 +97,7 @@ def busca_por_indice(nome_tb, cache, let, cols, def_obj, ind):
 def busca_por_identificador_e_indice(nome_tb, cache, let, cols, def_obj, ident, ind):
   """Função interna: mesmo que {busca_por identificador}, mas exige o índice inteiro {ind}
   da linha da tabela, além do identificador {ident}."""
+  print('oiooi', ident)
   cond = "indice = " + str(ind)
   col_nomes = extrai_nomes_de_colunas_SQL(cols)
   res = db_base_sql.executa_comando_SELECT(nome_tb, cond, col_nomes)
@@ -162,16 +163,16 @@ def busca_por_campos(nome_tb, let, cols, args, res_cols):
       res = util_identificador.de_lista_de_indices(let, res)
   return res
 
-def busca_por_semelhanca(nome_tb, let, cols, chaves, valores):
+def busca_por_semelhanca(nome_tb, let, chaves, valores):
   cond = ""
   for key in chaves:
     for value in valores:
-      cond += (key + " LIKE '%" + value + "%' OR ")
+      cond += ("LOWER(" + key + ") LIKE '%" + value.lower() + "%' OR ")
   cond = cond[:-4]
   res = db_base_sql.executa_comando_SELECT(nome_tb, cond, ['indice'])
   if res != None and type(res) is str:
     erro_prog("SELECT falhou " + str(res))
-  if tgb_debug: sys.stderr.write("  > busca_por_semelhanca: res = " + str(res) + "\n")
+  if tbg_debug: sys.stderr.write("  > busca_por_semelhanca: res = " + str(res) + "\n")
   res = util_identificador.de_lista_de_indices(let, res)
   return res
 

@@ -7,6 +7,8 @@ import obj_video
 import html_pag_mensagem_de_erro
 import html_pag_principal
 import html_pag_ver_video
+import db_base_sql
+import datetime
 
 def processa(ses, cmd_args):
   erros = [].copy()

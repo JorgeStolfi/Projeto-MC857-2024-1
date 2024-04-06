@@ -1,0 +1,10 @@
+Precisei fazer o merge do meu branch com a main para pegar o commit 83823bc
+pois a funcao que eu deveria testar nao existia na minha branch.
+
+Implementei o teste que valida a função 'num_entradas' do 'db_tabela_generica'.
+Para testar, eu criei uma variavel que é incrementada cada vez que um novo usuario
+é inserido na tabela durante o teste. No teste em questão temos 3 registros, então, 
+o resultado esperado do teste é que a função 'num_entradas' retorne o valor 3.
+Tambem verifico o tipo para garantir que nao venha um tipo invalido como um None ou 
+uma String da função.
+

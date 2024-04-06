@@ -1,0 +1,9 @@
+Bruno Gonçalves Rodrigues - RA232450
+
+Minha tarefa consistia em implementar e testar o html_bloco_resumo_de_comentario.
+Fiz a implementação do módulo gerando um bloco de resumo dos comentários a partir de parâmetros.
+O parâmtro de vídeo gera um parágrafo com id do vídeo, assim como o de autor.
+Os de data e texto exibem as strings de data e texto.
+O de pai verifica se o comentário tem pai e, se sim, mostra seu id, senão fica em branco.
+Além disso temos o botão Ver que redireciona para o comando ver_comentarios_de_video.
+Implementei teste para 3 comentários em html_bloco_resumo_de_comentario_TST gerando os arquivos de saída corretos.

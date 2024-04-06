@@ -2,10 +2,10 @@
 
 # Interfaces usadas por este script:
 
-import html_bloco_resumo_de_video
+import html_bloco_resumo_de_comentario
 import db_base_sql
 import db_tabelas
-import obj_video
+import obj_comentario
 import util_testes
 
 import sys
@@ -17,25 +17,27 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas.cria_todos_os_testes(True)
 
-def testa_html_bloco_resumo_de_video(rotulo, *args):
+def testa_html_bloco_resumo_de_comentario(rotulo, *args):
   """Testa {funcao(*args)}, grava resultado 
   em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
   
-  modulo = html_bloco_resumo_de_video
+  modulo = html_bloco_resumo_de_comentario
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
 
-ids_videos = [
-  "V-00000001",
-  "V-00000002",
-  "V-00000003",
-  "V-00000004",
-]
+usr1_ident = "C-00000001"
+usr1 = obj_comentario.busca_por_identificador(usr1_ident)
 
-for vid_ident in ids_videos:
-  vid = obj_video.busca_por_identificador(vid_ident)
-  testa_html_bloco_resumo_de_video(vid_ident, vid)
+usr2_ident = "C-00000002"
+usr2 = obj_comentario.busca_por_identificador(usr2_ident)
+
+usr5_ident = "C-00000005"
+usr5 = obj_comentario.busca_por_identificador(usr5_ident)
+
+testa_html_bloco_resumo_de_comentario("TCOMENT1",  usr1)
+testa_html_bloco_resumo_de_comentario("TCOMENT2",  usr2)
+testa_html_bloco_resumo_de_comentario("TCOMENT5",  usr5)
 
 sys.stderr.write("Testes terminados normalmente.\n")
