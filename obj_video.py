@@ -90,6 +90,13 @@ def obtem_data_de_upload(vid):
   Dá erro se {vid} é {None}."""
   return obj_video_IMP.obtem_data_de_upload(vid)
 
+def obtem_dimensoes_do_arquivo(arq):
+  """Localiza um video com nome "{arq}.mp4" no disco,
+  e devolve as dimensões deste vídeo.
+  Se tal vídeo não existe, devolve {None}.
+  """
+  return obj_video_IMP.obtem_dimensoes_do_arquivo(arq)
+
 def busca_por_identificador(id_vid):
   """Localiza um video com identificador {id_vid} (uma string da forma
   "V-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_video.Classe}.
