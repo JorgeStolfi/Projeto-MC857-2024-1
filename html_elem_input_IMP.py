@@ -1,17 +1,17 @@
 
 import html_elem_label
-from util_testes import erro_prog
+from util_erros import erro_prog
 
-def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio):
-  ht_rotulo = html_elem_label.gera(rotulo, ": ")
+def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio):
   ht_tipo = " type =\"" + tipo + "\""
-  ht_nome = " name=\"" + nome + "\""
-  ht_id_campo = " id=\"" + nome + ("." + val_ini if val_ini != None else "") + "\""
+  ht_nome = " name=\"" + chave + "\""
+  ht_ident = " id=\"" + ident + "\"" if ident != None else ""
 
   if val_ini != None and dica != None:
-    erro_prog("{val_ini} e {dica} são mutuamente exclusivos")
-  if val_ini == None and not editavel:
-    erro_prog("{val_ini} não pode ser {None} se o campo não é editável")
+    erro_prog("rot_campo '%s' chave '%s': {val_ini} e {dica} são mutuamente exclusivos" % (rot_campo, chave))
+    
+  if val_ini == None and obrigatorio and (tipo == "hidden" or not editavel):
+    erro_prog("rot_campo obrigatorio '%s' chave '%s': {val_ini} não pode ser {None} se o campo não é editável" % (rot_campo, chave))
 
   ht_val_ini = ( " value =\"" + val_ini + "\"" if val_ini != None else "" )
   if val_ini == 'on' and tipo == 'checkbox':
@@ -29,11 +29,11 @@ def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio)
   ht_dica = ( " placeholder=\"" + dica + "\"" if dica != None else "" )
   ht_cmd = ( " onchange=\"window.location.href=" + cmd + "\"" if cmd != None else "" )
   ht_estilo = ( " style=\"background-color:#c7c7c7\"" if not editavel else "" )
-  ht_input = ht_rotulo + \
+  ht_input = \
     "<input" + \
       ht_tipo + \
       ht_nome + \
-      ht_id_campo + \
+      ht_ident + \
       ht_val_ini + \
       ht_readonly + \
       ht_readonlybackground + \

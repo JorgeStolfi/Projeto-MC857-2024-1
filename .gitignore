@@ -7,5 +7,7 @@ __pycache__/
 *.pyd
 *~
 env/
-saida/
+testes/saida/
 DB/MC857.sqlite3
+!DUMMY.txt
+

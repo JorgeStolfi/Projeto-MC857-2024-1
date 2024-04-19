@@ -2,7 +2,7 @@
 
 import sqlite3, sys
 
-from util_testes import erro_prog, mostra
+from util_erros import erro_prog, mostra
 
 # VARIÁVEIS GLOBAIS DO MÓDULO
 
@@ -152,6 +152,31 @@ def executa_comando_DROP_TABLE(nome_tb):
     mostra(4,"db_base_sql_IMP.executa_comando_DROP_TABLE: ** erro = \"" + str(msg) + "\"")
     return msg
     
+def executa_comando_TABLE_EXISTS(nome_tb):
+  global db_conexao
+  # Cozinhada obtida da internet:
+  cmd_core = f"SELECT name FROM sqlite_schema WHERE type='table' AND name='{nome_tb}'"
+  cmd = f"SELECT EXISTS ({cmd_core})"
+  if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_TABLE_EXISTS: cmd = \"" + str(cmd) + "\"")
+  try:
+    cursor = db_conexao.cursor()
+    cursor.execute(cmd)
+    res = cursor.fetchall() # Converte o iterador em lista.
+    cursor.close()
+    res_num = res
+    while type(res_num) is list or type(res_num) is tuple:
+      res_num = res_num[0]
+    if type(res_num) is int and res_num >= 0 and res_num <= 1:
+      # Convert to boolean
+      return res_num == 1
+    else:
+      msg = f"resultado {str(res)} de tipo inválido"
+      mostra(4,"db_base_sql_IMP.executa_comando_TABLE_EXISTS: ** erro = \"" + str(msg) + "\"")    
+      return msg
+  except sqlite3.Error as msg:
+    mostra(4,"db_base_sql_IMP.executa_comando_TABLE_EXISTS: ** erro = \"" + str(msg) + "\"")
+    return msg
+
 def codifica_valor(val):
   # !!! (MAIS TARDE) Deveria proteger caracteres especiais em {val}, como ';'. !!!
   global db_conexao

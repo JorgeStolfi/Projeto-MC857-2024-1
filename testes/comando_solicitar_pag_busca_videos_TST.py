@@ -1,5 +1,5 @@
 import comando_solicitar_pag_buscar_videos
-import db_tabelas
+import db_tabelas_do_sistema
 import obj_sessao
 import obj_video
 import db_base_sql
@@ -12,7 +12,7 @@ res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
 sys.stderr.write("  Criando alguns objetos...\n")
-db_tabelas.cria_todos_os_testes(True)
+db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 # Sessões de teste
 ses_comum = obj_sessao.busca_por_identificador("S-00000001")
@@ -22,15 +22,15 @@ admin = obj_video.busca_por_identificador("U-00000001")
 assert obj_video.obtem_atributo(admin, 'administrador')
 ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX")
 
-def testa_processa(rotulo, *args):
+def testa_processa(rot_teste, *args):
   """Testa {funcao(*args)}, grava resultado
-  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   modulo = comando_solicitar_pag_buscar_videos
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
 testa_processa("NL-e0", None, None)
 testa_processa("NA-e2", ses_comum, ["banana", "abacate"])

@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 import html_pag_buscar_videos
-import db_tabelas
+import db_tabelas_do_sistema
 import obj_sessao
 import obj_usuario
 import db_base_sql
@@ -14,31 +14,43 @@ res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
 sys.stderr.write("Criando alguns objetos...\n")
-db_tabelas.cria_todos_os_testes(True)
+db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-# Sessao de teste:
-ses = obj_sessao.busca_por_identificador("S-00000001")
-assert ses != None
-
-# Usuario teste:
-usr1 = obj_sessao.obtem_usuario(ses)
-assert usr1 != None
-usr1_id = obj_usuario.obtem_identificador(usr1)
-usr1_atrs = obj_usuario.obtem_atributos(usr1)
-
-def testa_gera(rotulo, *args):
+def testa_gera(rot_teste, *args):
   """Testa {funcao(*args)}, grava resultado
-  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   modulo = html_pag_buscar_videos
   funcao = modulo.gera
   frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
-for admin in (True,): # Nao há necessidade de testar com admin=false pois a página é identica para admins e não admins
-  ad = "-a" + str(admin)
-  testa_gera("N-e0" + ad, ses, {},                                           admin, None) # Sem defaults
-  testa_gera("D-e0" + ad, ses, { 'id_video': "V-123456789", 'usr': "Joaquim", 'titulo': "video maneiros", 'arq': 'pesadao.mp4' }, admin, None) # Com defaults
-  testa_gera("D-e1" + ad, ses, { 'id_video': "V-123456789", 'usr': "Joaquim", 'titulo': "video maneiros", 'arq': 'pesadao.mp4' }, admin, "Tente novamente") # Com defaults e erro
-  testa_gera("D-e2" + ad, ses, { 'id_video': "V-123456789", 'usr': "Joaquim", 'titulo': "video maneiros", 'arq': 'pesadao.mp4' }, admin, ["Tente novamente", "Servidor falhou"]) # Com defaults e erro
+# Sessao de administrador:
+ses_A = obj_sessao.busca_por_identificador("S-00000001")
+assert obj_sessao.de_administrador(ses_A)
+
+# Sessao de usuário comum:
+ses_C = obj_sessao.busca_por_identificador("S-00000003")
+assert not obj_sessao.de_administrador(ses_C)
+
+ses_dic = { 'N': None, 'A', ses_A, 'C': ses_C, }
+
+atrs_aut = { 'autor': "U-00000001", }
+atrs_tit = { 'titulo': "fuk", }
+atrs_bad = { 'neto': "N-00000001", }
+
+atrs_dic = { 'N': {}, 'V': atrs_vid, 'T': atrs_tit, 'B': atrs_bad, }
+
+erros_1 = "Tente novamente"
+erros_2 = [ "Não gostei", "Tente novamente" ]
+
+erros_dic = { 'N': None, 'S': erros_1, 'L': erros_2, }
+
+for st, ses in ses_dic.items():
+  for at, atrs in atrs_dic.items():
+    for et, erros in erros_dic.items():
+      rot_teste = f"ses{st}-atrs{at}-erros{et}"
+      testa_gera(rot_teste, ses, atrs, erros)
+
+sys.stderr.write("Testes terminados normalmente.\n")

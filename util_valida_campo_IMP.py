@@ -4,98 +4,102 @@ import sys, re
 import util_valida_campo
 from math import floor
 
-def booleano(rotulo, val, nulo_ok):
-  erros = []
+def booleano(chave, val, nulo_ok):
+  erros = [].copy()
   if val == None:
-    if not nulo_ok: erros += [ "campo '%s' não pode ser omitido" % rotulo, ]
+    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
   else:
     if not type(val) is bool:
-      erros += [ "campo '%s' = \"%s\" deve ser booleano" % (rotulo, str(val)) ]
+      erros += [ f"campo '{chave}' = \"{str(val)}\" deve ser um booleano" ]
   return erros
   
-def identificador(rotulo, val, letra, nulo_ok):
+def identificador(chave, val, letra, nulo_ok):
   erros = []
   if val == None:
-    if not nulo_ok: erros += [ "campo '%s' não pode ser omitido" % rotulo, ]
+    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
   else:
     if type(val) is not str:
-      erros += [ "campo '%s' = \"%s\" deve ser string" % (rotulo, str(val)) ]
+      erros += [ f"campo '{chave}' = \"{str(val)}\" não é identificador válido: deve ser string" ]
     else:
       n = len(val)
       if letra != None and n >= 1 and val[0] != letra:
-        erros += [ "campo '%s' = \"%s\" deve comecar com %s" % (rotulo, val, letra) ]
+        erros += [ f"campo '{chave}' = \"{val}\" não é identificador válido: deve comecar com {letra}" ]
       if n != 10 or not re.match(r'^[A-Z]-[0-9]*$', val):
-        erros += [ "campo '%s' = \"%s\" tem formato inválido" % (rotulo, val) ]
+        erros += [ f"campo '{chave}' = \"{val}\" não é identificador válido: deve ser \"{letra}-\" e oito algarismos" ]
   return erros
 
-def nome_de_usuario(rotulo, val, nulo_ok):
-  erros = []
+def nome_de_usuario(chave, val, nulo_ok):
+  erros = [].copy()
   if val == None:
-    if not nulo_ok: erros += [ "campo '%s' não pode ser omitido" % rotulo, ]
+    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif type(val) is not str:
+    erros += [ f"campo '{chave}' = \"{str(val)}\" não é nome válido: deve ser string" ]
   else:
-    if type(val) is not str:
-      erros += [ "campo '%s' = \"%s\" deve ser string" % (rotulo, str(val)) ]
-    else:
-      n = len(val)
-      if n < 6:
-        erros += [ "campo '%s' (%d caracteres) muito curto" % (rotulo,n), ]
-      elif n > 60:
-        erros += [ "campo '%s' (%d caracteres) muito longo" % (rotulo,n), ]
-      padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
-      if not re.match(padrao, val):
-        erros += [ "campo '%s' não permite caracteres especiais nem números" % rotulo, ]
+    nmin = 6
+    nmax = 60
+    n = len(val)
+    if n < nmin:
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: é muito curto ({n} caracteres, mínimo {nmin})" ]
+    elif n > nmax:
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: é muito longo ({n} caracteres, máximo {nmax})" ]
+    padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
+    if not re.match(padrao, val):
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: tem caracteres não permitidos" ]
+    # !!! Verificar as demais regras !!!
   return erros
 
-def senha(rotulo, val ):
+def senha(chave, val, nulo_ok):
   # O padrão {re} para caracter ASCII visível é [!-~], e para
   # letra ou dígito é [A-Za-z0-9].
-  erros = []
+  erros = [].copy()
   if val == None:
-     erros += [ "campo '%s' não pode ser omitido" % rotulo, ]
+    if not nulo_ok:
+      erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif type(val) is not str:
+    erros += [ f"campo '{chave}' = \"{str(val)}\" não é senha válida: deve ser string" ]
   else:
-    if type(val) is not str:
-      erros += [ "campo '%s' = \"%s\" deve ser string" % (rotulo, str(val)) ]
-    else:
-      n = len(val)
-      if n < 8:
-        erros += ["campo '%s' não pode ter menos de 8  caracteres (%d caractes atualmente)  caracteres" % (rotulo, n)]
-      elif n > 16:
-        erros += ["campo '%s' não pode ter mais de 16 caracteres (%d caractes atualmente) caracteres" % (rotulo, n)]
-      if not re.search(r'[A-Z]', val):
-        erros += ["campo '%s' deve ter no mínimo 1 caracter maiúsculo" % rotulo,]
-      if not re.search(r'[a-z]', val):
-        erros += ["campo '%s' deve ter no mínimo 1 caracter minúsculo" % rotulo,]
-      if not re.search(r'\d', val):
-        erros += ["campo '%s' deve ter no mínimo 1 caracter numérico" % rotulo,]
-      if not re.search(r'[!@#%¨&*()_+{}|:"<>?]]', val):
-        erros += ["campo '%s' deve ter no mínimo 1 caracter especial" % rotulo,]
-    return erros
+    if not re.search(r'^[!-~]*$', val):
+      erros += [ f"campo '{chave}' não é senha válida: pode conter apenas caracters visíveis ASCII ([!-~])" ]
+    nmin = 8  # Comprimento mínimo.
+    nmax = 14 # Comprimento máximo.
+    n = len(val)
+    if n < nmin:
+      erros += [ f"campo '{chave}' não é senha válida: muito curto ({n} caracteres, mínimo {nmin})"]
+    elif n > nmax:
+      erros += [ f"campo '{chave}' não é senha válida: muito longo ({n} caracteres, máximo {nmax})"]
+    if not re.search(r'[A-Za-z]', val):
+      erros += [ f"campo '{chave}' não é senha válida: deve conter no mínimo uma letra" ]
+    if not re.search(r'[0-9]', val):
+      erros += [ f"campo '{chave}' não é senha válida: deve conter no mínimo um dígito" ]
+    if re.search(r'^[a-zA-Z0-9]*$', val):
+      erros += [ f"campo '{chave}' não é senha válida: não pode ser apenas letras e dígitos" ]
+  return erros
 
-def email(rotulo, val, nulo_ok):
-  erros = []
-  padrao_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+def email(chave, val, nulo_ok):
+  erros = [].copy()
   if val == None:
-    if not nulo_ok: erros += [ "campo '%s' não pode ser omitido" % rotulo, ]
+    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif type(val) is not str:
+    erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: deve ser string" ]
   else:
-    if type(val) is not str:
-      erros += [ "campo '%s' = \"%s\" deve ser string" % (rotulo, str(val)) ]
-    elif not re.match(padrao_email, val):
-      erros += ["campo '%s' deve conter um email válido. O email '%s' não é válido" % (rotulo, str(val))]
+    # !!! Corrigir conforme documentado na interface !!!
+    padrao_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(padrao_email, val):
+      erros += [ f"campo '{chave}' = '%s' não é um email válido" % ( str(val))]
   
   return erros
 
-def data_valida(data):
-    formatoISO = r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC$'
-    return re.match(formatoISO, data)
-
-def data(rotulo, val, nulo_ok):
-  erros = []
+def data(chave, val, nulo_ok):
+  erros = [].copy()
   if val == None:
-    if not nulo_ok: erros += [ "campo '%s' não pode ser omitido" % rotulo, ]
+    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif type(val) is not str:
+    erros += [ f"campo '{chave}' = \"{str(val)}\" deve ser uma string no formato ISO" ]
   else:
-    # verifica se é ISO
-    if not data_valida(val):
-      erros += [ "campo '%s' = \"%s\" deve ser uma string no formato ISO" % (rotulo, str(val)) ]
+    # Padrão geral do formato ISO UTC:
+    formatoISO = r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC$'
+    if not re.match(formatoISO, val):
+      erros += [ f"campo '{chave}' = \"{str(val)}\" deve ser uma string no formato ISO" ]
     else:
       ano = int(val[:4])
       mes = int(val[5:7])
@@ -104,35 +108,42 @@ def data(rotulo, val, nulo_ok):
       minuto = int(val[14:16])
       segundo = int(val[17:19])
       if not ano <= 2099 and ano >= 1900:
-        erros += ["campo '%s' = \"%s\" - O ano não pode ser menor que 1900 ou maior que 2099" % (rotulo, str(val))]
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o ano deve estar em 1900..2099"]
       elif not mes <= 12 and mes >= 1:
-        erros += ["campo '%s' = \"%s\" - O mês não pode ser menor que 1 ou maior que 12" % (rotulo, str(val))]
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o mês deve estar em 01..12"]
       elif not dia <= 31 and dia >= 1:
-        erros += ["campo '%s' = \"%s\" - O dia não pode ser menor que 1 ou maior que 31" % (rotulo, str(val))]
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o dia deve estar em 01..31"]
       elif not hora <= 23 and hora >= 0:
-        erros += ["campo '%s' = \"%s\" - A hora não pode ser menor que 0 ou maior que 23" % (rotulo, str(val))]
-      elif not minuto <= 59 and minuto >= 1:
-        erros += ["campo '%s' = \"%s\" - O minuto não pode ser menor que 1 ou maior que 59" % (rotulo, str(val))]
-      elif not segundo <= 60 and segundo >= 1:
-        erros += ["campo '%s' = \"%s\" - O segundo não pode ser menor que 1 ou maior que 60" % (rotulo, str(val))]
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: a hora deve estar em 00..23"]
+      elif not minuto <= 59 and minuto >= 0:
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o minuto deve estar em 00..59"]
+      elif not segundo <= 60 and segundo >= 0:
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o segundo deve estar em 00..60"]
   return erros
 
-def nome_de_arq_video(rotulo, val, nulo_ok):
-  erros = []
+def nome_de_arq_video(chave, val, nulo_ok):
+  erros = [].copy()
   if val is None and not nulo_ok:
-    erros += ["campo '%s' não pode ser omitido" % rotulo]
+    erros += [ f"campo '{chave}' não pode ser omitido" ]
   elif not isinstance(val, str):
-    erros += ["campo '%s' = \"%s\" deve ser string" % (rotulo, str(val))]
+    erros += [ f"campo '{chave}' = \"{str(val)}\" é nome de arquivo inválido: deve ser string"]
   else:
     if not val.endswith(".mp4"):
-      erros += ["campo '%s' deve ser o nome de um arquivo de video .mp4" % rotulo]
-
+      erros += [ f"campo '{chave}' = \"{val}\" é nome de arquivo inválido: deve ter extensão .mp4" ]
     nome_arq = val[:-4]
+    if not re.match("^[A-Za-z0-9_]*$", nome_arq):
+      erros += [ f"campo '{chave}' = \"{val}\" é nome de arquivo inválido: pode usar apenas apenas letras, dígitos, e underscores ASCII" ]
+    nmin = 4
+    nmax = 12
+    n = len(nome_arq)
+    if n < nmin:
+      erros += [ f"campo '{chave}' = \"{nome_arq}\" é nome de arquivo inválido: muito curto ({n} caracteres, mínimo {nmin})" ]
+    if n > nmax:
+      erros += [ f"campo '{chave}' = \"{nome_arq}\" é nome de arquivo inválido: muito longo ({n} caracteres, maximo {nmax})" ]
 
-    if nome_arq == "" or not val.endswith(".mp4"):
-      erros += ["campo '%s', cujo valor é '%s' deve ser o nome de um arquivo de video não vazio seguido da extensão .mp4"% (rotulo, val)]
+  return erros
 
-    if not re.match("^[A-Za-z0-9_-]*$", nome_arq):
-      erros += ["campo '%s' deve ser conter apenas apenas letras, dígitos, e underscores ASCII" % rotulo]
-
+def titulo_de_video(chave, val, nulo_ok):
+  erros = [].copy() 
+  # !!! Implementar conforme documentação na interface !!!
   return erros

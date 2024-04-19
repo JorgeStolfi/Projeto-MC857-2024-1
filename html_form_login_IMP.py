@@ -7,13 +7,13 @@ import html_elem_form
 def gera():
   linhas = [].copy()
   
-  ht_rotulo = html_elem_label.gera("E-mail", ": ")
-  ht_campo = html_elem_input.gera(None, "text", "email", None, None, True, "nome@provedor", None, False)
-  linhas.append((ht_rotulo, ht_campo,))
+  ht_rot_campo = html_elem_label.gera("E-mail", ": ")
+  ht_campo = html_elem_input.gera("text", "email", None, None, None, True, "nome@provedor", None, False)
+  linhas.append((ht_rot_campo, ht_campo,))
   
-  ht_rotulo = html_elem_label.gera("Senha", ": ")
-  ht_campo = html_elem_input.gera(None, "password", "senha", None, None, True, None, None, False)
-  linhas.append((ht_rotulo, ht_campo,))
+  ht_rot_campo = html_elem_label.gera("Senha", ": ")
+  ht_campo = html_elem_input.gera("password", "senha", None, None, None, True, None, None, False)
+  linhas.append((ht_rot_campo, ht_campo,))
 
   # Monta a tabela com os fragmentos HTML:
   ht_table = html_elem_table.gera(linhas, None)

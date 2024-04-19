@@ -1,96 +1,99 @@
-# Implementação do módulo {util_testes}.
 
 import sys
 import re
 import inspect
 import json
+from util_erros import ErroAtrib
 from bs4 import BeautifulSoup as bsoup  # Pretty-print of HTML
 
-def mostra_pilha(n):
-  """Para uso por {erro_prog} e {aviso_prog}. Mostra as {n} 
-  chamadas na pilha anteriores a essas funções."""
-  sys.stderr.write("  --- Traceback (most recent call last) %s\n" % ("-" * 40))
-  stack = inspect.stack()
-  omite_recentes = 2 # Omite as chamadas mais recentes ({mostra_pilha} e {aviso_prog}).
-  ini = omite_recentes + n # Indice da chamada mais antiga a mostrar.
-  fin = omite_recentes     # Indice da chamada mais antiga a omitir.
-  if ini >= len(stack): ini = len(stack) - 1;
-  for k in range(ini - fin):
-    fr = stack[ini - k]
-    sys.stderr.write("%s:%d: ** in %s\n" % (fr[1],fr[2],fr[3]))
-  sys.stderr.write("  %s\n" % ("-" * 70))
+def escreve_resultado_html(modulo, rot_teste, ht_res, frag, pretty):
+  nome_mod = modulo.__name__
 
-def erro_prog(mens):
-  mostra_pilha(20)
-  sys.stderr.write("    ** erro: %s\n" % mens)
-  assert False # Tem que ser, para que apareça o traceback
+  # Transforma o resultado numa página {pag}:
+  if frag or ht_res == None:
+    pag = gera_pagina_de_fragmentos(ht_res)
+  else:
+    assert type(ht_res) is str, ("{ht_res} = %s deveria ser string (página)" % str(ht_res))
+    pag = ht_res
+    
+  if pretty:
+    # Torna o HTML legível:
+    pag = bsoup(pag + "\n", "html.parser").prettify()
 
-def aviso_prog(mens, grave):
-  mostra_pilha(20)
-  tipo = ("** erro" if grave else "!! aviso")
-  sys.stderr.write("    %s %s\n" % (tipo,mens))
+  # Grava a página {pag} no arquivo:
+  prefixo = "testes/saida/"
+  nome_arq = nome_mod + "." + rot_teste
+  sys.stderr.write(f"  gravando arquivo {nome_arq} ...\n")
+  f = open(prefixo + nome_arq + '.html', 'w')
+  f.buffer.write(str(pag).encode('utf-8'))
+  f.close()
+
+def testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args):
+  nome_mod = modulo.__name__
+  nome_fn = funcao.__name__
+  func_rot = nome_fn + "." + rot_teste
+  sys.stderr.write("  " + "-"*70 + "\n")
+  try:
+    sys.stderr.write(f"  util_testes.testa_funcao_que_gera_html: testando {nome_mod}.{nome_fn}\n")
+    sys.stderr.write(f"  rot_teste = {rot_teste} args = {str(args)}\n")
+    ht_res = funcao(*args)
+    if len(str(ht_res)) <= 60: sys.stderr.write(f"  util_testes.testa_funcao_que_gera_html: resultado = {str(ht_res)}\n")
+    if not frag and (type(ht_res) is list or type(ht_res) is tuple):
+      # Deve ser um comando que retorna uma página e uma nova sessão:
+      assert len(ht_res) == 2 and type(ht_res[1]) is not str, "resultado inválido"
+      ht_res = ht_res[0]
+    escreve_resultado_html(modulo, func_rot, ht_res, frag, pretty)
+  except Exception as ex:
+    fr = inspect.stack()[2]
+    msg = ("File %s, line %d, in %s\n" % (fr[1], fr[2], str(fr[3])))
+    msg += ("** erro em %s(%s): %s\n" % (nome_fn, str(args), str(ex)))
+    sys.stderr.write(msg + "\n")
+    ht_res = str(msg)
+    escreve_resultado_html(modulo, func_rot, ht_res, True, pretty)
+    raise
+  sys.stderr.write("  " + "-"*70 + "\n")
+  sys.stderr.write("\n")
   return
 
-def mostra(ind,mens):
-  sys.stderr.write("%*s%s\n" % (ind,'',mens))
+def gera_pagina_de_fragmentos(ht_res):
+  """Gera uma página que mostra a lista de fragmentos HTML"""
+  if ht_res == None:
+    ht_titulo = "<h3>Resultado é {None}.</h3>\n"
+  elif type(ht_res) is list or type(ht_res) is tuple:
+    # Lista de elementos:
+    if len(ht_res) == 0:
+      ht_titulo = "<h3>Resultado é uma lista vazia.</h3>\n"
+    else:
+      ht_titulo = f"<h3>Resultado é uma lista de {len(ht_res)} elementos:</h3>\n"
+  else:
+    # Deve ser um único string:
+    assert type(ht_res) is str, "tipo de {ht_res} inválido"
+    ht_titulo = "<h3>Resultado é um string:</h3>\n"
+    ht_res = [ ht_res, ]
+  
+  if ht_res == None:
+    ht_cor_fundo = "#ff7733"
+    ht_res_formatado = ""
+  else:
+    ht_cor_fundo = "#cccccc"
+    ht_res_formatado = ""
+    for ht_el in ht_res:
+      assert type(ht_el) is str, "tipo de elemento inválido"
+      ht_res_formatado += "<br/><hr/>" + ht_el
+    ht_res_formatado += "<br/><hr/>"
 
-def escreve_resultado_html(modulo, rotulo, ht_res, frag, pretty):
-  prefixo = "testes/saida/"
-  nome_mod = modulo.__name__
-  nome_arq = nome_mod + "." + rotulo
-  f = open(prefixo + nome_arq + '.html', 'w')
-  # sys.stderr.buffer.write((str(*args) + "\n").encode('utf-8'))
-  cabe = \
+  ht_cabecalho = \
     "<!DOCTYPE HTML>\n" + \
     "<html>\n" + \
     "<head>\n" + \
     "<meta charset=\"UTF-8\"/>\n" + \
     "</head>\n" + \
     "<body style=\"background-color:#eeeeee; text-indent: 0px\">\n"
-  roda = \
+  ht_rodape = \
     "</body>\n" + \
     "</html>\n"  
-  if frag:
-    if type(ht_res) is list or type(ht_res) is tuple:
-      # Lista de elementos:
-      ht_contents = f"<h3>Lista de {len(ht_res)} elementos:</h3>\n"
-      for ht_el in ht_res:
-        assert type(ht_el) is str, "tipo de elemento inválido"
-        ht_contents += "<br/><hr/>" + ht_el
-      ht_contents += "<br/><hr/>"
-    else:
-      # Deve ser um único elemento:
-      assert type(ht_res) is str, "tipo de {ht_res} inválido"
-      ht_contents = ht_res
-    pag = cabe + ht_contents + roda
-  else:
-    assert type(ht_res) is str, ("tipo de {ht_res} inválido = %s" % str(ht_res))
-    pag = ht_res
-  if pretty:
-    pag = bsoup(pag + "\n", "html.parser").prettify()
-  f.buffer.write(str(pag).encode('utf-8'))
-  f.close()
-
-def testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args):
-  nome_fn = funcao.__name__
-  func_rot = nome_fn + "." + rotulo
-  try:
-    ht_res = funcao(*args)
-    if type(ht_res) is list or type(ht_res) is tuple:
-      # Alguns comandos retornam outras informações além de 
-      # uma página ou fragmento HTML.  Pegue só o primeiro
-      # resultado:
-      if len(ht_res) == 2 and not type(ht_res[1]) is str:
-        ht_res = ht_res[0]
-    escreve_resultado_html(modulo, func_rot, ht_res, frag, pretty)
-  except Exception as ex:
-    fr = inspect.stack()[2]
-    msg = ("File %s, line %d, in %s\n" % (fr[1], fr[2], str(fr[3])))
-    msg += ("** erro em testa(%s): %s\n" % (func_rot, str(ex)))
-    sys.stderr.write(msg + "\n")
-    ht_res = str(msg)
-    escreve_resultado_html(modulo, func_rot, ht_res, True, pretty)
-    raise
+  pag = ht_cabecalho + ht_titulo + ht_res_formatado + ht_rodape
+  return pag
 
 def formata_dict(dados):
   dados_lin = json.dumps(dados, indent='&nbsp;&nbsp;', sort_keys=True, separators=(',<br/>', ': '), ensure_ascii=False)
@@ -98,3 +101,17 @@ def formata_dict(dados):
   dados_lin = re.sub(r'\{', '{<br/>', dados_lin)
   dados_lin = re.sub(r'\},', '  \},', dados_lin)
   return dados_lin
+  
+def unico_elemento(lista):
+  if lista == None:
+    return None
+  elif type(lista) is list or type(lista) is tuple:
+    if len(lista) == 0:
+      return None
+    elif len(lista) == 1:
+      res = lista[0];
+      return res
+    else:
+      raise ErroAtrib([ f"argumento {str(lista)} tem mais de um elemento" ])
+  else:
+    raise ErroAtrib([ f"argumento {str(lista)} não é {None} ou lista" ])

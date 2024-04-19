@@ -1,184 +1,182 @@
-# Implementação do módulo {usuario} e da classe {obj_usuario.Classe}.
-
 import obj_raiz
 import obj_usuario
-import obj_sessao
 
-import db_tabela_generica
-import db_tabelas
+import db_obj_tabela
+import db_tabelas_do_sistema
 import db_conversao_sql
 import util_identificador
 import util_valida_campo
-from util_testes import ErroAtrib, erro_prog, mostra
+
+from util_erros import ErroAtrib, erro_prog, mostra
+
 import sys
 
-# VARIÁVEIS GLOBAIS DO MÓDULO
-
-nome_tb = "usuarios"
-  # Nome da tabela na base de dados.
-
-cache = {}.copy()
-  # Dicionário que mapeia identificadores para os objetos {obj_usuario.Classe} na memória.
-  # Todo objeto dessa classe que é criado é acrescentado a esse dicionário,
-  # a fim de garantir a unicidadde dos objetos.
-
-letra_tb = "U"
-  # Prefixo dos identificadores de usuários
-
-colunas = None
-  # Descrição das colunas da tabela na base de dados.
-  
-usr_debug = False
-  # Quando {True}, mostra comandos e resultados em {stderr}.
+# Uma instância de {db_obj_tabela} descrevendo a tabela de usuários:
+tabela = None
 
 # Definição interna da classe {obj_usuario.Classe}:
 
 class Classe_IMP(obj_raiz.Classe):
 
   def __init__(self, id, atrs):
-    global cache, nome_tb, letra_tb, colunas
     obj_raiz.Classe.__init__(self, id, atrs)
 
-# Implementação das funções:
+# Implementação das funções da interface:
 
 def inicializa_modulo(limpa):
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
+
+  # Só pode inicializar uma vez:
+  if tabela != None: return
+
+  nome_tb = "usuarios"        # Nome da tabela na base de dados.
+  letra_tb = "U"              # Prefixo dos identificadores de usuários
+  classe = obj_usuario.Classe # Classe dos objetos (linhas da tabela) na memória.
+
   # Descrição das colunas da tabela na base de dados:
-  # Vide parâmetro {cols} de {db_tabela_generica.cria_tabela}.
+  # Vide parâmetro {cols} de {db_obj_tabela.cria_tabela}.
   colunas = \
-    (
-      ( 'nome',          type("foo"), 'TEXT',    False ), # Nome completo.
+    ( ( 'nome',          type("foo"), 'TEXT',    False ), # Nome completo.
       ( 'senha',         type("foo"), 'TEXT',    False ), # Senha de login.
       ( 'email',         type("foo"), 'TEXT',    False ), # Endereço de email
       ( 'administrador', type(False), 'INTEGER', False ), # Define se o usuário é administrador (1=administrador)
     )
-  if limpa:
-    db_tabela_generica.limpa_tabela(nome_tb, colunas)
-  else:
-    db_tabela_generica.cria_tabela(nome_tb, colunas)
 
-def cria(atrs_mem):
-  global cache, nome_tb, letra_tb, colunas
-  if usr_debug: mostra(0,"obj_usuario_IMP.cria({str(atrs_mem)}) ...")
+  tabela = db_obj_tabela.cria_tabela(nome_tb, letra_tb, classe, colunas, limpa)
+  return
 
-  erros = valida_atributos(None, atrs_mem)
+def cria(atrs):
+  global tabela
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.cria}({str(atrs)})\n")
+
+  erros = valida_atributos(None, atrs)
   if len(erros) != 0: raise ErroAtrib(erros)
 
-  usr = obj_raiz.cria(atrs_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+  usr = obj_raiz.cria(atrs, tabela, def_obj_mem)
   assert type(usr) is obj_usuario.Classe
+  if tabela.debug: sys.stderr.write(f"  < {obj_usuario.cria}\n")
   return usr
 
 def muda_atributos(usr, mods_mem):
-  global cache, nome_tb, letra_tb, colunas
-  if usr_debug: sys.stderr.write("  > {obj_usuario.muda_atributos}:\n")
+  global tabela
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.muda_atributos} {str(mods_mem)}\n")
+  assert usr != None and isinstance(usr, obj_usuario.Classe)
   
   erros = valida_atributos(usr, mods_mem)
   if len(erros) != 0: raise ErroAtrib(erros)
   
-  if usr_debug: sys.stderr.write(f"    > usr antes = {str(usr)} mods_mem = {str(mods_mem)}\n")
-  obj_raiz.muda_atributos(usr, mods_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem)
-  if usr_debug: sys.stderr.write(f"    > usr depois = {str(usr)}\n")
+  if tabela.debug: sys.stderr.write(f"    usr antes = {str(usr)}\n")
+  obj_raiz.muda_atributos(usr, mods_mem, tabela, def_obj_mem)
+  if tabela.debug: sys.stderr.write(f"    usr depois = {str(usr)}\n")
+  
+  if tabela.debug: sys.stderr.write(f"  < {obj_usuario.muda_atributos}\n")
   return
 
 def obtem_identificador(usr):
-  global cache, nome_tb, letra_tb, colunas
-  assert usr != None
+  global tabela
+  assert usr != None and isinstance(usr, obj_usuario.Classe)
   return obj_raiz.obtem_identificador(usr)
 
 def obtem_atributos(usr):
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
+  assert usr != None and isinstance(usr, obj_usuario.Classe)
   return obj_raiz.obtem_atributos(usr)
 
 def obtem_atributo(usr, chave):
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
   return obj_raiz.obtem_atributo(usr,chave)
 
 def busca_por_identificador(id_usr):
-  global cache, nome_tb, letra_tb, colunas
-  usr = obj_raiz.busca_por_identificador(id_usr, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+  global tabela
+  usr = obj_raiz.busca_por_identificador(id_usr, tabela, def_obj_mem)
   assert usr == None or type(usr) is obj_usuario.Classe
   return usr
 
 def busca_por_email(em):
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
   unico = True
-  if usr_debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_email}: email = {em}\n");
-  id_usr = obj_raiz.busca_por_campo('email', em, unico, cache, nome_tb, letra_tb, colunas)
-  if usr_debug: sys.stderr.write(f"    > id encontrado = {id_usr}\n");
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_email}: email = {em}\n");
+  id_usr = obj_raiz.busca_por_campo('email', em, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > id encontrado = {id_usr}\n");
   return id_usr
 
 def busca_por_nome(nome):
-  global cache, nome_tb, letra_tb, colunas
-  if usr_debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_nome}: nome = {nome}\n");
-  lista_ids = obj_raiz.busca_por_semelhanca(nome_tb, letra_tb, ['nome'], [nome])
-  if usr_debug: sys.stderr.write(f"    > lista de ids encontrada = {lista_ids.join(',')}\n");
-  sys.stdout.write(",".join(lista_ids))
+  global tabela
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_nome}: nome = {nome}\n");
+  args = { 'nome': nome }
+  unico = False
+  lista_ids = obj_raiz.busca_por_semelhanca(args, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {','.join(lista_ids)}\n");
   return lista_ids
 
-def sessoes_abertas(usr):  
-  id_usr = obj_usuario.obtem_identificador(usr)
-  lista_ids_ses = obj_sessao.busca_por_usuario(id_usr) # IDs das sessões deste usuário.
-  lista_ses = map(lambda id: obj_sessao.busca_por_identificador(id), lista_ids_ses) # Pega objetos.
-  # Filtra apenas as Sessoes que estao abertas
-  lista_ses_abertas = list(filter(lambda ses: obj_sessao.aberta(ses), lista_ses))
-  return lista_ses_abertas
+def busca_por_campos(args, unico):
+  global tabela
+  return obj_raiz.busca_por_campos(args, unico, tabela)
   
+def busca_por_semelhanca(args, unico):
+  global tabela
+  return obj_raiz.busca_por_semelhanca(args, unico, tabela)
+  
+def ultimo_identificador():
+  global tabela
+  return obj_raiz.ultimo_identificador(tabela)
+
 def cria_testes(verb):
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
   inicializa_modulo(True)
   lista_atrs = \
     [ 
       { # U-00000001
         'nome': "José Primeiro", 
-        'senha': "11111111", 
+        'senha': "U-00000001", 
         'email': "primeiro@gmail.com",
         'administrador': True,
       },
       { # U-00000002
         'nome': "João Segundo", 
-        'senha': "22222222", 
+        'senha': "U-00000002", 
         'email': "segundo@gmail.com",
         'administrador' : False,
       },
       { # U-00000003
         'nome': "Juca Terceiro", 
-        'senha': "33333333", 
+        'senha': "U-00000003", 
         'email': "terceiro@gmail.com",
         'administrador' : False,
       },
       { # U-00000004
         'nome': "Jurandir Quarto", 
-        'senha': "44444444", 
+        'senha': "U-00000004", 
         'email': "quarto@gmail.com",
         'administrador' : False,
       },
       { # U-00000005
         'nome': "Josenildo Quinto", 
-        'senha': "55555555", 
+        'senha': "U-00000005", 
         'email': "quinto@ic.unicamp.br",
         'administrador' : False,
       },
       { # U-00000006
         'nome': "Julio Sexto", 
-        'senha': "66666666", 
+        'senha': "U-00000006", 
         'email': "sexto@ic.unicamp.br",
         'administrador' : False,
       },
       { # U-00000007
         'nome': "Jeferson Setimo", 
-        'senha': "77777777", 
+        'senha': "U-00000007", 
         'email': "setimo@ic.unicamp.br",
         'administrador' : False,
       },
       { # U-00000008
         'nome': "Joaquim Oitavo", 
-        'senha': "88888888", 
+        'senha': "U-00000008", 
         'email': "oitavo@ic.unicamp.br",
         'administrador' : True,
       },
       { # U-00000009
         'nome': "Jonas Nono", 
-        'senha': "99999999", 
+        'senha': "U-00000009", 
         'email': "nono@ic.unicamp.br",
         'administrador' : False,
       },
@@ -208,41 +206,41 @@ def confere_e_elimina_conf_senha(args):
   return
 
 def verifica_criacao(usr, id_usr, atrs):
-  return obj_raiz.verifica_criacao(usr, obj_usuario.Classe, id_usr, atrs, None, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+  return obj_raiz.verifica_criacao(usr, obj_usuario.Classe, id_usr, atrs, None, tabela, def_obj_mem)
 
 def liga_diagnosticos(val):
-  global usr_debug
-  usr_debug = val
+  global tabela
+  tabela.debug = val
   return
 
 # FUNÇÕES INTERNAS
 
-def valida_atributos(usr, atrs_mem):
-  """Faz validações específicas nos atributos {atrs_mem}. Devolve uma lista 
+def valida_atributos(usr, atrs):
+  """Faz validações específicas nos atributos {atrs}. Devolve uma lista 
   de strings com descrições dos erros encontrados.
   
   Se {usr} é {None}, supõe que um novo usuário está sendo criado. Se {usr}
   não é {None}, deve ser um objeto de tipo {obj_usuario.Classe},
-  e supõe que {atrs_mem} sao alterações a aplicar nesse
+  e supõe que {atrs} sao alterações a aplicar nesse
   usuário. 
   
   Em qualquer caso, não pode haver na base nenhum usuário
   com mesmo email."""
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
   
   erros = [].copy();
   
   # Validade dos campos fornecidos:
-  if 'nome' in atrs_mem:
-    erros += util_valida_campo.nome_de_usuario('nome', atrs_mem['nome'], False)
-  if 'email' in atrs_mem:
-    erros += util_valida_campo.email('Email', atrs_mem['email'], False)
-  if 'administrador' in atrs_mem:
-    erros += util_valida_campo.booleano('Administrador', atrs_mem['administrador'], False)
+  if 'nome' in atrs:
+    erros += util_valida_campo.nome_de_usuario('nome', atrs['nome'], False)
+  if 'email' in atrs:
+    erros += util_valida_campo.email('Email', atrs['email'], False)
+  if 'administrador' in atrs:
+    erros += util_valida_campo.booleano('Administrador', atrs['administrador'], False)
      
   # Pega a senha, se tiver:
-  if 'senha' in atrs_mem:
-    senha = atrs_mem['senha']
+  if 'senha' in atrs:
+    senha = atrs['senha']
     if senha == '': senha = None
   else:
     senha = None
@@ -251,25 +249,25 @@ def valida_atributos(usr, atrs_mem):
   erros += util_valida_campo.senha('Senha', senha, (usr != None))
 
   # Acrescenta 'administrador' se não está presente, converte para booleano se está:
-  if 'administrador' not in atrs_mem:
-    atrs_mem['administrador'] = False
-  elif type(atrs_mem['administrador']) is not bool:
-    atrs_mem['administrador'] = True
+  if 'administrador' not in atrs:
+    atrs['administrador'] = False
+  elif type(atrs['administrador']) is not bool:
+    atrs['administrador'] = True
       
   # Verifica completude:
-  nargs = 0 # Número de campos em {atrs_mem} reconhecidos.
-  for chave, tipo_mem, tipo_sql, nulo_ok in colunas:
-    if chave in atrs_mem:
+  nargs = 0 # Número de campos em {atrs} reconhecidos.
+  for chave, tipo_mem, tipo_sql, nulo_ok in tabela.colunas:
+    if chave in atrs:
       nargs += 1
     elif usr == None:
       erros.append("campo '" + chave + "' é obrigatório")
 
-  if nargs < len(atrs_mem):
+  if nargs < len(atrs):
     # Não deveria ocorrer:
-    erro_prog("campos espúrios em {atrs_mem} = " + str(atrs_mem) + "")
+    erro_prog("campos espúrios em {atrs} = " + str(atrs) + "")
     
   # Verifica unicidade de email:
-  erro_email_dup = verifica_email_em_uso(atrs_mem['email'], usr) if 'email' in atrs_mem else None
+  erro_email_dup = verifica_email_em_uso(atrs['email'], usr) if 'email' in atrs else None
   if erro_email_dup != None: erros.append(erro_email_dup)
 
   return erros
@@ -283,16 +281,16 @@ def verifica_email_em_uso(em, usr_dado):
   Em caso de erro devolve uma mensagem informando a 
   repetição. Senão, retorna {None}."""
   id_usr_dado = usr_dado.id if usr_dado != None else None
-  if usr_debug: sys.stderr.write(f"  > {obj_usuario.verifica_email_em_uso}: email = '{em}' id_usr_dado = '{str(id_usr_dado)}'\n")
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.verifica_email_em_uso}: email = '{em}' id_usr_dado = '{str(id_usr_dado)}'\n")
   id_usr_atual = busca_por_email(em)
-  if usr_debug: sys.stderr.write(f"    > id_usr_atual = '{str(id_usr_atual)}'\n")
+  if tabela.debug: sys.stderr.write(f"    > id_usr_atual = '{str(id_usr_atual)}'\n")
   if id_usr_dado == None and id_usr_atual != None:
     erro = "usuário com 'email' = '" + em + "' já existe: " + id_usr_atual
   elif id_usr_dado != None and id_usr_atual != None and id_usr_atual != id_usr_dado:
     erro = "usuário com 'email' = '" + em + "' não encontrado, devia ser " + id_usr_dado
   else:
     erro = None
-  if usr_debug: sys.stderr.write(f"    > resultado = '{erro}'\n")
+  if tabela.debug: sys.stderr.write(f"    > resultado = '{erro}'\n")
   return erro
 
 def def_obj_mem(usr, id_usr, atrs_SQL):
@@ -306,14 +304,14 @@ def def_obj_mem(usr, id_usr, atrs_SQL):
 
   Em qualquer caso, os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
-  global cache, nome_tb, letra_tb, colunas
-  if usr_debug: mostra(0,"obj_usuario_IMP.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
+  global tabela
+  if tabela.debug: mostra(0,"obj_usuario_IMP.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
   if usr == None:
     usr = cria_obj_mem(id_usr, atrs_SQL)
   else:
     assert usr.id == id_usr
     modifica_obj_mem(usr, atrs_SQL)
-  if usr_debug: mostra(2,"usr = " + str(usr))
+  if tabela.debug: mostra(2,"usr = " + str(usr))
   return usr
     
 def cria_obj_mem(id_usr, atrs_SQL):
@@ -324,14 +322,14 @@ def cria_obj_mem(id_usr, atrs_SQL):
   Os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
   
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
 
   # Converte atributos para formato na memória.  Todos devem estar presentes:
-  atrs_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, False, db_tabelas.identificador_para_objeto)
-  if usr_debug: mostra(2,"criando objeto, atrs_mem = " + str(atrs_mem))
+  atrs_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, tabela.colunas, False, db_tabelas_do_sistema.identificador_para_objeto)
+  if tabela.debug: mostra(2,"criando objeto, atrs_mem = " + str(atrs_mem))
   assert type(atrs_mem) is dict
-  if len(atrs_mem) != len(colunas):
-    erro_prog("numero de atributos = " + str(len(atrs_mem)) + " devia ser " + str(len(colunas)))
+  if len(atrs_mem) != len(tabela.colunas):
+    erro_prog("numero de atributos = " + str(len(atrs_mem)) + " devia ser " + str(len(tabela.colunas)))
     
   # Paranóia: verifica de novo a unicidade do email:
   erro_email_dup = verifica_email_em_uso(atrs_mem['email'], None) if 'email' in atrs_mem else None
@@ -347,13 +345,13 @@ def modifica_obj_mem(usr, atrs_mod_SQL):
 
   Os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
 
   # Converte atributos para formato na memória. Pode ser subconjunto:
-  atrs_mod_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_mod_SQL, colunas, True, db_tabelas.identificador_para_objeto)
-  if usr_debug: mostra(2,"modificando objeto, atrs_mod_mem = " + str(atrs_mod_mem))
+  atrs_mod_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_mod_SQL, tabela.colunas, True, db_tabelas_do_sistema.identificador_para_objeto)
+  if tabela.debug: mostra(2,"modificando objeto, atrs_mod_mem = " + str(atrs_mod_mem))
   assert type(atrs_mod_mem) is dict
-  if len(atrs_mod_mem) > len(colunas):
+  if len(atrs_mod_mem) > len(tabela.colunas):
     erro_prog("numero de atributos a alterar = " + str(len(atrs_mod_mem)) + " excessivo")
 
   # Paranóia: verifica de novo a unicidade de email:

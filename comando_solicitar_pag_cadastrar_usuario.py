@@ -1,21 +1,26 @@
 import comando_solicitar_pag_cadastrar_usuario_IMP
 
 def processa(ses, cmd_args):
-  """Esta função é chamada quando o usuário aperta o botão "Cadastrar"
-  no menu geral de uma página qualquer.
+  """Esta função é chamada quando o servidor do site recebe um comando HTTP
+  "solicitar_pag_cadastrar_usuario".  Tipicamnte esse comando é emitido pelo
+  browser do usuário quando o este aperta o botão "Cadastrar"
+  no menu geral de uma página qualquer. Devolve uma página que permite
+  especificar os dados do novo usuário.
   
   A função retorna uma página HTML {pag} contendo o formulário para definir um
   os atributos do novo usuário, e um botão de sumbissão "Cadastrar".
   
-  O dicionário de argumentos {cmd_args} é irrelevantes e pode ser {None}.
+  O parãmetro {ses} é a sessão de login corrente, que emitiu o comando.
+  Pode ser {None}, indicando que o usuário que pediu não estava logado.
+  Se não for {None}, deve ser um objeto de tipo {obj_sessao.Classe}, e deve estar
+  aberta.
   
-  A sessão corrente {ses} pode ser {None}; se não for, deve estar
-  aberta. Se {ses} não for {None} e o dono dela for um administrador do
-  site, a página retornada terá a opção de tornar o novo usuário um
-  administrador, também.
+  O parâmetro {cmd_args} deve ser dicionário com os argumentos do comando 
+  de argumentos. Atualmente deve ser vazio.
   
-  Se a sessão corrente {ses} for {None}, ou o dono dela não for um administrador,
-  a página retornada não terá essa opção e só permitirá criar outro usuário
-  comum (não administrador)."""
+  Normalmente o resultado é uma página criada por {html_pag_cadastrar_usuario.gera}.
+  Essa página contém um formulário onde o usuário corrente pode preencher os dados
+  do novo usuário. A página também inclui um botão "Cadastrar" que 
+  emite o comando "cadastrar_usuario"."""
   return comando_solicitar_pag_cadastrar_usuario_IMP.processa(ses, cmd_args)
 

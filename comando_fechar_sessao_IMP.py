@@ -6,12 +6,12 @@ import html_pag_principal
 import obj_sessao
 
 def processa(ses, cmd_args):
-  if ses == None or not obj_sessao.aberta(ses) or not obj_sessao.eh_administrador(ses):
+  if ses == None or not obj_sessao.aberta(ses) or not obj_sessao.de_administrador(ses):
     # Isto nunca deveria acontecer, mas em todo caso:
     pag = html_pag_mensagem_de_erro.gera(ses, "Precisa entrar como administrador antes de fechar a sessão de outro usuário")
   else:
     # Busca sessão mandada nos argumentos da url e a fecha
-    ses_a_fechar = obj_sessao.busca_por_identificador(cmd_args['id_ses'])
+    ses_a_fechar = obj_sessao.busca_por_identificador(cmd_args['sessao'])
     obj_sessao.fecha(ses_a_fechar)
     
     if ses == ses_a_fechar:

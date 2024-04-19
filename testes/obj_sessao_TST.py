@@ -1,13 +1,13 @@
 #! /usr/bin/python3
 
-import os,sys,inspect
-import db_base_sql 
-import db_tabela_generica
-import db_tabelas
 import obj_sessao
+
+import db_base_sql 
 import obj_usuario
 import util_testes
-from util_testes import erro_prog, mostra, aviso_prog
+from util_erros import erro_prog, mostra, aviso_prog
+
+import sys
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -31,13 +31,13 @@ usr2 = obj_usuario.busca_por_identificador("U-00000002")
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_sessao(rotulo, ses, ident, usr, aberta, cookie):
+def verifica_sessao(rot_teste, ses, ident, usr, aberta, cookie):
   """Testes básicos de consistência do objeto {ses} da classe {obj_sessao.Classe}, dados
   {ident} e {atrs} esperados."""
   global ok_global
 
   sys.stderr.write("  %s\n" % ("-" * 70))
-  sys.stderr.write("  verificando sessão %s\n" % rotulo)
+  sys.stderr.write("  verificando sessão %s\n" % rot_teste)
   atrs = { 'usr': usr, 'aberta': aberta, 'cookie': cookie }
   ok = obj_sessao.verifica_criacao(ses, ident, atrs)
   
@@ -97,4 +97,4 @@ verifica_sessao("fecha s1", s1, sident1, usr1, False, scook1)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("Teste falhou")
+  aviso_prog("Algum teste falhou", True)

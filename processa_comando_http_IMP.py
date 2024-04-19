@@ -4,27 +4,44 @@
 import obj_sessao
 import obj_usuario
 
+import comando_ver_sessao
 import comando_solicitar_pag_login
-import comando_solicitar_pag_cadastrar_usuario
-import comando_solicitar_pag_alterar_usuario
-import comando_solicitar_pag_buscar_usuarios
-
-import comando_solicitar_pag_buscar_videos
-
-import comando_buscar_usuarios
-import comando_fazer_login
 import comando_fazer_login
 import comando_fazer_logout
 import comando_fechar_sessao
+import comando_solicitar_pag_buscar_sessoes
+import comando_buscar_sessoes
+import comando_buscar_sessoes_de_usuario
+
+import comando_ver_usuario
+import comando_solicitar_pag_cadastrar_usuario
 import comando_cadastrar_usuario
+import comando_solicitar_pag_alterar_usuario
 import comando_alterar_usuario
-import comando_ver_objeto
-import comando_ver_sessoes
-import comando_ver_sessao
+import comando_solicitar_pag_buscar_usuarios
+import comando_buscar_usuarios
+
 import comando_ver_video
-import comando_ver_comentarios_de_video
-import comando_ver_comentarios_de_usuario
-import comando_ver_videos_de_usuario
+import comando_solicitar_pag_upload_video
+import comando_fazer_upload_video
+import comando_solicitar_pag_alterar_video
+import comando_alterar_video
+import comando_solicitar_pag_buscar_videos
+import comando_buscar_videos
+import comando_buscar_videos_de_usuario
+
+import comando_ver_comentario
+import comando_solicitar_pag_postar_comentario
+import comando_postar_comentario
+import comando_solicitar_pag_alterar_comentario
+import comando_alterar_comentario
+import comando_solicitar_pag_buscar_comentarios
+import comando_buscar_comentarios
+import comando_buscar_comentarios_de_video
+import comando_buscar_comentarios_de_usuario
+import comando_buscar_respostas_de_comentario
+
+import comando_ver_objeto
 
 import html_elem_span
 import html_elem_div
@@ -32,7 +49,7 @@ import html_pag_principal
 import html_pag_mensagem_de_erro
 
 import util_testes
-from util_testes import erro_prog, mostra, aviso_prog
+from util_erros import erro_prog, mostra, aviso_prog
 
 # Outras interfaces usadas por este módulo:
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -215,6 +232,7 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
         item_list = formulario.getlist(chave)
         # Enumera os campos com esse nome:
         for val in item_list:
+          sys.stderr.write(f"@#@ chave = '{chave}' val = {str(val)[:64]}\n")
           # Armazena no dicionário:
           if chave in ffs:
             erro_prog("o formulário tem mais de um campo com nome '" + chave + "'")
@@ -229,8 +247,8 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
       # Não temos cookies?
       return None
     cookies = dados['cookies']
-    if 'id_ses' in cookies:
-      id_ses = cookies['id_ses']
+    if 'sessao' in cookies:
+      id_ses = cookies['sessao']
       ses = obj_sessao.busca_por_identificador(id_ses)
     else:
       ses = None
@@ -276,8 +294,8 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
       cookie = ""
       usr = None
       id_usr = ""
-    self.send_header('Set-Cookie', 'id_usr=' + id_usr)
-    self.send_header('Set-Cookie', 'id_ses=' + id_ses)
+    self.send_header('Set-Cookie', 'usuario=' + id_usr)
+    self.send_header('Set-Cookie', 'sessao=' + id_ses)
     self.send_header('Set-Cookie', 'cookie_sessao=' + cookie)
 
     self.end_headers()
@@ -365,6 +383,10 @@ def processa_comando(tipo, ses, dados):
 
     # --- comandos referentes a {obj_usuario.Classe} ------------------------
 
+    elif cmd == '/ver_usuario':
+      # Quer ver dados de algum usuário:
+      pag = comando_ver_usuario.processa(ses, cmd_args)
+
     elif cmd == '/solicitar_pag_cadastrar_usuario':
       # Quer formumlário para cadastrar novo usuário:
       pag = comando_solicitar_pag_cadastrar_usuario.processa(ses, cmd_args)
@@ -382,7 +404,7 @@ def processa_comando(tipo, ses, dados):
       pag = comando_alterar_usuario.processa(ses, cmd_args)
 
     elif cmd == '/solicitar_pag_buscar_usuarios':
-      # Quer formumlário para cadastrar novo usuário:
+      # Quer formumlário para buscar usuários por campos variados:
       pag = comando_solicitar_pag_buscar_usuarios.processa(ses, cmd_args)
 
     elif cmd == '/buscar_usuarios':
@@ -390,6 +412,9 @@ def processa_comando(tipo, ses, dados):
       pag = comando_buscar_usuarios.processa(ses, cmd_args)
 
     # --- comandos referentes a {obj_sessao.Classe} -----------------------
+
+    elif cmd == '/ver_sessao':
+      pag = comando_ver_sessao.processa(ses, cmd_args)
 
     elif cmd == '/solicitar_pag_login':
       # Qer formulário para fazer "login":
@@ -410,48 +435,93 @@ def processa_comando(tipo, ses, dados):
       # Quer encerrar uma sessão dada:
       pag = comando_fechar_sessao.processa(ses, cmd_args)
 
-    elif cmd == '/ver_sessoes':
-      # Quer ver sessões:
-      pag = comando_ver_sessoes.processa(ses, cmd_args)
+    elif cmd == '/buscar_sessoes_de_usuario':
+      # Lista as sessões de determinado usuário:
+      pag = comando_buscar_sessoes_de_usuario.processa(ses, cmd_args)
 
-    elif cmd == '/ver_sessao':
-      pag = comando_ver_sessao.processa(ses, cmd_args)
+    elif cmd == '/solicitar_pag_buscar_sessoes':
+      # Quer formumlário para buscar sessões por campos variados:
+      pag = comando_solicitar_pag_buscar_sessoes.processa(ses, cmd_args)
+
+    elif cmd == '/buscar_sessoes':
+      # Efetua a busca de sessões por atributos variados:
+      pag = comando_buscar_sessoes.processa(ses, cmd_args)
 
     # --- comandos referentes a {obj_video.Classe} -----------------------
+      
+    elif cmd == '/ver_video':
+      # Página que mostra um detetrminado vídeo:
+      pag = comando_ver_video.processa(ses, cmd_args)
+
+    elif cmd == '/solicitar_pag_upload_video':
+      # Quer formulário para fazer upload de um video:
+      pag = comando_solicitar_pag_upload_video.processa(ses, cmd_args)
 
     elif cmd == '/fazer_upload_video':
       # Preencheu o formulário de upload de video e quer fazer o upload:
       pag = comando_fazer_upload_video.processa(ses, cmd_args)
 
-    elif cmd == '/solicitar_pag_upload_video':
-      # Quer formumlário para fazer upload de um video:
-      pag = comando_solicitar_pag_upload_video(ses, cmd_args)
-      
-    elif cmd == '/ver_video':
-      # Página que mostra um detetrminado vídeo:
-      pag = comando_ver_video.processa(ses, cmd_args)
-      
-    elif cmd == '/ver_videos_de_usuario':
-      # Solicita página com lista de vídeos de algum usuário:
-      pag = comando_ver_videos_de_usuario.processa(ses, cmd_args)
+    elif cmd == '/solicitar_pag_alterar_video':
+      # Quer formulário para alterar atributos de um video:
+      pag = comando_solicitar_pag_alterar_video(ses, cmd_args)
+
+    elif cmd == '/alterar_video':
+      # Preencheu formulário e quer efetuar as alterações:
+      pag = comando_alterar_video.processa(ses, cmd_args)
       
     elif cmd == '/solicitar_pag_buscar_videos':
-      # Quer formumlário para cadastrar novo usuário:
+      # Quer formumlário para buscar vídeos por campos variados:
       pag = comando_solicitar_pag_buscar_videos.processa(ses, cmd_args)
     
     elif cmd == '/buscar_videos':
-      # Busca de vídeos com certos atributos:
+      # Preencheu parâmetros e quer executar a busca:
       pag = comando_buscar_videos.processa(ses, cmd_args)
+      
+    elif cmd == '/buscar_videos_de_usuario':
+      # Quer lista dos vídeos de algum usuário:
+      pag = comando_buscar_videos_de_usuario.processa(ses, cmd_args)
 
     # --- comandos referentes a {obj_comentario.Classe} -----------------------
       
-    elif cmd == '/ver_comentarios_de_video':
-      # Solicita página com lista de comentários de algum video ou usuário:
-      pag = comando_ver_comentarios_de_video.processa(ses, cmd_args)
+    elif cmd == '/ver_comentario':
+      # Página que mostra um determinado comentário:
+      pag = comando_ver_comentario.processa(ses, cmd_args)
       
-    elif cmd == '/ver_comentarios_de_usuario':
-      # Solicita página com lista de comentários de algum video ou usuário:
-      pag = comando_ver_comentarios_de_usuario.processa(ses, cmd_args)
+    elif cmd == '/solicitar_pag_postar_comentario':
+      # Quer formumlário para postar um comentário a um vídeo ou resposta:
+      pag = comando_solicitar_pag_postar_comentario.processa(ses, cmd_args)
+      
+    elif cmd == '/postar_comentario':
+      # Acrescenta o comentário com o texto preenchido:
+      pag = comando_postar_comentario.processa(ses, cmd_args)
+      
+    elif cmd == '/solicitar_pag_alterar_comentario':
+      # Quer forumlário para editar um comentário existente:
+      pag = comando_solicitar_pag_alterar_comentario.processa(ses, cmd_args)
+      
+    elif cmd == '/alterar_comentario':
+      # Efetua alterações especificadas num comentário:
+      pag = comando_alterar_comentario.processa(ses, cmd_args)
+      
+    elif cmd == '/solicitar_pag_buscar_comentarios':
+      # Quer formumlário para buscar comentarios por campos variados:
+      pag = comando_solicitar_pag_buscar_comentarios.processa(ses, cmd_args)
+      
+    elif cmd == '/buscar_comentarios':
+      # Busca de comentáriso com certos atributos:
+      pag = comando_buscar_comentarios.processa(ses, cmd_args)
+      
+    elif cmd == '/buscar_comentarios_de_usuario':
+      # Quer lista de comentários de algum usuário:
+      pag = comando_buscar_comentarios_de_usuario.processa(ses, cmd_args)
+      
+    elif cmd == '/buscar_comentarios_de_video':
+      # Quer lista de comentários de algum video:
+      pag = comando_buscar_comentarios_de_video.processa(ses, cmd_args)
+      
+    elif cmd == '/buscar_respostas_de_comentario':
+      # Quer lista de comentários que são respostas de algum comentário:
+      pag = comando_buscar_respostas_de_comentario.processa(ses, cmd_args)
 
     # --- outros comandos -----------------------
 
@@ -469,15 +539,20 @@ def processa_comando(tipo, ses, dados):
     cmd_args = {}.copy()
     pag =  html_pag_mensagem_de_erro.gera(ses, ("** comando \"%s\" não implementado" % tipo))
 
+  if pag == None:
+    pag = html_pag_mensagem_de_erro.gera(ses, [ "Resultado do comando foi {None}" ])
+  elif re.match(r"^ *[!*][!*]", pag) != None:
+    # Parece mais mensagem de erro que página
+    pag = html_pag_mensagem_de_erro.gera(ses, [ "Resultado do comando foi:", pag ])
+  
   sys.stderr.write("    pag resultado = %s\n" % pag)
 
   if mostra_cmd:
-    # Acrescenta os dados para depuração:
+    # Acrescenta os dados do comando para depuração:
     ht_cmd = formata_dados_http(cmd,cmd_args,dados)
     sys.stderr.write(f"{'~'*70}\n{ht_cmd}\n{'~'*70}\n")
-    # Must use {re.compile} first to avoid 'bad escape' error.
-    re_cmp = re.compile(r'</body>') 
-    pag = re_cmp.sub(("<br/>%s<br/><br/></body>" % ht_cmd), pag)
+    ebdix = pag.find('</body>')
+    pag = pag[:ebdix] + "<br/>" + ht_cmd + "<br/><br/></body>" 
 
   return pag, ses_nova
 

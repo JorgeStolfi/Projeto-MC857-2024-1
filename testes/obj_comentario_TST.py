@@ -1,14 +1,14 @@
 #! /usr/bin/python3
 
-import os,sys,inspect
+import obj_comentario
+
 import db_base_sql 
-import db_tabela_generica
-import db_tabelas
 import obj_usuario
 import obj_video
-import obj_comentario
 import util_testes
-from util_testes import erro_prog, mostra, aviso_prog
+from util_erros import erro_prog, mostra, aviso_prog
+
+import sys
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -50,13 +50,13 @@ usr3 = obj_usuario.busca_por_identificador("U-00000003")
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_comentario(rotulo, com, ident, atrs):
+def verifica_comentario(rot_teste, com, ident, atrs):
   """Testes básicos de consistência do objeto {com} da classe {obj_comentario.Classe}, dados
   {ident} e os atributos {atrs} esperados."""
   global ok_global
 
   sys.stderr.write("  %s\n" % ("-" * 70))
-  sys.stderr.write("  teste %s, comentário %s\n" % (rotulo, ident))
+  sys.stderr.write("  teste %s, comentário %s\n" % (rot_teste, ident))
   ok = obj_comentario.verifica_criacao(com, ident, atrs)
   
   if com == None:
@@ -99,7 +99,7 @@ def verifica_comentario(rotulo, com, ident, atrs):
   sys.stderr.write("  %s\n" % ("-" * 70))
   return
 
-def verifica_busca_multipla(rotulo, chave, val, idents):
+def verifica_busca_multipla(rot_teste, chave, val, idents):
   """Testes de consistência das funções de busca que devolvem listas de identificadores, dados
   a chave de busca {chave}, o valor de busca {val}, e a lista de identificadores {idents} esperados."""
   sys.stderr.write("  testando {obj_comentario.busca_por_%s(\"%s\")}:\n" % (chave, val))
@@ -176,4 +176,4 @@ verifica_busca_multipla("bu3", 'autor', id_usr_bu3, ( ))
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("Teste falhou")
+  aviso_prog("Algum teste falhou", True)

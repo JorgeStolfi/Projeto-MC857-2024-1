@@ -1,10 +1,12 @@
 #! /usr/bin/python3
+
 import obj_usuario  
-import db_tabela_generica
+
 import db_base_sql
 import util_testes
+from util_erros import erro_prog, aviso_prog, mostra
+
 import sys
-from util_testes import erro_prog, aviso_prog, mostra
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -19,13 +21,13 @@ obj_usuario.inicializa_modulo(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_usuario(rotulo, usr, ident, atrs):
+def verifica_usuario(rot_teste, usr, ident, atrs):
   """Testes básicos de consistência do objeto {usr} da classe {obj_usuario.Classe}, dados 
   {ident} e {atrs} esperados."""
   global ok_global
 
   sys.stderr.write("  %s\n" % ("-" * 70))
-  sys.stderr.write("  verificando usuário %s\n" % rotulo)
+  sys.stderr.write("  verificando usuário %s\n" % rot_teste)
   ok = obj_usuario.verifica_criacao(usr, ident, atrs)
 
   if usr != None and type(usr) is obj_usuario.Classe:   
@@ -44,17 +46,17 @@ def verifica_usuario(rotulo, usr, ident, atrs):
   sys.stderr.write(  "%s\n" % ("-" * 70))
   return
  
-def testa_cria_usuario(rotulo, ident, atrs):
+def testa_cria_usuario(rot_teste, ident, atrs):
   """Testa criação de usuário com atributos com {atrs}. Retorna o usuário."""
   usr = obj_usuario.cria(atrs)
-  verifica_usuario(rotulo, usr, ident, atrs)
+  verifica_usuario(rot_teste, usr, ident, atrs)
   return usr
  
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_usuario.cria}:\n")
 usr1_atrs = {
   'nome': "José Primeiro", 
-  'senha': "11111111", 
+  'senha': "U!00000001", 
   'email': "primeiro@gmail.com",
   'administrador': False
 }
@@ -64,7 +66,7 @@ usr1 = testa_cria_usuario("usr1", uident1, usr1_atrs)
 
 usr2_atrs = {
   'nome': "João Segundo", 
-  'senha': "22222222", 
+  'senha': "U!00000002", 
   'email': "segundo@ic.unicamp.br",
   'administrador': False
 }
@@ -78,7 +80,7 @@ sys.stderr.write("  testando {obj_usuario.muda_atributos}:\n")
 # Alteração OK
 usr1_mods = {
   'nome': "Josegrosso de Souza",
-  'senha': "10101010"
+  'senha': "U!12345678"
 }
 obj_usuario.muda_atributos(usr1, usr1_mods)
 usr1_d_atrs = usr1_atrs
@@ -95,7 +97,7 @@ if type(usr2) is obj_usuario.Classe:
 if type(usr2) is obj_usuario.Classe:
   usr2_m_atrs = usr2_atrs.copy()
   usr2_m_atrs['nome'] = 'Mutatis Mutande'
-  usr2_m_atrs['senha'] = '10101010'
+  usr2_m_atrs['senha'] = 'U!87654321'
   obj_usuario.muda_atributos(usr2, usr2_m_atrs)
   verifica_usuario("usr2_m", usr2, uident2, usr2_m_atrs)
 
@@ -105,4 +107,4 @@ if type(usr2) is obj_usuario.Classe:
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("Teste falhou")
+  aviso_prog("Algum teste falhou", True)

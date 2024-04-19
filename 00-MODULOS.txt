@@ -1,108 +1,147 @@
 # Módulos em ordem de teste:
-# Last edited on 2024-04-05 17:48:46 by stolfi
+# Last edited on 2024-04-19 10:57:28 by stolfi
 
-util_testes
+? util_erros
+? util_testes
 
-util_valida_campo
-util_identificador
+? util_valida_campo
+? util_identificador
 
-db_base_sql
+? db_base_sql
 
-obj_raiz
-db_conversao_sql
+? obj_raiz
+? db_conversao_sql
 
-db_tabela_generica
+? db_obj_tabela
 
-obj_usuario
-obj_sessao
-obj_video
-obj_comentario
+? obj_usuario
+? obj_sessao
+? obj_video
+? obj_comentario
 
-db_tabelas
+? db_tabelas_do_sistema
 
-html_estilo_cabecalho_de_tabela
-html_estilo_de_botao
+? html_estilo_cabecalho_de_tabela
+? html_estilo_de_botao
+? html_estilo_titulo
 
-html_elem_button_simples
-html_elem_button_submit
-html_elem_div
-html_elem_form
-html_elem_img
-html_elem_video
-html_elem_input
-html_elem_label
-html_elem_link_img
-html_elem_paragraph
-html_elem_span
-html_elem_table
-html_elem_textarea
+? html_elem_button_simples
+? html_elem_button_submit
+? html_elem_div
+? html_elem_form
+? html_elem_img
+? html_elem_video
+? html_elem_input
+? html_elem_label
+? html_elem_link_img
+? html_elem_paragraph
+? html_elem_span
+? html_elem_table
+? html_elem_textarea
 
-html_bloco_cabecalho
-html_bloco_rodape
-html_bloco_erro
-html_bloco_menu_geral
-html_bloco_sessao
-html_bloco_tabela_de_campos
-html_bloco_dados_de_sessao
-html_bloco_dados_de_usuario
-html_bloco_dados_de_video
-html_bloco_comentario
+? html_bloco_cabecalho
+? html_bloco_titulo
+? html_bloco_rodape
+? html_bloco_erro
+? html_bloco_menu_geral
 
-html_bloco_resumo_de_sessao
-html_bloco_lista_de_sessoes
-html_bloco_resumo_de_usuario
-html_bloco_lista_de_usuarios
-html_bloco_resumo_de_video
-html_bloco_lista_de_videos
-html_bloco_resumo_de_comentario
-html_bloco_lista_de_comentarios
+? html_bloco_tabela_de_campos
 
-html_form_login
-html_form_criar_alterar_usuario
+? html_bloco_dados_de_sessao
+? html_bloco_dados_de_usuario
+? html_bloco_dados_de_video
+? html_bloco_dados_de_comentario
 
-html_form_buscar_usuarios
-html_form_buscar_videos
-html_form_upload_video
+? html_linha_resumo_de_sessao
+? html_bloco_lista_de_sessoes
 
-html_pag_alterar_usuario
-html_pag_cadastrar_usuario
-html_pag_generica
-html_pag_login
-html_pag_mensagem_de_erro
-html_pag_principal
-html_pag_buscar_usuarios
-html_pag_buscar_videos
-html_pag_upload_video
-html_pag_ver_sessao
-html_pag_ver_usuario
-html_pag_ver_video
+? html_linha_resumo_de_usuario
+? html_bloco_lista_de_usuarios
 
-comando_solicitar_pag_login
-comando_solicitar_pag_cadastrar_usuario
-comando_solicitar_pag_alterar_usuario
-comando_solicitar_pag_upload_video
-comando_solicitar_pag_buscar_usuarios
-comando_solicitar_pag_buscar_videos
+? html_linha_resumo_de_video
+? html_bloco_lista_de_videos
 
-comando_alterar_usuario
-comando_cadastrar_usuario
-comando_buscar_usuarios
-comando_fazer_login
-comando_fazer_logout
-comando_fechar_sessao
-comando_fazer_upload_video
-comando_buscar_videos
+? html_linha_resumo_de_comentario
+? html_bloco_lista_de_comentarios
 
-comando_ver_objeto
-comando_ver_sessao
-comando_ver_sessoes
-comando_ver_comentarios_de_video
-comando_ver_comentarios_de_usuario
-comando_ver_video
-comando_ver_videos_de_usuario
+? html_form_login
+? html_form_criar_alterar_usuario
+? html_form_alterar_comentario
+? html_form_alterar_video
+
+? html_form_buscar_usuarios
+? html_form_buscar_sessoes
+? html_form_buscar_videos
+? html_form_buscar_comentarios
+
+? html_form_upload_video
+
+? html_pag_generica
+? html_pag_mensagem_de_erro
+
+? html_pag_principal
+? html_pag_cadastrar_usuario
+? html_pag_login
+
+? html_pag_alterar_usuario
+? html_pag_alterar_comentario
+? html_pag_alterar_video
+
+? html_pag_buscar_usuarios
+? html_pag_buscar_videos
+? html_pag_buscar_comentarios
+? html_pag_buscar_sessoes
+
+? html_pag_upload_video
+? html_pag_postar_comentario
+
+? html_pag_ver_sessao
+? html_pag_ver_usuario
+? html_pag_ver_video
+? html_pag_ver_comentario
+
+? comando_ver_sessao
+? comando_solicitar_pag_login
+? comando_fazer_login
+? comando_fazer_logout
+? comando_fechar_sessao
+? comando_solicitar_pag_buscar_sessoes
+? comando_buscar_sessoes
+? comando_buscar_sessoes_de_usuario
+ 
+? comando_solicitar_pag_cadastrar_usuario
+? comando_cadastrar_usuario
+? comando_solicitar_pag_alterar_usuario
+? comando_alterar_usuario
+? comando_solicitar_pag_buscar_usuarios
+? comando_buscar_usuarios
+ 
+? comando_solicitar_pag_upload_video
+? comando_fazer_upload_video
+? comando_ver_video
+? comando_solicitar_pag_alterar_video
+? comando_alterar_video
+? comando_solicitar_pag_buscar_videos
+? comando_buscar_videos
+? comando_buscar_videos_de_usuario
+
+? comando_ver_comentario
+? comando_ver_usuario
+
+? comando_solicitar_pag_postar_comentario
+? comando_postar_comentario
+? comando_solicitar_pag_alterar_comentario
+? comando_alterar_comentario
+? comando_solicitar_pag_buscar_comentarios
+? comando_buscar_comentarios
+? comando_buscar_comentarios_de_video
+? comando_buscar_comentarios_de_usuario
+? comando_buscar_respostas_de_comentario
+
+? comando_ver_objeto
 
 # Sem teste unitário:
-processa_comando_http
+N processa_comando_http
 
 # Sem implementação nem teste unitário (o teste é o próprio {servidor.py}):
-servidor
+N servidor

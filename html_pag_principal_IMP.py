@@ -4,7 +4,7 @@ import html_pag_generica
 import html_elem_span
 import html_elem_div
 import html_elem_video
-from util_testes import erro_prog, mostra
+from util_erros import erro_prog, mostra
 
 # Outras interfaces usadas por este módulo:
 from datetime import datetime, timezone

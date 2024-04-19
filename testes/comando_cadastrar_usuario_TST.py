@@ -4,7 +4,7 @@
 
 import db_base_sql
 import obj_usuario
-from util_testes import erro_prog, aviso_prog, mostra
+from util_erros import erro_prog, aviso_prog, mostra
 import comando_cadastrar_usuario
 
 import sys
@@ -117,4 +117,4 @@ testa_comando_cadastrar_usuario(None, dados4, True)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("Teste falhou")
+  aviso_prog("Algum teste falhou", True)

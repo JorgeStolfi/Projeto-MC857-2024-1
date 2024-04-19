@@ -1,7 +1,6 @@
 # Este módulo processa comandos HTTP (GET,POST, ou HEAD)
 # recebidos do usuário.  
 
-# Implementação desta interface:
 import processa_comando_http_IMP
 
 def cria_objeto_servidor(host,porta):

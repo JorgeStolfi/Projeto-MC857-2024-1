@@ -1,42 +1,40 @@
-import obj_usuario
-import obj_sessao
-import obj_video
-from util_testes import ErroAtrib
-
-import html_pag_ver_usuario
-import html_pag_ver_sessao
-import html_pag_ver_video
+import comando_ver_usuario
+import comando_ver_sessao
+import comando_ver_video
+import comando_ver_comentario
 
 import html_pag_mensagem_de_erro
+from util_erros import ErroAtrib
 import sys
 
 def processa(ses, cmd_args):
-  assert obj_sessao.eh_administrador(ses) # O dono da sessão deve ser administrador.
-  try:
-    if not 'id_objeto' in cmd_args:
-      pag = html_pag_mensagem_de_erro.gera(ses, 'É necessário adicionar um ID para pesquisar.')
-      return pag
-
-    id_obj = cmd_args['id_objeto']
-    if len(id_obj) != 10: raise ErroAtrib("O identificador \"" + id_obj + "\" é inválido")
-    
+  erros = [].copy()
+  
+  id_obj = None
+  if not 'objeto' in cmd_args or cmd_args['objeto'] == None:
+    erros.append("O identificador do objeto não foi fornecido")
+  else:
+    id_obj = cmd_args['objeto'] 
+    if not isinstance(id_obj, str) or len(id_obj) != 10:
+      erros.append(f"O identificador \"{str(id_obj)}\" é inválido")
+  
+  pag = None
+  if id_obj != None:
+    assert len(erros) == 0
     letra = id_obj[0]
     if letra == "U":
-      usr = obj_usuario.busca_por_identificador(id_obj)
-      if usr == None: raise ErroAtrib("Não existe usuário com identificador " + id_obj)
-      pag = html_pag_ver_usuario.gera(ses, usr, None)
+      pag = comando_ver_usuario.processa(ses, {'usuario': id_obj})
     elif letra == "S":
-      ses_indicada = obj_sessao.busca_por_identificador(id_obj)
-      if ses_indicada == None: raise ErroAtrib("Não existe sessão com identificador" + id_obj)
-      pag = html_pag_ver_sessao.gera(ses, ses_indicada, None)
+      pag = comando_ver_sessao.processa(ses, {'sessao': id_obj})
     elif letra == "V":
-      vid_indicada = obj_video.busca_por_identificador(id_obj)
-      if vid_indicada == None: raise ErroAtrib("Não existe vídeo com identificador" + id_vid)
-      pag = html_pag_ver_video.gera(ses, vid_indicada, None)
+      pag = comando_ver_video.processa(ses, {'video': id_obj})
+    elif letra == "C":
+      pag = comando_ver_comentario.processa(ses, {'comentario': id_obj})
     else:
-      raise ErroAtrib("Classe de objeto \"" + letra + "\" inválida")
-  except ErroAtrib as ex:
-    erros = ex.args[0]
-    return html_pag_mensagem_de_erro.gera(ses, erros)
+      erros.append(f"Classe de objeto \"{letra}\" inválida")
+  
+  if pag == None:
+    pag = html_pag_mensagem_de_erro.gera(ses, erros)
+
   return pag
 

@@ -5,7 +5,7 @@ import html_pag_mensagem_de_erro
 import html_pag_alterar_usuario
 import obj_usuario
 import obj_sessao
-from util_testes import ErroAtrib
+from util_erros import ErroAtrib
 
 def msg_campo_obrigatorio(nome_do_campo):
   return "O campo %s é obrigatório." % nome_do_campo
@@ -27,9 +27,9 @@ def processa(ses, cmd_args):
     admin = obj_usuario.obtem_atributos(usr_ses)['administrador']
     
     # Determina o usuário {usr} a alterar:
-    if 'id_usuario' in cmd_args:
-      id_usr = cmd_args['id_usuario']
-      cmd_args.pop('id_usuario')
+    if 'usuario' in cmd_args:
+      id_usr = cmd_args['usuario']
+      cmd_args.pop('usuario')
       usr = obj_usuario.busca_por_identificador(id_usr)
       if usr == None:
         erros.append(f"usuario {id_usr} não existe")

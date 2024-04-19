@@ -1,30 +1,45 @@
-# Este módulo define a classe de objetos {obj_sessao.Classe}, que
-# representa uma sessão de 'login' de um usuário do website.
-#
-# Nas funções abaixo, o parâmetro {usr} é um objeto da classe
-# {obj_usuario.Classe} que representa o usuario.
-
-# Implementaçao deste módulo:
 import obj_sessao_IMP
 
 class Classe(obj_sessao_IMP.Classe_IMP):
-  """Um objeto desta classe representa uma sessao de acesso ao
-  servidor.  Os atributos deste objeto, por enquanto, são:
+  """
+  Um objeto desta classe representa uma sessao de acesso ao servidor
+  por um usuário que fez login, e armazena seus atributos na memória,
+  espelhando a linha correspondente da tabela "sessoes" da base de dados
+  do sistema. É uma subclasse de {obj_raiz.Classe}.
+  
+  O identificador de uma sessão (vide {obtem_indentificador} abaixo) é
+  uma string da forma "S-{NNNNNNNN}" onde {NNNNNNNN} é o índice na
+  tabela de sessãoes, formatado em 8 algarismos.
 
-    'usr'      {obj_usuario.Classe} o usuário que fez login na sessão.
-    'aberta'   {bool}               estado da sessao.
-    'cookie'   {str}                cookie da sessao.
-    'criacao'  {str}                data da criação da sessão no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
+  Por enquanto, o dicionário de atributos de um objeto desta classe
+  (vide {obtem_atributos} abaixo) contém os seguintes campos:
+
+    'usr'      {obj_usuario.Classe} O usuário cujo login criou a sessão.
+    'aberta'   {bool}               Estado da sessao.
+    'cookie'   {str}                Cookie da sessao.
+    'criacao'  {str}                Data da criação da sessão.
 
   Outros atributos (IP, etc.) poderão ser acrescentados no futuro.
-
-  Além desses atributos, cada sessão também tem um identificador de
-  sessão, uma string da forma "S-{NNNNNNNN}" onde {NNNNNNNN} é o índice
-  na tabela (vide abaixo) formatado em 8 algarismos.
+  
+  Nenhum destes atributos pode ser {None}.
+  
+  A data de criação deve estar no formato ISO, "yyyy-mm-dd HH:MM:SS UTC".
+  Por enquanto todas as datas são referentes ao fuso universal "UTC".
 
   Cada sessao pertence a um unico usuário, mas cada usuário
   pode ter várias sessoes abertas ao mesmo tempo. A sessao é criada
   e "aberta" quando o usuario faz login, e e "fechada" no logout.
+  Sessões continuam registradas na tabela mesmo depois de fechadas,
+  para fins de depuração, estatísticas, atendimento a usuários, etc..
+  
+  Não é necessario fazer login para fazer certos acessos ao sistema,
+  como fazer buscas e assistir vídeos.  Estes acessos não são
+  registrados na base de dados, e não geram objetos {obj_sessao.Classe}.
+  (Entretanto, o servidor HTTP do site -- separado deste sistema --
+  provavelmente estará registrando todos os acessos num log.)
+  
+  Em todas as funções abaixo, o parâmetro {ses} deve ser {None}
+  ou um objeto desta classe.
 
   REPRESENTAÇÃO NA BASE DE DADOS
 
@@ -34,9 +49,11 @@ class Classe(obj_sessao_IMP.Classe_IMP):
   {obj_sessao.Classe}.
 
   Cada linha da tabela tem um índice inteiro (chave primária) distinto,
-  que é atribuído quando a linha é criada. Além disso, cada linha tem
+  que é atribuído quando a linha é criada. O índice é o identificador
+  menos o prefixo "S-", convertido para inteiro. Além disso, cada linha tem
   uma coluna da tabela (um campo) para cada um dos atributos da sessão
-  (menos o identificador)."""
+  (menos o identificador).
+  """
   pass
 
 def inicializa_modulo(limpa):
@@ -48,12 +65,34 @@ def inicializa_modulo(limpa):
   obj_sessao_IMP.inicializa_modulo(limpa)
 
 def cria(usr, cookie):
-  """Cria um novo objeto da classe {obj_sessao.Classe}, associada ao usuário {usr},
-  inicialmente aberta, com o cookie inicial {cookie}.
-  Também acrescenta a sessão à base de dados.  Em caso de sucesso, retorna o objeto.
-  Atribui um identificador único à sessão, derivado do seu índice na tabela.
-  Retorna o objeto criado."""
+  """
+  Cria um novo objeto da classe {obj_sessao.Classe}, associada ao
+  usuário {usr}, inicialmente aberta, com o cookie inicial {cookie}.
+  Também acrescenta a sessão à base de dados.
+  
+  O campo 'criacao' do objeto será a data corrente no momento da chamada
+  desta função. O identificador do novo objeto será derivado do seu
+  índice na tabela.
+  
+  Em caso de sucesso, retorna o objeto. Caso contrário,
+  levanta a exceção {ErroAtrib} com uma lista de mensagens de erro.
+  """
   return obj_sessao_IMP.cria(usr, cookie)
+
+def muda_atributos(ses, atrs_mod):
+  """Modifica alguns atributos do objeto {ses} da classe
+  {obj_sessao.Classe}, registrando as alterações na base de dados.
+  Dá erro se {ses} é {None}.
+
+  O parâmetro {atrs_mod} deve ser um dicionário cujas chaves são um
+  subconjunto das chaves dos atributos da sessão (excluindo o identificador).
+  Os valores atuais desses atributos são substituídos pelos valores
+  correspondentes em {atrs_mod}.  Os valores devem estar no formato de
+  atributos na memória.
+  
+  Em caso de sucesso, não devolve nenhum resultado. Caso contrário,
+  levanta a exceção {ErroAtrib} com uma lista de mensagens de erro."""
+  obj_sessao_IMP.muda_atributos(ses, atrs_mod)
 
 def obtem_identificador(ses):
   """Devolve o identificador 'S-{NNNNNNNN}' da sessão {ses}.
@@ -62,8 +101,7 @@ def obtem_identificador(ses):
 
 def obtem_atributos(ses):
   """Retorna um dicionário Python que é uma cópia dos atributos da
-  sessão {ses}, exceto identificador.
-  Dá erro se {ses} é {None}."""
+  sessão {ses}, exceto identificador. Dá erro se {ses} é {None}."""
   return obj_sessao_IMP.obtem_atributos(ses)
 
 def obtem_atributo(ses, chave):
@@ -96,11 +134,11 @@ def obtem_data_de_criacao(ses):
   Dá erro se {ses} é {None}."""
   return obj_sessao_IMP.obtem_data_de_criacao(ses)
 
-def eh_administrador(ses):
+def de_administrador(ses):
   """Retorna {True} se a sessão {ses} não é {None}, está aberta, e
-  o usuário da mesma é um administrador.  Devolve {False} se {ses}
-  é {None}."""
-  return obj_sessao_IMP.eh_administrador(ses)
+  o usuário da mesma é um administrador.  Caso contrário (em particular, se {ses} é {None})
+  devolve {False}."""
+  return obj_sessao_IMP.de_administrador(ses)
 
 def busca_por_identificador(id_ses):
   """Localiza uma sessao com identificador {id_ses} (uma string da forma
@@ -113,26 +151,23 @@ def busca_por_campo(campo, val):
   dessas sessões."""
   return obj_sessao_IMP.busca_por_campo(campo, val)  
 
-def busca_por_usuario(id_usr):
+def busca_por_usuario(id_usr, soh_abertas):
   """Localiza todas as sessões do usuário com identificador {id_usr} (uma string da forma
-  "U-{NNNNNNNN}")Retorna uma lista de identificadores dessas sessões.
+  "U-{NNNNNNNN}").  Se {soh_abertas} é {True}, considera apenas as sessões abertas.
+  Retorna uma lista de identificadores dessas sessões.
   Se {id_usr} é {None} ou não existem tais sessões, devolve uma lista vazia."""
-  return obj_sessao_IMP.busca_por_usuario(id_usr)
-
-def muda_atributos(ses, atrs_mod_mem):
-  """Recebe um dicionário Python {atrs_mod_mem} cujas chaves são um subconjunto
-  dos nomes de atributos da sessão (exceto o identificador). Troca os
-  valores desses atributos no objeto {ses} da classe {obj_sessao.Classe}
-  pelos valores correspondentes em {atrs_mod_mem}.  Também altera esses
-  campos na base de dados. Os valores devem estar no formato de
-  atributos na memória."""
-  obj_sessao_IMP.muda_atributos(ses, atrs_mod_mem)
+  return obj_sessao_IMP.busca_por_usuario(id_usr, soh_abertas)
 
 def fecha(ses):
   """Registra o logout do usuário na sessão {ses}, mudando o atributo 'aberta'
   permanentemente para {False}. Também altera esse campo na base de dados.
   A sessão não pode ser {None} e deve estar aberta.  Não retorna nenum resultado."""
   obj_sessao_IMP.fecha(ses)
+
+def ultimo_identificador():
+  """Devolve o identificador da última sessão inserida na tabela.
+  Se ainda não houver nenhuma sessão, devolve "S-00000000"."""
+  return obj_sessao_IMP.ultimo_identificador()
 
 # DEPURAÇÂO
 

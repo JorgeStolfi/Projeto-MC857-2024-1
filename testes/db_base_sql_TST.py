@@ -21,10 +21,10 @@ def testa_insert(atrs):
   sys.stderr.write("    > resultado: " + str(res) + "\n\n")
   num_ents += 1
   
-def do_various_tests(rotulo):
+def do_various_tests(rot_teste):
   global nome_tb, num_ents
   sys.stderr.write("  %s\n" % ("-" * 70))
-  sys.stderr.write(rotulo + "\n")
+  sys.stderr.write(rot_teste + "\n")
 
   testa_insert({ 'nome': 'zeca', 'cpf': '123.456.789-10', 'cep':  '13083-851', 'peso':  30.22, 'pernas': 3 })
   testa_insert({ 'nome': 'juca', 'cpf': '987.654.321-00', 'cep':  '13083-851', 'peso': 120.01, 'pernas': 2 })
@@ -62,19 +62,36 @@ def do_various_tests(rotulo):
   sys.stderr.write("%s\n" % ("-" * 70))
   return
  
+sys.stderr.write("  > testando TABLE_EXISTS (sem tabela):\n")
+res = db_base_sql.executa_comando_TABLE_EXISTS (nome_tb)
+sys.stderr.write("    resultado: " + str(res) + "\n\n")
+assert type(res) is bool and not res # Meaning does not exist
+ 
 sys.stderr.write("  > testando DROP_TABLE sem tabela:\n")
 res = db_base_sql.executa_comando_DROP_TABLE(nome_tb)
 sys.stderr.write("    resultado: " + str(res) + "\n\n")
+assert res == None # Meaning OK
  
 sys.stderr.write("  > testando CREATE_TABLE:\n")
 res = db_base_sql.executa_comando_CREATE_TABLE (nome_tb, descr_cols)
 sys.stderr.write("    resultado: " + str(res) + "\n\n")
+assert res == None # Meaning OK
+ 
+sys.stderr.write("  > testando TABLE_EXISTS (cem tabela):\n")
+res = db_base_sql.executa_comando_TABLE_EXISTS (nome_tb)
+sys.stderr.write("    resultado: " + str(res) + "\n\n")
+assert type(res) is bool and res # Meaning exists
 
 do_various_tests("  > testes com tabela existente")
 
 sys.stderr.write("  > testando DROP_TABLE:\n")
 res = db_base_sql.executa_comando_DROP_TABLE(nome_tb)
 sys.stderr.write("    resultado: " + str(res) + "\n\n")
+ 
+sys.stderr.write("  > testando TABLE_EXISTS (de novo sem tabela):\n")
+res = db_base_sql.executa_comando_TABLE_EXISTS (nome_tb)
+sys.stderr.write("    resultado: " + str(res) + "\n\n")
+assert type(res) is bool and not res # Meaning does not exist
 
 do_various_tests("  > testes com tabela destruída")
 

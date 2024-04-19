@@ -4,7 +4,7 @@ import html_pag_login
 import html_pag_cadastrar_usuario
 import obj_usuario
 import obj_sessao
-from util_testes import ErroAtrib, erro_prog, mostra
+from util_erros import ErroAtrib, erro_prog, mostra
 import re
 import sys
 

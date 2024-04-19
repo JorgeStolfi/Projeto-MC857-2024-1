@@ -4,7 +4,7 @@
 
 import db_conversao_sql
 import obj_raiz
-from util_testes import erro_prog, mostra
+from util_erros import erro_prog, mostra
 
 import sys
 

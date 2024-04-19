@@ -1,12 +1,12 @@
 #! /usr/bin/python3
 
 import obj_raiz
-import db_tabela_generica
-import db_tabelas
 import db_base_sql
-import util_testes
+import db_obj_tabela
 import db_conversao_sql
-from util_testes import erro_prog, aviso_prog, mostra
+import db_tabelas_do_sistema
+import util_testes
+from util_erros import erro_prog, aviso_prog, mostra
 import sys
 from obj_raiz import ultimo_identificador
 
@@ -31,37 +31,34 @@ obj0 = ClasseDeTeste("X-00000000", { }) # An object just to get its type
 
 # ----------------------------------------------------------------------
 
-nome_tb = "objtestes"
-sys.stderr.write(f"  Criando uma tabela '{nome_tb} para teste':\n")
-
-letra_tb = "X"
-  # Prefixo dos identificadores de testes
-
-cache = {}.copy()
-  # Dicionário que mapeia identificadores para os objetos {ClasseDeTeste} na memória.
-  # Todo objeto dessa classe que é criado é acrescentado a esse dicionário,
-  # a fim de garantir a unicidade dos objetos.
-
-colunas = \
-  (
-    ( 'coisa',         type(100),   'INTEGER', False ),
-    ( 'treco',         type(100),   'INTEGER', False ),
-    ( 'lhufas',        type("foo"), 'TEXT',    False ),
-  )
-  # Descrição das colunas da tabela na base de dados.
+def cria_tabela():
+  """ Cria uma instância de {db_obj_tabela} para a classe de testes. """
+  nome_tb = "objtestes"
+  letra_tb = "X" # Prefixo dos identificadores de testes
+  colunas_tb = \
+    (
+      ( 'coisa',         type(100),   'INTEGER', False ),
+      ( 'treco',         type(100),   'INTEGER', False ),
+      ( 'lhufas',        type("foo"), 'TEXT',    False ),
+    )
+  limpa = True
  
-db_tabela_generica.limpa_tabela(nome_tb, colunas)
+  sys.stderr.write(f"  Criando uma tabela '{nome_tb} para teste':\n")
+  tab = db_obj_tabela.cria_tabela(nome_tb, letra_tb, ClasseDeTeste, colunas_tb, limpa)
+  return tab
+  
+tabela = cria_tabela()
 
 # ----------------------------------------------------------------------
 def def_obj_mem(obj, id_obj, atrs_SQL):
   """Função que cria ou modifica objeto na memória."""
-  global cache, nome_tb, letra_tb, colunas
+  global tabela
   if obj == None:
-    atrs_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, False, db_tabelas.identificador_para_objeto)
+    atrs_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, tabela.colunas, False, db_tabelas_do_sistema.identificador_para_objeto)
     obj = ClasseDeTeste(id_obj, atrs_mem)
   else:
     assert obj.id == id_obj
-    mods_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, colunas, True, db_tabelas.identificador_para_objeto)
+    mods_mem = db_conversao_sql.dict_SQL_para_dict_mem(atrs_SQL, tabela.colunas, True, db_tabelas_do_sistema.identificador_para_objeto)
     # Modifica os atributos:
     for chave, val in mods_mem.items():
       val_velho = obj.atrs[chave]
@@ -71,14 +68,14 @@ def def_obj_mem(obj, id_obj, atrs_SQL):
 # ----------------------------------------------------------------------
 # Funções auxiliares de teste
 
-def verifica_objeto(rotulo, obj, id_obj, atrs, ignore):
+def verifica_objeto(rot_teste, obj, id_obj, atrs, ignore):
   """Testes básicos de consistência do objeto {obj} da classe {ClasseDeTeste}, dados 
   {id_obj} e {atrs} esperados."""
   global ok_global
 
   sys.stderr.write("  %s\n" % ("-" * 70))
-  sys.stderr.write("  verificando usuário %s\n" % rotulo)
-  ok = obj_raiz.verifica_criacao(obj, type(obj0), id_obj, atrs, ignore, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+  sys.stderr.write("  verificando usuário %s\n" % rot_teste)
+  ok = obj_raiz.verifica_criacao(obj, type(obj0), id_obj, atrs, ignore, tabela, def_obj_mem)
 
   if not ok:
     aviso_prog("teste falhou", True)
@@ -87,10 +84,10 @@ def verifica_objeto(rotulo, obj, id_obj, atrs, ignore):
   sys.stderr.write("  %s\n" % ("-" * 70))
   return
  
-def testa_cria_objeto(rotulo, id_obj, atrs):
+def testa_cria_objeto(rot_teste, id_obj, atrs):
   """Testa criação de objeto com atributos com {atrs}. Retorna o usuário."""
-  obj = obj_raiz.cria(atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem)
-  verifica_objeto(rotulo, obj, id_obj, atrs, None)
+  obj = obj_raiz.cria(atrs, tabela, def_obj_mem)
+  verifica_objeto(rot_teste, obj, id_obj, atrs, None)
   return obj
 
 # ----------------------------------------------------------------------
@@ -117,17 +114,17 @@ obj1_mods = {
   'coisa': 109,
   'lhufas': "cento e nove"
 }
-obj_raiz.muda_atributos(obj1, obj1_mods, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+obj_raiz.muda_atributos(obj1, obj1_mods, tabela, def_obj_mem)
 obj1_atrs_m = obj1_atrs
 for k, v in obj1_mods.items():
   obj1_atrs_m[k] = v
 verifica_objeto("obj1_d", obj1, obj1_id, obj1_atrs_m, None)
 
-obj_raiz.muda_atributos(obj2, obj2_atrs, cache, nome_tb, letra_tb, colunas, def_obj_mem) # Não deveria mudar os atributos
+obj_raiz.muda_atributos(obj2, obj2_atrs, tabela, def_obj_mem) # Não deveria mudar os atributos
 verifica_objeto("obj2", obj2, obj2_id, obj2_atrs, ('coisa',))
 
 obj2_atrs_m = obj3_atrs.copy()
-obj_raiz.muda_atributos(obj2, obj2_atrs_m, cache, nome_tb, letra_tb, colunas, def_obj_mem) # Deveria assumir os valores do obj3
+obj_raiz.muda_atributos(obj2, obj2_atrs_m, tabela, def_obj_mem) # Deveria assumir os valores do obj3
 verifica_objeto("obj2_m", obj2, obj2_id, obj2_atrs_m, None)
 
 # ----------------------------------------------------------------------
@@ -147,13 +144,14 @@ nome_tb = "objtestes"
 letra_tb = "X"
 
 # Chamada da função ultimo_identificador
-ultimo_id = ultimo_identificador(nome_tb, letra_tb)
+ultimo_id = ultimo_identificador(tabela)
 
 # Verificação do resultado
 if ultimo_id == "X-00000003":  # O identificador esperado com base no exemplo fornecido
-    sys.stderr.write("Teste passou: o último identificador foi obtido corretamente.\n")
+  sys.stderr.write("Teste passou: o último identificador foi obtido corretamente.\n")
 else:
-    erro_prog("Teste falhou: o último identificador não corresponde ao esperado.")
+  aviso_prog("Teste falhou: o último identificador não corresponde ao esperado.", True)
+  ok_global = False
 
 # ----------------------------------------------------------------------
 
@@ -162,4 +160,4 @@ else:
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("Teste falhou")
+  aviso_prog("Algum teste falhou", True)

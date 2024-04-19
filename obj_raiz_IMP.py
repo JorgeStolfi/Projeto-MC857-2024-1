@@ -1,13 +1,14 @@
-# Implementação do módulo {objeto} e da classe {Objeto}.
+# Implementação do módulo {objeto} e da classe {obj_raiz.Classe}.
 
 import obj_raiz
 
-import db_tabela_generica
+import db_obj_tabela
 import db_conversao_sql
 
 import util_identificador
+import util_testes
 import util_valida_campo
-from util_testes import ErroAtrib, erro_prog, aviso_prog, mostra
+from util_erros import erro_prog, aviso_prog, mostra
 
 import sys
 
@@ -24,22 +25,22 @@ class Classe_IMP:
 
 # Implementação das funções:
 
-def cria(atrs_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem):
+def cria(atrs_mem, tabela, def_obj_mem):
   global orz_debug
   if orz_debug: mostra(0,"obj_raiz_IMP.cria(" + str(atrs_mem) + ") ...")
-  assert colunas != None # Pega módulo não inicializado.
+  assert tabela.colunas != None # Pega módulo não inicializado.
 
   # Converte atibutos para formato SQL.
-  atrs_SQL = db_conversao_sql.dict_mem_para_dict_SQL(atrs_mem, colunas, False)
+  atrs_SQL = db_conversao_sql.dict_mem_para_dict_SQL(atrs_mem, tabela.colunas, False)
   # Insere na base de dados e obtém o índice na mesma:
-  obj = db_tabela_generica.acrescenta(nome_tb, cache, letra_tb, colunas, def_obj_mem, atrs_SQL)
+  obj = db_obj_tabela.acrescenta_objeto(tabela, def_obj_mem, atrs_SQL)
   return obj
 
-def muda_atributos(obj, mods_mem, cache, nome_tb, letra_tb, colunas, def_obj_mem):
+def muda_atributos(obj, mods_mem, tabela, def_obj_mem):
 
   # Converte valores de formato memória para formato SQL.
-  mods_SQL = db_conversao_sql.dict_mem_para_dict_SQL(mods_mem, colunas, True)
-  res = db_tabela_generica.atualiza(nome_tb, cache, letra_tb, colunas, def_obj_mem, obj.id, mods_SQL)
+  mods_SQL = db_conversao_sql.dict_mem_para_dict_SQL(mods_mem, tabela.colunas, True)
+  res = db_obj_tabela.atualiza_objeto(tabela, def_obj_mem, obj.id, mods_SQL)
   assert res == obj
   return
 
@@ -53,22 +54,22 @@ def obtem_atributos(obj):
 def obtem_atributo(obj, chave):
   return obj.atrs[chave]
 
-def busca_por_identificador(id_obj, cache, nome_tb, letra_tb, colunas, def_obj_mem):
+def busca_por_identificador(id_obj, tabela, def_obj_mem):
   if id_obj == None:
     obj = None
   else:
-    obj = db_tabela_generica.busca_por_identificador(nome_tb, cache, letra_tb, colunas, def_obj_mem, id_obj)
+    obj = db_obj_tabela.busca_por_identificador(tabela, def_obj_mem, id_obj)
   return obj
 
-def busca_por_campo(chave, val, unico, cache, nome_tb, letra_tb, colunas):
-  lista_ids = db_tabela_generica.busca_por_campo(nome_tb, letra_tb, colunas, chave, val, None)
+def busca_por_campo(chave, val, unico, tabela):
+  lista_ids = db_obj_tabela.busca_por_campo(tabela, chave, val, None)
   if unico:
-    return util_identificador.unico_elemento(lista_ids)
+    return util_testes.unico_elemento(lista_ids)
   else:
     return lista_ids
     
-def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
-  res = db_tabela_generica.busca_por_campos(nome_tb, letra_tb, colunas, args, None)
+def busca_por_campos(args, unico, tabela):
+  res = db_obj_tabela.busca_por_campos(tabela, args, None)
   if res == None: res = [].copy() # Just in case.
   if type(res) is list or type(res) is tuple:
     return res
@@ -77,20 +78,20 @@ def busca_por_campos(args, unico, cache, nome_tb, letra_tb, colunas):
   else:
     erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
 
-def ultimo_identificador(nome_tb, letra_tb):
-  num_ents = db_tabela_generica.num_entradas(nome_tb)
-  id_ult = util_identificador.de_indice(letra_tb, num_ents)
+def busca_por_semelhanca(args, unico, tabela):
+  res = db_obj_tabela.busca_por_semelhanca(tabela, args, None)
+  if res == None: res = [].copy() # Just in case.
+  if type(res) is list or type(res) is tuple:
+    return res
+  elif type(res) is str:
+    erro_prog("busca na tabela falhou, res = " + res)
+  else:
+    erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
+
+def ultimo_identificador(tabela):
+  num_ents = db_obj_tabela.num_entradas(tabela)
+  id_ult = util_identificador.de_indice(tabela.letra, num_ents)
   return id_ult
-
-def busca_por_semelhanca(nome_tb, let, chaves, valores):
-  res = db_tabela_generica.busca_por_semelhanca(nome_tb, let, chaves, valores)
-  if res == None: res = [].copy() # Just in case.
-  if type(res) is list or type(res) is tuple:
-    return res
-  elif type(res) is str:
-    erro_prog("busca na tabela falhou, res = " + res)
-  else:
-    erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
 
 # FUNÇÕES PARA DEPURAÇÃO
 
@@ -99,7 +100,7 @@ def liga_diagnosticos(val):
   orz_debug = val
   return
 
-def verifica_criacao(obj, tipo, id_obj, atrs, ignore, cache, nome_tb, letra_tb, colunas, def_obj_mem): 
+def verifica_criacao(obj, tipo, id_obj, atrs, ignore, tabela, def_obj_mem): 
   if orz_debug: sys.stderr.write("  > {obj_raiz.obtem_verifica_criacao()}:\n")
 
   ok = True # Este teste deu OK?
@@ -133,7 +134,7 @@ def verifica_criacao(obj, tipo, id_obj, atrs, ignore, cache, nome_tb, letra_tb, 
         ok = False
     
     if orz_debug: sys.stderr.write("  > testando {obj_raiz.busca_por_identificador()}:\n")
-    obj1 = busca_por_identificador(id_obj, cache, nome_tb, letra_tb, colunas, def_obj_mem)
+    obj1 = busca_por_identificador(id_obj, tabela, def_obj_mem)
     if obj1 != obj:
       aviso_prog("retornou " + str(obj1) + ", deveria ter retornado " + str(obj), True)
       ok = False

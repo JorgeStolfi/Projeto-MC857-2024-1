@@ -4,9 +4,9 @@
 import db_base_sql
 import obj_usuario
 import obj_sessao
-import db_tabelas
+import db_tabelas_do_sistema
 import db_conversao_sql
-from util_testes import erro_prog, aviso_prog, mostra
+from util_erros import erro_prog, aviso_prog, mostra
 
 # Para diagnóstico:
 import sys
@@ -15,8 +15,8 @@ import sys
 sys.stderr.write("  Conectando com base de dados...\n")
 db_base_sql.conecta("DB", None, None)
 
-db_tabelas.inicializa_todas(True)
-db_tabelas.cria_todos_os_testes(True)
+db_tabelas_do_sistema.inicializa_todas(True)
+db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 usr1_id = "U-00000001"
 usr1 = obj_usuario.busca_por_identificador(usr1_id)  
@@ -32,26 +32,26 @@ ok_global = True # Vira {False} se um teste falha.
 # ----------------------------------------------------------------------
 # TESTES DE CONVERSÃO DE VALORES
 
-def testa_conversao_de_valor(rotulo, val_mem, tipo_mem, val_SQL, tipo_SQL, nulo_ok):
+def testa_conversao_de_valor(rot_teste, val_mem, tipo_mem, val_SQL, tipo_SQL, nulo_ok):
   """Testa {valor_mem_para_valor_SQL} e {valor_SQL_para_valor_mem}."""
   global ok_global
   ok = True # Estado deste teste.
   
   # Mostra parâmetros:
   sys.stderr.write("  %s\n" % ("-" * 70))
-  sys.stderr.write(rotulo + "\n")
+  sys.stderr.write(rot_teste + "\n")
   sys.stderr.write("  val_mem = " + str(val_mem) + " tipo_mem = " + str(tipo_mem) + "\n")
   sys.stderr.write("  val_SQL = " + str(val_SQL) + " tipo_SQL = " + str(tipo_SQL) + "\n")
    
   # Testa {valor_mem_para_valor_SQL}:
-  val_SQL_cmp = db_conversao_sql.valor_mem_para_valor_SQL(rotulo, val_mem, tipo_mem, tipo_SQL, nulo_ok)
+  val_SQL_cmp = db_conversao_sql.valor_mem_para_valor_SQL(rot_teste, val_mem, tipo_mem, tipo_SQL, nulo_ok)
   if val_SQL_cmp != val_SQL:
     aviso_prog("{valor_mem_para_valor_SQL} valor SQL não bate = '" + str(val_SQL_cmp) + "'",True)
     ok = False
 
   # Testa {valor_SQL_para_valor_mem}:
   val_mem_cmp = \
-    db_conversao_sql.valor_SQL_para_valor_mem(rotulo, val_SQL, tipo_SQL, tipo_mem, nulo_ok, db_tabelas.identificador_para_objeto)
+    db_conversao_sql.valor_SQL_para_valor_mem(rot_teste, val_SQL, tipo_SQL, tipo_mem, nulo_ok, db_tabelas_do_sistema.identificador_para_objeto)
   if val_mem_cmp != val_mem:
     aviso_prog("{valor_SQL_para_valor_mem} não bate = '" + str(val_mem_cmp) + "'",True)
     ok = False
@@ -87,14 +87,14 @@ colunas = (
   ('bobagem', type(usr1),  'TEXT',    False )
 )
 
-def verifica_dict(rotulo, dic_mem, falta_ok, dic_SQL):
+def verifica_dict(rot_teste, dic_mem, falta_ok, dic_SQL):
   """Testa {dict_mem_para_dict_SQL} e {dict_SQL_para_dict_mem}."""
   global ok_global
   ok = True # Estado deste teste.
 
   # Mostra parâmetros:
   sys.stderr.write("  %s\n" % ("-" * 70))
-  sys.stderr.write(rotulo + "\n")
+  sys.stderr.write(rot_teste + "\n")
   sys.stderr.write("  dic_mem =     '" + str(dic_mem) + "' falta_ok = " + str(falta_ok) + "\n")
   sys.stderr.write("  dic_SQL =     '" + str(dic_SQL) + "'\n")
   
@@ -106,7 +106,7 @@ def verifica_dict(rotulo, dic_mem, falta_ok, dic_SQL):
     ok = False
 
   # Verifica conversão SQL --> memória:
-  dic_mem_cmp = db_conversao_sql.dict_SQL_para_dict_mem(dic_SQL, colunas, falta_ok, db_tabelas.identificador_para_objeto)
+  dic_mem_cmp = db_conversao_sql.dict_SQL_para_dict_mem(dic_SQL, colunas, falta_ok, db_tabelas_do_sistema.identificador_para_objeto)
   sys.stderr.write("    dic_mem_cmp = '" + str(dic_mem_cmp) + "'\n")
   for chave, tipo_mem, tipo_SQL, nulo_ok in colunas:
     if tipo_mem is list or tipo_mem is tuple or tipo_mem is dict:
@@ -186,4 +186,4 @@ verifica_dict("dicionario {dic2}, T", dic2_mem, True, dic2_SQL)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("Teste falhou")
+  aviso_prog("Algum teste falhou", True)

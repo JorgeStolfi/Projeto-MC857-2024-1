@@ -1,8 +1,8 @@
 import html_elem_label_IMP
 
-def gera(rotulo, sep):
-  """Devolve o elemento HTML "<label>{rotulo}{sep}</label>",
-  ou a cadeia vazia se o {rotulo} for {None} ou a cadeia vazia.
+def gera(texto, sep):
+  """Devolve o elemento HTML "<label>{texto}{sep}</label>",
+  ou a cadeia vazia se o {texto} for {None} ou a cadeia vazia.
   Omite o separador {sep} se ele for {None}."""
-  return html_elem_label_IMP.gera(rotulo, sep)
+  return html_elem_label_IMP.gera(texto, sep)
 

@@ -1,25 +1,37 @@
 import obj_usuario
 import obj_sessao
 
-import html_form_criar_alterar_usuario
+import html_pag_alterar_usuario
+import html_bloco_dados_de_usuario
 import html_pag_generica
 import html_elem_button_simples
+from util_erros import ErroAtrib, erro_prog
 
 def gera(ses, usr, erros):
-  usr_sessao = obj_sessao.obtem_usuario(ses)
-  usr_sessao_admin = obj_usuario.obtem_atributo(usr_sessao, "administrador") == 1
 
-  assert usr != None and type(usr) is obj_usuario.Classe
-  id_usr = obj_usuario.obtem_identificador(usr)
-  atrs = obj_usuario.obtem_atributos(usr)
+  # Páginas geradas pelo sistema deveriam satisfazer estas condições:
+  assert ses == None or obj_sessao.aberta(ses), "Sessão inválida"
+  assert usr != None and isinstance(usr, obj_usuario.Classe), "Usuário inválido"
+  assert erros == None or type(erros) is tuple or type(erros) is list
   
-  ht_form = html_form_criar_alterar_usuario.gera(id_usr, atrs, usr_sessao_admin, "Confirmar", "alterar_usuario")
+  erros = [].copy()
+  
+  # Obtem o usuário da sessão:
+  usr_ses = obj_sessao.obtem_usuario(ses) if ses != None else None
 
-  ht_botao_sessoes = html_elem_button_simples.gera("Ver sessões", "ver_sessoes", {'id_usuario': id_usr}, '#eeee55')
+  try:
+    # Determina privilégios do usuário da sessão:
+    admin = obj_sessao.de_administrador(ses) if ses != None else False
+    
+    # Obtem o identificador e atributos do usuário:
+    id_usr = obj_usuario.obtem_identificador(usr)
+    atrs_usr = obj_usuario.obtem_atributos(usr)
 
-  ht_conteudo_pag = "<span>O usuário tem " + \
-             str(len(obj_usuario.sessoes_abertas(usr))) + \
-             " sessões abertas</span><br />" + \
-             ht_form
+    auto = (usr == usr_ses)
+    ht_bloco = html_bloco_dados_de_usuario.gera(id_usr, atrs_usr, admin, auto)
+    pag = html_pag_generica.gera(ses, ht_bloco, erros)
+  except ErroAtrib as ex:
+    erros.append(ex.args[0])
+    pag = html_pag_mensagem_de_erro(ses, erros)
 
-  return html_pag_generica.gera(ses, ht_conteudo_pag, erros)
+  return pag

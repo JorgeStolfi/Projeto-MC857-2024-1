@@ -1,29 +1,32 @@
-import html_elem_label
-import html_elem_input
-import html_elem_table
+import html_form_upload_video
+import html_elem_paragraph
 import html_elem_button_submit
 import html_elem_form
+import obj_sessao
+import obj_usuario
+import html_pag_generica
 
-def gera():
-  linhas = [].copy()
+def gera(ses, atrs, erros):
+
+  # Estas condições deveriam ser garantidas para pedidos gerados pelo site:
+  assert ses != None and type(ses) is obj_sessao.Classe
+  assert obj_sessao.aberta(ses)
+  assert atrs == None or type(atrs) is dict
+  assert erros == None or type(erros) is list or type(erros) is tuple
+
+  # !!! Fazer funcionar !!!
   
-  ht_rotulo = html_elem_label.gera("E-mail", ": ")
-  ht_campo = html_elem_input.gera(None, "text", "email", None, None, True, "nome@provedor", None, False)
-  linhas.append((ht_rotulo, ht_campo,))
+  usr_ses = obj_sessao.obtem_usuario(ses)
+  assert usr_ses != None
+  usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
   
-  ht_rotulo = html_elem_label.gera("Senha", ": ")
-  ht_campo = html_elem_input.gera(None, "password", "senha", None, None, True, None, None, False)
-  linhas.append((ht_rotulo, ht_campo,))
+  autor_id = usr_ses_id
+  atrs_id = { }
+  
+  ht_form = html_form_upload_video.gera(usr_ses_id, atrs_id)
+  
+  ht_conteudo = ht_form
 
-  # Monta a tabela com os fragmentos HTML:
-  ht_table = html_elem_table.gera(linhas, None)
-
-  ht_bt_login = html_elem_button_submit.gera("Entrar", 'fazer_login', None, '#55ee55')
-
-  ht_campos = \
-    ht_table + \
-    ht_bt_login
-
-  ht = html_elem_form.gera(ht_campos)
-  return ht
+  pag = html_pag_generica.gera(ses, ht_conteudo, erros)
+  return pag
   

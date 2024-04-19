@@ -23,7 +23,7 @@ def gera(ses, ht_conteudo, erros):
     nome_usuario = obj_usuario.obtem_atributos(usr)['nome']
     admin = obj_usuario.obtem_atributos(usr)['administrador']
     id_usr = obj_usuario.obtem_identificador(usr)
-    num_ses = len(obj_usuario.sessoes_abertas(usr));
+    num_ses = len(obj_sessao.busca_por_usuario(usr, True));
     if pgn_debug: sys.stderr.write("  > usuario %s num_ses = %d\n" % (id_usr, num_ses))
   else:
     nome_usuario = None

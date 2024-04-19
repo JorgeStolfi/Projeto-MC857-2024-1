@@ -10,7 +10,7 @@
 
 # Interfaces do projeto usadas por este programa:
 import db_base_sql
-import db_tabelas
+import db_tabelas_do_sistema
 import processa_comando_http
 import sys
 
@@ -27,11 +27,11 @@ def dispara():
   testando = True # Que base de dados deve usar?
   if testando:
     # Inicializa a base com algumas entradas para testes:
-    db_tabelas.cria_todos_os_testes(False)
+    db_tabelas_do_sistema.cria_todos_os_testes(False)
   else:
     # Usa a base de dados existente:
     limpa = False # Começa com tabelas vazias?
-    db_tabelas.inicializa_todas(limpa)
+    db_tabelas_do_sistema.inicializa_todas(limpa)
   sys.stderr.write("  {servidor}: criando o objeto servidor...\n")
   host = '0.0.0.0' # Aceita pedidos de qualquer IP.
   porta = 8081 # Porta 8081 em vez de 80, para não precisar de acesso "root"

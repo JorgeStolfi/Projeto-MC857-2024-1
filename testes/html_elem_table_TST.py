@@ -10,15 +10,15 @@ import util_testes
 
 import sys
 
-def testa_html_table_gera(rotulo, *args):
+def testa_html_table_gera(rot_teste, *args):
   """Testa {funcao(*args)}, grava resultado
-  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   modulo = html_elem_table
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False  # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
 linhas = [].copy()
 
@@ -28,7 +28,7 @@ cabecalho=("Coluna 1", "Coluna 2")
 for i in range(3):
   ht_lab = html_elem_label.gera(f"Teste {i:03d}", ":")
   if i == 0:
-    ht_val = html_elem_input.gera(None, "text", f"input_{i:03d}", None, None, True, "Me edite!", None, False)
+    ht_val = html_elem_input.gera("text", f"input_{i:03d}", None, None, None, True, "Me edite!", None, False)
   elif i == 1:
     ht_val = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
   elif i == 2:

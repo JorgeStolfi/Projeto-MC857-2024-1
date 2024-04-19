@@ -1,12 +1,12 @@
 #! /usr/bin/python3
 
 import comando_alterar_usuario
-import db_tabelas
+import db_tabelas_do_sistema
 import obj_usuario
 import obj_sessao
 import db_base_sql
 import util_testes
-from util_testes import ErroAtrib
+from util_erros import ErroAtrib
 
 import sys
 
@@ -16,25 +16,25 @@ res = db_base_sql.conecta("DB", None, None)
 assert res is None
 
 sys.stderr.write("  Criando alguns objetos...\n")
-db_tabelas.cria_todos_os_testes(True)
+db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 # Obtem sessao de teste
 ses = obj_sessao.busca_por_identificador("S-00000001")
 
-def testa_comando_alterar_usuario(rotulo, *args):
+def testa_comando_alterar_usuario(rot_teste, *args):
   """Testa {funcao(*cmd_args)}, grava resultado
-  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   modulo = comando_alterar_usuario
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
     
 def testa_atualiza_nome_com_sucesso():
   novo_nome = "John First"
   cmd_args = {
-      'id_usuario': "U-00000001",
+      'usuario': "U-00000001",
       'nome': novo_nome,
   }
   testa_comando_alterar_usuario("Nom", ses, cmd_args)
@@ -46,7 +46,7 @@ def testa_atualiza_nome_com_sucesso():
 def testa_atualiza_email_com_sucesso():
   email_novo = "banana@nanica.com"
   cmd_args = {
-      'id_usuario': "U-00000001",
+      'usuario': "U-00000001",
       'email': email_novo,
   }
   testa_comando_alterar_usuario("Ema", ses, cmd_args)
@@ -58,7 +58,7 @@ def testa_atualiza_email_com_sucesso():
 def testa_atualiza_email_repetido_falha():
   email_dup = "segundo@gmail.com"
   cmd_args = {
-    'id_usuario': "U-00000001",
+    'usuario': "U-00000001",
     'email': email_dup,
   }
   try:

@@ -1,4 +1,3 @@
-
 import html_pag_ver_sessao
 import html_bloco_dados_de_sessao
 import obj_sessao
@@ -10,14 +9,14 @@ def processa(ses, cmd_args):
     erros.append("precisa estar logado para executar este comando")
   else:
     usr_ses = obj_sessao.obtem_usuario(ses)
-    admin = obj_sessao.eh_administrador(ses);
-    if 'id_ses' not in cmd_args:
+    admin = obj_sessao.de_administrador(ses);
+    if 'sessao' not in cmd_args:
       # Identificador da sessão não foi especificado, supõe que é a corrente:
       ses_a_ver = ses
       id_ses_a_ver = obj_sessao.obtem_identificador(ses_a_ver)
     else: 
       # Quer ver uma sessão diferente da corrente:
-      id_ses_a_ver = cmd_args['id_ses']
+      id_ses_a_ver = cmd_args['sessao']
       ses_a_ver = obj_sessao.busca_por_identificador(id_ses_a_ver)
       if ses_a_ver == None:
         erros.append("sessão inexistente")

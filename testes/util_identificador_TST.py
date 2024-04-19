@@ -2,11 +2,11 @@
 
 import sys
 import util_identificador
-from util_testes import ErroAtrib, erro_prog, mostra
+from util_erros import ErroAtrib, erro_prog, mostra
 
 ok_global = True  # Vira {False} se houver erro.
 
-def testa_funcoes_de_para_indice(rotulo, let, indice, ident):
+def testa_funcoes_de_para_indice(rot_teste, let, indice, ident):
   """Testa as funções {util_identificador.de_indice(let,indice)} e 
   {util_identificador.para_indice(let, ident)}, verificando se o resultado
   de uma é o argumento da outra.  Se algum teste der errado,
@@ -14,7 +14,7 @@ def testa_funcoes_de_para_indice(rotulo, let, indice, ident):
   global ok_global
   ok = True # Estado deste teste.
   sys.stderr.write(f"  {'-'*70}\n")
-  sys.stderr.write(f"  teste {rotulo} let = '{let}' indice = {str(indice)} ident = '{str(ident)}'\n")
+  sys.stderr.write(f"  teste {rot_teste} let = '{let}' indice = {str(indice)} ident = '{str(ident)}'\n")
   
   # Paranóia: verifica tipo dos argumentos do teste:
   if not type(indice) is int:
@@ -56,13 +56,13 @@ testa_funcoes_de_para_indice("id_A", let1, indice1, ident1)
 
 # ----------------------------------------------------------------------
 
-def testa_funcao_de_lista_de_indices(rotulo, let, indices, idents):
+def testa_funcao_de_lista_de_indices(rot_teste, let, indices, idents):
   """Testa a função {util_identificador.de_lista_de_indices} na lista de inteiros {indices},
   verificando se o resultado é a lista de identificadores {idents}.  Se algum teste der errado,
   imprime uma mensagem de erro e desliga a variável global {ok_global}."""
   global ok_global
   sys.stderr.write(f"  {'~'*70}\n")
-  sys.stderr.write(f"  Teste {rotulo} (lista) let = '{let}' indices = {str(indices)} idents = {str(idents)}\n")
+  sys.stderr.write(f"  Teste {rot_teste} (lista) let = '{let}' indices = {str(indices)} idents = {str(idents)}\n")
   ok = True # Estado deste teste.
 
   # Paranóia: verifica tipo dos argumentos do teste:
@@ -106,68 +106,9 @@ idents3L = ()
 testa_funcao_de_lista_de_indices("id_3L", let3L, indices3L, idents3L)
 
 # ----------------------------------------------------------------------
-
-def testa_funcao_unico_elemento(rotulo, idents):
-  """Testa a função {util_identificador.unico_elemento} na lista de identificadores {idents},
-  verificando se devolve {None}, devolve {idents[0]}, ou levanta erro {AssertionError}
-  conforme a lista tenha 0, 1, ou mais de 1 elemento.  Se algum teste der errado,
-  imprime uma mensagem de erro e desliga a variável global {ok_global}."""
-  global ok_global
-  sys.stderr.write(f"  {'-'*70}\n")
-  sys.stderr.write(f"  Teste {rotulo} idents = {str(idents)}\n")
-  ok = True # Estado deste teste.
-
-  # Paranóia: verifica tipo dos argumentos do teste:
-  if idents != None and type(idents) != list and type(idents) != tuple:
-    erro_prog("Argumento {idents} = %s devis ser {None} ou lista/tupla" % str(idents))
-
-  # Testa {unico_elemento()}:
-  sys.stderr.write("  {unico_elemento(%s)} =" % str(idents));
-  try:
-    ident_cmp = util_identificador.unico_elemento(idents)
-    sys.stderr.write(" %s\n" % str(ident_cmp))
-    aborted = False
-  except ErroAtrib as ex:     
-    sys.stderr.write("\n")
-    sys.stderr.write("  deu {ErroAtrib} com %s\n" % str(ex))
-    ident_cmp = None
-    aborted = True
-  if idents == None or len(idents) == 0:
-    if ident_cmp != None or aborted:
-      sys.stderr.write("  ** devia ser {None}\n")
-      ok = False
-  elif len(idents) == 1:
-    if type(ident_cmp) != str:
-      sys.stderr.write("  ** devia ser string\n")
-      ok = False
-    elif ident_cmp != idents[0] or aborted:
-      sys.stderr.write("  ** devia ser %s\n" % idents[0])
-      ok = False
-  else:
-    if not aborted:
-      sys.stderr.write("  ** devia ter dado {ErroAtrib}\n")
-      ok = False
-  if ok:
-    sys.stderr.write("  Teste OK\n")
-  ok_global = ok_global and ok
-  sys.stderr.write(f"  {'-'*70}\n")
-
-idents1u = [ ]
-testa_funcao_unico_elemento("id_u1_bom", idents1u)
-
-idents2u = [ "W-00000111", ]
-testa_funcao_unico_elemento("id_u2_bom", idents2u)
-
-idents3u = None
-testa_funcao_unico_elemento("id_u3_bom", idents3u)
-
-idents4u = [ "Z-00000111", "Z-00000222", ]
-testa_funcao_unico_elemento("id_u4_mau", idents4u)
-
-# ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("Teste falhou")
+  aviso_prog("Algum teste falhou", True)

@@ -3,7 +3,7 @@ import sys
 import db_base_sql
 import html_bloco_lista_de_usuarios
 import obj_usuario
-import db_tabelas
+import db_tabelas_do_sistema
 import util_testes
 
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -11,7 +11,7 @@ res = db_base_sql.conecta("DB", None, None)
 assert res == None
 
 sys.stderr.write("  Criando alguns objetos...\n")
-db_tabelas.cria_todos_os_testes(True)
+db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 ids_usuarios = [
   "U-00000001",
@@ -25,15 +25,15 @@ ids_usuarios = [
   "U-00000009",
 ]
 
-def testa_html_bloco_lista_de_usuarios(rotulo, *args):
+def testa_html_bloco_lista_de_usuarios(rot_teste, *args):
   """Testa {funcao(*args)}, grava resultado
-  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   modulo = html_bloco_lista_de_usuarios   
   funcao = modulo.gera
   frag = True     # Resultado é só um fragmento de página?
   pretty = False  # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
 for ver in (False, True):
   for fechar in (False, True):

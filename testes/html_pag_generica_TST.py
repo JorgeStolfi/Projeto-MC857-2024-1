@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 import html_pag_generica
-import db_tabelas
+import db_tabelas_do_sistema
 import obj_usuario
 import obj_sessao
 import db_base_sql
@@ -14,25 +14,26 @@ res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
 sys.stderr.write("  Criando alguns objetos...\n")
-db_tabelas.cria_todos_os_testes(True)
+db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 
-def testa_gera(rotulo, *args):
+def testa_gera(rot_teste, *args):
   """Testa {funcao(*args)}, grava resultado 
-  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   
   modulo = html_pag_generica
   funcao = modulo.gera
   frag = False  # Resultado é só um fragmento de página?
   pretty = True  # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
 def fecha_sessoes(id_usr):
-  id_ses_list = obj_sessao.busca_por_usuario(id_usr)
+  # Obtem identificadores das sessões abertas:
+  id_ses_list = obj_sessao.busca_por_usuario(id_usr, True)
   ses_list = list(map((lambda id_ses: obj_sessao.busca_por_identificador(id_ses)), id_ses_list))
   for ses in ses_list:
-    if obj_sessao.aberta(ses):
-      obj_sessao.fecha(ses)
+    assert obj_sessao.aberta(ses)
+    obj_sessao.fecha(ses)
 
 pag_conteudo = "Texto de teste"
 id_usr_admin = "U-00000001"

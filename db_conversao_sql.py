@@ -67,7 +67,7 @@ def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, identif
 # 
 # Nestas funções, o parâmetro {cols} deve ser uma descrição das 
 # colunas da tabela, menos a coluna de índice de linha.
-# Vide {db_tabela_generica.cria_tabela}. 
+# Vide {db_obj_tabela.cria_tabela}. 
   
 def dict_mem_para_dict_SQL(dic_mem, cols, falta_ok):
   """

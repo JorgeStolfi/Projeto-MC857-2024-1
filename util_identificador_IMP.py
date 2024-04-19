@@ -1,7 +1,7 @@
 # Implementação do módulo {util_identificador}.
 
 import sys
-from util_testes import ErroAtrib, erro_prog
+from util_erros import erro_prog
 
 def de_indice(let, indice):
   assert type(let) is str and len(let) == 1
@@ -31,17 +31,3 @@ def de_lista_de_indices(let, lista_indices):
     return lista_ids_obj
   else:
     erro_prog("tipo de " + str(lista_indices) + " inválido")
-  
-def unico_elemento(lista_de_ids):
-  if lista_de_ids == None:
-    return None
-  elif type(lista_de_ids) is list or type(lista_de_ids) is tuple:
-    if len(lista_de_ids) == 0:
-      return None
-    elif len(lista_de_ids) == 1:
-      id_obj = lista_de_ids[0];
-      return id_obj
-    else:
-      raise ErroAtrib([ f"argumento {str(lista_de_ids)} tem mais de um elemento" ])
-  else:
-    raise ErroAtrib([ f"argumento {str(lista_de_ids)} não é {None} ou lista" ])

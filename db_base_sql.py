@@ -113,6 +113,16 @@ def executa_comando_DROP_TABLE(nome_tb):
   """
   return db_base_sql_IMP.executa_comando_DROP_TABLE(nome_tb)
 
+def executa_comando_TABLE_EXISTS(nome_tb):
+  """
+  Verifica se a tabela {none_tb} existe na base de dados. 
+  Retorna {True} se existir, {False} caso contrário.
+  
+  (Não existe comando SQL 'TABLE EXISTS', mas simula o 
+  mesmo com um truque sujo.)
+  """
+  return db_base_sql_IMP.executa_comando_TABLE_EXISTS(nome_tb)
+
 # UTILIDADES
 
 def codifica_valor(val):

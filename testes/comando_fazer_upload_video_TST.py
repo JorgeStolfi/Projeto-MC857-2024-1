@@ -3,12 +3,13 @@
 # Interfaces usadas por este script:
 
 import db_base_sql
-import db_tabelas
+import db_tabelas_do_sistema
 import obj_usuario
 import obj_sessao
 import obj_video
 import obj_raiz
-import util_testes; from util_testes import erro_prog, aviso_prog, mostra
+import util_testes
+from util_erros import erro_prog, aviso_prog, mostra
 import comando_fazer_upload_video
 
 import sys
@@ -18,13 +19,13 @@ res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
 sys.stderr.write("  Criando alguns objetos...\n")
-db_tabelas.cria_todos_os_testes(True)
+db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
 # ----------------------------------------------------------------------
 # Função de teste:
 
-def testa_comando_fazer_upload_video(rotulo, valido, ses, cmd_args):
+def testa_comando_fazer_upload_video(rot_teste, valido, ses, cmd_args):
   global ok_global
 
   modulo = comando_fazer_upload_video
@@ -34,11 +35,11 @@ def testa_comando_fazer_upload_video(rotulo, valido, ses, cmd_args):
 
   id_ses = obj_sessao.obtem_identificador(ses) if ses != None else None
   sys.stderr.write("-"*70 + "\n")
-  sys.stderr.write(f"testando {funcao} rotulo = {rotulo} ses = {str(id_ses)} cmd_args = {str(cmd_args)}\n")
+  sys.stderr.write(f"testando {funcao} rot_teste = {rot_teste} ses = {str(id_ses)} cmd_args = {str(cmd_args)}\n")
 
-  ult_id_antes = obj_raiz.ultimo_identificador("videos", "V")
+  ult_id_antes = obj_video.ultimo_identificador()
   pag = funcao(ses, cmd_args)
-  ult_id_depois = obj_raiz.ultimo_identificador("videos", "V")
+  ult_id_depois = obj_video.ultimo_identificador()
   sys.stderr.write(f"  ultimo id antes = {ult_id_antes} depois = {ult_id_depois}\n")
   
   if ult_id_depois == ult_id_antes:
@@ -61,7 +62,7 @@ def testa_comando_fazer_upload_video(rotulo, valido, ses, cmd_args):
     atrs_criado = obj_video.obtem_atributos(vid_criado)
     sys.stderr.write(f"  atributos criados = {str(atrs_criado)}\n")
     for chave in cmd_args.keys():
-      if chave == 'id_usuario': 
+      if chave == 'usuario': 
         val_criado = obj_usuario.obtem_identificador(vid_args['autor'])
       else:
         val_criado = atrs_criado[chave] if vid_criado != None else None
@@ -72,7 +73,7 @@ def testa_comando_fazer_upload_video(rotulo, valido, ses, cmd_args):
    
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.escreve_resultado_html(modulo, rotulo, pag, frag, pretty)
+  util_testes.escreve_resultado_html(modulo, rot_teste, pag, frag, pretty)
 
   if not ok:
     aviso_prog("teste falhou", True)
@@ -136,4 +137,4 @@ testa_comando_fazer_upload_video("Eses", False, None, dados_Elog)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  erro_prog("Teste falhou")
+  aviso_prog("Algum teste falhou", True)

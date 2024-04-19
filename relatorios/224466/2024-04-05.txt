@@ -1,9 +1,0 @@
-Na aula de hoje precisei implementar dois botões no arquivo 'html_bloco_menu_geral',
-sendo esses 2 botões, 'Buscar Comentários' e 'Buscar Sessões', no qual cada um chamava
-o link 'solicitar_pag_buscar_comentarios' e 'solicitar_pag_buscar_sessoes',
-respectivamente.
-
-Como os botões deveriam ser mostrados para todos os usuários, inclusive os não logados,
-admin ou não, adicionei ambos os botões na função 'gera_botoes_linha_1', sem nenhuma
-condicional para eles, o que permitiu que ambos aparecessem para todo e qualquer usuário
-na primeira linha do menu.

@@ -3,17 +3,26 @@
 import comando_solicitar_pag_upload_video_IMP
 
 def processa(ses, cmd_args):
-  """Esta função é chamada quando o usuário aperta o botão "Upload Video"
-  no menu geral de uma página qualquer.  
+  """
+  Esta função é chamada pelo servidor do sistema para processar o
+  comadno HTTP "solicitar_pag_upload_video". Este comando é tipicamente
+  emitido pelo browser do usuário quando este aperta o botão "Upload
+  Video" no menu geral de uma página qualquer.
   
-  A sessão corrente {ses} e o dicionário de argumentos {cmd_args}
-  são irrelevantes e podem ser {None}.
+  O parâmetro {ses} é a sessão de login que emitiu o comando. Não pode
+  ser {None}, e deve ser um objeto de tipo {obj_sessao.Classe},
+  atualmente aberto.
   
-  A função retorna a página HTML {pag}, com o formulário para o usuário
-  fazer upload do video. A página terá um campo editável "Arquivo"
-  (chave 'arq') para escolher o arquivo na máquina do usuário, e um
-  campo texto editável "Título" (chave 'titulo'). A página terá também
-  um botão de sumbissão "Upload" wie emite o comando 'fazer_upload_video'
-  (vide {comando_fazer_upload_video.py})."""
+  O parãmetro {cmd_args} é um dicionário que contém os argumentos do
+  comando. Atualmente deve ser vazio.
+  
+  A função normalmente retorna uma página HTML {pag} que inclui o
+  formulário para o usuário fazer upload do video. Veja
+  {html_pag_upload_video.gera}. Nessa página o usuário poderá
+  especificar o título do vídeo e o arquivo (na sua máquina) a ser
+  acrescentado ao sistema. A página vai conter um botão de sumbissão
+  "Enviar" ou similar que emite o comando 'fazer_upload_video' (vide
+  {comando_fazer_upload_video.py}).
+  """
   return comando_solicitar_pag_upload_video_IMP.processa(ses, cmd_args)
 

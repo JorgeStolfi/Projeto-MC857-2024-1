@@ -5,15 +5,15 @@ import util_testes
 
 import sys
 
-def testa_gera(rotulo, *args):
+def testa_gera(rot_teste, *args):
   """Testa {funcao(*args)}, grava resultado
-  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   modulo = html_elem_button_simples
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
 testa_gera("Principal", "Principal", 'pag_principal', None, '#60a3bc')
 
@@ -25,4 +25,4 @@ testa_gera("simples_Cadastrar", "Cadastrar", 'solicitar_pag_cadastrar_usuario', 
 
 testa_gera("simples_OK",        "OK", 'pag_principal', None, '#55ee55')
 
-sys.stderr.write("Testes terminadso normalmente.")
+sys.stderr.write("Testes terminados normalmente.")

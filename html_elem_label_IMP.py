@@ -1,6 +1,6 @@
 
-def gera(rotulo, sep):
-  if rotulo == None or rotulo == "":
+def gera(texto, sep):
+  if texto == None or texto == "":
     return ""
   else:
-    return "<label>" + rotulo + (sep if sep != None else "") + "</label>"
+    return "<label>" + texto + (sep if sep != None else "") + "</label>"

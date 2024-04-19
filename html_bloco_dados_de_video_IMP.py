@@ -3,11 +3,13 @@ import obj_video
 import html_elem_paragraph
 import html_bloco_tabela_de_campos
 
-def gera(vid, usr, mostra_usr, edita_titulo):
+def gera(id_vid, atrs_vid, mostra_arq, edita_titulo):
   
-  mensagem = html_elem_paragraph.gera(None, "!!! html_bloco_dados_de_video não implementado ainda !!!")
+  # atrs_tb = ...
+  # dados_linhas = ...
+  # ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_tb)
 
-  # ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs, admin)
+  mensagem = html_elem_paragraph.gera(None, "!!! html_bloco_dados_de_video não implementado ainda !!!")
   ht_table = mensagem
 
   return ht_table

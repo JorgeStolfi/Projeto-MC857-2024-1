@@ -1,44 +1,29 @@
 #! /usr/bin/python3
 
-# Interfaces usadas por este script:
-
 import html_form_buscar_videos
 import util_testes
 
 import sys
 
-# deve criar um formulario editavel se admin == True
-def testa_form_editavel_admin_true(rot_teste):
-  
+def testa_gera(rot_teste, *args):
+  """Testa {funcao(*args)}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
-  # Cria formulário:
-  ht_form = html_form_buscar_videos.gera({}, True)
-  
-  frag = True
-  pretty = False
-  util_testes.escreve_resultado_html(html_form_buscar_videos, rot_teste, ht_form, frag, pretty)
+  modulo = html_form_buscar_sessoes
+  funcao = modulo.gera
+  frag = True  # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  return
 
-# deve criar um formulario editavel se admin == False
-def testa_form_editavel_admin_false(rot_teste):
-  
-  # Cria formulário:
-  ht_form = html_form_buscar_videos.gera({}, False)
-  
-  frag = True
-  pretty = False
-  util_testes.escreve_resultado_html(html_form_buscar_videos, rot_teste, ht_form, frag, pretty)
+atrs1 = \
+  { 'video': 'V-11111111', 
+    'titulo': 'La la land', 
+    'autor': 'José Primeiro', 
+    'arq': 'la_la_land.mp4',
+  }
 
-# deve criar um formulario com os valores iniciais se o atrs nao for vazio
-def testa_form_valores_iniciais(rot_teste):
-  
-  # Cria formulário:
-  ht_form = html_form_buscar_videos.gera({'id_video': 'V-111111', 'titulo': 'La la land', 'usr': 'José Primeiro', 'arq': 'la_la_land.mp4'}, False)
-  
-  frag = True
-  pretty = False
-  util_testes.escreve_resultado_html(html_form_buscar_videos, rot_teste, ht_form, frag, pretty)
+testa_gera("SemValores", {})
+testa_gera("ComValores", atrs1)
 
-testa_form_editavel_admin_true("form_editavel_admin_true")
-testa_form_editavel_admin_false("form_editavel_admin_false")
-testa_form_valores_iniciais(" form_com_valores_iniciais")
 sys.stderr.write("Testes terminados normalmente.")

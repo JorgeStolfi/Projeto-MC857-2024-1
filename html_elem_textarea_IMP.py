@@ -1,13 +1,13 @@
 
 import html_elem_label
-from util_testes import erro_prog
+from util_erros import erro_prog
 
-def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio):
-  ht_rotulo = html_elem_label.gera(rotulo, ": ")
+def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio):
+  ht_rot_campo = html_elem_label.gera(rot_campo, ": ")
   ht_linhas = " rows=\"" + "10" + "\""
   ht_maxCarac = " maxlength=\"" + "5000" + "\""
-  ht_nome = " name=\"" + nome + "\""
-  ht_id_campo = " id=\"" + nome + ("." + val_ini if val_ini != None else "") + "\""
+  ht_nome = " name=\"" + chave + "\""
+  ht_ident = " id=\"" + ident + "\"" if ident != None else ""
 
   if val_ini != None and dica != None:
     erro_prog("{val_ini} e {dica} são mutuamente exclusivos")
@@ -22,12 +22,12 @@ def gera(rotulo, tipo, nome, val_ini, val_min, editavel, dica, cmd, obrigatorio)
   ht_dica = ( " placeholder=\"" + dica + "\"" if dica != None else "" )
   ht_cmd = ( " onchange=\"window.location.href=" + cmd + "\"" if cmd != None else "" )
   ht_estilo = ( " style=\"background-color:#c7c7c7\"" if not editavel else "" )
-  ht_input_textarea = ht_rotulo + \
+  ht_input_textarea = ht_rot_campo + \
     "<textarea" + \
       ht_linhas + \
       ht_maxCarac + \
       ht_nome + \
-      ht_id_campo + \
+      ht_ident + \
       ht_val_ini + \
       ht_readonly + \
       ht_readonlybackground + \

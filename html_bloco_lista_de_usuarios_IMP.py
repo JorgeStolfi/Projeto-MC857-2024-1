@@ -1,5 +1,5 @@
 import obj_usuario
-import html_bloco_resumo_de_usuario
+import html_linha_resumo_de_usuario
 import html_elem_table
 import html_elem_div
 import html_elem_span
@@ -20,7 +20,7 @@ def gera(lista_ids_usr):
     usr = obj_usuario.busca_por_identificador(id_usr)
 
     # Gera uma lista de fragmentos HTML com as informacoes dessa usuario
-    res_campos = html_bloco_resumo_de_usuario.gera(usr)
+    res_campos = html_linha_resumo_de_usuario.gera(usr)
 
     # Adiciona essa lista à lista de linhas para a tabela HTML:
     linhas.append(res_campos)
@@ -28,8 +28,4 @@ def gera(lista_ids_usr):
   # Gera a tabela HTML a partir da lista de linhas
   ht_tabela = html_elem_table.gera(linhas, cabecalho)
 
-  # ht_titulo = html_bloco_cabecalho.gera("Usuários", False)
-  ht_conteudo = ht_tabela
-
-  # Devolve a tabela HTML
-  return ht_conteudo
+  return ht_tabela

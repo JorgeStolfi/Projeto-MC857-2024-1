@@ -1,5 +1,5 @@
 import html_estilo_de_botao
-from util_testes import erro_prog
+from util_erros import erro_prog
 import re
 
 def gera(texto, URL, cmd_args, cor_fundo):

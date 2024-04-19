@@ -1,8 +1,8 @@
 import html_form_upload_video_IMP
 
-def gera(id_usr):
+def gera(id_autor, atrs):
   """Retorna um elemento "<form>...</form>" adequado para 
-  fazer upload de um novo video do usuário {id_usr}.
+  fazer upload de um novo video do usuário {id_autor}.
   
   O formulário contém campos editáveis para o usuário
   especificar os atributos do vídeo.
@@ -14,4 +14,4 @@ def gera(id_usr):
 
   O formulário também terá um botão simples 'Cancelar',
   que, quando clicado, emite o comando 'pag_principal'."""
-  return html_form_upload_video_IMP.gera(id_usr)
+  return html_form_upload_video_IMP.gera(id_autor, atrs)

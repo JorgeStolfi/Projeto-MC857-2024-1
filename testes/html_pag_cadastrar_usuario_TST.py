@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 import html_pag_cadastrar_usuario
-import db_tabelas
+import db_tabelas_do_sistema
 import obj_usuario
 import obj_sessao
 import db_base_sql
@@ -14,17 +14,17 @@ res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
 sys.stderr.write("  Criando alguns objetos...\n")
-db_tabelas.cria_todos_os_testes(True)
+db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-def testa_gera(rotulo, *args):
+def testa_gera(rot_teste, *args):
   """Testa {funcao(*args)}, grava resultado 
-  em "testes/saida/{modulo}.{funcao}.{rotulo}.html"."""
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   
   modulo = html_pag_cadastrar_usuario
   funcao = modulo.gera
   frag = False  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rotulo, frag, pretty, *args)
+  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
 # Sessao de teste cujo usuario não é admin:
 ses = obj_sessao.busca_por_identificador("S-00000004")
@@ -46,8 +46,8 @@ for tag, atrs, erros in (
     ("EN", None,  ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",]),
     ("EA", atrs1, ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",]),
   ):
-  rotulo = tag
-  testa_gera(rotulo, ses, atrs, erros)
+  rot_teste = tag
+  testa_gera(rot_teste, ses, atrs, erros)
 
 # Sessao de teste cujo usuario é admin:
 ses = obj_sessao.busca_por_identificador("S-00000001")
@@ -61,7 +61,7 @@ for tag, atrs, erros in (
     ("EN", None,  ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",]),
     ("EA", atrs1, ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",]),
   ):
-  rotulo = tag
-  testa_gera(rotulo, ses, atrs, erros)
+  rot_teste = tag
+  testa_gera(rot_teste, ses, atrs, erros)
 
 sys.stderr.write("Testes terminados normalmente.\n")

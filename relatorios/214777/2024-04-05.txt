@@ -1,4 +1,0 @@
-
-2024 Apr 6, 01:10
-Iniciada a implementação do comando de ver vídeos, que já está retornando uma página html que chama as funções que precisa para um vídeo ser visto e já volta para a p´[agina inicial caso haja a falta de um id para encontrar o vídeo a ser visto.
-Ainda não foi criado nenhum teste, os testes foram feitos no servidor utilizando a URL "http://127.0.0.1:8081/ver_video?id=V-00000001" após ter logado com o usuário primeiro@gmail.com (que é um admin). É necessário ir direto por essa URL pois a página de busca de vídeo ainda não foi implementada (não estava nem abrindo, coloquei 2 imports que estavam faltando).
