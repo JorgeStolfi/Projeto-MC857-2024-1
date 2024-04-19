@@ -144,6 +144,26 @@ def nome_de_arq_video(chave, val, nulo_ok):
   return erros
 
 def titulo_de_video(chave, val, nulo_ok):
-  erros = [].copy() 
-  # !!! Implementar conforme documentação na interface !!!
+  erros = [] 
+
+  if val is None:
+    if not nulo_ok:
+      erros += ["O título do vídeo não pode ser nulo"]
+    return erros
+
+  if len(val) <10 or len(val)>60:
+    erros += ["O título do  vídeo tem que ter entre 10 e 60 caracteres"]
+  if val[0]==" " or val[-1]==" ":
+    erros += ["O título do vídeo não pode começar ou terminar com espaços em branco"]
+  if "  " in val:
+    erros += ["O título do vídeo não pode ter espaços em branco duplicados"]
+  if not val.isascii():
+    erros += ["Existem caracteres não ASCII no título do vídeo"]
+  
+  padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
+  if not re.match(padrao, val):
+    erros += ["O título do vídeo contém caracteres não permitidos" ]
+  if not val[0].isalpha() or  not val[0].isupper():
+    erros += ["O título do vídeo deve iniciar com uma letra maiúscula"]
+
   return erros
