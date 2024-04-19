@@ -38,4 +38,7 @@ id_usr1 = {'usuario': "U-00000002"}
 
 testa_processa("T1",        ses_adm, id_usr1)
 
+# Testa a visualização dos próprios comentários
+testa_processa("T2",        ses_adm, {})
+
 sys.stderr.write("Testes terminados normalmente.")
