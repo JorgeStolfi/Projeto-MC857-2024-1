@@ -43,7 +43,7 @@ def testa_comando_cadastrar_usuario(ses, cmd_args, deveria_cadastrar):
   global ok_global
 
   sys.stderr.write(f"  ----------------------------------------------------------------------\n")
-  sys.stderr.write(f"  cadastrando usuario {cmd_args['nome']} {cmd_args['email']}\n")
+  sys.stderr.write(f"  cadastrando usuario {cmd_args['nome']} {cmd_args['email']} - {"Deve" if deveria_cadastrar else "Não deve"} cadastrar\n")
 
   usr_old_id = obj_usuario.busca_por_email(cmd_args["email"])
   usr_old_obj = obj_usuario.busca_por_identificador(usr_old_id)
@@ -74,8 +74,8 @@ obj_usuario.inicializa_modulo(True)
 # Testa chamada OK:
 dados1 = {
     'nome': "Luiz Primeiro", 
-    'senha': "123456789", 
-    'conf_senha': "123456789",
+    'senha': "a!23456789", 
+    'conf_senha': "a!23456789",
     'email': "luiz@primeiro.com",
     'administrador': False,
   }
@@ -93,8 +93,8 @@ testa_comando_cadastrar_usuario(None, dados2, False)
 
 # Testa email repetido:
 dados3 = {
-    'nome': "Luiz Terceiro", 
-    'senha': "123456789", 
+    'nome': "Luiz Primeiro Funcional",
+    'senha': "123456789",
     'conf_senha': "123456789",
     'email': "luiz@primeiro.com",
     'administrador': True,
@@ -104,12 +104,42 @@ testa_comando_cadastrar_usuario(None, dados3, False)
 # Testa se o teste anterior com senha-nao-confere entrou:
 dados4 = {
     'nome': "Luiz Segundo Bis", 
-    'senha': "987654321", 
-    'conf_senha': "987654321",
+    'senha': "98765432!a", 
+    'conf_senha': "98765432!a",
     'email': "luiz@segundo.com",
     'administrador': True,
   }
 testa_comando_cadastrar_usuario(None, dados4, True)
+
+# Testa senha fraca (somente números)
+dados5 = {
+    'nome': "Luiz Quinto", 
+    'senha': "12345678", 
+    'conf_senha': "12345678",
+    'email': "luiz@quinto.com",
+    'administrador': False,
+  }
+testa_comando_cadastrar_usuario(None, dados5, False)
+
+# Testa senha fraca (somente números e letras)
+dados6 = {
+    'nome': "Luiz Sexto", 
+    'senha': "12345abcde", 
+    'conf_senha': "12345abcde",
+    'email': "luiz@sexto.com",
+    'administrador': False,
+  }
+testa_comando_cadastrar_usuario(None, dados6, False)
+
+# Testa senha fraca (muito curta)
+dados7 = {
+    'nome': "Luiz Sétimo", 
+    'senha': "123", 
+    'conf_senha': "123",
+    'email': "luiz@sehtimo.com",
+    'administrador': False,
+  }
+testa_comando_cadastrar_usuario(None, dados7, False)
 
 # ----------------------------------------------------------------------
 # Veredito final:
