@@ -1,7 +1,5 @@
 import html_form_postar_comentario
-import html_elem_paragraph
-import html_elem_button_submit
-import html_elem_form
+import html_pag_generica
 import obj_sessao
 
 def gera(ses, atrs, erros):
@@ -13,6 +11,6 @@ def gera(ses, atrs, erros):
  
   ht_form = html_form_postar_comentario.gera(atrs)
 
-  pag = html_pag_generica.gera(ses, ht_conteudo, erros)
+  pag = html_pag_generica.gera(ses, ht_form, erros)
   return pag
   

@@ -4,9 +4,9 @@ import html_elem_form
 import html_elem_button_simples
 import html_elem_button_submit
 
-def gera(id_autor, atrs):
+def gera(atrs):
   # Constrói tabela com dados:
-  atrs = { 'autor': id_autor } 
+  # atrs = { 'autor': id_autor } 
   
   # dados_linhas = ( ... )
   # ht_tabela = html_bloco_tabela_de_campos.gera(dados_linas, atrs)
