@@ -54,7 +54,7 @@ except AssertionError as error:
   print('Retornou o seguinte erro, pois os argumentos passados não eram válidos: {}'.format(error))
 
 try:
-  testa_processa('CA-e3', ses_C1, {"error": True}) # Sessao usuário comum aberta, argumentos não vazio.
+  testa_processa('CA-e3', ses_C1, {"error": True}) # Sessao usuário comum aberta, argumentos não vazios.
 except AssertionError as error:
   print('Retornou o seguinte erro, pois os argumentos passados não eram vazios: {}'.format(error))
 
