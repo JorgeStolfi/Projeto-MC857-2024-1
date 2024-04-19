@@ -74,6 +74,7 @@ def muda_atributos(usr, mods_mem):
 
 def obtem_identificador(usr):
   global tabela
+  print(usr)
   assert usr != None and isinstance(usr, obj_usuario.Classe)
   return obj_raiz.obtem_identificador(usr)
 

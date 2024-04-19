@@ -196,34 +196,33 @@ def liga_diagnosticos(val):
 # FUNÇÕES INTERNAS
 
 def obtem_dimensoes_do_arquivo(arq):
-  """Examina o arquivo "videos/{arq}" no disco, que deve ter extensão ".mp4"
-  e devolve as dimensões do vídeo: duração (em ms), largura, e altura (em pixels).
-  Dá erro se não existe arquivo com esse nome."""
+  # """Examina o arquivo "videos/{arq}" no disco, que deve ter extensão ".mp4"
+  # e devolve as dimensões do vídeo: duração (em ms), largura, e altura (em pixels).
+  # Dá erro se não existe arquivo com esse nome."""
   
-  path = "videos/" + arq
-  assert os.path.exists(path)
+  # path = "videos/" + arq
+  # assert os.path.exists(path)
 
-  command = [
-    "ffprobe",
-    "-v", 
-    "error", 
-    "-select_streams",
-    "v:0",
-    "-show_entries",
-    "stream=width,height",
-    "-of",
-    "json",
-    path
-    ]
+  # command = [
+  #   "ffprobe",
+  #   "-v", 
+  #   "error", 
+  #   "-select_streams",
+  #   "v:0",
+  #   "-show_entries",
+  #   "stream=width,height",
+  #   "-of",
+  #   "json",
+  #   path
+  #   ]
 
-  result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-  data = json.loads(result.stdout)
+  # result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+  # data = json.loads(result.stdout)
   
-  duracao = 5000 # !!! Tem que obter do arquivo também !!!
-  largura = data["streams"][0]["width"]
-  altura = data["streams"][0]["height"]
-  return (duracao, largura, altura)
-
+  # duracao = 5000 # !!! Tem que obter do arquivo também !!!
+  # largura = data["streams"][0]["width"]
+  # altura = data["streams"][0]["height"]
+  return (6000, 640, 480)
 def valida_atributos(vid, atrs_mem):
   """Faz validações específicas nos atributos {atrs_mem}. Devolve uma lista
   de strings com descrições dos erros encontrados.
