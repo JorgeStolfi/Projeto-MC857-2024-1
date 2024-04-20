@@ -51,12 +51,16 @@ def processa(ses, cmd_args):
           lista_ids_usr = [ id_usr ]
       elif 'email' in cmd_args:
         # Deve haver um único usuário com esse email
-        email = cmd_args['email']
-        id_usr = obj_usuario.busca_por_email(email)
-        if id_usr == None:
-          erros.append(f"Não existe usuário com email '{email}'")
+        admin = obj_sessao.de_administrador(ses)
+        if not admin:
+          erros.append("Busca por email só é permitida para administradores")
         else:
-          lista_ids_usr = [ id_usr ]
+          email = cmd_args['email']
+          id_usr = obj_usuario.busca_por_email(email)
+          if id_usr == None:
+            erros.append(f"Não existe usuário com email '{email}'")
+          else:
+            lista_ids_usr = [ id_usr ]
       else:
         # Busca por campos aproximados:
         lista_ids_usr = obj_usuario.busca_por_semelhanca(cmd_args, False)
@@ -79,7 +83,7 @@ def processa(ses, cmd_args):
     # Não encontrou nenhum usuário.
     # Repete a página de busca, com eventuais mensagens de erro:
     admin = obj_sessao.de_administrador(ses)
-    pag = html_pag_buscar_usuarios.gera(ses, cmd_args, admin, erros)
+    pag = html_pag_buscar_usuarios.gera(ses, cmd_args, erros)
 
   return pag
 
