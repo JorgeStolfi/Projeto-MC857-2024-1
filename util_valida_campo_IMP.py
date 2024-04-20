@@ -49,9 +49,8 @@ def nome_de_usuario(chave, val, nulo_ok):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: branco antes ou depois do nome" ]
     if '  ' in val:
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: você inseriu dos espaços seguidos" ]
-
-
-    
+      
+    # !!! Tem que verificar TODAS as ocorrências de "'", "-", etc. !!!
     if "'" in val:
       letraSeguinte = val.split("'")[1][0]
       letraAnterior = val.split("'")[0][-1]
@@ -69,14 +68,38 @@ def nome_de_usuario(chave, val, nulo_ok):
     if "-" in val:
       letraSeguinte = val.split("-")[1][0]
       letraAnterior = val.split("-")[0][-1]
-
       if not( letraAnterior.isalpha or letraAnterior == "."):
         erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
       if not letraSeguinte.isupper():
         erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
-
         
-    # !!! Verificar as demais regras !!!
+    # !!! Combinar com código abaixo !!!
+    if (not val[0].isupper()):
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: começa com letra minúscula" ]
+    elif (not val[-1].isalpha()):
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o último caractere não é uma letra" ]
+    else:
+        for i in range(1, n):
+          digito = val[i]
+          if (digito == "."):
+              if (not val[i-1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não segue uma letra" ]
+              elif (val[i+1] != " "):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não é seguido por um espaço em branco" ]
+          elif (digito == "'"):
+              if (not val[i-1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não segue uma letra" ]
+              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não é seguido por uma letra maiúscula" ]
+          elif (digito == "-"):
+              if (not (val[i-1].isalpha() or val[i-1] != ".")):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não segue uma letra ou um ponto" ]
+              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não é seguido por uma letra maiúscula" ]
+          elif (digito == " "):
+              if (not val[i+1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
+
   return erros
 
 def senha(chave, val, nulo_ok):
@@ -136,9 +159,10 @@ def email(chave, val, nulo_ok):
 
 def data(chave, val, nulo_ok):
   erros = [].copy()
-  if val == None:
-    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
-  elif type(val) is not str:
+  if val is None:
+    if not nulo_ok:
+      erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif not isinstance(val, str):
     erros += [ f"campo '{chave}' = \"{str(val)}\" deve ser uma string no formato ISO" ]
   else:
     # Padrão geral do formato ISO UTC:
@@ -152,6 +176,8 @@ def data(chave, val, nulo_ok):
       hora = int(val[11:13])
       minuto = int(val[14:16])
       segundo = int(val[17:19])
+
+      # !!! Combinar os dois conjuntso de testes abaixo !!!
       
       if not 1900 <= ano <= 2099:
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o ano deve estar em 1900..2099"]
@@ -164,6 +190,19 @@ def data(chave, val, nulo_ok):
       elif not 0 <= minuto <= 59:
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o minuto deve estar em 00..59"]
       elif not 0 <= segundo <= 60:
+
+      # !!! Combinar com os testes acima !!!
+      if not (ano <= 2099 and ano >= 1900):
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o ano deve estar em 1900..2099"]
+      elif not (mes <= 12 and mes >= 1):
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o mês deve estar em 01..12"]
+      elif not (dia <= 31 and dia >= 1):
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o dia deve estar em 01..31"]
+      elif not (hora <= 23 and hora >= 0):
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: a hora deve estar em 00..23"]
+      elif not (minuto <= 59 and minuto >= 0):
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o minuto deve estar em 00..59"]
+      elif not (segundo <= 60 and segundo >= 0):
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o segundo deve estar em 00..60"]
   return erros
 
@@ -190,6 +229,8 @@ def nome_de_arq_video(chave, val, nulo_ok):
   return erros
 
 def titulo_de_video(chave, val, nulo_ok):
+
+  # !!! Combinar com os testes abaixo !!!
   erros = [].copy() 
   #chave e o nome do campo
   #val é o valor do campo
@@ -206,7 +247,7 @@ def titulo_de_video(chave, val, nulo_ok):
     elif len(val)>60:
       erros += [ f"campo '{chave}' = \"{str(val)}\" deve conter no máximo 10 Caracteres"]
 
-  #3 - verificar se a primeira letra é maíuscula
+    #3 - verificar se a primeira letra é maíuscula
     if not val[0].isupper():
       erros += [ f"campo '{chave}' = \"{str(val)}\" deve conter a primeira letra maiúscula"]
 
@@ -223,5 +264,28 @@ def titulo_de_video(chave, val, nulo_ok):
 
     if not re.match(padrao, val):
       erros += [ f"campo '{chave}' = \"{str(val)}\"  contém caracteres não permitidos"]
+
+  # !!! Combinar com os testes acima !!!
+  erros = [] 
+
+  if val is None:
+    if not nulo_ok:
+      erros += ["O título do vídeo não pode ser nulo"]
+    return erros
+
+  if len(val) <10 or len(val)>60:
+    erros += ["O título do  vídeo tem que ter entre 10 e 60 caracteres"]
+  if val[0]==" " or val[-1]==" ":
+    erros += ["O título do vídeo não pode começar ou terminar com espaços em branco"]
+  if "  " in val:
+    erros += ["O título do vídeo não pode ter espaços em branco duplicados"]
+  if not val.isascii():
+    erros += ["Existem caracteres não ASCII no título do vídeo"]
+  
+  padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
+  if not re.match(padrao, val):
+    erros += ["O título do vídeo contém caracteres não permitidos" ]
+  if not val[0].isalpha() or  not val[0].isupper():
+    erros += ["O título do vídeo deve iniciar com uma letra maiúscula"]
 
   return erros

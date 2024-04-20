@@ -165,17 +165,18 @@ testa_funcao("data_None_nulokF_bad",  False,  func_data, 'niver', None, False)
 
 func_titulo_video = util_valida_campo.titulo_de_video
 #positivo
-testa_funcao("titulo_valido_ok", True, func_titulo_video, 'titulo', 'Velozes e Furiosos 2', True)
-testa_funcao("titulo_validoNone_ok", True, func_titulo_video, 'titulo', None, True)
+testa_funcao("titulo_valido_ok",      True, func_titulo_video, 'titulo', 'Velozes e Furiosos 2', True)
+testa_funcao("titulo_validoNone_ok",  True, func_titulo_video, 'titulo', None,                   True)
 
 #Negativo
-testa_funcao("titulo_menos10Caracteres_bad", False, func_titulo_video, 'titulo', 'Val', True)
-testa_funcao("titulo_mais60_Caracteres_bad", False, func_titulo_video, 'titulo',("a"*62), True)
-testa_funcao("titulo_caracterNaoIso_bad", False, func_titulo_video,'titulo', 'Titulo Sem ISO ぁ', True)
-testa_funcao("titulo_primeiraLetraMinuscula_bad", False, func_titulo_video,'titulo', 'titulo minusculo comeco', True)
-testa_funcao("titulo_finalBranco_bad", False, func_titulo_video, 'titulo','Titulo final branco  ', True)
-testa_funcao("titulo_duploBranco_bad", False, func_titulo_video, 'titulo','Titulo duplo  branco', True)
+testa_funcao("titulo_menos10Caracteres_bad",      False, func_titulo_video, 'titulo', 'Val', True)
+testa_funcao("titulo_mais60_Caracteres_bad",      False, func_titulo_video, 'titulo', ("a"*62), True)
+testa_funcao("titulo_caracterNaoIso_bad",         False, func_titulo_video, 'titulo', 'Titulo Sem ISO ぁ', True)
+testa_funcao("titulo_primeiraLetraMinuscula_bad", False, func_titulo_video, 'titulo', 'titulo minusculo comeco', True)
+testa_funcao("titulo_finalBranco_bad",            False, func_titulo_video, 'titulo', 'Titulo final branco  ', True)
+testa_funcao("titulo_duploBranco_bad",            False, func_titulo_video, 'titulo', 'Titulo duplo  branco', True)
 
+# ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:

@@ -22,7 +22,8 @@ def processa(ses, cmd_args):
   if 'usuario' in cmd_args:
     # Alguém quer ver videos de usuário específico:
     id_autor = cmd_args['usuario']
-    autor = obj_usuario.obtem_identificador(id_autor)
+    autor = obj_usuario.busca_por_identificador(id_autor)
+    autor = obj_usuario.obtem_identificador(autor)
   else:
     # Usuário da sessão {ses} quer ver os próprios videos:
     autor = usr_ses

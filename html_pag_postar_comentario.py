@@ -28,4 +28,4 @@ def gera(ses, atrs, erros):
   comando POST com ação "postar_comentario". Os argumentos desse POST
   serão 'autor', 'pai', 'video', e 'texto' (o texto do comentário).
   """
-  return html_pag_postar_comentario.gera(ses, atrs, erros)
+  return html_pag_postar_comentario_IMP.gera(ses, atrs, erros)
