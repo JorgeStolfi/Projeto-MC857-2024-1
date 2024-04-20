@@ -7,17 +7,9 @@ import obj_video
 import html_pag_mensagem_de_erro
 import html_pag_principal
 import html_pag_ver_video
-import db_base_sql
-import datetime
 
 def processa(ses, cmd_args):
-  # Estas condições deveriam valer para comandos gerados
-  # pelas páginas do site:
-  assert ses == None or obj_sessao.aberta(ses), "Sessao inválida"
-  assert type(cmd_args) is dict, "Argumentos inválidos"
-  
   erros = [].copy()
-  
   if ses == None or not obj_sessao.aberta(ses):
     erros.append("Precisa estar logado para executar esta função")
     vid = None
@@ -27,8 +19,8 @@ def processa(ses, cmd_args):
     id_autor = obj_usuario.obtem_identificador(autor)
     
     # Por via das dúvidas:
-    if 'usuario' in cmd_args: assert id_autor == cmd_args['usuario']
-    if 'autor' in cmd_args: assert id_autor == cmd_args['autor']
+    if 'id_usuario' in cmd_args: assert id_autor == cmd_args['id_usuario']
+    if 'id_autor' in cmd_args: assert id_autor == cmd_args['id_autor']
     
     # Nome do arquivo:
     arq = cmd_args['arq'] if 'arq' in cmd_args else None
@@ -38,10 +30,10 @@ def processa(ses, cmd_args):
     
     # Grava o conteudo do arquivo no disco:
     wr = open("videos/" + arq, 'wb')
-    # !!! Implementar o upload do arquivo {arq} e gravação no disco !!!
+    # !!! Implementar o upload e gravação no disco !!!
     wr.close()
     erros.append("!!! uppload do arquivo ainda não foi implementado !!!")    
-
+    
     # Registra na tabela de vídeos e cria o objeto:
     atrs = {
       'autor': autor,
@@ -53,7 +45,6 @@ def processa(ses, cmd_args):
   if vid != None:
     pag = html_pag_ver_video.gera(ses, vid, erros)
   else:
-    # !!! Devia retornar a página de upload !!!
     pag = html_pag_mensagem_de_erro.gera(None, erros)
 
   return pag
