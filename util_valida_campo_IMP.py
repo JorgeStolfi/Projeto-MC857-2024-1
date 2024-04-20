@@ -91,9 +91,10 @@ def email(chave, val, nulo_ok):
 
 def data(chave, val, nulo_ok):
   erros = [].copy()
-  if val == None:
-    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
-  elif type(val) is not str:
+  if val is None:
+    if not nulo_ok:
+      erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif not isinstance(val, str):
     erros += [ f"campo '{chave}' = \"{str(val)}\" deve ser uma string no formato ISO" ]
   else:
     # Padrão geral do formato ISO UTC:
@@ -107,17 +108,17 @@ def data(chave, val, nulo_ok):
       hora = int(val[11:13])
       minuto = int(val[14:16])
       segundo = int(val[17:19])
-      if not ano <= 2099 and ano >= 1900:
+      if not (ano <= 2099 and ano >= 1900):
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o ano deve estar em 1900..2099"]
-      elif not mes <= 12 and mes >= 1:
+      elif not (mes <= 12 and mes >= 1):
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o mês deve estar em 01..12"]
-      elif not dia <= 31 and dia >= 1:
+      elif not (dia <= 31 and dia >= 1):
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o dia deve estar em 01..31"]
-      elif not hora <= 23 and hora >= 0:
+      elif not (hora <= 23 and hora >= 0):
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: a hora deve estar em 00..23"]
-      elif not minuto <= 59 and minuto >= 0:
+      elif not (minuto <= 59 and minuto >= 0):
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o minuto deve estar em 00..59"]
-      elif not segundo <= 60 and segundo >= 0:
+      elif not (segundo <= 60 and segundo >= 0):
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o segundo deve estar em 00..60"]
   return erros
 
