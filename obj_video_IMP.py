@@ -222,10 +222,7 @@ def obtem_dimensoes_do_arquivo(arq):
   duracao = 5000 # !!! Tem que obter do arquivo também !!!
   largura = data["streams"][0]["width"]
   altura = data["streams"][0]["height"]'''
-  duracao = 6000
-  largura = 640
-  altura = 480
-  return (duracao, largura, altura)
+  return duracao, largura, altura
 
 def valida_atributos(vid, atrs_mem):
   """Faz validações específicas nos atributos {atrs_mem}. Devolve uma lista

@@ -46,7 +46,7 @@ def testa_comando_fazer_login(rot_teste, email, senha, deveria_logar):
 
 # ----------------------------------------------------------------------
 # Executa chamadas
-testa_comando_fazer_login("OK", "primeiro@gmail.com", "11111111", True)
+testa_comando_fazer_login("OK", "primeiro@gmail.com", "U-00000001", True)
 testa_comando_fazer_login("Erro", "nao_existo@gmail.com", "123456789", False)
 
 # ----------------------------------------------------------------------
