@@ -1,0 +1,7 @@
+Relatório de 04/19/2024:
+
+    A tarefa diária que me foi designada consistia em completar/consertar a implementação da função {nome_de_usuario} especificada na interface do arquivo 
+util_valida_campo.py. Após leitura da descrição, completei a implementação da função no arquivo de implementação seguindo os passos designados. 
+    Após conserto/complemento da implementação, executei o comando testa.sh para rodar o arquivo de teste da função (util_valida_campo_TST.py), que já tinha 
+cenários de testes descritos para testar diversos cenários que envolvessem sucesso e erro da função ajustada. 
+    Depois de executar o comando de teste, as mensagens referentes a função "nome_de_usuario" apresentaram resultado positivo - confere - em todas as tentativas.

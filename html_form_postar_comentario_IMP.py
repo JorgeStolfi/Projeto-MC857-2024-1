@@ -1,19 +1,24 @@
 import html_bloco_tabela_de_campos
-import html_elem_input
 import html_elem_form
 import html_elem_button_simples
 import html_elem_button_submit
 
-def gera(id_autor, atrs):
-  # Constrói tabela com dados:
-  atrs = { 'autor': id_autor } 
-  
-  # dados_linhas = ( ... )
-  # ht_tabela = html_bloco_tabela_de_campos.gera(dados_linas, atrs)
-  
-  ht_tabela = "!!! implementação de {html_form_postar_comentario.gera} ainda não completada !!!"
+def gera(atrs):
+  """  
+  Formato do argumento {atrs}:
+  {atrs} = { 'autor': id_autor, 'video': id_video, 'pai': id_pai, "texto": texto } 
+  """  
 
-  ht_submit = html_elem_button_submit.gera("Enviar", "fazer_upload_video", None, '#55ee55')
+  dados_linhas = ( 
+    ("autor", "text", "autor", False, None),
+    ("video", "text", "video", False, None),
+    ("pai", "text", "pai", False, None),
+    ("texto", "text", "texto", True, "Texto exemplo.")
+  )
+
+  ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
+  
+  ht_submit = html_elem_button_submit.gera("Enviar", "fazer_postar_comentario", None, '#55ee55')
   ht_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, '#ee5555')
   ht_conteudo = \
     ( ht_tabela + "\n" ) + \

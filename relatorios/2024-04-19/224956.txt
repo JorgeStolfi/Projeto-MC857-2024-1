@@ -1,0 +1,5 @@
+Primeiramente para não quebrar o código na execução do teste onde a sessão não está aberta, eu cobri a execução com um
+try-except de modo que eu possa capturar a exceção sem que eu fique impedido de executar mais cenários posteriormente.
+
+Depois disso, eu adicionei cenários para os outros dois casos onde uma exceção pode ser lançada. Um quando os argumentos 
+passados não são do tipo dicionário e outro quando eles são do tipo dicionário, mas não vazios.

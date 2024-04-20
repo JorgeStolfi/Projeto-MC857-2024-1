@@ -1,0 +1,12 @@
+Minha tarefa foi completar a implementação do módulo `html_form_upload_video`.
+
+Primeiro rodei o teste do módulo para gerar o HTML e ver quais requisitos estavam faltando.
+
+Olhando o HTML gerado notei que existia apenas o campo de fazer o upload de arquivo.
+Analisando o `comando_fazer_upload_de_video` notei que o formulário também deveria conter os campos de título do vídeo e de nome do arquivo.
+
+Assim utilizei o `htmp_bloco_tabela_de_campos` para incluir os dois campos faltando do formulário. Ambos campos de texto, garanti que as chaves deles estivessem compatíveis com as definidas pelo comando.
+
+Com isso o HTML gerado está com o formulário completo.
+
+As ação do botão de "fazer_upload_video" e "fazer_upload" (do input de arquivo), ainda não estão totalmente implementadas.

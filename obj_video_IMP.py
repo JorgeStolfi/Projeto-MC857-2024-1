@@ -219,10 +219,11 @@ def obtem_dimensoes_do_arquivo(arq):
   # result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
   # data = json.loads(result.stdout)
   
-  # duracao = 5000 # !!! Tem que obter do arquivo também !!!
-  # largura = data["streams"][0]["width"]
-  # altura = data["streams"][0]["height"]
-  return (6000, 640, 480)
+  duracao = 6000 # !!! Tem que obter do arquivo também !!!
+  largura = 640
+  altura = 480
+  return (duracao, largura, altura)
+
 def valida_atributos(vid, atrs_mem):
   """Faz validações específicas nos atributos {atrs_mem}. Devolve uma lista
   de strings com descrições dos erros encontrados.

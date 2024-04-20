@@ -1,0 +1,7 @@
+Primeiramente consertei uns warnings relacionados a como era feito a validação de None, onde é recomendado
+utilizar is no lugar de == quando comparando com None. Depois para verificar o tipo, é recomendado usar
+isIstance e nao comparar diretamente com ==. Analisando a descrição da função, pareceu-me que todas as
+validações/testes foram implementados. Ao rodar os testes percebi que alguns estavam errados e a causa
+era a mesma para todos. Basicamente havia um not no inicio do if que só estava sendo aplicado para uma
+parte do statement, quando deveria estar se aplicando a todo o statement no if. Dessa maneira adicionei
+parênteses para garantir a aplicação do not em todo o statement, corrigindo assim a função.
