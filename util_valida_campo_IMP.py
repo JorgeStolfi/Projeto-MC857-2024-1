@@ -45,6 +45,35 @@ def nome_de_usuario(chave, val, nulo_ok):
     padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
     if not re.match(padrao, val):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: tem caracteres não permitidos" ]
+    if val[0].isspace() or val[-1].isspace():
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: branco antes ou depois do nome" ]
+    if '  ' in val:
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: você inseriu dos espaços seguidos" ]
+      
+    # !!! Tem que verificar TODAS as ocorrências de "'", "-", etc. !!!
+    if "'" in val:
+      letraSeguinte = val.split("'")[1][0]
+      letraAnterior = val.split("'")[0][-1]
+      if not (letraSeguinte.isupper() and not letraSeguinte.isspace()):
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita maiúscula após o apostrofe" ]
+      if not letraAnterior.isalpha():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do apostrofe" ]
+    if "." in val:
+      letraSeguinte = val.split(".")[1][0]
+      letraAnterior = val.split(".")[0][-1]
+      if not letraSeguinte.isspace():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita espaço após o ponto" ]
+      if not letraAnterior.isalpha():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do ponto" ]
+    if "-" in val:
+      letraSeguinte = val.split("-")[1][0]
+      letraAnterior = val.split("-")[0][-1]
+      if not( letraAnterior.isalpha or letraAnterior == "."):
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
+      if not letraSeguinte.isupper():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
+        
+    # !!! Combinar com código abaixo !!!
     if (not val[0].isupper()):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: começa com letra minúscula" ]
     elif (not val[-1].isalpha()):
@@ -70,6 +99,7 @@ def nome_de_usuario(chave, val, nulo_ok):
           elif (digito == " "):
               if (not val[i+1].isalpha()):
                 erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
+
   return erros
 
 def senha(chave, val, nulo_ok):
@@ -77,7 +107,7 @@ def senha(chave, val, nulo_ok):
   # letra ou dígito é [A-Za-z0-9].
   erros = [].copy()
   if val == None:
-    if not nulo_ok:
+    if not nulo_ok:# !!! Implementar conforme documentação na interface !!!
       erros += [ f"campo '{chave}' não pode ser omitido" ]
   elif type(val) is not str:
     erros += [ f"campo '{chave}' = \"{str(val)}\" não é senha válida: deve ser string" ]
@@ -106,11 +136,25 @@ def email(chave, val, nulo_ok):
   elif type(val) is not str:
     erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: deve ser string" ]
   else:
-    # !!! Corrigir conforme documentado na interface !!!
     padrao_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not re.match(padrao_email, val):
       erros += [ f"campo '{chave}' = '%s' não é um email válido" % ( str(val))]
-  
+
+    #Validar se o campo usuario e campo dominio estão dentro dos padrões de, respectivamente 64 e 255 caracteres
+    else:
+      partes = val.split('@')
+      usuario = partes[0]
+      dominio = partes[1]
+      if not 1< len(usuario) < 64:
+        erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: usuario inválido "]
+      if not 1< len(dominio) < 255:
+        erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: dominio inválido "]
+      
+      #validar as partes do dominio
+      partes_dominio = dominio.split('.')
+      for parte in partes_dominio:
+        if not 1 < len(parte) < 64:
+          erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: dominio inválido "]
   return erros
 
 def data(chave, val, nulo_ok):
@@ -132,6 +176,22 @@ def data(chave, val, nulo_ok):
       hora = int(val[11:13])
       minuto = int(val[14:16])
       segundo = int(val[17:19])
+
+      # !!! Combinar os dois conjuntso de testes abaixo !!!
+      
+      if not 1900 <= ano <= 2099:
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o ano deve estar em 1900..2099"]
+      elif not 1 <= mes <= 12 :
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o mês deve estar em 01..12"]
+      elif not 1 <= dia <= 31 :
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o dia deve estar em 01..31"]
+      elif not 0 <= hora <= 23 :
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: a hora deve estar em 00..23"]
+      elif not 0 <= minuto <= 59:
+        erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o minuto deve estar em 00..59"]
+      elif not 0 <= segundo <= 60:
+
+      # !!! Combinar com os testes acima !!!
       if not (ano <= 2099 and ano >= 1900):
         erros += [ f"campo '{chave}' = \"{str(val)}\" é data inválida: o ano deve estar em 1900..2099"]
       elif not (mes <= 12 and mes >= 1):
@@ -169,6 +229,43 @@ def nome_de_arq_video(chave, val, nulo_ok):
   return erros
 
 def titulo_de_video(chave, val, nulo_ok):
+
+  # !!! Combinar com os testes abaixo !!!
+  erros = [].copy() 
+  #chave e o nome do campo
+  #val é o valor do campo
+  #mulo_o verifica se pode ser nulo
+  #1 - Verificar se pode ser nulo
+  if val == None or not val:
+    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif not isinstance(val, str):
+    erros += [ f"campo '{chave}' = \"{str(val)}\" é nome de arquivo inválido: deve ser string"]
+  else:
+    #2 - verificar se tem mais de 10 digitos e menos de 60
+    if len(val) < 10:
+      erros += [ f"campo '{chave}' = \"{str(val)}\" deve conter no mínimo 10 Caracteres"]
+    elif len(val)>60:
+      erros += [ f"campo '{chave}' = \"{str(val)}\" deve conter no máximo 10 Caracteres"]
+
+    #3 - verificar se a primeira letra é maíuscula
+    if not val[0].isupper():
+      erros += [ f"campo '{chave}' = \"{str(val)}\" deve conter a primeira letra maiúscula"]
+
+    #4 - verificar se nao termina com espaço
+    if val[-1].isspace():
+      erros += [ f"campo '{chave}' = \"{str(val)}\"  não pode começar com espaços"]
+
+    #5 - verificar se não existe dois espaços em branco em nenhum lugar
+    if "  "  in val:
+      erros += [ f"campo '{chave}' = \"{str(val)}\"  não pode conter dois espaços seguidos"]
+
+    #6- verificar padrão ascii latino americano
+    padrao = r'^[A-Za-z0-9À-ÖØ-öø-ÿ!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~\s]+$'
+
+    if not re.match(padrao, val):
+      erros += [ f"campo '{chave}' = \"{str(val)}\"  contém caracteres não permitidos"]
+
+  # !!! Combinar com os testes acima !!!
   erros = [] 
 
   if val is None:

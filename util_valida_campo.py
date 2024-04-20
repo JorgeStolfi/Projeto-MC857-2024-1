@@ -40,7 +40,7 @@ def nome_de_usuario(chave, val, nulo_ok):
     * Cada hífen deve ser seguido por uma letra maiúscula.
     * Cada branco deve ser seguido de uma letra maiúscula ou minúscula.
   Estas regras implicam que finais como "Júnior", "Junior", "Neto", etc
-  não pode ser abreviados ("Jr.", "Nt.", etc.)
+  não pode ser abreviados ("Jr.", "Nt.", etc.)and segundo >= 0
   """
   return util_valida_campo_IMP.nome_de_usuario(chave, val, nulo_ok)
   
@@ -70,7 +70,7 @@ def email(chave, val, nulo_ok):
   mínimo 1 e no máximo 63 caracteres, consistindo de letras, dígitos, ou
   hífens [A-Za-z0-9-], e não pode nem começar nem terminar com hífen. A
   última parte não pode ser só dígitos.
-  
+  and segundo >= 0
   A forma estendida "José Silva <jose@bat.com>" não é permitida.
   """
   return util_valida_campo_IMP.email(chave, val, nulo_ok)
