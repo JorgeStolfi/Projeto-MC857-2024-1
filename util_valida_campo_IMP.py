@@ -45,7 +45,31 @@ def nome_de_usuario(chave, val, nulo_ok):
     padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
     if not re.match(padrao, val):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: tem caracteres não permitidos" ]
-    # !!! Verificar as demais regras !!!
+    if (not val[0].isupper()):
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: começa com letra minúscula" ]
+    elif (not val[-1].isalpha()):
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o último caractere não é uma letra" ]
+    else:
+        for i in range(1, n):
+          digito = val[i]
+          if (digito == "."):
+              if (not val[i-1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não segue uma letra" ]
+              elif (val[i+1] != " "):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não é seguido por um espaço em branco" ]
+          elif (digito == "'"):
+              if (not val[i-1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não segue uma letra" ]
+              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não é seguido por uma letra maiúscula" ]
+          elif (digito == "-"):
+              if (not (val[i-1].isalpha() or val[i-1] != ".")):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não segue uma letra ou um ponto" ]
+              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não é seguido por uma letra maiúscula" ]
+          elif (digito == " "):
+              if (not val[i+1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
   return erros
 
 def senha(chave, val, nulo_ok):
