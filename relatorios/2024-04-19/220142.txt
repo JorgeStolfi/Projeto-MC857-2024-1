@@ -1,0 +1,5 @@
+Nome: Leonardo Novaes do Nascimento
+RA: 220142
+
+Comecei tentando implementar alguma forma de dar upload do video do usuario, porém, durante a implementação, por algum motivo, o comando upload criava um comando 
+"get" em vez "push". Por fim, pelo menos, implementei o formulario com o titulo e o nome do Autor. Além de copiar o conteudo de um arquivo mp4.
