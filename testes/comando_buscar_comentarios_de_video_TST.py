@@ -34,8 +34,8 @@ ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
 # Teste passando um id do video
 testa_processa("T1",  ses_adm, {'video': "V-00000001"})
 testa_processa("T2",  ses_adm, {'video': "V-00000002"})
-testa_processa("T3",  None, {'video': "V-00000003"})
-testa_processa("T4",  None, {'video': "V-00000004"})
-testa_processa("T5",  None, {'video': "V-00000005"})
+testa_processa("T3",  None,    {'video': "V-00000003"})
+testa_processa("T4",  None,    {'video': "V-00000004"})
+testa_processa("T5",  None,    {'video': "V-00000005"})
 
 sys.stderr.write("Testes terminados normalmente.")
