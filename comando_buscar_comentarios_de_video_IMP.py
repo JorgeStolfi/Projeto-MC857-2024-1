@@ -28,8 +28,10 @@ def processa(ses, cmd_args):
       erros.append(f"Vídeo {id_vid} não tem nenhum comentário")
       ht_bloco = None
     else:
-      ht_titulo = html_bloco_titulo.gera(f"Comentários do video {id_vid}", False)
-      ht_tabela = html_bloco_lista_de_comentarios.gera(lista_ids_comentarios)
+      mostra_autor = True # É necessário mostrar todos os autores dos comentários de um vídeo
+      mostra_video = False # Não é necessário mostrar o vídeo na página de comentários
+      ht_titulo = html_bloco_titulo.gera(f"Comentários do video {id_vid}")
+      ht_tabela = html_bloco_lista_de_comentarios.gera(lista_ids_com, mostra_autor, mostra_video)
       ht_bloco = \
         ht_titulo + "<br/>\n" + \
         ht_tabela
@@ -37,5 +39,5 @@ def processa(ses, cmd_args):
   if ht_bloco == None:
     pag = html_pag_mensagem_de_erro(ses, erros)
   else:
-    pag = html_pag_generica.gera(ses, ht_conteudo, erros)
+    pag = html_pag_generica.gera(ses, ht_bloco, erros)
   return pag
