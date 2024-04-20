@@ -1,0 +1,1 @@
+Acrescentei e testei botão para ver comentários do usuário em html_bloco_dados_de_usuario, seguindo padrão de botões para ver sessões e vídeos do mesmo, usando comando HTTP 'GET' para o URL buscar_comentarios_de_usuario

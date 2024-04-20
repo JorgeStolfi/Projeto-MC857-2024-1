@@ -3,16 +3,13 @@ import html_elem_form
 import html_elem_button_simples
 import html_elem_button_submit
 
-def gera(id_vid, atrs, ses_admin):
+def gera(id_vid, atrs):
 
   # Validação de argumentos (paranóia):
   assert id_vid != None and type(id_vid) is str
   assert atrs == None or type(atrs) is dict
-  assert type(ses_admin) is bool
 
-  # Constrói tabela vid dados:
-  auto = not ses_admin # Caso o pedinte não seja administardor, supõe que é o autor.
-  ht_table = html_bloco_dados_de_video.gera(id_vid, atrs, ses_admin, auto)
+  ht_table = html_bloco_dados_de_video.gera(id_vid, atrs, True, True)
 
   # Constrói formulário vid botões 'Confirmar' e 'Cancelar':
   ht_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_video', None, '#55ee55')

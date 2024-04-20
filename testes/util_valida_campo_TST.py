@@ -162,6 +162,27 @@ testa_funcao("data_None_nulokF_bad",  False,  func_data, 'niver', None, False)
   
 # !!! Testar {titulo_de_video} !!!
 
+func_titulo = util_valida_campo.titulo_de_video
+for xrot, xvalido, val in \
+    ( ( "Nulo",               True,  None,                                     ),
+      ( "Valido",             True,  "Titulo do Video",   ), 
+      ( "MuitoCurto",         False, "Título", ),
+      ( "MuitoLongo",         False, "Título Josefino Josualdo Josismar Josias Josenildo Josafá Josênioaaaaaaaa", ),
+      ( "BrancoInicial",      False, " Título do Vídeo",   ),
+      ( "BrancoFinal",        False, "Título do Vídeo ",   ),
+      ( "BrancoDuplo",        False, "Título do  Vídeo",   ),
+      ( "PontoInválido",      False, "Título P.O'Hara do vídeo",    ),
+      ( "CaracsInvalidos",    False, "Elon X-φ ≥ 17",                           ),
+      ( "ComeçaNumero",      False, "1Título do Vídeo",    ),
+      ( "ComeçaMinusculo",      False, "título do Vídeo",    )
+    ):
+  for nulo_ok in ( False, True ) if (val == None or xrot == "A") else ( False, ):
+    if xvalido or ( val != None and not nulo_ok):
+      valido = xvalido and (val != None or nulo_ok)
+      rot_teste = "nome_" + xrot + "_nulok" + str(nulo_ok)[0] + ("_ok" if valido else "_bad")
+      testa_funcao(rot_teste, valido, func_titulo, 'Titulo', val, nulo_ok)
+
+
 # ----------------------------------------------------------------------
 # Veredito final:
 

@@ -1,0 +1,15 @@
+Fiquei responsável por implementar a função 'comando_solicitar_pag_alterar_video',
+no qual um usuário ao clicar para editar um vídeo, deve ser redirecionado para uma
+página que apresenta um formulário (que ainda não foi implementado e não estava na
+minha tarefa de hoje) com alguns campos editáveis. O usuário deve ser admin ou o criador
+do vídeo.
+
+Comecei implementando a lógica para verificar se existia uma sessão, e se o usuário
+estava logado como admin, ou se era um usuário comum mas que criou o vídeo. Em caso
+positivo, ele era redirecionado para a página do formulário de edição de vídeo.
+
+Caso o usuário não fosse admin, e nem fosse o criador do vídeo, uma mensagem de erro
+é mostrada, dizendo que o usuário não tem permissão para editar.
+
+Por fim, criei os testes, com 4 casos específicos: usuário admim, usuário criador do vídeo,
+usuário comum não criador do vídeo e usuário não logado.

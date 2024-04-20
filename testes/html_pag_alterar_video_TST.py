@@ -4,6 +4,7 @@ import html_pag_alterar_video
 import db_tabelas_do_sistema
 import obj_video
 import obj_sessao
+import obj_usuario
 import db_base_sql
 import util_testes
 
@@ -71,7 +72,7 @@ erros_dic = { 'N': None, 'V': erros_vaz, 'E': erros_tri, }
 for st, ses in ses_dic.items():
   for vt, id_vid in vid_dic.items():
     for et, erros in erros_dic.items():
-      if ses == sesA1 or (ses == sesC1 and id_vid == vidC1_id)
+      if ses == sesA1 or (ses == sesC1 and id_vid == vidC1_id):
         vid = obj_video.busca_por_identificador(id_vid)
         atrs_tot = obj_video.obtem_atributos(vid)
         atrs_som = { 'titulo': "Alteradus", }

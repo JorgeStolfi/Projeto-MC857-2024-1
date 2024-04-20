@@ -16,9 +16,10 @@ def processa(ses, cmd_args):
   try:
     obj_usuario.confere_e_elimina_conf_senha(cmd_args)
     usr = obj_usuario.cria(cmd_args)
-    pag = html_pag_login.gera(ses, None)
+    pag = html_pag_login.gera(None)
   except ErroAtrib as ex:
     erros = ex.args[0]
+    sys.stderr.write(f"Erro na criação de usuário: {erros}\n")
     # Repete a página de cadastrar com os mesmos argumentos e mens de erro:
     pag = html_pag_cadastrar_usuario.gera(ses, cmd_args, erros)
   return pag
