@@ -1,6 +1,6 @@
 import html_form_alterar_video_IMP
 
-def gera(id_vid, atrs, ses_admin):
+def gera(id_vid, atrs):
   """
   Retorna um elemento "<form>...</form>" adequado para
   alterar os dados de um vídeo {vid} cujo identificador é {id_vid}.
@@ -32,4 +32,4 @@ def gera(id_vid, atrs, ses_admin):
   O formulário também terá um botão simples "Cancelar", que, 
   quando clicado, emite o comando "pag_principal".
   """
-  return html_form_alterar_video_IMP.gera(id_vid, atrs, ses_admin)
+  return html_form_alterar_video_IMP.gera(id_vid, atrs)
