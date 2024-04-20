@@ -3,6 +3,8 @@ import html_bloco_titulo
 import html_pag_generica
 import html_bloco_lista_de_comentarios
 import obj_comentario
+import obj_video
+import obj_sessao
 
 def processa(ses, cmd_args):
   
