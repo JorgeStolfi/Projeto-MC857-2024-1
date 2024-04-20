@@ -42,6 +42,20 @@ obj_sessao.fecha(ses_C2)
 testa_processa("NA-e2", None,   {}) # Não logado.
 testa_processa('CA-e3', ses_C1, {}) # Sessao usuário comum aberta.
 testa_processa("OK-e0", ses_A1, {}) # Sessão admin aberta.
-testa_processa("NL-e0", ses_C2, {}) # Sessão comum não aberta.
+
+try:
+  testa_processa("NL-e0", ses_C2, {}) # Sessão comum não aberta.
+except AssertionError as error:
+  print('Retornou o seguinte erro, pois a sessão já tinha sido fechada: {}'.format(error))
+
+try:
+  testa_processa('CA-e3', ses_C1, {"bla, bla, bla"}) # Sessao usuário comum aberta, argumentos não são do tipo dicionário.
+except AssertionError as error:
+  print('Retornou o seguinte erro, pois os argumentos passados não eram válidos: {}'.format(error))
+
+try:
+  testa_processa('CA-e3', ses_C1, {"error": True}) # Sessao usuário comum aberta, argumentos não vazios.
+except AssertionError as error:
+  print('Retornou o seguinte erro, pois os argumentos passados não eram vazios: {}'.format(error))
 
 sys.stderr.write("Testes terminados normalmente.\n")

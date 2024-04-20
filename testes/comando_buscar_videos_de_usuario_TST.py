@@ -32,7 +32,7 @@ id_ses = "S-00000001"
 ses1 = obj_sessao.busca_por_identificador(id_ses)
 
 # Sessão de usuário comum:
-testa_comando_buscar_videos_de_usuario("teste1", ses1, {'usuario': '1'})  
+testa_comando_buscar_videos_de_usuario("teste1", ses1, {'usuario': 'U-00000001'})  
 
 sys.stderr.write("Testes terminados normalmente.\n")
  

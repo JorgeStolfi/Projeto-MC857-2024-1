@@ -34,7 +34,7 @@ def gera(id_usr, atrs, ses_admin, auto):
 
   Se houver campos editáveis, este bloco deve ser incluído em um
   elemento "<form>...</form>" que deve incluir um botão de tipo submit.
-  No comando POST gerado por esse bitãi, o identificador {id_usr} será
+  No comando POST gerado por esse botão, o identificador {id_usr} será
   incluído nos argumentos do comando com rótulo 'usuario'.
   """
   return html_bloco_dados_de_usuario_IMP.gera(id_usr, atrs, ses_admin, auto)

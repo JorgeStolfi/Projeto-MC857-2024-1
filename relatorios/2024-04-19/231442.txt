@@ -1,0 +1,6 @@
+Hoje foi mais desafiador.
+
+Os testes estavam quebrados e tinha também uma parte do codigo para mexer. No entanto, a cada aula que passa eu me sinto mais adaptado 
+à esse projeto.
+
+Tive problemas de testar a feature porque havia esquecido de subir o servidor, mas uma vez que subi deu tudo certo.

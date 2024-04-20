@@ -5,12 +5,10 @@ import db_tabelas_do_sistema
 import comando_buscar_comentarios_de_video
 import obj_sessao
 import util_testes
-import obj_usuario
-import obj_video
 
 import sys
 
-# Conecta no banco e carrega alimenta com as informações para o teste
+# Conecta no banco e alimenta com as informações para o teste
 
 sys.stderr.write("Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB", None, None)
@@ -34,8 +32,10 @@ ses_adm_id = "S-00000001"
 ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
 
 # Teste passando um id do video
-id_vid = "V-00000002"
-
-testa_processa("T1",  ses_adm, {'video': id_vid })
+testa_processa("T1",  ses_adm, {'video': "V-00000001"})
+testa_processa("T2",  ses_adm, {'video': "V-00000002"})
+testa_processa("T3",  None,    {'video': "V-00000003"})
+testa_processa("T4",  None,    {'video': "V-00000004"})
+testa_processa("T5",  None,    {'video': "V-00000005"})
 
 sys.stderr.write("Testes terminados normalmente.")

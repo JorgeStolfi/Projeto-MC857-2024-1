@@ -3,10 +3,7 @@
 import comando_solicitar_pag_postar_comentario
 import db_base_sql
 import db_tabelas_do_sistema
-import obj_comentario
-import obj_video
 import obj_sessao
-import obj_usuario
 import util_testes
 
 import sys
@@ -30,6 +27,12 @@ ses_C1 = obj_sessao.busca_por_identificador(ses_C1_id)
 assert ses_C1 != None
 assert not obj_sessao.de_administrador(ses_C1)
 
+cmd_args = {
+  "video": "V-00000001",
+  "pai": "C-00000001",
+  "autor": "U-00000001"
+}
+
 def testa_processa(rot_teste, *cmd_args):
   """Testa {funcao(*cmd_args)}, grava resultado 
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
@@ -39,4 +42,5 @@ def testa_processa(rot_teste, *cmd_args):
   pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *cmd_args)
 
-aviso_prog("!!! Programa de teste {comando_solicitar_pag_postar_comentario_TST.py} ainda não escrito !!!")
+
+testa_processa("T1", ses_A1, cmd_args)

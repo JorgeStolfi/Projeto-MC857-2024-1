@@ -31,21 +31,26 @@ def processa(ses, cmd_args):
     if 'autor' in cmd_args: assert id_autor == cmd_args['autor']
     
     # Nome do arquivo:
-    arq = cmd_args['arq'] if 'arq' in cmd_args else None
     
     # Título:
     titulo = cmd_args['titulo'] if 'titulo' in cmd_args else None
     
+    rd = open('videos/virus.mp4', 'rb')
+    conteudo = rd.read()
+    rd.close()
     # Grava o conteudo do arquivo no disco:
-    wr = open("videos/" + arq, 'wb')
+    wr = open("videos/" + 'teste.mp4', 'wb')
     # !!! Implementar o upload do arquivo {arq} e gravação no disco !!!
+   
+    
+    wr.write(conteudo)
+
     wr.close()
-    erros.append("!!! uppload do arquivo ainda não foi implementado !!!")    
 
     # Registra na tabela de vídeos e cria o objeto:
     atrs = {
       'autor': autor,
-      'arq': arq,
+      'arq' : 'teste.mp4',
       'titulo': titulo,
     }
     vid = obj_video.cria(atrs)
