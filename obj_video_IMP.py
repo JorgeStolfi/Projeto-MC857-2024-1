@@ -196,9 +196,9 @@ def liga_diagnosticos(val):
 # FUNÇÕES INTERNAS
 
 def obtem_dimensoes_do_arquivo(arq):
-  """Examina o arquivo "videos/{arq}" no disco, que deve ter extensão ".mp4"
-  e devolve as dimensões do vídeo: duração (em ms), largura, e altura (em pixels).
-  Dá erro se não existe arquivo com esse nome."""
+  # """Examina o arquivo "videos/{arq}" no disco, que deve ter extensão ".mp4"
+  # e devolve as dimensões do vídeo: duração (em ms), largura, e altura (em pixels).
+  # Dá erro se não existe arquivo com esse nome."""
   
   # path = "videos/" + arq
   # assert os.path.exists(path)
