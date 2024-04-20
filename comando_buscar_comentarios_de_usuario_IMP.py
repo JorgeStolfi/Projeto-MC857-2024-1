@@ -11,12 +11,16 @@ def processa(ses, cmd_args):
   # Páginas do sistema deveriam garantir estas condições:
   assert ses == None or obj_sessao.aberta(ses), "Sessão do comando inválida"
   assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
+  # Caso ses seja None, é necessário que seja passado um id de usuário de parâmetro
+  assert not (ses == None and 'usuario' not in cmd_args), "Argumentos inválidos"
  
   erros = [].copy()
 
-  # Obtem o usuário {usr_ses} dono da sessão:
-  usr_ses = obj_sessao.obtem_usuario(ses); assert usr_ses != None
-  id_usr_ses = obj_usuario.obtem_identificador(usr_ses)
+  # Caso ses != None, obtem o usuário {usr_ses} dono da sessão:
+  usr_ses = None
+  if ses != None:
+    usr_ses = obj_sessao.obtem_usuario(ses); assert usr_ses != None
+    id_usr_ses = obj_usuario.obtem_identificador(usr_ses)
   
   # Obtém o usuário {autor} a listar e seu identificador {id_autor}:
   if 'usuario' in cmd_args:

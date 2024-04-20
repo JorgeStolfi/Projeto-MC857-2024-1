@@ -20,7 +20,7 @@ def processa(ses, cmd_args):
   A função retorna uma página HTML {pag} com o formulário que mostra os
   dados do vídeo {vid}. Veja {html_pag_alterar_video.gera}. Alguns
   atributos do vídeo (como o autor, o nome do arquivo, e suas dimensões)
-  serão exibidos mas não poderão ser ser alterados, nem mesmo pelo
+  serão exibidos mas não poderão ser alterados, nem mesmo pelo
   administrador. A página terá um botão de submissão "Confirmar" ou
   equivalente que emite um comando HTTP "alterar_video".
   """
