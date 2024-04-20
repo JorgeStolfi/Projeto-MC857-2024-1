@@ -7,5 +7,5 @@ O erro ocorreu pois o módulo de teste estava passando um dicionário com outro 
 Após essa correção, outro erro surgiu: html_bloco_titulo.gera(f"Comentários do video {id_vid}", False). Esse método espera apenas 1 campo, o título, sem o False.
 O próximo erro foi em html_bloco_lista_de_comentarios.gera(lista_ids_comentarios), onde lista_ids_comentarios não estava definido. A variável correta é lista_ids_com, que foi definida anteriormente. Esse método também espera outros 2 campos booleanos: mostra_autor e mostra_video. Não é necessário mostrar o vídeo na página de comentários, mas é importante mostrar os autores dos comentários.
 O próximo erro foi ht_conteudo não definido. O html_pag_generica retorna uma página com cabeçalho, menus, e rodapé padrões do projeto, e o {conteudo} dado (um {string} em formato HTML5). Esse bloco na verdade é o ht_bloco.
-Após essas correções o teste concluiu com êxito e a página de comentários foi gerada.
+Após essas correções o teste concluiu com êxito e a página de comentários foi gerada. O módulo de teste executou o único método presente, o "processa".
 Na página gerada na saída do teste, a tabela especificada em html_linha_resumo_de_comentario foi gerada.
