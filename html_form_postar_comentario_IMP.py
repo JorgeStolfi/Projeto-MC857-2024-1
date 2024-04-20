@@ -4,10 +4,6 @@ import html_elem_button_simples
 import html_elem_button_submit
 
 def gera(atrs):
-  """  
-  Formato do argumento {atrs}:
-  {atrs} = { 'autor': id_autor, 'video': id_video, 'pai': id_pai, "texto": texto } 
-  """  
 
   dados_linhas = ( 
     ("autor", "text", "autor", False, None),
