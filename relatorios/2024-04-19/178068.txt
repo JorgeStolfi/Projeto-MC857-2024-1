@@ -1,0 +1,11 @@
+Fiquei responsável pelo módulo comando_buscar_comentarios_video: completar implementação e programa de teste.
+    
+O servidor.py e teste.sh estavam apresentando erro pela falta do ffprobe e ffmpeg. Fiz download do binário do ffprobe e ffmpeg e importei no servidor.py e no módulo de teste chamado pelo teste.sh, o que resolveu o problema.
+O primeiro teste do módulo mostrou a falta da importação do obj_video e do obj_sessao.
+Após a correção, o segundo teste mostrou um "TypeError: unhashable type: 'dict' na linha 82 do db_obj_tabela_IMP.py".
+O erro ocorreu pois o módulo de teste estava passando um dicionário com outro dicionário dentro dele para o módulo de busca de comentário de vídeo, o que não era permitido. O método 'processa' desse módulo deve receber como argumento um dicionário com único campo 'video' e com o identificador ("V-{NNNNNNNN}"), como especificado na assinatura do método.
+Após essa correção, outro erro surgiu: html_bloco_titulo.gera(f"Comentários do video {id_vid}", False). Esse método espera apenas 1 campo, o título, sem o False.
+O próximo erro foi em html_bloco_lista_de_comentarios.gera(lista_ids_comentarios), onde lista_ids_comentarios não estava definido. A variável correta é lista_ids_com, que foi definida anteriormente. Esse método também espera outros 2 campos booleanos: mostra_autor e mostra_video. Não é necessário mostrar o vídeo na página de comentários, mas é importante mostrar os autores dos comentários.
+O próximo erro foi ht_conteudo não definido. O html_pag_generica retorna uma página com cabeçalho, menus, e rodapé padrões do projeto, e o {conteudo} dado (um {string} em formato HTML5). Esse bloco na verdade é o ht_bloco.
+Após essas correções o teste concluiu com êxito e a página de comentários foi gerada.
+Na página gerada na saída do teste, a tabela especificada em html_linha_resumo_de_comentario foi gerada.
