@@ -1,4 +1,4 @@
-import comando_alterar_video_IMP
+import comando_alterar_comentario_IMP
 
 def processa(ses, cmd_args):
   """Esta função é chamada quando o usuário aperta o botão "Confirmar alterações"
@@ -8,9 +8,10 @@ def processa(ses, cmd_args):
   no dicionário {cmd_args}.   
   
   O parâmetro {ses} não pode ser {None} e deve ser um objeto de tipo
-  {obj_sessao.Class}.  A sessão deve estar aberta.   O dicionário {cmd_args}
+  {obj_sessao.Class}. (VV). A sessão deve estar aberta. (V)  O dicionário {cmd_args}
   deve ter um campo 'comentario' não nulo, cujo valor é o identificador do
-  comentário {com} a alterar.
+  comentário {com} a alterar. (V)
+  (V)
   
   Por enquanto o único campo que pode ser alterado é o 'texto'
   do comentário, e só se o dono da sessão {ses} for um 'administrador' 
