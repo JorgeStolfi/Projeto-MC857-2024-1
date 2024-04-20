@@ -34,7 +34,7 @@ ses_adm_id = "S-00000001"
 ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
 
 # Teste passando um id do video
-id_vid = {'video': "V-00000002"}
+id_vid = "V-00000002"
 
 testa_processa("T1",  ses_adm, {'video': id_vid })
 
