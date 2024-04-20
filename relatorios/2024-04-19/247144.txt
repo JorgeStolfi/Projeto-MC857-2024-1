@@ -1,0 +1,154 @@
+1 - Inicialmente comecei realizando a unica coisa restante na função util_valida_campo, que seria implementar a validação de titulo do video.
+2 - Comecei e dei sequencia a todas as especificações, das quais
+    2.1 - mais de 10 e menos de 60 caracteres
+    2.2 - validar se é String e se pode ser nulo
+    2.3 - valiadar se a primeira letra é maiúscula
+    2.4 - validar se existem 2 espaços entre os caracteres
+    2.5 - validar se o titulo está com os caracteres certos e dentro do padrão
+
+Onde a função ficou:
+    def titulo_de_video(chave, val, nulo_ok):
+        erros = [].copy() 
+        #chave e o nome do campo
+        #val é o valor do campo
+        #mulo_o verifica se pode ser nulo
+        #1 - Verificar se pode ser nulo
+        if val == None or not val:
+            if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
+        elif not isinstance(val, str):
+            erros += [ f"campo '{chave}' = \"{str(val)}\" é nome de arquivo inválido: deve ser string"]
+        else:
+            #2 - verificar se tem mais de 10 digitos e menos de 60
+            if len(val) < 10:
+            erros += [ f"campo '{chave}' = \"{str(val)}\" deve conter no mínimo 10 Caracteres"]
+            elif len(val)>60:
+            erros += [ f"campo '{chave}' = \"{str(val)}\" deve conter no máximo 10 Caracteres"]
+
+        #3 - verificar se a primeira letra é maíuscula
+            if not val[0].isupper():
+            erros += [ f"campo '{chave}' = \"{str(val)}\" deve conter a primeira letra maiúscula"]
+
+            #4 - verificar se nao termina com espaço
+            if val[-1].isspace():
+            erros += [ f"campo '{chave}' = \"{str(val)}\"  não pode começar com espaços"]
+
+            #5 - verificar se não existe dois espaços em branco em nenhum lugar
+            if "  "  in val:
+            erros += [ f"campo '{chave}' = \"{str(val)}\"  não pode conter dois espaços seguidos"]
+
+            #6- verificar padrão ascii latino americano
+            padrao = r'^[A-Za-z0-9À-ÖØ-öø-ÿ!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~\s]+$'
+
+            if not re.match(padrao, val):
+            erros += [ f"campo '{chave}' = \"{str(val)}\"  contém caracteres não permitidos"]
+
+            return erros
+
+3 - Em sequencia rodei o comando testa.sh para visualizar os resultados atuais dos testes do qual obtive:
+    testando email
+    rot_teste = 'email_MuitoLonga_bad' args = ('spam-to', 'Xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@gov.br', True)'
+    resultado = []
+    resultado vazio - função diz que campo é válido
+    ** devia dizer que é inválido
+
+Contudo de acordo com a interface diz que pode ter até 64 caracteres, enquanto que no teste ele testa apenas 60
+    - testa_funcao("email_MuitoLonga_bad",     False,  func_email, 'spam-to', "X"+("a"*60)+"@gov.br",  True) 
+Portante arrumei para:
+    - testa_funcao("email_MuitoLonga_bad",     False,  func_email, 'spam-to', "X"+("a"*64)+"@gov.br",  True) 
+
+Após isso notei que a propria função que verifica se o email está correto estava errada e corrigi para:
+
+4 - Depois notei o erro no teste de data:
+ testando data
+    rot_teste = 'data_Ano1899Invalido_bad' args = ('niver', '1899-12-31 20:10:05 UTC', True)'
+    resultado = ['campo \'niver\' = "1899-12-31 20:10:05 UTC" é data inválida: o ano deve estar em 1900..2099']
+    resultado não vazio - função diz que campo é inválido
+    confere!
+  gravando arquivo util_valida_campo.data_Ano1899Invalido_bad ...
+
+No qual havia um erro de lógica no campo data:
+    if not ano <= 2099 and ano >= 1900:
+Mudei para:
+    if not 1900 <= ano <= 2099:
+
+Havia a mesma problematica nos respectivos itens:
+      elif not 1 <= mes <= 12 :
+      elif not dia <= 31 and dia >= 1:
+      elif not hora <= 23 and hora >= 0:
+      elif not minuto <= 59 and minuto >= 0:
+      elif not segundo <= 60 and segundo >= 0:
+Dos quais fiz as mudanças igual na linha de ano citada anteriormente
+
+
+5 - Após isso notei o seguinte erro nos testes:
+    testando nome_de_usuario
+    rot_teste = 'nome_ApostInvalido_nulokF_bad' args = ('padrinho', "José' da Silva P. O'Hara Costa-Gravas", False)'
+    resultado = []
+    resultado vazio - função diz que campo é válido
+    ** devia dizer que é inválido
+
+no qual reparei que na função nome não havia tratativa para o apostrofe, do qual eu inseri
+    if "'" in val:
+      letraSeguinte = val.split("'")[1][0]
+      letraAnterior = val.split("'")[0][-1]
+      if not (letraSeguinte.isupper() and not letraSeguinte.isspace()):
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita maiúscula após o apostrofe" ]
+      if not letraAnterior.isalpha():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do apostrofe ]
+
+Também fiz adição no que dizia respeito a espaços em branco no nome:
+    if val[0].isspace() or val[-1].isspace():
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: branco antes ou depois do nome" ]
+    if '  ' in val:
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: você inseriu dos espaços seguidos" ]
+
+E no que diz respeito a pontos:
+ if "." in val:
+      letraSeguinte = val.split("'")[1][0]
+      letraAnterior = val.split("'")[0][-1]
+      if not letraSeguinte.isspace():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita espaço após o ponto" ]
+      if not letraAnterior.isalpha():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do ponto" ]
+
+E no que diz respeito aos hifens
+if "-" in val:
+      letraSeguinte = val.split("-")[1][0]
+      letraAnterior = val.split("-")[0][-1]
+
+      if not( letraAnterior.isalpha or letraAnterior == "."):
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
+      if not letraSeguinte.isupper():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
+
+ao fim notei que havia um problema nos testes de nome:
+      ( "Valido",             True,  "José da Çilvã P. O'Hara Cøsta-Grävas",   ), 
+Onde esse nome não é valido e deve virar um nome válido:
+      ( "Valido",             True,  "José da Çilvã P.O'Hara Costa-Gravas",   ), 
+
+6 - Após isso criei o teste para minha função de titulo de filme criada com os seguintes cenários de teste:
+
+    Positivos:
+    6.1 - Filme com 10 a 60 caracteres com caracteres ASCII corretos, Letra maiuscula no inicio e sem terminar com branco ou ter dois brancos juntos
+    6.2 - Filme com valor none e nulo_ok true
+    Negativo
+    6.2 - Filme com menos de 10 caracteres
+    6.3 - Filme com mais de 60 caracteres
+    6.4 - Filme com caracter fora da ISO
+    6.5 - Filme com primeira letra minuscula
+    6.6 - Filme terminado com branco
+    6.7 - Filme com dois brancos juntos
+
+    Ficando assim:
+    func_titulo_video = util_valida_campo.titulo_de_video
+    #positivo
+    testa_funcao("titulo_valido_ok", True, func_titulo_video, 'titulo', 'Velozes e Furiosos 2', True)
+    testa_funcao("titulo_validoNone_ok", True, func_titulo_video, 'titulo', None, True)
+
+    #Negativo
+    testa_funcao("titulo_menos10Caracteres_bad", False, func_titulo_video, 'titulo', 'Val', True)
+    testa_funcao("titulo_mais60_Caracteres_bad", False, func_titulo_video, 'titulo',("a"*62), True)
+    testa_funcao("titulo_caracterNaoIso_bad", False, func_titulo_video,'titulo', 'Titulo Sem ISO ぁ', True)
+    testa_funcao("titulo_primeiraLetraMinuscula_bad", False, func_titulo_video,'titulo', 'titulo minusculo comeco', True)
+    testa_funcao("titulo_finalBranco_bad", False, func_titulo_video, 'titulo','Titulo final branco  ', True)
+    testa_funcao("titulo_duploBranco_bad", False, func_titulo_video, 'titulo','Titulo duplo  branco', True)

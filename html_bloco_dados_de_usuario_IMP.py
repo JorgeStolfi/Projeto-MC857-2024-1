@@ -30,6 +30,7 @@ def gera(id_usr, atrs, ses_admin, auto):
   # Acrescenta o botão "Ver sessões" se for o caso:
   ht_bt_sessoes = None # A menos que tenha.
   ht_bt_videos = None # A menos que tenha.
+  ht_bt_comentarios = None # A menos que tenha.
   if id_usr != None:
     # Somente admininstrador ou o próprio podem ver as sessões de {usr}:
     if ses_admin or auto:
@@ -42,11 +43,13 @@ def gera(id_usr, atrs, ses_admin, auto):
     # Mas qualquer um pode ver os vídeos de {usr}
     ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': id_usr}, '#eeee55')
   
-    # !!! Acrescentar botão para ver comentários do usuário !!! 
+    # Assim como qualquer um pode ver seus comentários
+    ht_bt_comentarios = html_elem_button_simples.gera(f"Ver comentarios", "buscar_comentarios_de_usuario", {'usuario': id_usr}, '#eeee55')
 
   ht_bloco = \
     ht_table + "<br/>" + \
     ( ht_bt_sessoes + " " if ht_bt_sessoes != None else "") + \
-    ( ht_bt_videos  + " " if ht_bt_videos != None else "")
+    ( ht_bt_videos  + " " if ht_bt_videos != None else "") + \
+    ( ht_bt_comentarios  + " " if ht_bt_comentarios != None else "")
 
   return ht_bloco

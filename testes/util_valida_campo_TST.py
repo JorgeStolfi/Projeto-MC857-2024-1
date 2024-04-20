@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 import sys, re
-from util_erros import erro_prog, aviso_prog
+from util_erros import aviso_prog
 import util_valida_campo
 import util_valida_campo
 import util_testes
@@ -42,11 +42,14 @@ def testa_funcao(rot_teste, valido, funcao, *args):
         sys.stderr.write("    confere!\n")
       else:
         sys.stderr.write("    ** devia dizer que é inválido\n")
+        print(f"PROBLEMA AQUI  {rot_teste}\n  {str(res)}\n")
+
         ok = False
     else:
       sys.stderr.write("    resultado não vazio - função diz que campo é inválido\n")
       if valido:
         sys.stderr.write("    ** devia dizer que é válido\n")
+        print(f"PROBLEMA AQUI  {rot_teste}\n  {str(res)}\n")
         ok = False
       else:
         sys.stderr.write("    confere!\n")
@@ -54,6 +57,8 @@ def testa_funcao(rot_teste, valido, funcao, *args):
       for msg in res:
         if type(msg) != str:
           sys.stderr.write(f"    ** mensagem = '{str(res)}' devia ser string\n")
+          print(f"PROBLEMA AQUI  {rot_teste}\n {str(res)}\n")
+
           ok = False
         else:
           ht_msg = html_elem_paragraph.gera(None, msg);
@@ -65,7 +70,7 @@ def testa_funcao(rot_teste, valido, funcao, *args):
   ok_global = ok_global and ok
   sys.stderr.write(f"  {'-'*70}\n")
 
-# ======================================================================
+# ==================================# !!! Implementar conforme documentação na interface !!!====================================
 
 func_bool = util_valida_campo.booleano
 for val in None, True, False, 410:
@@ -100,7 +105,7 @@ for letra in "C", "ZZ":
 func_nome = util_valida_campo.nome_de_usuario
 for xrot, xvalido, val in \
     ( ( "Nulo",               True,  None,                                     ),
-      ( "Valido",             True,  "José da Çilvã P. O'Hara Cøsta-Grävas",   ), 
+      ( "Valido",             True,  "José da Silvã P. O'Hara Costa-Gravas",   ), 
       ( "ApostInvalido",      False, "José' da Silva P. O'Hara Costa-Gravas",  ),
       ( "ApostInválido",      False, "José da Silva P'. O'Hara Costa-Gravas ", ),
       ( "MuitoCurto",         False, "José", ),
@@ -137,7 +142,7 @@ testa_funcao("email_Valido_ok",          True,   func_email, 'spam-to', "quem_12
 testa_funcao("email_DuasArrobas_bad",    False,  func_email, 'spam-to', "123@456@onde.br",       True) 
 testa_funcao("email_NenhumaArroba_bad",  False,  func_email, 'spam-to', "nenhures",              True) 
 testa_funcao("email_HostSemPonto_bad",   False,  func_email, 'spam-to', "tomate@beringela",      True) 
-testa_funcao("email_MuitoLonga_bad",     False,  func_email, 'spam-to', "X"+("a"*60)+"@gov.br",  True) 
+testa_funcao("email_MuitoLonga_bad",     False,  func_email, 'spam-to', "X"+("a"*64)+"@gov.br",  True) 
 
 testa_funcao("email_None_nulokT_ok",   True,   func_email, 'spam-to', None, True) 
 testa_funcao("email_None_nulokF_bad",  False,  func_email, 'spam-to', None, False)
@@ -158,9 +163,18 @@ testa_funcao("data_ZonaINvalida_bad",      False,  func_data, 'niver', "2024-04-
 testa_funcao("data_None_nulokT_ok",   True,   func_data, 'niver', None, True) 
 testa_funcao("data_None_nulokF_bad",  False,  func_data, 'niver', None, False)
 
-# ======================================================================
-  
-# !!! Testar {titulo_de_video} !!!
+func_titulo_video = util_valida_campo.titulo_de_video
+#positivo
+testa_funcao("titulo_valido_ok",      True, func_titulo_video, 'titulo', 'Velozes e Furiosos 2', True)
+testa_funcao("titulo_validoNone_ok",  True, func_titulo_video, 'titulo', None,                   True)
+
+#Negativo
+testa_funcao("titulo_menos10Caracteres_bad",      False, func_titulo_video, 'titulo', 'Val', True)
+testa_funcao("titulo_mais60_Caracteres_bad",      False, func_titulo_video, 'titulo', ("a"*62), True)
+testa_funcao("titulo_caracterNaoIso_bad",         False, func_titulo_video, 'titulo', 'Titulo Sem ISO ぁ', True)
+testa_funcao("titulo_primeiraLetraMinuscula_bad", False, func_titulo_video, 'titulo', 'titulo minusculo comeco', True)
+testa_funcao("titulo_finalBranco_bad",            False, func_titulo_video, 'titulo', 'Titulo final branco  ', True)
+testa_funcao("titulo_duploBranco_bad",            False, func_titulo_video, 'titulo', 'Titulo duplo  branco', True)
 
 # ----------------------------------------------------------------------
 # Veredito final:

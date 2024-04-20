@@ -35,5 +35,5 @@ def testa_html_bloco_lista_de_comentarios(rot_teste, *args):
 
 for ver in (False, True):
   tag = "ver" + str(ver)[0]
-  testa_html_bloco_lista_de_comentarios("muitas-" + tag, ids_comentarios)
-  testa_html_bloco_lista_de_comentarios("lhufas-" + tag, [])
+  testa_html_bloco_lista_de_comentarios("muitas-" + tag, ids_comentarios, ver, ver)
+  testa_html_bloco_lista_de_comentarios("lhufas-" + tag, [], ver, ver)

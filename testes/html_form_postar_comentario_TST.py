@@ -1,23 +1,8 @@
 #! /usr/bin/python3
 
 import html_form_postar_comentario
-import obj_usuario
-import util_identificador
-import db_base_sql
-import db_tabelas_do_sistema
 import util_testes
-
 import sys
-
-from obj_usuario import obtem_atributos, obtem_identificador
-
-sys.stderr.write("  Conectando com base de dados...\n")
-res = db_base_sql.conecta("DB",None,None)
-assert res == None
-
-sys.stderr.write("  Criando alguns objetos...\n")
-db_tabelas_do_sistema.cria_todos_os_testes(True)
-
 
 def testa_gera(rot_teste, *args):
   """Testa {funcao(*args)}, grava resultado
@@ -29,4 +14,10 @@ def testa_gera(rot_teste, *args):
   pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
-aviso_prog("!!! html_pag_postar_comentario_TST.py ainda não escrito !!!")
+comment1 = { 'autor': "autor1", 'video': "video1", 'pai': "pai1", "texto": "texto1" } 
+comment2 = { 'autor': "autor2", 'video': "video2", 'pai': "pai2", "texto": "texto2" } 
+
+testa_gera("postar_comentario_1", comment1)
+testa_gera("postar_comentario_2", comment2)
+
+sys.stderr.write("Testes terminados normalmente.\n")

@@ -1,0 +1,5 @@
+Gustavo Purcena 198594
+
+- Verifiquei como o modulo de comando_buscar_usuarios era montado e implementado
+- Adicionei a condicional pedida para permitir buscas por email apenas para usuarios com sessao de administrador
+- Rodei os testes do modulo e identifiquei e corrigi um erro de uma chamada de funcao com um argumento a mais que o esperado

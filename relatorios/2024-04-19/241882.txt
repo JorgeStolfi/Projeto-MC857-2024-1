@@ -1,0 +1,16 @@
+Relatório:
+
+Para o dia 19-04-2024 foi determinada a tarefa de completar a implementação e teste
+do módulo html_form_postar_comentario.
+
+Para completar a implementação do módulo foi uma tarefa relativa simples, onde
+bastou definir a váriavel "dados_linhas" com os dados que determinam o formato
+do formulário para criação de comentário. Foi tomado o devido cuidado para 
+permitir que somente o  campo "texto" seja editável. Com tal váriavel definida, bastou
+chamar a função html_bloco_tabela_de_campos para obter o formulário.
+
+Foi necessário, também, uma correção no botão de submit, que estava executando o comando
+de fazer upload de video. Desta forma, o botão foi modificado para executar o comando
+fazer_postar_comentario, como esperado.
+
+O testes também foram implementados, e funcionam corretamente.
