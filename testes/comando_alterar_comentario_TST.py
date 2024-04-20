@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import comando_alterar_comentario
+import db_tabelas_do_sistema
 import obj_comentario
 import obj_usuario
 import obj_sessao
@@ -32,4 +33,11 @@ def testa_comando_alterar_comentario(rot_teste, *args):
   pretty = False # Deve formatar o HTML para facilitar view source?
   util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
 
-sys.stderr.write("!!! falta o progama de teste {comando_alterar_comentario_TST.py} !!!\n")
+
+# Executar o teste
+cmd_args = {
+  #"C-00000001", "V-00000001", "U-00000001", "2024-04-05 08:00:00 UTC", None,         "Supimpa!\nDeveras!"
+  'comentario': "C-00000001", 'autor' : "U-00000001", 'video' : "V-00000001", 'texto' : "Texto de teste" 
+}
+testa_comando_alterar_comentario("Dup", ses, cmd_args)
+sys.stderr.write("Teste terminado normalmente\n")
