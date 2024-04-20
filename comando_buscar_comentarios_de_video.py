@@ -3,7 +3,7 @@ import comando_buscar_comentarios_de_video_IMP
 def processa(ses, cmd_args):
   """Esta função lista os comentarios associados a um determinado video.
    
-  O parãmetro {ses} deve {None} ou um objeto {obj_sessao.Classe}
+  O parãmetro {ses} deve ser {None} ou um objeto {obj_sessao.Classe}
   de uma sessão atualmente aberta.
   
   O parâmetro {cmd_args} deve ser um dicionário com os argumentos do
