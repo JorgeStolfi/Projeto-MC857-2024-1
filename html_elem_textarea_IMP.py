@@ -2,7 +2,7 @@
 import html_elem_label
 from util_erros import erro_prog
 
-def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio):
+def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio, altura, largura):
   ht_rot_campo = html_elem_label.gera(rot_campo, ": ")
   ht_linhas = " rows=\"" + "10" + "\""
   ht_maxCarac = " maxlength=\"" + "5000" + "\""
@@ -18,10 +18,11 @@ def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio):
 
   ht_obrigatorio = (" required" if obrigatorio else "")
   ht_readonly = ( " readonly" if not editavel else "" )
-  ht_readonlybackground = ( " style=\"background-color:#BCBCBC\"" if not editavel else "" )
   ht_dica = ( " placeholder=\"" + dica + "\"" if dica != None else "" )
   ht_cmd = ( " onchange=\"window.location.href=" + cmd + "\"" if cmd != None else "" )
-  ht_estilo = ( " style=\"background-color:#c7c7c7\"" if not editavel else "" )
+  bg_color = ( "background-color:#c7c7c7;" if not editavel else "" )
+  elem_size = ( f"height:{altura}px;width:{largura}px;" if (altura is not None) and (largura is not None) else "" )
+  ht_estilo = " style=\"" + bg_color + elem_size + "\""
   ht_input_textarea = ht_rot_campo + \
     "<textarea" + \
       ht_linhas + \
@@ -30,7 +31,6 @@ def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio):
       ht_ident + \
       ht_val_ini + \
       ht_readonly + \
-      ht_readonlybackground + \
       ht_dica + \
       ht_cmd + \
       ht_obrigatorio + \
