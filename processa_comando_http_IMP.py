@@ -96,7 +96,7 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
 
     # Extrai os dados do comando HTTP na forma de um dicionário:
     dados = self.extrai_dados(tipo)
-
+    
     if tipo == 'GET' and dados['real_path'][0:9] == '/imagens/':
       # Pedido de uma imagem:
       nome_imagem = dados['real_path'][1:]
@@ -114,6 +114,15 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
 
       # Determina a sessao à qual este comando se refere:
       ses = self.obtem_sessao(dados)
+      
+      # Verificação de comprimento, por segurança:
+      cmd_len_max = 10000000 + 100000;  # Upload de arquivos até 10 MB:
+      if 'content-length' in self.headers:
+        cmd_len = int(self.headers['content-length'])
+        # sys.stderr.write(f"@$@ do_geral({tipo}): cmd_len = {cmd_len}\n")
+        if cmd_len > cmd_len_max:
+          self.devolve_erro(ses, f"comando {tipo} muito longo ({cmd_len}, máximo {cmd_len_max})") 
+          return
 
       # Processa o comando e constrói a página HTML de resposta:
       pag, ses_nova = processa_comando(tipo, ses, dados)
@@ -126,8 +135,8 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
       self.devolve_pagina(ses_nova, pag)
 
   def extrai_dados(self, tipo):
-    """Retorna todos os campos de um pedido do tipo {tipo} ('GET','POST', ou 'HEAD')
-    na forma de um dicionário Python {dados}.
+    """Retorna todos os campos de um pedido do tipo {tipo} 
+    ('GET','POST', ou 'HEAD') na forma de um dicionário Python {dados}.
     O valor do campo {dados['request_type']} é o {tipo} dado. Os demais
     campos são extraídos do {self} conforme especificado
     na classe {BaseHTTPRequestHandler}, com as seguintes adições:
@@ -221,18 +230,21 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
     campos {self.rfile} e {self, headers}, na forma de um dicionário Python."""
     ffs = {}.copy() # Novo dicionário.
     if self.command == 'POST':
+      # sys.stderr.write(f"@#@ extrai_dados_de_formulario: self.command = {str(self.command)}\n")
       formulario = cgi.FieldStorage(
         fp=self.rfile,
         headers=self.headers,
         environ={'REQUEST_METHOD':'POST', 'CONTENT_TYPE':self.headers['Content-Type']}
       )
+      # sys.stderr.write(f"@#@ extrai_dados_de_formulario: formulario = {str(formulario)[:2000]}\n")
       # Enumera os nomes dos campos presentes no formulário:
       for chave in formulario.keys():
+        # sys.stderr.write(f"@#@ extrai_dados_de_formulario: chave = '{chave}'\n")
         # Pega a lista de todos os campos com nome {chave}:
         item_list = formulario.getlist(chave)
         # Enumera os campos com esse nome:
         for val in item_list:
-          sys.stderr.write(f"@#@ chave = '{chave}' val = {str(val)[:64]}\n")
+          # sys.stderr.write(f"@#@ extrai_dados_de_formulario:   val = {str(val)[:64]}\n")
           # Armazena no dicionário:
           if chave in ffs:
             erro_prog("o formulário tem mais de um campo com nome '" + chave + "'")
@@ -254,9 +266,26 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
       ses = None
     return ses
 
+  def devolve_erro(self, msg):
+    """Manda para o usuário uma página HTML 5.0. simples dizendo que houve erro
+    no comando, com a mensagem {msg}."""
+    pag = \
+      "<!doctype html>\n" + \
+      "<html>\n" + \
+      "<head>\n" + \
+      "<title>ERRO Comando Inválido</title>\n" + \
+      "</head>\n" + \
+      "<body bgcolor='#ffaa77'>" + \
+      "<h2>O servidor MC857 recebeu um comando inválido<h2>\n" + \
+      f"<h3>{msg}<h3>\n" + \
+      "</body>\n" + \
+      "</html>\n"
+    self.devolve_pagina(ses, pag)
+    return
+  
   def devolve_pagina(self, ses, pag):
     """Manda para o usuário a {pag} dada, que deve ser um string
-    com o conteúdo da página em HTML 5.0., com os preâmulos adequados
+    com o conteúdo da página em HTML 5.0, com os preâmulos adequados
     segundo o protocolo HTTP.
     Se {pag} é {None}, sinaliza no preâmbulo o código 404 com conteúdo 'text/plain',
     mensagem 'Não encontrado'. Caso contrário, devolve a página com código 200 e
@@ -343,7 +372,7 @@ def processa_comando(tipo, ses, dados):
   a sessão {ses_nova} corrente.  Esta sessão pode ser diferente de {ses}, se o
   comando for login ou logout."""
 
-  mostra(0, "dados = " + str(dados) + "")
+  mostra_dados(dados)
 
   mostra_cmd = True # Deve mostrar os dados do comando no final da página?
 
@@ -549,32 +578,63 @@ def processa_comando(tipo, ses, dados):
 
   if mostra_cmd:
     # Acrescenta os dados do comando para depuração:
-    ht_cmd = formata_dados_http(cmd,cmd_args,dados)
+    ht_cmd = formata_dados_http(cmd,cmd_args,dados,True)
     sys.stderr.write(f"{'~'*70}\n{ht_cmd}\n{'~'*70}\n")
     ebdix = pag.find('</body>')
     pag = pag[:ebdix] + "<br/>" + ht_cmd + "<br/><br/></body>" 
 
   return pag, ses_nova
 
-def formata_dados_http(cmd,cmd_args,resto):
-  """Esta função de depuração devolve um string que é um trecho de HTML5 a ser inserido
-  no final de uma página.  Ele mostra a função {cmd} que foi executada, o dicionário {cmd_args}
-  com os argumentos da mesma, e o dicionário {resto} com os demais parâmetros do comando
-  HTTP recebido, num formato razoavelmente legível."""
+def formata_dados_http(cmd, cmd_args, resto, html):
+  """
+  Esta função de depuração devolve um string que mostra a função {cmd}
+  que foi executada, o dicionário {cmd_args} com os argumentos da mesma,
+  e o dicionário {resto} com os demais parâmetros do comando HTTP
+  recebido. 
+  
+  Se o booleano {html} é {False}, o resultado é prórpio para imprimir
+  em {stderr}. Se {html} é {True}, o resultado é um trecho de HTML5 a
+  ser inserido no final de uma página. Nos dois casos, os dados são
+  formatados de maneira mais ou menos legível, e campos muito longos são
+  truncados.
+  """
   resto_d = resto.copy()
   tipo = resto_d['command']; del resto_d['command'] # 'GET', 'POST', ou 'HEAD'
   # Dados principais:
-  args_lin = util_testes.formata_dict(cmd_args)
-  resto_lin = util_testes.formata_dict(resto_d)
+  max_len = 2000
+  ht_cmd_args = util_testes.formata_valor(cmd_args, html, max_len)
+  ht_resto = util_testes.formata_valor(resto_d, html, max_len)
 
   # Monta um bloco HTML com os dados de depuração:
-  texto = ("Resposta a comando HTTP \"%s\" recebido com dados principais:" % tipo)
-  texto = texto + ("<br/>cmd = \"%s\"<br/>cmd_args =<br/>%s" % (cmd, args_lin))
-  texto = texto + ("<br/><hr/>Outros dados:<br/>%s" % resto_lin)
-  estilo = f"font-family: Courier; font-size: 18px; font-weight: normal; padding: 5px; text-align: left;"
-  conteudo = html_elem_span.gera(estilo, texto)
-  conteudo = "<hr/>\n" + html_elem_div.gera("background-color:#bbbbbb;", conteudo) + "<hr/>\n"
-  return conteudo
+  ht_tit = (f"Resposta a comando HTTP \"{tipo}\" recebido com dados principais:")
+  if html:
+    ht_cmd =      f"<br/>cmd = \"{cmd}\"<br/>"
+    ht_cmd_args = "cmd_args =<br/>" + ht_cmd_args 
+    ht_resto =    "<br/><hr/>Outros dados:<br/>" + ht_resto
+  else:
+    ht_cmd =      f"\ncmd = \"{cmd}\"\n"
+    ht_cmd_args = "cmd_args =\n" + ht_cmd_args 
+    ht_resto =    "\n" + ("-"*70) + "Outros dados:\n" + ht_resto
+  
+  ht_conteudo = ht_tit + ht_cmd + ht_cmd_args + ht_resto
+
+  if html:
+    estilo = f"font-family: Courier; font-size: 18px; font-weight: normal; padding: 5px; text-align: left;"
+    ht_conteudo = html_elem_span.gera(estilo, ht_conteudo)
+    ht_conteudo = "<hr/>\n" + html_elem_div.gera("background-color:#bbbbbb;", ht_conteudo) + "<hr/>\n"
+  return ht_conteudo
+
+def mostra_dados(dado):
+  """Esta função de depuração imprime o valor simples ou estruturado {dado} em {stderr}, 
+  formatado e com os campos longs devidamente truncados."""
+  
+  html = False
+  max_len = 2000
+  dado = util_testes.formata_valor(dado, html, max_len)
+  sys.stderr.write(("-"*70)+"\n")
+  sys.stderr.write("dado =\n")
+  sys.stderr.write(dado)
+  sys.stderr.write(("-"*70)+"\n")
 
 def descasca_argumentos(cmd_args):
   """Dado um dicionário de argumentos extraídos de um comando GET ou POST,

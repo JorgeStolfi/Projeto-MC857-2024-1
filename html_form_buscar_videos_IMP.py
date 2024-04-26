@@ -11,7 +11,6 @@ def gera(atrs):
       ( "ID",       "text",   'video',  True,  "V-NNNNNNNN",      ),
       ( "Título",   "text",   'titulo', True,  "Bla bla bla",     ),
       ( "Autor",    "text",   'usr',    True,  "Fulano de tal",   ),
-      ( "Arquivo",  "text",   'arq',    True,  "XXXXX.mp4",       ),
     )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
@@ -23,4 +22,4 @@ def gera(atrs):
         ht_submit + \
         ht_cancel
 
-  return html_elem_form.gera(ht_conteudo)
+  return html_elem_form.gera(ht_conteudo, False)

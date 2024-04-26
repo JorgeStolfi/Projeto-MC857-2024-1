@@ -14,9 +14,6 @@ def gera(vid):
   id_autor = obj_usuario.obtem_identificador(autor)
   ht_usr = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, id_autor))
 
-  arq = atrs['arq']
-  ht_arq = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, arq))
-
   titulo = atrs['titulo']
   ht_titulo = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, titulo))
 
@@ -36,4 +33,4 @@ def gera(vid):
   bt_arg = {'video': obj_video.obtem_identificador(vid)}
   bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_arg, "#eeeeee")
 
-  return [ht_usr, ht_arq, ht_titulo, ht_data, ht_duracao, ht_largura, ht_altura, bt_ver]
+  return [ht_usr, ht_titulo, ht_data, ht_duracao, ht_largura, ht_altura, bt_ver]

@@ -18,7 +18,8 @@ def gera(ses, id_com, atrs, erros):
   assert com != None, f"Comentário {id_com} não existe"
   
   # Cria o formulário básico:
-  ht_form = html_form_alterar_comentario.gera(id_com, atrs)
+  ses_admin = obj_sessao.de_administrador(ses)
+  ht_form = html_form_alterar_comentario.gera(id_com, atrs, ses_admin)
     
   ht_conteudo = ht_form
 

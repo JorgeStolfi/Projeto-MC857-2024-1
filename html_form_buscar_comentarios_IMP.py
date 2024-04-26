@@ -18,6 +18,6 @@ def gera(atrs, admin=False):
     
     conteudo = "!!! html_form_buscar_comentarios.gera ainda não implementada !!!"
     ht_conteudo = html_elem_paragraph.gera(None, conteudo)
-    ht_form = html_elem_form.gera(ht_conteudo)
+    ht_form = html_elem_form.gera(ht_conteudo, False)
     
     return ht_form

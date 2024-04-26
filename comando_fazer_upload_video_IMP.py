@@ -13,52 +13,44 @@ import datetime
 def processa(ses, cmd_args):
   # Estas condições deveriam valer para comandos gerados
   # pelas páginas do site:
-  assert ses == None or obj_sessao.aberta(ses), "Sessao inválida"
+  assert ses != None and obj_sessao.aberta(ses), "Sessao inválida"
   assert type(cmd_args) is dict, "Argumentos inválidos"
   
   erros = [].copy()
   
-  if ses == None or not obj_sessao.aberta(ses):
-    erros.append("Precisa estar logado para executar esta função")
-    vid = None
+  # O autor do vídeo será sempre o dono da sessão:
+  autor = obj_sessao.obtem_usuario(ses)
+  id_autor = obj_usuario.obtem_identificador(autor)
+
+  # Estas condições também deveriam valer para comandos gerados pelo site:
+  if 'usuario' in cmd_args: assert cmd_args['usuario'] == id_autor
+  if 'autor' in cmd_args: assert cmd_args['autor'] == id_autor
+
+  if 'titulo' in cmd_args:
+    titulo = cmd_args['titulo']
   else:
-    # O autor do vídeo será sempre o dono da sessão:
-    autor = obj_sessao.obtem_usuario(ses)
-    id_autor = obj_usuario.obtem_identificador(autor)
+    erros.append("Precisa definir o título do video") 
+    titulo = None
     
-    # Por via das dúvidas:
-    if 'usuario' in cmd_args: assert id_autor == cmd_args['usuario']
-    if 'autor' in cmd_args: assert id_autor == cmd_args['autor']
-    
-    # Nome do arquivo:
-    
-    # Título:
-    titulo = cmd_args['titulo'] if 'titulo' in cmd_args else None
-    
-    rd = open('videos/virus.mp4', 'rb')
-    conteudo = rd.read()
-    rd.close()
-    # Grava o conteudo do arquivo no disco:
-    wr = open("videos/" + 'teste.mp4', 'wb')
-    # !!! Implementar o upload do arquivo {arq} e gravação no disco !!!
-   
-    
-    wr.write(conteudo)
+  # Pega o conteúdo do arquivo:
+  if 'arquivo' in cmd_args:
+    conteudo = cmd_args['arquivo']
+  else:
+    erros.append("Bytes do vídeo não foram enviados") 
+    conteudo = None
 
-    wr.close()
-
-    # Registra na tabela de vídeos e cria o objeto:
-    atrs = {
-      'autor': autor,
-      'arq' : 'teste.mp4',
-      'titulo': titulo,
-    }
-    vid = obj_video.cria(atrs)
+  # Salva o arquivo, cria o objeto, e registra na tabela de vídeos:
+  atrs = {
+    'autor': autor,
+    'titulo': titulo,
+    'conteudo': conteudo
+  }
+  vid = obj_video.cria(atrs)
     
   if vid != None:
     pag = html_pag_ver_video.gera(ses, vid, erros)
   else:
     # !!! Devia retornar a página de upload !!!
-    pag = html_pag_mensagem_de_erro.gera(None, erros)
+    pag = html_pag_upload_video.gera(ses, atrs, erros)
 
   return pag

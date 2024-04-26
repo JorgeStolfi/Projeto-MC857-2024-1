@@ -18,18 +18,28 @@ assert res is None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-# Obtem sessao de teste
-ses = obj_sessao.busca_por_identificador("S-00000001")
-assert obj_sessao.de_administrador(ses)
+ok_global = True # Vira {False} se algum teste falha.
 
-def testa_comando_alterar_video(rot_teste, *args):
-  """Testa {funcao(*cmd_args)}, grava resultado
+def testa_processa(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, compara com {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = comando_alterar_video
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
-sys.stderr.write("!!! falta o progama de teste {comando_alterar_video_TST.py} !!!\n")
+# Obtem sessao de teste
+ses = obj_sessao.busca_por_identificador("S-00000001")
+assert obj_sessao.de_administrador(ses)
+
+sys.stderr.write("!!! Escrever as chamadas de {testa_processa} e conferir se alterou !!!\n")
+
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente")
+else:
+  aviso_erro("Alguns testes falharam")

@@ -5,25 +5,40 @@ import obj_usuario
 import obj_sessao
 import html_elem_form
 
-def gera(id_usr, atrs, ses_admin, auto):
+def gera(id_usr, atrs, ses_admin, ses_proprio):
 
-  # For simplicity:
+  # Para simplificar
   atrs = {}.copy() if atrs == None else atrs.copy()
+  
+  # Acrescenta identificador do usuário:
   atrs.update( { 'usuario': id_usr } )
+  
+  # Apaga a senha e contra-senha, se houverem:
+  if 'senha' in atrs: atrs.pop('senha')
+  if 'conf-senha' in atrs: atrs.pop('conf-senha')
 
+  edit = ses_admin or ses_proprio  # Atributos comuns devem ser editáveis.
+  edcri = id_usr == None or edit   # Mostre senha e email, editáveis
+  
   # Dados brutos para as linhas. Para cada linha, o rótulo, tipo do "<input>", nome do campo, e dica.
   dados_linhas = [].copy()
+  
+  if id_usr != None:
+    # Mostra identificador do usuário como readonly:
+    dados_linhas.append( ( "Identificador", "text",  'usuario',  False, None, ) )
 
-  if id_usr == None or ses_admin or auto:
-    dados_linhas.append( ( "Nome",             "text",     'nome',          True,      None,             ) )
+  # Mostra sempre o nome:
+  dados_linhas.append( ( "Nome", "text", 'nome',  edcri, None, ) )
+
+  if edcri:
+    # Mostra senha, conf-senha, e email, editáveis
     dados_linhas.append( ( "E-mail",           "email",    'email',         True,      "xxx@xxx.xxx.xx", ) )
     dados_linhas.append( ( "Senha",            "password", 'senha',         True,      None,             ) )
     dados_linhas.append( ( "Confirmar senha",  "password", 'conf_senha',    True,      None,             ) )
-    dados_linhas.append( ( "Administrador",    "checkbox", 'administrador', ses_admin,     None              ) )
-    if id_usr != None:                                                             
-      dados_linhas.append( ( "Identificador",    "text",     'usuario',    False,     None,            ) )
-  else:                                                                            
-    dados_linhas.append( ( "Nome",             "text",     'nome',          False, None,            ) )
+    
+  if ses_admin:
+    # Mostra atributo 'admnistrador', editável:
+    dados_linhas.append( ( "Administrador",    "checkbox", 'administrador', ses_admin, None ) )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
 
@@ -33,7 +48,7 @@ def gera(id_usr, atrs, ses_admin, auto):
   ht_bt_comentarios = None # A menos que tenha.
   if id_usr != None:
     # Somente admininstrador ou o próprio podem ver as sessões de {usr}:
-    if ses_admin or auto:
+    if ses_admin or ses_proprio:
       usr = obj_usuario.busca_por_identificador(id_usr)
       assert usr != None
       nab = len(obj_sessao.busca_por_usuario(usr, True))

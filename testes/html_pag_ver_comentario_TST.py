@@ -5,6 +5,7 @@ import db_base_sql
 import util_testes
 import db_tabelas_do_sistema
 import obj_sessao
+import obj_comentario
 import obj_video
 import sys
 
@@ -15,23 +16,31 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-# Sessao do admin
-ses1 = obj_sessao.busca_por_identificador("S-00000001")
+ok_global = True # Vira {False} se algum teste falha.
 
-# Comentário de teste:
-com1 = obj_video.busca_por_identificador("C-00000002")
-
-def testa_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado 
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado 
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   
+  global ok_global
   modulo = html_pag_ver_usuario
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
-testa_gera("C-E0", ses1, com1, None)
-testa_gera("C-E2", ses1, com1, ["Veja a mensagem abaixo", "Veja a mensagem acima"])
+# Sessao do admin
+ses1 = obj_sessao.busca_por_identificador("S-00000001")
 
-sys.stderr.write("Testes terminados normalmente")
+# Comentário de teste:
+com1 = obj_comentario.busca_por_identificador("C-00000002")
+
+testa_gera("C-E0",  "AssertionError", ses1, com1, None)
+testa_gera("C-E2",  "AssertionError", ses1, com1, ["Veja a mensagem abaixo", "Veja a mensagem acima"])
+
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente")
+else:
+  aviso_erro("Alguns testes falharam", True)

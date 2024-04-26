@@ -10,6 +10,7 @@ import util_valida_campo
 from util_erros import ErroAtrib, erro_prog, mostra
 
 import sys
+import re
 
 # Uma instância de {db_obj_tabela} descrevendo a tabela de usuários:
 tabela = None
@@ -74,7 +75,6 @@ def muda_atributos(usr, mods_mem):
 
 def obtem_identificador(usr):
   global tabela
-  print(usr)
   assert usr != None and isinstance(usr, obj_usuario.Classe)
   return obj_raiz.obtem_identificador(usr)
 
@@ -127,68 +127,69 @@ def cria_testes(verb):
   inicializa_modulo(True)
   lista_atrs = \
     [ 
-      { # U-00000001
+      { 'id': "U-00000001",
         'nome': "José Primeiro", 
         'senha': "U-00000001", 
         'email': "primeiro@gmail.com",
         'administrador': True,
       },
-      { # U-00000002
+      { 'id': "U-00000002",
         'nome': "João Segundo", 
         'senha': "U-00000002", 
         'email': "segundo@gmail.com",
         'administrador' : False,
       },
-      { # U-00000003
+      { 'id': "U-00000003",
         'nome': "Juca Terceiro", 
         'senha': "U-00000003", 
         'email': "terceiro@gmail.com",
         'administrador' : False,
       },
-      { # U-00000004
+      { 'id': "U-00000004",
         'nome': "Jurandir Quarto", 
         'senha': "U-00000004", 
         'email': "quarto@gmail.com",
         'administrador' : False,
       },
-      { # U-00000005
+      { 'id': "U-00000005",
         'nome': "Josenildo Quinto", 
         'senha': "U-00000005", 
         'email': "quinto@ic.unicamp.br",
         'administrador' : False,
       },
-      { # U-00000006
+      { 'id': "U-00000006",
         'nome': "Julio Sexto", 
         'senha': "U-00000006", 
         'email': "sexto@ic.unicamp.br",
         'administrador' : False,
       },
-      { # U-00000007
+      { 'id': "U-00000007",
         'nome': "Jeferson Setimo", 
         'senha': "U-00000007", 
         'email': "setimo@ic.unicamp.br",
         'administrador' : False,
       },
-      { # U-00000008
+      { 'id': "U-00000008",
         'nome': "Joaquim Oitavo", 
         'senha': "U-00000008", 
         'email': "oitavo@ic.unicamp.br",
         'administrador' : True,
       },
-      { # U-00000009
+      { 'id': "U-00000009",
         'nome': "Jonas Nono", 
         'senha': "U-00000009", 
         'email': "nono@ic.unicamp.br",
         'administrador' : False,
       },
-
     ]
   for atrs in lista_atrs:
+    id_usr_esp = atrs['id']; del atrs['id']
     usr = cria(atrs)
     assert usr != None and type(usr) is obj_usuario.Classe
     id_usr = obj_usuario.obtem_identificador(usr)
     nome = obj_usuario.obtem_atributo(usr,'nome')
     if verb: sys.stderr.write("  usuário %s = \"%s\" criado\n" % (id_usr, nome))
+    assert id_usr == id_usr_esp, "identificador não confere"
   return
 
 def confere_e_elimina_conf_senha(args):
@@ -208,6 +209,135 @@ def confere_e_elimina_conf_senha(args):
 
 def verifica_criacao(usr, id_usr, atrs):
   return obj_raiz.verifica_criacao(usr, obj_usuario.Classe, id_usr, atrs, None, tabela, def_obj_mem)
+
+def valida_nome_de_usuario(chave, val, nulo_ok):
+  erros = [].copy()
+  if val == None:
+    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif type(val) is not str:
+    erros += [ f"campo '{chave}' = \"{str(val)}\" não é nome válido: deve ser string" ]
+  else:
+    nmin = 6
+    nmax = 60
+    n = len(val)
+    if n < nmin:
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: é muito curto ({n} caracteres, mínimo {nmin})" ]
+    elif n > nmax:
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: é muito longo ({n} caracteres, máximo {nmax})" ]
+    padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
+    if not re.match(padrao, val):
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: tem caracteres não permitidos" ]
+    if val[0].isspace() or val[-1].isspace():
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: branco antes ou depois do nome" ]
+    if '  ' in val:
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: você inseriu dos espaços seguidos" ]
+      
+    # !!! Tem que verificar TODAS as ocorrências de "'", "-", etc. !!!
+    if "'" in val:
+      letraSeguinte = val.split("'")[1][0]
+      letraAnterior = val.split("'")[0][-1]
+      if not (letraSeguinte.isupper() and not letraSeguinte.isspace()):
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita maiúscula após o apostrofe" ]
+      if not letraAnterior.isalpha():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do apostrofe" ]
+    if "." in val:
+      letraSeguinte = val.split(".")[1][0]
+      letraAnterior = val.split(".")[0][-1]
+      if not letraSeguinte.isspace():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita espaço após o ponto" ]
+      if not letraAnterior.isalpha():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do ponto" ]
+    if "-" in val:
+      letraSeguinte = val.split("-")[1][0]
+      letraAnterior = val.split("-")[0][-1]
+      if not( letraAnterior.isalpha or letraAnterior == "."):
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
+      if not letraSeguinte.isupper():
+        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
+        
+    # !!! Combinar com código abaixo !!!
+    if (not val[0].isupper()):
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: começa com letra minúscula" ]
+    elif (not val[-1].isalpha()):
+      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o último caractere não é uma letra" ]
+    else:
+        for i in range(1, n):
+          digito = val[i]
+          if (digito == "."):
+              if (not val[i-1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não segue uma letra" ]
+              elif (val[i+1] != " "):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não é seguido por um espaço em branco" ]
+          elif (digito == "'"):
+              if (not val[i-1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não segue uma letra" ]
+              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não é seguido por uma letra maiúscula" ]
+          elif (digito == "-"):
+              if (not (val[i-1].isalpha() or val[i-1] != ".")):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não segue uma letra ou um ponto" ]
+              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não é seguido por uma letra maiúscula" ]
+          elif (digito == " "):
+              if (not val[i+1].isalpha()):
+                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
+
+  return erros
+
+def valida_senha(chave, val, nulo_ok):
+  # O padrão {re} para caracter ASCII visível é [!-~], e para
+  # letra ou dígito é [A-Za-z0-9].
+  erros = [].copy()
+  if val == None:
+    if not nulo_ok:# !!! Implementar conforme documentação na interface !!!
+      erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif type(val) is not str:
+    erros += [ f"campo '{chave}' = \"{str(val)}\" não é senha válida: deve ser string" ]
+  else:
+    if not re.search(r'^[!-~]*$', val):
+      erros += [ f"campo '{chave}' não é senha válida: pode conter apenas caracters visíveis ASCII ([!-~])" ]
+    nmin = 8  # Comprimento mínimo.
+    nmax = 14 # Comprimento máximo.
+    n = len(val)
+    if n < nmin:
+      erros += [ f"campo '{chave}' não é senha válida: muito curto ({n} caracteres, mínimo {nmin})"]
+    elif n > nmax:
+      erros += [ f"campo '{chave}' não é senha válida: muito longo ({n} caracteres, máximo {nmax})"]
+    if not re.search(r'[A-Za-z]', val):
+      erros += [ f"campo '{chave}' não é senha válida: deve conter no mínimo uma letra" ]
+    if not re.search(r'[0-9]', val):
+      erros += [ f"campo '{chave}' não é senha válida: deve conter no mínimo um dígito" ]
+    if re.search(r'^[a-zA-Z0-9]*$', val):
+      erros += [ f"campo '{chave}' não é senha válida: não pode ser apenas letras e dígitos" ]
+  return erros
+
+def valida_email(chave, val, nulo_ok):
+  erros = [].copy()
+  if val == None:
+    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
+  elif type(val) is not str:
+    erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: deve ser string" ]
+  else:
+    padrao_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(padrao_email, val):
+      erros += [ f"campo '{chave}' = '%s' não é um email válido" % ( str(val))]
+
+    #Validar se o campo usuario e campo dominio estão dentro dos padrões de, respectivamente 64 e 255 caracteres
+    else:
+      partes = val.split('@')
+      usuario = partes[0]
+      dominio = partes[1]
+      if not 1< len(usuario) < 64:
+        erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: usuario inválido "]
+      if not 1< len(dominio) < 255:
+        erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: dominio inválido "]
+      
+      #validar as partes do dominio
+      partes_dominio = dominio.split('.')
+      for parte in partes_dominio:
+        if not 1 < len(parte) < 64:
+          erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: dominio inválido "]
+  return erros
 
 def liga_diagnosticos(val):
   global tabela
@@ -233,9 +363,9 @@ def valida_atributos(usr, atrs):
   
   # Validade dos campos fornecidos:
   if 'nome' in atrs:
-    erros += util_valida_campo.nome_de_usuario('nome', atrs['nome'], False)
+    erros += valida_nome_de_usuario('nome', atrs['nome'], False)
   if 'email' in atrs:
-    erros += util_valida_campo.email('Email', atrs['email'], False)
+    erros += valida_email('Email', atrs['email'], False)
   if 'administrador' in atrs:
     erros += util_valida_campo.booleano('Administrador', atrs['administrador'], False)
      
@@ -247,7 +377,7 @@ def valida_atributos(usr, atrs):
     senha = None
   
   # Valida a senha:
-  erros += util_valida_campo.senha('Senha', senha, (usr != None))
+  erros += valida_senha('Senha', senha, (usr != None))
 
   # Acrescenta 'administrador' se não está presente, converte para booleano se está:
   if 'administrador' not in atrs:

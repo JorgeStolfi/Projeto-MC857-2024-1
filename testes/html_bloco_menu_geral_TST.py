@@ -4,15 +4,25 @@ import html_bloco_menu_geral
 import util_testes
 import sys
 
-def testa_html_bloco_menu_geral(rot_teste, *args):
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
+  global ok_global
   modulo = html_bloco_menu_geral
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
-testa_html_bloco_menu_geral("deslogado", False, None,            False)
-testa_html_bloco_menu_geral("comum",     True,  "José Primeiro", False)
-testa_html_bloco_menu_geral("admin",     True,  "Geraldo Ente",  True)
+testa_gera("deslogado", str, False, None,            False)
+testa_gera("comum",     str, True,  "José Primeiro", False)
+testa_gera("admin",     str, True,  "Geraldo Ente",  True)
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

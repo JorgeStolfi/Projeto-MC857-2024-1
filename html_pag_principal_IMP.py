@@ -30,7 +30,7 @@ def gera(ses, erros):
   texto2 = "Bem vindo(a) ao nosso site de videos!"
   bloco_texto2 = html_elem_div.gera(estilo, texto2)
 
-  bloco_video = html_elem_div.gera(None, html_elem_video.gera("virus.mp4", "virus", 400))
+  bloco_video = html_elem_div.gera(None, html_elem_video.gera("V-00000001.mp4", "virus", 400))
 
   now = datetime.now(timezone.utc)
   data = now.strftime("%Y-%m-%d %H:%M:%S %z")

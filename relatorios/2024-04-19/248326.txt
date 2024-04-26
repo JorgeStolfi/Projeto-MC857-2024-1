@@ -1,2 +1,0 @@
-Implementei a função util_valida_campo_IMP.titulo_de_video(chave, val, nulo_ok) colocando todas as condicionais presentes na declaração da função e na issue do github.
-Também implementei a função teste dessa função e testei, passando em todos.

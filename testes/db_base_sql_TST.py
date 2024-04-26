@@ -3,6 +3,10 @@
 import sys
 import db_base_sql
 
+ok_global = True
+
+# !!! Resetar {ok_global} nas falhas  !!!
+
 db_base_sql.conecta("DB",None,None)
 nome_tb = "testabela"
 num_ents = 0
@@ -95,4 +99,7 @@ assert type(res) is bool and not res # Meaning does not exist
 
 do_various_tests("  > testes com tabela destruída")
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

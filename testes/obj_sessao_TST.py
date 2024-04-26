@@ -9,25 +9,14 @@ from util_erros import erro_prog, mostra, aviso_prog
 
 import sys
 
-# ----------------------------------------------------------------------
 sys.stderr.write("  Conectando com base de dados...\n")
 db_base_sql.conecta("DB",None,None)
 
-# ----------------------------------------------------------------------
 sys.stderr.write("  Inicializando módulo {usuario}, limpando tabela, criando usuários para teste:\n")
 obj_usuario.cria_testes(True)
 
 sys.stderr.write("  Inicializando módulo {sessao}, limpando tabela:\n")
 obj_sessao.inicializa_modulo(True)
-
-# ----------------------------------------------------------------------
-sys.stderr.write("  Obtendo dois usuários para teste:\n")
-
-usr1 = obj_usuario.busca_por_identificador("U-00000001")
-usr2 = obj_usuario.busca_por_identificador("U-00000002")
-
-# ----------------------------------------------------------------------
-# Funções de teste:
 
 ok_global = True # Vira {False} se um teste falha.
 
@@ -67,6 +56,12 @@ def verifica_sessao(rot_teste, ses, ident, usr, aberta, cookie):
 
   sys.stderr.write("  %s\n" % ("-" * 70))
   return
+
+# ----------------------------------------------------------------------
+sys.stderr.write("  Obtendo dois usuários para teste:\n")
+
+usr1 = obj_usuario.busca_por_identificador("U-00000001")
+usr2 = obj_usuario.busca_por_identificador("U-00000002")
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_sessao.cria}:\n")

@@ -19,8 +19,7 @@ def processa(ses, cmd_args):
       erros.append(f"O identificador \"{str(id_obj)}\" é inválido")
   
   pag = None
-  if id_obj != None:
-    assert len(erros) == 0
+  if len(erros) == 0:
     letra = id_obj[0]
     if letra == "U":
       pag = comando_ver_usuario.processa(ses, {'usuario': id_obj})

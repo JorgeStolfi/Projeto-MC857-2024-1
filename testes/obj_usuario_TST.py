@@ -8,18 +8,73 @@ from util_erros import erro_prog, aviso_prog, mostra
 
 import sys
 
-# ----------------------------------------------------------------------
 sys.stderr.write("  Conectando com base de dados...\n")
 db_base_sql.conecta("DB",None,None)
 
-# ----------------------------------------------------------------------
 sys.stderr.write("  Inicializando módulo {usuario}, limpando tabela:\n")
 obj_usuario.inicializa_modulo(True)
 
-# ----------------------------------------------------------------------
-# Funções de teste:
-
 ok_global = True # Vira {False} se um teste falha.
+
+def testa_valida(rot_teste, funcao, res_esp, *args):
+  global ok_global
+  modulo = obj_usuario
+  html = False   # Resultados string já são HTML?
+  frag = False   # Resultados HTML são só fragmentos?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  ok = util_testes.testa_funcao(rot_teste, modulo, funcao, res_esp, html,frag,pretty, *args)
+  ok_global = ok_global and ok
+  return ok
+
+funcao = obj_usuario.valida_nome_de_usuario
+for xrot, xvalido, val in \
+    ( ( "Nulo",               True,  None,                                     ),
+      ( "Valido",             True,  "José da Silvã P. O'Hara Costa-Gravas",   ), 
+      ( "ApostInvalido",      False, "José' da Silva P. O'Hara Costa-Gravas",  ),
+      ( "ApostInválido",      False, "José da Silva P'. O'Hara Costa-Gravas ", ),
+      ( "MuitoCurto",         False, "José", ),
+      ( "Incerto",            True,  "Ba'Ana", ),
+      ( "Valido",             True,  "Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghij", ),
+      ( "MuitoLongo",         False, "José Josefino Josualdo Josismar Josias Josenildo Josafá Josênio", ),
+      ( "HifenInvalido",      False, "José-da Silva P. O'Hara Costa-Gravas",    ),
+      ( "BrancoInicial",      False, " José da Silva P. O'Hara Costa-Gravas",   ),
+      ( "BrancoFinal",        False, "José da Silva P. O'Hara Costa-Gravas ",   ),
+      ( "BrancoDuplo",        False, "José da Silva P.  O'Hara Costa-Gravas",   ),
+      ( "PontoInválido",      False, "José da Silva P.O'Hara Costa-Gravas ",    ),
+      ( "CaracsInvalidos",    False, "Elon X-φ ≥ 17",                           )
+    ):
+  for nulo_ok in ( False, True ) if (val == None or xrot == "A") else ( False, ):
+    if xvalido or ( val != None and not nulo_ok):
+      valido = xvalido and (val != None or nulo_ok)
+      rot_teste = "nome_" + xrot + "_nulok" + str(nulo_ok)[0] + ("_ok" if valido else "_bad")
+      res_esp = [] if valido else list
+      testa_valida(rot_teste, funcao, res_esp,  "padrinho", val, nulo_ok)
+      
+# ======================================================================
+
+funcao = obj_usuario.valida_senha
+testa_valida("senha_Valida_ok",         funcao, [],   'password', "123(meia)4", True) 
+testa_valida("senha_MuitoCurta_bad",    funcao, list, 'password', "123",        True) 
+testa_valida("senha_MuitoRepetida_bad", funcao, list, 'password', "111111111",  True) 
+testa_valida("senha_SoLetras_bad",      funcao, list, 'password', "Segredo",    True) 
+testa_valida("senha_MuitoLonga_bad",    funcao, list, 'password', "X"+("a"*60), True) 
+
+testa_valida("senha_None_nulokT_ok",    funcao, [],   'password', None, True)  
+testa_valida("senha_None_nulokF_bad",   funcao, list, 'password', None, False)
+
+# ======================================================================
+
+funcao = obj_usuario.valida_email
+testa_valida("email_Valido_ok",          funcao, [],    'spam-to', "quem_123@ic.u-camp.br", True) 
+testa_valida("email_DuasArrobas_bad",    funcao, list,  'spam-to', "123@456@onde.br",       True) 
+testa_valida("email_NenhumaArroba_bad",  funcao, list,  'spam-to', "nenhures",              True) 
+testa_valida("email_HostSemPonto_bad",   funcao, list,  'spam-to', "tomate@beringela",      True) 
+testa_valida("email_MuitoLonga_bad",     funcao, list,  'spam-to', "X"+("a"*64)+"@gov.br",  True) 
+
+testa_valida("email_None_nulokT_ok",     funcao, [],    'spam-to', None, True) 
+testa_valida("email_None_nulokF_bad",    funcao, list,  'spam-to', None, False)
+
+# ======================================================================
 
 def verifica_usuario(rot_teste, usr, ident, atrs):
   """Testes básicos de consistência do objeto {usr} da classe {obj_usuario.Classe}, dados 

@@ -28,7 +28,7 @@ def processa(ses, cmd_args):
     try:
       com = obj_comentario.cria(atrs_com)
     except ErroAtrib as ex:
-      erros.append(ex.args[0])
+      erros += ex.args[0]
       
   if com != None:
     pag = html_pag_ver_comentario.gera(ses, com)

@@ -15,21 +15,24 @@ sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB",None,None)
 assert res == None
 
+sys.stderr.write("  Criando alguns objetos...\n")
+db_tabelas_do_sistema.cria_todos_os_testes(True)
+
 ok_global = True # Vira {False} se um teste falha.
 
-# ----------------------------------------------------------------------
-# Função de teste:
+def testa_processa(ses, cmd_args, deveria_postar):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
-def testa_comando(ses, cmd_args, deveria_postar):
   global ok_global
 
   sys.stderr.write(f"  ----------------------------------------------------------------------\n")
-  sys.stderr.write(f"  postando comentário {str(cmd_args)}\n")
+  sys.stderr.write(f"  postando comentário {str(*args)}\n")
 
   ult_id_old = obj_comentario.ultimo_identificador()
   sys.stderr.write(f"  ultimo comentário antes = {ult_id_old}\n")
 
-  comando_postar_comentario.processa(ses, cmd_args)
+  comando_postar_comentario.processa(ses, *args)
 
   ult_id_new = obj_comentario.ultimo_identificador()
   sys.stderr.write(f"  ultimo comentário depois = {ult_id_new}\n")
@@ -65,7 +68,7 @@ dados1 = {
     'email': "luiz@primeiro.com",
     'administrador': False,
   }
-testa_comando(None, dados1, True)
+testa_processa(None, dados1, True)
 
 # Testa senha não confere:
 dados2 = {
@@ -75,7 +78,7 @@ dados2 = {
     'email': "luiz@segundo.com",
     'administrador': False,
   }
-testa_comando(None, dados2, False)
+testa_processa(None, dados2, False)
 
 # Testa email repetido:
 dados3 = {
@@ -85,7 +88,7 @@ dados3 = {
     'email': "luiz@primeiro.com",
     'administrador': True,
   }
-testa_comando(None, dados3, False)
+testa_processa(None, dados3, False)
 
 # Testa se o teste anterior com senha-nao-confere entrou:
 dados4 = {
@@ -95,7 +98,7 @@ dados4 = {
     'email': "luiz@segundo.com",
     'administrador': True,
   }
-testa_comando(None, dados4, True)
+testa_processa(None, dados4, True)
 
 # ----------------------------------------------------------------------
 # Veredito final:

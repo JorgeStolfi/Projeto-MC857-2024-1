@@ -17,27 +17,36 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-def testa_html_linha_resumo_de_comentario(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado 
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado 
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   
+  global ok_global
   modulo = html_linha_resumo_de_comentario
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
-usr1_ident = "C-00000001"
-usr1 = obj_comentario.busca_por_identificador(usr1_ident)
+com1_id = "C-00000001"
+com1 = obj_comentario.busca_por_identificador(com1_id)
 
-usr2_ident = "C-00000002"
-usr2 = obj_comentario.busca_por_identificador(usr2_ident)
+com2_id = "C-00000002"
+com2 = obj_comentario.busca_por_identificador(com2_id)
 
-usr5_ident = "C-00000005"
-usr5 = obj_comentario.busca_por_identificador(usr5_ident)
+com5_id = "C-00000005"
+com5 = obj_comentario.busca_por_identificador(com5_id)
 
-testa_html_linha_resumo_de_comentario("TCOMENT1",  usr1)
-testa_html_linha_resumo_de_comentario("TCOMENT2",  usr2)
-testa_html_linha_resumo_de_comentario("TCOMENT5",  usr5)
+for ver in False, True:
+  testa_gera("TCOMENT1",  list, com1, ver, ver, ver)
+  testa_gera("TCOMENT2",  list, com2, ver, ver, ver)
+  testa_gera("TCOMENT5",  list, com5, ver, ver, ver)
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

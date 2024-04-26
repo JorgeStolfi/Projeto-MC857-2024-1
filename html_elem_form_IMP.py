@@ -1,5 +1,10 @@
-import html_elem_span
 
-def gera(conteudo):
-  ht_form = "<form>" + conteudo + "</form>"
+def gera(conteudo, multipart):
+  if multipart:
+    enctype = " enctype=\"multipart/form-data\""
+    metodo = "method=\"POST\""
+  else:
+    enctype = "" 
+    metodo  = ""
+  ht_form = f"<form{enctype}{metodo}>" + conteudo + "</form>"
   return ht_form

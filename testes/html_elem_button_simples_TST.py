@@ -5,24 +5,32 @@ import util_testes
 
 import sys
 
-def testa_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = html_elem_button_simples
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
-testa_gera("Principal", "Principal", 'pag_principal', None, '#60a3bc')
+testa_gera("Principal",         str, "Principal", 'pag_principal', None, '#60a3bc')
 
-testa_gera("Entrar",    "Entrar", 'solicitar_pag_login', None, '#55ee55')
+testa_gera("Entrar",            str, "Entrar", 'solicitar_pag_login', None, '#55ee55')
 
-testa_gera("Sair",      "Sair", 'fazer_logout', None, '#60a3bc')
+testa_gera("Sair",              str, "Sair", 'fazer_logout', None, '#60a3bc')
 
-testa_gera("simples_Cadastrar", "Cadastrar", 'solicitar_pag_cadastrar_usuario', None, '#60a3bc')
+testa_gera("simples_Cadastrar", str, "Cadastrar", 'solicitar_pag_cadastrar_usuario', None, '#60a3bc')
 
-testa_gera("simples_OK",        "OK", 'pag_principal', None, '#55ee55')
+testa_gera("simples_OK",        str, "OK", 'pag_principal', None, '#55ee55')
 
-sys.stderr.write("Testes terminados normalmente.")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.")
+else:
+  aviso_erro("Alguns testes falharam", True)

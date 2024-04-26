@@ -15,15 +15,20 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-def testa_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = html_pag_upload_video
   funcao = modulo.gera
   frag = False  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
 # Sessao de teste
 ses = obj_sessao.busca_por_identificador("S-00000001")
@@ -38,5 +43,10 @@ for tag, erros in (
     ("V", []),
     ("E", ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",])
   ):
-  testa_gera("ComValores-err" + tag, ses, args1, erros)
-  testa_gera("SemValores-err" + tag, ses, {},    erros)
+  testa_gera("ComValores-err" + tag,  str, ses, args1, erros)
+  testa_gera("SemValores-err" + tag,  str, ses, {},    erros)
+
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente")
+else:
+  aviso_erro("Alguns testes falharam")

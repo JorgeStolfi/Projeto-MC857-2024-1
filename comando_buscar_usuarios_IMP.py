@@ -26,10 +26,10 @@ def processa(ses, cmd_args):
       erros += util_valida_campo.identificador(chave, val, "U", False)
     elif chave == 'email':
       # !!! Deveria aceitar email parcial, como "@unicamp.br" ou RE. !!!
-      erros += util_valida_campo.email(chave, val, False)
+      erros += obj_usuario.valida_email(chave, val, False)
     elif chave == 'nome':
       # !!! Devia aceitar nome parcial ou RE !!!
-      erros += util_valida_campo.nome_de_usuario(chave, val, False)
+      erros += obj_usuario.valida_nome_de_usuario(chave, val, False)
     elif chave == 'administrador' or chave == 'senha':
       erros.append(f"Busca por '{chave}' não é permitida")
     else:

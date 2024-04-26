@@ -1,3 +1,0 @@
-Na tarefa eu só adicionei um teste para verificar se o logout da erro quando o usuario tenta deslogar de uma sessao que nao existe.
-Além disso, melhorei o teste de logout quando a sessao esta ativa para verificar se a sessao realmente foi fechada apos o logout.
-A implementacao nao precisou ser alterada pois ja estava funcionando.

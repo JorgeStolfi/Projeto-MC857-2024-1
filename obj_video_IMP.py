@@ -11,7 +11,7 @@ import util_valida_campo
 from util_erros import ErroAtrib, erro_prog, mostra
 
 from datetime import datetime, timezone
-from math import log
+from math import log, gcd
 import os
 import subprocess
 import json
@@ -44,7 +44,6 @@ def inicializa_modulo(limpa):
   colunas = \
     (
       ( 'autor',   obj_usuario.Classe,  'TEXT',    False ), # Objeto/id do usuário que fez upload.
-      ( 'arq',     type("foo"),         'TEXT',    False ), # Nome do arquivo no disco.
       ( 'titulo',  type("foo"),         'TEXT',    False ), # Título do video.
       ( 'data',    type("foo"),         'TEXT',    False ), # Momento do upload do video.
       ( 'duracao', type(418),           'INTEGER', False ), # Duração do video em milissegundos.
@@ -66,9 +65,24 @@ def cria(atrs):
   data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %z")
   atrs['data'] = data
 
-  # Obtem as dimensões:
-  arq = atrs['arq']
-  duracao, largura, altura = obtem_dimensoes_do_arquivo(arq)
+  # Determina o identificador esperado do vídeo:
+  ind_vid = db_obj_tabela.num_entradas(tabela) + 1  # Índice na tabela.
+  id_vid = util_identificador.de_indice("V", ind_vid)
+
+  # Nome do arquivo de vídeo:
+  nome_arq = f"videos/{id_vid}.mp4"
+
+  if 'conteudo' in atrs:
+    # Grava o conteúdo em disco:
+    conteudo = atrs['conteudo']
+    wr = open(nome_arq, 'wb')
+    wr.write(conteudo)
+    wr.close()
+    atrs.pop('conteudo') # Pois não será atributo do objeto.
+  else:
+    assert os.path.exists(nome_arq), f"Item 'conteudo' ausente e arquivo {nome_arq} não existe"
+  
+  duracao, largura, altura = obtem_dimensoes_do_arquivo(nome_arq)
   atrs['duracao'] = duracao
   atrs['largura'] = largura
   atrs['altura'] = altura
@@ -78,6 +92,10 @@ def cria(atrs):
 
   vid = obj_raiz.cria(atrs, tabela, def_obj_mem)
   assert type(vid) is obj_video.Classe
+
+  # Verifica se o identificador foi previsto corretamente:
+  assert obj_video.obtem_identificador(vid) == id_vid
+  
   if tabela.debug: sys.stderr.write(f"  < {obj_video.cria}\n")
   return vid
 
@@ -112,7 +130,7 @@ def obtem_atributo(vid, chave):
   assert vid != None and isinstance(vid, obj_video.Classe)
   return obj_raiz.obtem_atributo(vid, chave)
 
-def obtem_usuario(vid):
+def obtem_autor(vid):
   global tabela
   assert vid != None and isinstance(vid, obj_video.Classe)
   return obj_raiz.obtem_atributo(vid, 'autor')
@@ -146,12 +164,7 @@ def busca_por_autor(id_autor):
   if id_autor == None: return [].copy()
   lista_ids_vid = obj_raiz.busca_por_campo('autor', id_autor, False, tabela)
   return lista_ids_vid
-
-def busca_por_arquivo(arq):
-  global tabela
-  id_vid = obj_raiz.busca_por_campo('arq', arq, True, tabela)
-  return id_vid
-  
+ 
 def ultimo_identificador():
   global tabela
   return obj_raiz.ultimo_identificador(tabela)
@@ -162,31 +175,31 @@ def cria_testes(verb):
   # Identificadores esperados e atributos dos videos de teste:
   lista_ats = \
     [
-      ( "V-00000001", "U-00000001", "eject.mp4", "Ejetar",    ),
-      ( "V-00000002", "U-00000002", "fukup.mp4", "Fukushima", ),
-      ( "V-00000003", "U-00000001", "pipoc.mp4", "Pipoca",    ),
-      ( "V-00000004", "U-00000004", "virus.mp4", "Vírus",     ),
+      ( "V-00000001", "U-00000001", "Ejetar",    ),
+      ( "V-00000002", "U-00000002", "Fukushima", ),
+      ( "V-00000003", "U-00000001", "Pipoca",    ),
+      ( "V-00000004", "U-00000004", "Vírus",     ),
     ]
-  for id_vid_esp, id_autor, arq, titulo in lista_ats:
+  for id_vid_esp, id_autor, titulo in lista_ats:
     autor = obj_usuario.busca_por_identificador(id_autor)
     assert autor != None and type(autor) is obj_usuario.Classe
     atrs_cria = {
       'autor': autor,
-      'arq': arq,
       'titulo': titulo
     }
     vid = cria(atrs_cria)
     assert vid != None and type(vid) is obj_video.Classe
     id_vid = obj_video.obtem_identificador(vid)
     assert id_vid == id_vid_esp
-    autor_conf = obj_video.obtem_usuario(vid)
+    autor_conf = obj_video.obtem_autor(vid)
     id_autor_conf = obj_usuario.obtem_identificador(autor_conf)
     assert autor_conf == autor;
     if verb: sys.stderr.write("  video %s de %s criado\n" % (id_vid, id_autor))
   return
 
 def verifica_criacao(vid, id_vid, atrs):
-  return obj_raiz.verifica_criacao(vid, obj_video.Classe, id_vid, atrs, None, tabela, def_obj_mem)
+  ignore = [ 'conteudo' ]
+  return obj_raiz.verifica_criacao(vid, obj_video.Classe, id_vid, atrs, ignore, tabela, def_obj_mem)
 
 def liga_diagnosticos(val):
   global tabela
@@ -195,13 +208,12 @@ def liga_diagnosticos(val):
 
 # FUNÇÕES INTERNAS
 
-def obtem_dimensoes_do_arquivo(arq):
-  """Examina o arquivo "videos/{arq}" no disco, que deve ter extensão ".mp4"
+def obtem_dimensoes_do_arquivo(nome_arq):
+  """Examina o arquivo "nome_arq" no disco, que deve ter extensão ".mp4"
   e devolve as dimensões do vídeo: duração (em ms), largura, e altura (em pixels).
   Dá erro se não existe arquivo com esse nome."""
 
-  path = "videos/" + arq
-  assert os.path.exists(path)
+  assert os.path.exists(nome_arq)
 
   command = [
     "ffprobe",
@@ -213,7 +225,7 @@ def obtem_dimensoes_do_arquivo(arq):
     "stream=width,height",
     "-of",
     "json",
-    path
+    nome_arq
     ]
 
   result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -221,7 +233,7 @@ def obtem_dimensoes_do_arquivo(arq):
   
   duracao = 5000 # !!! Tem que obter do arquivo também !!!
   largura = data["streams"][0]["width"]
-  altura = data["streams"][0]["height"]'''
+  altura = data["streams"][0]["height"]
   return duracao, largura, altura
 
 def valida_atributos(vid, atrs_mem):
@@ -236,52 +248,49 @@ def valida_atributos(vid, atrs_mem):
   erros = [].copy();
 
   vid_id = obtem_identificador(vid) if vid is not None else None
-  if 'arq' in atrs_mem:
-    nome_arq = atrs_mem['arq']
-    erros += util_valida_campo.nome_de_arq_video('arq', nome_arq, False)
-    if busca_por_arquivo(nome_arq) != vid_id:
-      erros.append(f"já existe um arquivo com o nome '{nome_arq}'")
-  
-  dur_min = 2000; dur_max = 6000000; # Intervalo permitido para duração (ms).
-  if 'duracao' in atrs_mem:
-    dur = atrs_mem['duracao']
-    if dur < dur_min or dur > dur_max:
-      erros.append(f"Duração do vídeo inaceitável ({dur} ms, devia estar em {dur_min}..{dur_max} ms)")
+
+  if vid != None:
+    # Os campos de {atrs} são alterações a aplicar no vídeo {vid}.
+    for chave in 'duracao', 'altura', 'largura':
+      if chave in atrs_mem:
+        val_novo = atrs_mem[chave]
+        val_prev = obj_video.obtem_atributos(vid)[chave]
+        if val_novo != val_prev:
+          erros.append(f"Atributo {chave} do vídeo {vid_id} não pode ser alterado")
   else:
-    if vid == None:
-      erros.append(f"Duração do vídeo não especificada")
-      dur = None
-    else:
-      alt = obj_video.obtem_atributos(vid)['duracao']
-  
-  alt_min = 48;   alt_max = 800;     # Intervalo permitido para altura.
-  if 'altura' in atrs_mem:
-    alt = atrs_mem['altura']
-    if alt < alt_min or alt > alt_max:
-      erros.append(f"Altura do vídeo inaceitável ({alt} pixels, devia estar em {alt_min}..{alt_max}")
-  else:
-    if vid == None:
-      erros.append(f"Altura do vídeo não especificada")
-      alt = None
-    else:
-      alt = obj_video.obtem_atributos(vid)['altura']
- 
-  lar_min = 64;   lar_max = 800;     # Intervalo permitido para largura.
-  if 'largura' in atrs_mem:
-    lar = atrs_mem['largura']
-    if lar < lar_min or lar > lar_max:
-      erros.append(f"Largura do vídeo inaceitável ({lar} pixels, devia estar em {lar_min}..{lar_max})")
-  else:
-    if vid == None:
-      erros.append(f"Largura do vídeo não especificada")
-      lar = None
-    else:
-      lar = obj_video.obtem_atributos(vid)['largura']
+    # Os campos de {atrs} são os atributos de um vídeo sendo criado:
+    atrs_min = { 'duracao':   2000, 'altura':  48, 'largura':  48, }
+    atrs_max = { 'duracao': 600000, 'altura': 800, 'largura': 800, }
+    for chave in 'duracao', 'altura', 'largura':
+      if chave in atrs_mem:
+        val_def = atrs_mem[chave]
+        val_min = atrs_min[chave]
+        val_max = atrs_max[chave]
+        if val_def < val_min:
+          erros.append(f"Atributo {chave} do vídeo muito pequeno ({val_def}, mínimo {val_min})")
+        elif val_def > val_max:
+          erros.append(f"Atributo {chave} do vídeo muito grande ({val_def}, máximo {val_max})")
+      else:
+        erros.append(f"Atributo {chave} do vídeo não está especificado")
+
+    # Razão lagura:altura máxima, um pouco maior que HDTV e celular:
+    lar_max = 17  # Nominal.
+    alt_min = 9   # Nominal.
+    asp_max = lar_max/alt_min
     
-  if lar != None and alt != None:
-    if abs(log(lar/alt) - log(4/3)) > log(1.35):
-      erros.append(f"Razão largura:altura inaceitável ({lar}:{alt}, devia ser ~4:3")
-    
+    if len(erros) == 0:
+      # Verifica aspecto (razão largura:altura):
+      lar_def = atrs_mem['largura']
+      alt_def = atrs_mem['altura']
+      asp_def = lar_def/alt_def
+      if abs(log(asp_def)) > abs(log(asp_max)):
+        d = gcd(lar_def,alt_def)
+        lar_red, alt_red = lar_def//d, alt_def//d
+        if lar_def > alt_def:
+          erros.append(f"Razão largura:altura muito grande ({lar_red}:{alt_red}, máximo {lar_max}:{alt_min})")
+        else:
+          erros.append(f"Razão largura:altura muito pequena ({lar_red}:{alt_red}, mínimo {alt_min}:{lar_max})")
+
   return erros
 
 def def_obj_mem(obj, id_vid, atrs_SQL):
@@ -314,7 +323,7 @@ def def_obj_mem(obj, id_vid, atrs_SQL):
       val_velho = obj.atrs[chave]
       if not type(val_velho) is type(val):
         erro_prog(f"tipo do campo '{chave}' incorreto")
-      alteravel = False # No futuro pode haver campos alteraveis.
+      alteravel = (chave == 'titulo') # No futuro pode haver mais campos alteraveis.
       if (not alteravel) and val != val_velho:
         erro_prog(f"campo '{chave}' não pode ser alterado - val = {str(val)} val_velho = {str(val_velho)}")
       obj.atrs[chave] = val

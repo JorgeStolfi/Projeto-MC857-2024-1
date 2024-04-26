@@ -27,7 +27,7 @@ def conecta(dir, uid, senha):
     if db_debug: mostra(6,"db_base_sql_IMP.conecta: base {sqlite3}, versao = " + sqlite3.version)
     return None
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.conecta: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.conecta: !! erro = \"" + str(msg) + "\"")
     return msg
 
 def executa_comando_CREATE_TABLE(nome_tb, descr_cols):
@@ -39,7 +39,7 @@ def executa_comando_CREATE_TABLE(nome_tb, descr_cols):
     cursor.execute(cmd)
     return None
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.executa_comando_CREATE_TABLE: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.executa_comando_CREATE_TABLE: !! erro = \"" + str(msg) + "\"")
     return msg
 
 def num_entradas(nome_tb, nome_indice):
@@ -55,7 +55,7 @@ def num_entradas(nome_tb, nome_indice):
       max_ind = 0
     return max_ind
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.num_entradas: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.num_entradas: !! erro = \"" + str(msg) + "\"")
     return msg
 
 def executa_comando_INSERT(nome_tb, atrs):
@@ -80,7 +80,7 @@ def executa_comando_INSERT(nome_tb, atrs):
     if db_debug: mostra(6,"lastrowid = " + str(ind))
     return ind
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.executa_comando_INSERT: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.executa_comando_INSERT: !! erro = \"" + str(msg) + "\"")
     return msg
 
 def executa_comando_UPDATE(nome_tb, cond, atrs):
@@ -99,7 +99,7 @@ def executa_comando_UPDATE(nome_tb, cond, atrs):
     db_conexao.commit()
     return None
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.executa_comando_UPDATE: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.executa_comando_UPDATE: !! erro = \"" + str(msg) + "\"")
     return msg
 
 def executa_comando_SELECT(nome_tb, cond, nomes_cols):
@@ -120,7 +120,7 @@ def executa_comando_SELECT(nome_tb, cond, nomes_cols):
     if db_debug: mostra(6,"db_base_sql_IMP.executa_comando_SELECT: len(res) = " + str(len(res)))
     return res
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.executa_comando_SELECT: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.executa_comando_SELECT: !! erro = \"" + str(msg) + "\"")
     mostra(4,"  cmd = \"" + str(cmd) + "\"")
     return msg
 
@@ -135,7 +135,7 @@ def executa_comando_DELETE(nome_tb, cond):
     cursor.close()
     return None
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.executa_comando_DELETE: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.executa_comando_DELETE: !! erro = \"" + str(msg) + "\"")
     return msg
 
 def executa_comando_DROP_TABLE(nome_tb):
@@ -149,7 +149,7 @@ def executa_comando_DROP_TABLE(nome_tb):
     cursor.close()
     return None
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.executa_comando_DROP_TABLE: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.executa_comando_DROP_TABLE: !! erro = \"" + str(msg) + "\"")
     return msg
     
 def executa_comando_TABLE_EXISTS(nome_tb):
@@ -171,10 +171,10 @@ def executa_comando_TABLE_EXISTS(nome_tb):
       return res_num == 1
     else:
       msg = f"resultado {str(res)} de tipo inválido"
-      mostra(4,"db_base_sql_IMP.executa_comando_TABLE_EXISTS: ** erro = \"" + str(msg) + "\"")    
+      mostra(4,"db_base_sql_IMP.executa_comando_TABLE_EXISTS: !! erro = \"" + str(msg) + "\"")    
       return msg
   except sqlite3.Error as msg:
-    mostra(4,"db_base_sql_IMP.executa_comando_TABLE_EXISTS: ** erro = \"" + str(msg) + "\"")
+    mostra(4,"db_base_sql_IMP.executa_comando_TABLE_EXISTS: !! erro = \"" + str(msg) + "\"")
     return msg
 
 def codifica_valor(val):

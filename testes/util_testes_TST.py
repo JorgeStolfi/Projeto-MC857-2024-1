@@ -6,9 +6,12 @@ from util_erros import ErroAtrib, erro_prog, mostra
 ok_global = True
 
 def testa_escreve_resultado_html(rot_teste, ht_res, frag):
+  global ok_global
+  global ok_global
   modulo = util_testes
+  funcao = modulo.escreve_resultado_html
   pretty = True # Deve formatar o HTML para facilitar view source?
-  modulo.escreve_resultado_html(modulo, "escreve_resultado_html." + rot_teste, ht_res, frag, pretty)
+  funcao(modulo, funcao, rot_teste, ht_res, frag, pretty)
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {util_testes.escreve_resultado_html}\n")
@@ -26,71 +29,63 @@ pag1 = \
     "</body>\n" + \
     "</html>\n"  
 testa_escreve_resultado_html("pag",   pag1, False); 
- 
-# ----------------------------------------------------------------------
-sys.stderr.write("  testando {util_testes.formata_dict}\n")
-
-d1 = { 'coisa': 100, 'treco': 200, 'lhufas': [ 10, 100 ], 'picas': { 'sim': 100, 'nao': 200, 'bah': 123 } }
-fd1 = util_testes.formata_dict(d1);
-sys.stderr.write("    d1 formatado:\n%s\n" % fd1)
 
 # ----------------------------------------------------------------------
+sys.stderr.write("  testando {util_testes.formata_valor}\n")
 
-def testa_funcao_unico_elemento(rot_teste, idents):
+def testa_formata_valor(rot_teste, val, html):
+  global ok_global
+  global ok_global
+  modulo = util_testes
+  funcao = modulo.formata_valor
+  frag = True    # Resultados HTML são só fragmentos?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  ok = util_testes.testa_funcao(rot_teste, modulo, funcao, str, html,frag,pretty,   val, html, 1000)
+  if ok and not html:
+    d1f = util_testes.formata_valor(rot_teste, val, html);
+    sys.stderr.write("    " + ("~"*70) + "\n")
+    sys.stderr.write(f"    d1 formatado como string =\n{d1f}\n")
+    sys.stderr.write("    " + ("~"*70) + "\n")
+  ok_global = ok_global and ok
+  return ok
+
+d1 = { 'coisa': 100, 'treco': 200, 'lhufas': [ 10, 100 ]*500, 'picas': { 'sim': 100, 'nao': "bla "*5000, 'bah': ( 123, 321, )*500 } }
+for html in False, True:
+  rot_teste = "html" + str(html)[0]
+  testa_formata_valor(rot_teste, d1, html)
+
+# ----------------------------------------------------------------------
+
+def testa_unico_elemento(rot_teste, idents, res_esp):
   """Testa a função {util_testes.unico_elemento} na lista de identificadores {idents},
-  verificando se devolve {None}, devolve {idents[0]}, ou levanta erro {AssertionError}
-  conforme a lista tenha 0, 1, ou mais de 1 elemento.  Se algum teste der errado,
+  verificando se devolve {res_esp}.  Se algum teste der errado,
   imprime uma mensagem de erro e desliga a variável global {ok_global}."""
   global ok_global
-  sys.stderr.write(f"  {'-'*70}\n")
-  sys.stderr.write(f"  Teste {rot_teste} idents = {str(idents)}\n")
-  ok = True # Estado deste teste.
-
-  # Paranóia: verifica tipo dos argumentos do teste:
-  if idents != None and type(idents) != list and type(idents) != tuple:
-    erro_prog("Argumento {idents} = %s devis ser {None} ou lista/tupla" % str(idents))
-
-  # Testa {unico_elemento()}:
-  sys.stderr.write("  {unico_elemento(%s)} =" % str(idents));
-  try:
-    ident_cmp = util_testes.unico_elemento(idents)
-    sys.stderr.write(" %s\n" % str(ident_cmp))
-    aborted = False
-  except ErroAtrib as ex:     
-    sys.stderr.write("\n")
-    sys.stderr.write("  deu {ErroAtrib} com %s\n" % str(ex))
-    ident_cmp = None
-    aborted = True
-  if idents == None or len(idents) == 0:
-    if ident_cmp != None or aborted:
-      sys.stderr.write("  ** devia ser {None}\n")
-      ok = False
-  elif len(idents) == 1:
-    if type(ident_cmp) != str:
-      sys.stderr.write("  ** devia ser string\n")
-      ok = False
-    elif ident_cmp != idents[0] or aborted:
-      sys.stderr.write("  ** devia ser %s\n" % idents[0])
-      ok = False
-  else:
-    if not aborted:
-      sys.stderr.write("  ** devia ter dado {ErroAtrib}\n")
-      ok = False
-  if ok:
-    sys.stderr.write("  Teste OK\n")
+  modulo = util_testes
+  funcao = modulo.unico_elemento
+  html = False   # Resultados string já são HTML?
+  frag = True    # Resultados HTML são só fragmentos?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  ok = util_testes.testa_funcao(rot_teste, modulo, funcao, res_esp, html,frag,pretty,   idents)
   ok_global = ok_global and ok
-  sys.stderr.write(f"  {'-'*70}\n")
+  return 
 
 idents1u = [ ]
-testa_funcao_unico_elemento("id_u1_bom", idents1u)
+testa_unico_elemento("u1_vazia", idents1u, None)
 
 idents2u = [ "W-00000111", ]
-testa_funcao_unico_elemento("id_u2_bom", idents2u)
+testa_unico_elemento("u2_unico", idents2u, idents2u[0])
 
 idents3u = None
-testa_funcao_unico_elemento("id_u3_bom", idents3u)
+testa_unico_elemento("u3_none", idents3u, None)
 
 idents4u = [ "Z-00000111", "Z-00000222", ]
-testa_funcao_unico_elemento("id_u4_mau", idents4u)
+testa_unico_elemento("u4_muitos", idents4u, "ErroAtrib")
 
-sys.stderr.write("Testes terminados normalmente.\n")
+idents5u = { 'coisa': "Z-00000222", }
+testa_unico_elemento("u4_muitos", idents5u, "ErroAtrib")
+
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

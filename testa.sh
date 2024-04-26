@@ -37,7 +37,7 @@ echo "=== executando teste \"testes/${modulo}_TST.py\" ======================" 1
 export PYTHONPATH=".:testes:..:/usr/lib/python3.6/site-packages/sos/plugins" ; \
   python3 testes/${modulo}_TST.py > ${otext} 2>&1
 
-# Create the main page ${opage}:
+# Cria a página principal ${opage}:
 if [[ -s ${opage} ]]; then
   echo "** programa gravou ${opage} em vez de ${opref}.{rotulo}.html" 1>&2;
   exit 1
@@ -45,7 +45,7 @@ fi
 
 files=( `cd testes/saida && ( shopt -s nullglob; echo ${modulo}.*.html; shopt -u nullglob )` )
 
-# White the HTML page header:
+# Escreve o cabeçalho da página de índice:
 printf "<!DOCTYPE HTML>\n" >> ${opage}
 printf "<html>\n" >> ${opage}
 printf "<head>\n" >> ${opage}
@@ -56,7 +56,7 @@ printf "<title>Teste de ${modulo}</title>\n" >> ${opage}
 printf "</head>\n" >> ${opage}
 printf "<body style=\"background-color:#eeeeee; text-indent: 0px\">\n" >> ${opage}
 
-# Get the HTML files produced by the test program:
+# Obtém todas as páginas HTML produzidas pelo programa de teste:
 if [[ ${#files[@]} -eq 0 ]]; then
   echo "!! nenhuma página ${opref}.*.html criada." 1>&2 
   printf "<h3>Nenhuma página ${opref}.*.html foi criada</h3>\n"  >> ${opage} 
@@ -66,12 +66,12 @@ else
   printf "<h3>Páginas HTML criadas:</h3>\n"  >> ${opage} 
   printf "<ul>\n" >> ${opage}
   for ff in "${files[@]}" ; do 
-    printf "  <li><p><a href=\"${ff}\">${ff}</a></p></li>\n" >> ${opage} 
+    printf "  <li><p><a href=\"%s\">%s</a></p></li>\n" "${ff}" "${ff}" >> ${opage} 
   done
   printf "</ul>\n" >> ${opage}
 fi
 
-# Supply a notice if nothing was written to {stdout} and {stderr}:
+# Providencia um aviso se nada foi escrito em {stdout} e {stderr}:
 if [[ ( ! ( -s ${otext} ) ) ]]; then 
   echo "!! nada foi gravado em {stdout} ou {stderr}" 1>&2
   printf "<h3>Nada foi gravado em {stdout} ou {stderr}</h3>\n" >> ${opage}
@@ -94,7 +94,7 @@ else
   printf "</span>\n" >> ${opage}
 fi
 
-# Write HTML tail:
+# Escreve o fecho da página de índice:
 printf "</body>\n" >> ${opage}
 printf "</html>\n" >> ${opage}
 

@@ -23,31 +23,6 @@ sys.stderr.write("  Inicializando módulo {comentario}, limpando tabela, criando
 obj_comentario.inicializa_modulo(True)
 obj_comentario.cria_testes(True)
 
-# ----------------------------------------------------------------------
-sys.stderr.write("  Obtendo alguns comentários para teste:\n")
-
-com1 = obj_comentario.busca_por_identificador("C-00000001")
-com2 = obj_comentario.busca_por_identificador("C-00000002")
-com3 = obj_comentario.busca_por_identificador("C-00000003")
-com4 = obj_comentario.busca_por_identificador("C-00000004")
-com5 = obj_comentario.busca_por_identificador("C-00000005")
-com6 = obj_comentario.busca_por_identificador("C-00000006")
-
-sys.stderr.write("  Obtendo alguns vídeos para teste:\n")
-
-vid1 = obj_video.busca_por_identificador("V-00000001")
-vid2 = obj_video.busca_por_identificador("V-00000002")
-vid2 = obj_video.busca_por_identificador("V-00000002")
-
-sys.stderr.write("  Obtendo alguns usuários para teste:\n")
-
-usr1 = obj_usuario.busca_por_identificador("U-00000001")
-usr2 = obj_usuario.busca_por_identificador("U-00000002")
-usr3 = obj_usuario.busca_por_identificador("U-00000003")
-
-# ----------------------------------------------------------------------
-# Funções de teste:
-
 ok_global = True # Vira {False} se um teste falha.
 
 def verifica_comentario(rot_teste, com, ident, atrs):
@@ -122,6 +97,29 @@ def verifica_busca_multipla(rot_teste, chave, val, idents):
 
   sys.stderr.write("  %s\n" % ("-" * 70))
   return
+
+
+# ----------------------------------------------------------------------
+sys.stderr.write("  Obtendo alguns comentários para teste:\n")
+
+com1 = obj_comentario.busca_por_identificador("C-00000001")
+com2 = obj_comentario.busca_por_identificador("C-00000002")
+com3 = obj_comentario.busca_por_identificador("C-00000003")
+com4 = obj_comentario.busca_por_identificador("C-00000004")
+com5 = obj_comentario.busca_por_identificador("C-00000005")
+com6 = obj_comentario.busca_por_identificador("C-00000006")
+
+sys.stderr.write("  Obtendo alguns vídeos para teste:\n")
+
+vid1 = obj_video.busca_por_identificador("V-00000001")
+vid2 = obj_video.busca_por_identificador("V-00000002")
+vid2 = obj_video.busca_por_identificador("V-00000002")
+
+sys.stderr.write("  Obtendo alguns usuários para teste:\n")
+
+usr1 = obj_usuario.busca_por_identificador("U-00000001")
+usr2 = obj_usuario.busca_por_identificador("U-00000002")
+usr3 = obj_usuario.busca_por_identificador("U-00000003")
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_comentario.cria} sem pai:\n")

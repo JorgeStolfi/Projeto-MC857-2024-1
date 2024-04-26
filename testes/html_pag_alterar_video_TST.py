@@ -17,15 +17,20 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-def testa_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = html_pag_alterar_video
   funcao = modulo.gera
   frag = False  # Resultado é só um fragmento de página?
   pretty = True # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
 # Sessao de usuário  administrador:
 sesA1_id = "S-00000006"
@@ -53,14 +58,14 @@ ses_dic = { 'A': sesA1, 'C': sesC1, }
 vidC1_id = "V-00000002"
 vidC1 = obj_video.busca_por_identificador(vidC1_id)
 assert vidC1 != None
-assert obj_video.obtem_campo(vidC1, 'autor') == usrC1
+assert obj_video.obtem_atributo(vidC1, 'autor') == usrC1
 
 # Um vídeo de outro usuário, nenhum dos dois:
 vidC2_id = "V-00000004"
 vidC2 = obj_video.busca_por_identificador(vidC2_id)
 assert vidC2 != None
-assert obj_video.obtem_campo(vidC2, 'autor') != usrC1
-assert obj_video.obtem_campo(vidC2, 'autor') != usrA1
+assert obj_video.obtem_atributo(vidC2, 'autor') != usrC1
+assert obj_video.obtem_atributo(vidC2, 'autor') != usrA1
 
 vid_dic = { 'C1': vidC1_id, 'C2': vidC2_id, }
 
@@ -79,6 +84,9 @@ for st, ses in ses_dic.items():
         atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
         for at, atrs in atrs_dic.items():
           rot_teste = f"ses{st}-vid{vt}-atrs{at}-erros{et}"
-          testa_gera(rot_teste, ses, id_vid, atrs, erros)
+          testa_gera(rot_teste,  str,  ses, id_vid, atrs, erros)
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

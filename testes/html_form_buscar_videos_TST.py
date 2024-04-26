@@ -5,16 +5,20 @@ import util_testes
 
 import sys
 
-def testa_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
-  modulo = html_form_buscar_sessoes
+  global ok_global
+  modulo = html_form_buscar_videos
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
-  return
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
 atrs1 = \
   { 'video': 'V-11111111', 
@@ -23,7 +27,10 @@ atrs1 = \
     'arq': 'la_la_land.mp4',
   }
 
-testa_gera("SemValores", {})
-testa_gera("ComValores", atrs1)
+testa_gera("SemValores", str, {})
+testa_gera("ComValores", str, atrs1)
 
-sys.stderr.write("Testes terminados normalmente.")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.")
+else:
+  aviso_erro("Alguns testes falharam", True)

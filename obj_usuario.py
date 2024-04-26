@@ -169,6 +169,61 @@ def verifica_criacao(usr, id_usr, atrs):
   imprme diagnósticos em {sys.stderr}."""
   return obj_usuario_IMP.verifica_criacao(usr, id_usr, atrs)
 
+def valida_nome_de_usuario(chave, val, nulo_ok):
+  """O parâmetro {val} deve ser um string com aparência de
+  nome de usuário, com no mínimo 6 e no máximo 60 caracteres.
+  
+  São permitidas apenas letras acentuadas do conjunto ISO-Latin-1,
+  brancos (ASCII octal 040), hífens (055), pontos (056), e apóstrofes
+  (047). Além disso as seguintes regras devem ser obedecidas:
+  
+    * O nome deve começar com letra maiúscula.
+    * O nome deve terminar com letra maiúscula ou minúscula. 
+    * Cada ponto deve seguir uma letra maiúscula ou minúscula.
+    * Cada ponto deve ser seguido por um branco.
+    * Cada apóstrofe deve seguir uma letra maiúscula ou minúscula.
+    * Cada apóstrofe deve ser seguido por uma letra maiúscula.
+    * Cada hífen deve seguir um ponto ou uma letra maiúscula ou minúscula.
+    * Cada hífen deve ser seguido por uma letra maiúscula.
+    * Cada branco deve ser seguido de uma letra maiúscula ou minúscula.
+  Estas regras implicam que finais como "Júnior", "Junior", "Neto", etc
+  não pode ser abreviados ("Jr.", "Nt.", etc.)and segundo >= 0
+  """
+  return obj_usuario_IMP.valida_nome_de_usuario(chave, val, nulo_ok)
+  
+def valida_senha(chave, val, nulo_ok):
+  """O valor {val} deve ser uma cadeia de caracteres visíveis do conjunto ASCII,
+  no intervalo [!-~].  Não pode ter letras acentuadas ou outros caracters
+  Unicode, como "¿" ou "♫".  Deve ter no mínimo 8 e no máximo 14 caracters,
+  e conter pelo menos uma letra, um dígito, e um caracter que não é nem 
+  letra nem dígito."""
+  return obj_usuario_IMP.valida_senha(chave, val, nulo_ok)
+
+def valida_email(chave, val, nulo_ok):
+  """
+  O valor {val} deve ser um endereço de email válido segundo 
+  as especificações IETF RFC 5322 (seções 3.2.3 e 3.4.1) e RFC 5321,
+  com restrições adicionais. 
+  
+  Especificamente, {val} deve ter a forma "{usuario}@{dominio}".
+  
+  O {usuario} deve ter pelo menos 1 e no máximo 64 caracteres ASCII, que
+  podem ser [A-Za-z0-9.%'/-]. Não pode começar nem terminar com "." e
+  não pode ter dois ou mais pontos seguidos (ou seja, nem ".Alfa", nem
+  "Omega.", nem "Alfa..Omega" são {usuario}s válidos).
+  
+  O {dominio} deve ter comprimento total máximo 255, e deve consistir de
+  uma ou mais partes, separadas por pontos. Cada parte deve ter no
+  mínimo 1 e no máximo 63 caracteres, consistindo de letras, dígitos, ou
+  hífens [A-Za-z0-9-], e não pode nem começar nem terminar com hífen. A
+  última parte não pode ser só dígitos.
+  and segundo >= 0
+  A forma estendida "José Silva <jose@bat.com>" não é permitida.
+  """
+  return obj_usuario_IMP.valida_email(chave, val, nulo_ok)
+
+
+
 def cria_testes(verb):
   """Limpa a tabela de usuários com {inicializa(True)}, e cria pelo menos três usuários
   para fins de teste, incluindo-os na tabela.  Não devolve nenhum resultado.

@@ -9,7 +9,7 @@ def gera(id_vid, atrs):
   assert id_vid != None and type(id_vid) is str
   assert atrs == None or type(atrs) is dict
 
-  ht_table = html_bloco_dados_de_video.gera(id_vid, atrs, True, True)
+  ht_table = html_bloco_dados_de_video.gera(id_vid, atrs, True)
 
   # Constrói formulário vid botões 'Confirmar' e 'Cancelar':
   ht_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_video', None, '#55ee55')
@@ -19,6 +19,6 @@ def gera(id_vid, atrs):
     ( ht_submit + " " ) + \
     ( ht_cancel + "\n" )
 
-  ht_form = html_elem_form.gera(conteudo_form)
+  ht_form = html_elem_form.gera(conteudo_form, False)
   
   return ht_form

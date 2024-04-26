@@ -26,12 +26,12 @@ def gera(ses, usr, erros):
     # Obtem o identificador e atributos do usuário:
     id_usr = obj_usuario.obtem_identificador(usr)
     atrs_usr = obj_usuario.obtem_atributos(usr)
-
+    
     auto = (usr == usr_ses)
     ht_bloco = html_bloco_dados_de_usuario.gera(id_usr, atrs_usr, admin, auto)
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
   except ErroAtrib as ex:
-    erros.append(ex.args[0])
+    erros += ex.args[0]
     pag = html_pag_mensagem_de_erro(ses, erros)
 
   return pag

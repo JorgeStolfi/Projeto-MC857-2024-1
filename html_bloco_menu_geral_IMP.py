@@ -131,7 +131,7 @@ def gera_botoes_linha_admin():
 
   ht_busca_obj_input = html_elem_input.gera("text", "objeto", None, None, None, True, "Id do objeto", None, False)
   ht_busca_obj_bt =    html_elem_button_submit.gera("Checar Objeto", "ver_objeto", None, cor_bt_busca)
-  ht_busca_obj_form = html_elem_form.gera(ht_busca_obj_input + ht_busca_obj_bt)
+  ht_busca_obj_form = html_elem_form.gera(ht_busca_obj_input + ht_busca_obj_bt, False)
   hts_botoes = [ ht_busca_obj_form, ]
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_admin: hts_botoes = %s\n" % str(hts_botoes))
   return hts_botoes

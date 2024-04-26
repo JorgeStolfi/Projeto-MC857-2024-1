@@ -151,12 +151,12 @@ def busca_por_campo(campo, val):
   dessas sessões."""
   return obj_sessao_IMP.busca_por_campo(campo, val)  
 
-def busca_por_usuario(id_usr, soh_abertas):
-  """Localiza todas as sessões do usuário com identificador {id_usr} (uma string da forma
-  "U-{NNNNNNNN}").  Se {soh_abertas} é {True}, considera apenas as sessões abertas.
+def busca_por_usuario(usr, soh_abertas):
+  """Localiza todas as sessões do usuário com identificador {usr}.  
+  Se {soh_abertas} é {True}, considera apenas as sessões abertas.
   Retorna uma lista de identificadores dessas sessões.
-  Se {id_usr} é {None} ou não existem tais sessões, devolve uma lista vazia."""
-  return obj_sessao_IMP.busca_por_usuario(id_usr, soh_abertas)
+  Se {usr} é {None} ou não existem tais sessões, devolve uma lista vazia."""
+  return obj_sessao_IMP.busca_por_usuario(usr, soh_abertas)
 
 def fecha(ses):
   """Registra o logout do usuário na sessão {ses}, mudando o atributo 'aberta'

@@ -1,6 +1,0 @@
-- Alteração da primeira linha do comando_alterar_comentario.py para import comando_alterar_comentario_IMP
-- Alteração necessária em obj_video_IMP.py para rodar servidor
-- notada altereção na senha dos usuários para login no servidor em obj_usuario_IMP.py de 11111111 para U-00000001
-- import db_tabelas_do_sistema em comando_alterar_comentario_TST.py
-
-Tive problema na implementação da identificação do autor

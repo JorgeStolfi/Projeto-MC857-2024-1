@@ -17,11 +17,15 @@ def gera(id_com, atrs, ses_admin):
   por um usuário comum (não administrador) que é o 
   autor do comentário.
   
-  Alguns atributos do comentário não podem ser alterados, nem mesmo
-  pelo administrador. Esses atributos serão mostrados, mas como 
-  "readonly". Se seus valores forem especificados em {atrs},
-  eles devem coincidir com os respectivos valores atuais no
-  comentário {com}.
+  Por qnquanto, o único atributo que pode ser alterado é 'titulo',
+  que pode ser alterado tanto por administrador quanto pelo
+  autor do comentário.  No futuro pode haver atributos que 
+  só o administrador pode alterar.
+  
+  Atributos do comentário que não podem ser alterados, como 'data' e
+  'video', serão mostrados mas como "readonly". Se seus valores forem
+  especificados em {atrs}, eles devem coincidir com os respectivos
+  valores atuais no comentário {com}.
 
   O formulário conterá um botão "Confirmar alterações" ou similar.
   Quando o usuário clicar nesse botão, será emitido um comando POST com

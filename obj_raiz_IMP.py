@@ -128,7 +128,7 @@ def verifica_criacao(obj, tipo, id_obj, atrs, ignore, tabela, def_obj_mem):
         if chave in atrs_esp: del atrs_esp[chave]
       
     for chave in atrs_esp.keys():
-      assert chave in atrs_cmp
+      assert chave in atrs_cmp, f"chave {chave} falta nos atributos do objeto"
       if atrs_cmp[chave] != atrs_esp[chave]:
         aviso_prog("retornou " + str(atrs_cmp[chave]) + ", deveria ter retornado " + str(atrs_esp[chave]), True)
         ok = False

@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-import html_form_criar_alterar_video
+import html_form_alterar_video
 import obj_video
 import obj_sessao
 import util_identificador
@@ -19,15 +19,20 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-def testa_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
-  modulo = html_form_criar_alterar_video
+  global ok_global
+  modulo = html_form_alterar_video
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
 # Video:
 vidC1_id = "V-00000002"
@@ -41,6 +46,9 @@ for ses_admin in False, True:
   atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
   for at, atrs in atrs_dic.items():
     rot_teste = f"admin{st}-atrs{at}"
-    testa_gera(rot_teste, vidC1_id, atrs, ses_admin)
+    testa_gera(rot_teste, str, vidC1_id, atrs)
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

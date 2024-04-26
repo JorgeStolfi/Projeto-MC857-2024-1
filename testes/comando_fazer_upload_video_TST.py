@@ -22,10 +22,10 @@ sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
-# ----------------------------------------------------------------------
-# Função de teste:
 
-def testa_comando_fazer_upload_video(rot_teste, valido, ses, cmd_args):
+def testa_processa(rot_teste, valido, ses, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   global ok_global
 
   modulo = comando_fazer_upload_video
@@ -35,10 +35,10 @@ def testa_comando_fazer_upload_video(rot_teste, valido, ses, cmd_args):
 
   id_ses = obj_sessao.obtem_identificador(ses) if ses != None else None
   sys.stderr.write("-"*70 + "\n")
-  sys.stderr.write(f"testando {funcao} rot_teste = {rot_teste} ses = {str(id_ses)} cmd_args = {str(cmd_args)}\n")
+  sys.stderr.write(f"testando {funcao} rot_teste = {rot_teste} ses = {str(id_ses)} cmd_args = {str(*args)}\n")
 
   ult_id_antes = obj_video.ultimo_identificador()
-  pag = funcao(ses, cmd_args)
+  pag = funcao(ses, *args)
   ult_id_depois = obj_video.ultimo_identificador()
   sys.stderr.write(f"  ultimo id antes = {ult_id_antes} depois = {ult_id_depois}\n")
   
@@ -73,14 +73,9 @@ def testa_comando_fazer_upload_video(rot_teste, valido, ses, cmd_args):
    
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.escreve_resultado_html(modulo, rot_teste, pag, frag, pretty)
-
-  if not ok:
-    aviso_prog("teste falhou", True)
-    ok_global = False
-
-  sys.stderr.write("-"*70 + "\n")
-  return
+  util_testes.escreve_resultado_html(modulo, funcao, rot_teste, pag, frag, pretty)
+  ok_global = ok_global and ok
+  return ok
 
 # ----------------------------------------------------------------------
 # Algumas sessões para teste:
@@ -91,45 +86,50 @@ ses_comum2 = obj_sessao.busca_por_identificador("S-00000004") # De outro plebeu.
 # Obtém alguns usuários:
 usr_admin1 = obj_sessao.obtem_usuario(ses_admin1)
 assert obj_usuario.obtem_atributo(usr_admin1, 'administrador')
+usr_admin1_id = obj_usuario.obtem_identificador(usr_admin1)
 
 usr_comum1 = obj_sessao.obtem_usuario(ses_comum1)
 assert not obj_usuario.obtem_atributo(usr_comum1, 'administrador')
+usr_comum1_id = obj_usuario.obtem_identificador(usr_comum1)
 
 usr_comum2 = obj_sessao.obtem_usuario(ses_comum2)
 assert not obj_usuario.obtem_atributo(usr_comum2, 'administrador')
 assert usr_comum2 != usr_comum1 
+usr_comum2_id = obj_usuario.obtem_identificador(usr_comum2)
+
+bytes1 = open("videos/V-00000002.mp4", 'rb').read()
 
 # ----------------------------------------------------------------------
 # Testa com dados OK:
-dados_OK = { \
-  'arq': "banana",
+dados_OK1 = { \
   'titulo': "Bananas cibernéticas",
+  'conteudo': bytes1,
 }
-testa_comando_fazer_upload_video("OK", True, ses_comum1, dados_OK)
+testa_processa("OK1", True, ses_comum1, dados_OK1)
 
-# Testa com arquivo repetido:
-dados_Earq = { \
-  'autor': usr_comum2,
-  'arq': "banana",
+# Outro teste OK
+dados_OK2 = { \
+  'autor': usr_comum2_id,
   'titulo': "Bananas psicossomáticas",
+  'conteudo': bytes1,
 }
-testa_comando_fazer_upload_video("Earq", False, ses_comum2, dados_Earq)
+testa_processa("OK2", True, ses_comum2, dados_OK2)
 
 # Testa com usuário de outra sessão:
 dados_Eses = { \
-  'autor': usr_comum1,
-  'arq': "pitmat",
+  'autor': usr_comum1_id,
   'titulo': "Pitangas matemáticas",
+  'conteudo': bytes1,
 }
-testa_comando_fazer_upload_video("Eses", False, ses_comum2, dados_Eses)
+testa_processa("E str,  str, ses", False, ses_comum2, dados_Eses)
 
 # Testa com usuário não logado:
 dados_Elog = { \
-  'autor': usr_comum1,
-  'arq': "goiorg",
+  'autor': usr_comum1_id,
   'titulo': "Goiabas organolépticas",
+  'conteudo': bytes1,
 }
-testa_comando_fazer_upload_video("Eses", False, None, dados_Elog)
+testa_processa("E str,  str, ses", False, None, dados_Elog)
 
 # ----------------------------------------------------------------------
 # Veredito final:

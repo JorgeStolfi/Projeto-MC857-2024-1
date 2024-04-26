@@ -21,6 +21,6 @@ def gera(atrs):
     ( "    " + ht_submit + "\n" ) + \
     ( "    " + ht_cancel + "\n" )
 
-  ht_form = html_elem_form.gera(ht_conteudo)
+  ht_form = html_elem_form.gera(ht_conteudo, False)
   
   return ht_form

@@ -10,32 +10,41 @@ import util_testes
 
 import sys
 
-def testa_html_table_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = html_elem_table
-  funcao = modulo.gera
+  funcao = cria_tabela
   frag = True  # Resultado é só um fragmento de página?
   pretty = False  # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
-linhas = [].copy()
+def cria_tabela():
+  cabecalho=("Coluna 1", "Coluna 2")
 
-erro_de_teste_html = html_bloco_erro.gera("Houston, we've got a problem. Nevermind, this is just a Test!")
+  ht_val = [None]*3
+  ht_val[0] = html_elem_input.gera("text", 'veiculo', "ident0", None, None, True, "Me edite!", None, False)
+  ht_val[1] = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
+  ht_val[2] = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
 
-cabecalho=("Coluna 1", "Coluna 2")
-for i in range(3):
-  ht_lab = html_elem_label.gera(f"Teste {i:03d}", ":")
-  if i == 0:
-    ht_val = html_elem_input.gera("text", f"input_{i:03d}", None, None, None, True, "Me edite!", None, False)
-  elif i == 1:
-    ht_val = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
-  elif i == 2:
-    ht_val = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
+  linhas = [].copy()
 
-  linhas.append((ht_lab, ht_val))
+  for i in range(3):
+    ht_lab = html_elem_label.gera(f"Teste {i:03d}", ":")
+    linhas.append((ht_lab, ht_val[i]))
 
-testa_html_table_gera("Teste", linhas, cabecalho)
+  ht_tab = html_elem_table.gera(linhas, cabecalho)
+  return ht_tab
 
-sys.stderr.write("Testes terminados normalmente.");
+testa_gera("Teste", str)
+
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.");
+else:
+  aviso_erro("Alguns testes falharam", True)

@@ -20,34 +20,29 @@ sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
-# ----------------------------------------------------------------------
-# Função de teste:
 
-def testa_comando_fazer_login(rot_teste, email, senha, deveria_logar):
+def testa_processa(rot_teste, email, senha, deveria_logar):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   global ok_global
-  dados = {
+  cmd_args = {
     "email": email,
     "senha": senha
   }
+  res_esp = (str, obj_sessao.Classe) if deveria_logar else (str, None)
   modulo = comando_fazer_login
-  pag, ses = modulo.processa(None, dados)
-
-  if (deveria_logar and ses == None):
-    ok_global = False
-    aviso_prog("Não gerou a sessão quando deveria para o email " + str(email), True)
-
-  if ((not deveria_logar) and ses != None):
-    ok_global = False
-    aviso_prog("Gerou gerou a sessão quando não deveria para o email " + str(email), True)
-    
+  funcao = modulo.processa
+  html = False 
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.escreve_resultado_html(modulo, rot_teste, pag, frag, pretty)
-
+  ok = util_testes.testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, None, cmd_args)
+  ok_global = ok_global and ok
+  return ok
+     
 # ----------------------------------------------------------------------
 # Executa chamadas
-testa_comando_fazer_login("OK", "primeiro@gmail.com", "U-00000001", True)
-testa_comando_fazer_login("Erro", "nao_existo@gmail.com", "123456789", False)
+testa_processa("OK",   "primeiro@gmail.com",  "U-00000001", True)
+testa_processa("Erro", "nao_existo@gmail.com", "123456789", False)
 
 # ----------------------------------------------------------------------
 # Veredito final:

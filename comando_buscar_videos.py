@@ -27,7 +27,7 @@ def processa(ses, cmd_args):
   Atributos de {obj_video.Classe} que tem valor {None} em
   {cmd_args} (ou estão omitidos) serão ignorados na busca.
   
-  No casos dos campos 'video', 'arq', e 'autor' de {cmd_args}, a
+  No casos dos campos 'video' e 'autor' de {cmd_args}, a
   busca será feita pelo valor exato. Nos caso dos campos 'titulo' e
   'data', será feita uma busca por valor aproximado.
 

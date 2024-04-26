@@ -27,6 +27,6 @@ def gera(id_usr, atrs, ses_admin, texto_bt, comando_bt):
     ( ht_submit + " " ) + \
     ( ht_cancel + "\n" )
 
-  ht_form = html_elem_form.gera(conteudo_form)
+  ht_form = html_elem_form.gera(conteudo_form, False)
   
   return ht_form

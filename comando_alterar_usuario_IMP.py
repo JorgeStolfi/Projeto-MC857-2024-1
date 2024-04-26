@@ -2,6 +2,7 @@
 
 import html_pag_login
 import html_pag_mensagem_de_erro
+import html_pag_ver_usuario
 import html_pag_alterar_usuario
 import obj_usuario
 import obj_sessao
@@ -47,21 +48,20 @@ def processa(ses, cmd_args):
         erros.append(f"já existe um usuário com o email {novo_email}")
 
   if len(erros) == 0:
-    # Tenta editar o usuário:
+    # Tenta modificar os atributos do usuário:
     try:
       obj_usuario.confere_e_elimina_conf_senha(cmd_args)
       obj_usuario.muda_atributos(usr, cmd_args)
     except ErroAtrib as ex:
-      erros.append(ex.args[0])
+      erros += ex.args[0]
       
   if usr_ses == None:
     # Sessão inativa: mostra página de erro:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
   elif len(erros) == 0:
-    # Mostra de novo a página de alterar mas com dados alterados:
-    cmd_args_novos = obj_usuario.obtem_atributos(usr)
-    pag = html_pag_alterar_usuario.gera(ses, id_usr, cmd_args_novos, admin, None)
+    # Mostra o usuário com dados alterados:
+    pag = html_pag_ver_usuario.gera(ses, usr, None)
   else:
     # Repete a página de cadastrar com os mesmos argumentos e mens de erro:
-    pag = html_pag_alterar_usuario.gera(ses, id_usr, cmd_args, admin, erros)
+    pag = html_pag_alterar_usuario.gera(ses, id_usr, cmd_args, erros)
   return pag

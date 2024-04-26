@@ -1,7 +1,0 @@
-Foi implementada a página de busca de sessões baseado na página de busca de usuários.
-Como nos testes haviam somente os campos "usuário" e "aberta" o formulário
-foi criado com esses dois campos, usuário como texto e aberta como checkbox.
-
-O parâmetro admin estava sendo passado nos testes, então ele foi adicionado na
-instanciação do módulo html_form_buscar_sessoes. Seu valor é capturado na página
-html_pag_buscar_sessoes através da função obj_sessao.de_administrador.

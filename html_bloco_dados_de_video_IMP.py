@@ -3,7 +3,7 @@ import obj_video
 import html_elem_paragraph
 import html_bloco_tabela_de_campos
 
-def gera(id_vid, atrs_vid, mostra_arq, edita_titulo):
+def gera(id_vid, atrs_vid, edita_titulo):
   
   # atrs_tb = ...
   # dados_linhas = ...

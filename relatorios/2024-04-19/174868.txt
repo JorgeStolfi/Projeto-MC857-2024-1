@@ -1,7 +1,0 @@
-A minha tarefa era corrigir implementação e/ou programa de teste do módulo comando_buscar_comentarios_de_usuario.
-
-No arquivo de testes eu vi que apenas o teste para a visualização do comentário de outros usuários estava sendo feito, então adicionei um novo teste para garantir que o usuário consiga ver seus próprios comentários.
-
-Além disso, notei um problema no arquivo de implementação. Na teoria o módulo poderia aceitar usuários sem sessão, porém ele sempre fazia uma busca pelo id do usuário da sessão atual, portanto eu realizei as seguintes modificações:
-1) Adicionei uma condição para pegar o id do usuário da sessão apenas quando ses != None;
-2) Inseri um assert para garantir que quando ses != None, exista algum id de usuário no dicionário cmd_args, pois um usuário sem sessão não possui comentários, o máximo que ele pode fazer é ver os comentários de outros usuários.

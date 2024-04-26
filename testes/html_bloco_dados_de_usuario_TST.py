@@ -22,15 +22,20 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-def testa_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = html_bloco_dados_de_usuario
   funcao = modulo.gera
   frag = True # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
 # Sessao de usuário  administrador:
 sesA1_id = "S-00000006"
@@ -65,17 +70,20 @@ for id_ses in None, sesA1_id, sesC1_id:
     usr = obj_usuario.busca_por_identificador(id_usr) if id_usr != None else None
     ses_usr = obj_sessao.obtem_usuario(ses) if ses != None else None
     ses_usr_id = obj_usuario.obtem_identificador(ses_usr) if ses_usr != None else None
-    auto = (id_usr != None and id_usr == ses_usr_id)
+    ses_proprio = (id_usr != None and id_usr == ses_usr_id)
     atrs_set = ( {}, obj_usuario.obtem_atributos(usr), ) if usr != None else ( {}, )
     for xatrs in atrs_set:
       atrs = xatrs.copy()
-      if id_usr != None and not ses_admin and not auto:
+      if id_usr != None and not ses_admin and not ses_proprio:
         atrs.update({ 'nome': "Seracomeço Nãoquerubim" })
       if not ses_admin:
         usr_admin = obj_usuario.obtem_atributo(usr, 'administrador') if usr != None else False
         atrs.update({ 'administrador': usr_admin })
       na = len(atrs.keys())
       rot_teste = "ses" + str(id_ses) + "-usr" + str(id_usr) + "-na" + str(na)
-      testa_gera(rot_teste, id_usr, atrs, ses_admin, auto)
+      testa_gera(rot_teste, str, id_usr, atrs, ses_admin, ses_proprio)
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

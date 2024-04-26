@@ -48,7 +48,8 @@ def processa(ses, cmd_args):
         ht_titulo = html_bloco_titulo.gera(f"Comentários do usuário {id_autor}")
       ms_autor = False # Pois todos do mesmo autor.
       ms_video = True  # Podem ser de videos diferentes.
-      ht_tabela = html_bloco_lista_de_comentarios.gera(lista_ids_com, ms_autor, ms_video)
+      ms_pai = True    # Podem ter pais diferentes.
+      ht_tabela = html_bloco_lista_de_comentarios.gera(lista_ids_com, ms_autor, ms_video, ms_pai)
       ht_conteudo = \
         ht_titulo + "<br/>\n" + \
         ht_tabela

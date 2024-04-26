@@ -15,7 +15,6 @@ class Classe(obj_video_IMP.Classe_IMP):
   (vide {obtem_atributos} abaixo) contém os seguintes campos:
 
     'autor'    {obj_usuario.Classe} O usuário que fez upload do vídeo.
-    'arq'      {str}   Nome do arquivo de vídeo.
     'titulo'   {str}   Título do vídeo (max 60 caracteres).
     'data'     {str}   Data de upload, no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
     'duracao'  {int}   Duração do vídeo em millissegundos.
@@ -39,7 +38,7 @@ class Classe(obj_video_IMP.Classe_IMP):
   REPRESENTAÇÃO NA BASE DE DADOS
 
   Cada vídeo está representado no sistema por (a) um arquivo na pasta
-  "videos", com nome "{arq}.mp4"; e (b) por uma linha na tabela "videos"
+  "videos", com nome "{id_video}.mp4"; e (b) por uma linha na tabela "videos"
   da base SQL em disco. Apenas algumas dessas linhas estarão
   representadas também na memória por objetos da classe
   {obj_video.Classe}.
@@ -68,9 +67,16 @@ def cria(atrs):
   usuário {autor}, com os atributos {atrs}. Também acrescenta o vídeo à
   base de dados.
   
-  O dicionário {atrs} deve ter apenas os campos 'autor', 'arq', e
-  'titulo' como especificados na {Classe} acima. O conteúdo do vídeo já
-  deve estar gravado no arquivo "videos/{arq}". Os camos 'duracao',
+  O dicionário {atrs} deve ter apenas os campos 'autor' e
+  'titulo' como especificados na {Classe} acima.
+  
+  O conteúdo do vídeo deve estar no atributo {atrs} com chave
+  'conteudo'. Esse conteúdo será gravado no arquivo
+  "videos/{id_vid}.mp4", onde {id_vid} é o identificador do objeto video
+  a ser criado. Se a chave 'conteúdo' não existir em {atrs}, supõe que o
+  arquivo já está gravado com esse nome.
+  
+  Os campos 'duracao',
   'largura' e 'altura' do objeto serão extraídos desse arquivo. O campo
   'data' será a data corrente no momento da chamada desta função. O
   identificador do novo objeto será derivado do seu índice na tabela.
@@ -87,8 +93,8 @@ def muda_atributos(vid, atrs_mod):
   Dá erro se {vid} é {None}.
   
   Recebe um dicionário Python {atrs_mod} cujas chaves são um subconjunto
-  dos nomes de atributos do vídeo, exceto o identificador, o nome do
-  arquivo ('arq'), e as dimensões ('duracao', 'largura', 'altura'). 
+  dos nomes de atributos do vídeo, exceto o identificador
+  e as dimensões ('duracao', 'largura', 'altura'). 
   Os valores atuais desses atributos são substituídos pelos valores
   correspondentes em {atrs_mod}.  Os valores devem estar no formato de
   atributos na memória.
@@ -113,11 +119,11 @@ def obtem_atributo(vid, chave):
   Dá erro se {vid} é {None}."""
   return obj_video_IMP.obtem_atributo(vid, chave)
 
-def obtem_usuario(vid):
-  """Retorna o objeto da classe {obj_usuario.Classe} correspondente ao usuario que
-  fez login na video {vid}.  Equivale a {obj_video.obtem_atributo(vid,'autor')}.
+def obtem_autor(vid):
+  """Retorna o objeto da classe {obj_usuario.Classe} correspondente ao autor do
+  vídeo {vid}.  Equivale a {obj_video.obtem_atributo(vid,'autor')}.
   Dá erro se {vid} é {None}."""
-  return obj_video_IMP.obtem_usuario(vid)
+  return obj_video_IMP.obtem_autor(vid)
 
 def obtem_data_de_upload(vid):
   """Devolve a data de criação do vídeo {vid}.
@@ -156,12 +162,6 @@ def busca_por_semelhanca(args, unico):
   {db_tabela_generica.busca_por_semelhanca}."""
   # !!! Deveria ter especificação exato/aproximado para cada campo. !!!
   return obj_video_IMP.busca_por_semelhanca(args, unico)
-
-def busca_por_arquivo(arq):
-  """Localiza um video com nome "{arq}.mp4" na tabela de videos,
-  e devolve o mesmo na forma de um objeto da classe {obj_video.Classe}.
-  Se tal vídeo não existe, devolve {None}."""
-  return obj_video_IMP.busca_por_arquivo(arq)
 
 def busca_por_autor(id_autor):
   """Localiza todos os vídeos do usuário com identificador {id_autor} (uma string da forma

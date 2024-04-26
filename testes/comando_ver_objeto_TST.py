@@ -17,26 +17,26 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-# Obtem uma sessao de um usuario que é de administrador:
-ses1 = obj_sessao.busca_por_identificador("S-00000001")
-assert obj_sessao.de_administrador(ses1)
+ok_global = True # Vira {False} se algum teste falha.
 
-ok_global = True # Vira {False} se um teste falha.
-
-# ----------------------------------------------------------------------
-# Função de teste:
-
-def testa_comando_ver_objeto(rot_teste, *cmd_args):
-  """Testa {funcao(*cmd_args)}, grava resultado 
+def testa_processa(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado 
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   global ok_global
   
+  global ok_global
   modulo = comando_ver_objeto
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *cmd_args)
-  
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
+
+# Obtem uma sessao de um usuario que é de administrador:
+ses1 = obj_sessao.busca_por_identificador("S-00000001")
+assert obj_sessao.de_administrador(ses1)
+
 for tag, id_obj in ( \
     ("U", "U-00000001"),
     ("S", "S-00000001"),
@@ -46,7 +46,7 @@ for tag, id_obj in ( \
     ("item_not_found", "U-12345678"),
     ("blank", ""),
   ):
-  testa_comando_ver_objeto(tag, ses1, {'objeto': id_obj})
+  testa_processa(tag,  str, ses1, {'objeto': id_obj})
 
 # ----------------------------------------------------------------------
 # Veredito final:

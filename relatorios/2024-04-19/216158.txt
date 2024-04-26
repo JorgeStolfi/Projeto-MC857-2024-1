@@ -1,1 +1,0 @@
-Modifiquei o teste do login para usar a senha de teste correta, o resto parece OK.

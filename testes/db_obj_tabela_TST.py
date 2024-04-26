@@ -221,7 +221,10 @@ assert type(res) == int
 # verifica o valor
 assert res == num_elementos
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)
 
 # ----------------------------------------------------------------------
 # Veredito final:

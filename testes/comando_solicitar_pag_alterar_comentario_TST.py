@@ -17,35 +17,43 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_processa(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
+
+  global ok_global
+  modulo = comando_solicitar_pag_alterar_comentario
+  funcao = modulo.processa
+  frag = False # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
+
 ses_admin = obj_sessao.busca_por_identificador("S-00000001")
 ses_comum = obj_sessao.busca_por_identificador("S-00000003")
 
-def testa_processa(rot_teste, *cmd_args):
-    """Testa {comando_solicitar_pag_alterar_comentario.processa(*cmd_args)}, grava resultado
-    em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
-
-    modulo = comando_solicitar_pag_alterar_comentario
-    funcao = modulo.processa
-    frag = False # Resultado é só um fragmento de página?
-    pretty = False # Deve formatar o HTML para facilitar view source?
-    util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *cmd_args)
-
 # Testa erro de sessão inválida
-testa_processa("sessaoInvalida", None, {})
+testa_processa(" str, sessaoInvalida",  str, None, {})
 
 # Testa erro de comentário não especificado
-testa_processa("comentarioNaoEspecificado", ses_admin, {})
+testa_processa("comentarioNaoEspecificado",  str, ses_admin, {})
 
 # Testa erro de comentário não existente
 id_comentario_nao_existente = 'C-01010101'
-testa_processa("comentarioNaoExistente", ses_admin, { 'comentario': id_comentario_nao_existente })
+testa_processa("comentarioNaoExistente",  str, ses_admin, { 'comentario': id_comentario_nao_existente })
 
 # Testa erro de permissão para alterar comentário
 id_comentario_outro_usuario = 'C-00000001'
-testa_processa("usuarioSemPermissao", ses_comum, { 'comentario': id_comentario_outro_usuario })
+testa_processa("usuarioSemPermissao",  str, ses_comum, { 'comentario': id_comentario_outro_usuario })
 
 # Teste de gerar página para alterar um comentário
 id_comentario_existente = 'C-00000001'
-testa_processa("exibePaginaAlterarComentario", ses_admin, { 'comentario': id_comentario_existente })
+testa_processa("exibePaginaAlterarComentario",  str, ses_admin, { 'comentario': id_comentario_existente })
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

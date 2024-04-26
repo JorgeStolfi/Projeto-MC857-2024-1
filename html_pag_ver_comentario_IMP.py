@@ -12,7 +12,7 @@ def gera(ses, com, erros):
   edita_texto = False
   ht_bloco_com = html_bloco_dados_de_comentario.gera(id_com, atrs_com, edita_texto)
 
-  ht_form_com = html_elem_form.gera(ht_bloco_com)
+  ht_form_com = html_elem_form.gera(ht_bloco_com, False)
 
   pag = html_pag_generica.gera(ses, ht_form_com, erros)
   return pag

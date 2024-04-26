@@ -1,6 +1,0 @@
-
-Corrigi os testes, havia um erro neles em que as senhas estavam muito fracas mas o teste era para funcionar. Ajustei esses testes colocando senhas mais fortes.
-
-Aproveitei e criei mais 3 testes de erro para verificar se as senhas fracas estão realmente falhando como esperado.
-
-No arquivo "comando_cadastrar_usuario_IMP.py" eu removi um parâmetro extra que havia sido colocado, porém não era esperado pela função sendo chamada. Também adicionei um log para ficar visível o erro quando algum ocorre.

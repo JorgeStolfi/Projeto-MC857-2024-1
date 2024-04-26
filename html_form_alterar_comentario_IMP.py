@@ -11,8 +11,8 @@ def gera(id_com, atrs, ses_admin):
   assert type(ses_admin) is bool
 
   # Constrói tabela com dados:
-  auto = not ses_admin # Caso o pedinte não seja administardor, supõe que é o autor.
-  ht_table = html_bloco_dados_de_comentario.gera(id_com, atrs, ses_admin, auto)
+  edita_texto = True
+  ht_table = html_bloco_dados_de_comentario.gera(id_com, atrs, edita_texto)
 
   # Constrói formulário com botões 'Confirmar' e 'Cancelar':
   ht_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_comentario', None, '#55ee55')
@@ -22,6 +22,6 @@ def gera(id_com, atrs, ses_admin):
     ( ht_submit + " " ) + \
     ( ht_cancel + "\n" )
 
-  ht_form = html_elem_form.gera(conteudo_form)
+  ht_form = html_elem_form.gera(conteudo_form, False)
   
   return ht_form

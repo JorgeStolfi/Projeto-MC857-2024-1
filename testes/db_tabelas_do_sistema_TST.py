@@ -9,6 +9,8 @@ import obj_video
 
 import sys
 
+ok_global = True # Muda para {False} se algum teste falha.
+
 # ----------------------------------------------------------------------
 
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -18,7 +20,7 @@ assert res == None
 # ----------------------------------------------------------------------
 
 sys.stderr.write("  Abrindo as tabelas...\n")
-db_tabelas_do_sistema.inicializa_todas(False)
+db_tabelas_do_sistema.inicializa_todas(True)
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 # ----------------------------------------------------------------------
@@ -58,4 +60,7 @@ assert vid1 == db_tabelas_do_sistema.identificador_para_objeto(vid1_id)
 
 sys.stderr.write("\n")
 
-sys.stderr.write("Testes terminadosnormalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminadosnormalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

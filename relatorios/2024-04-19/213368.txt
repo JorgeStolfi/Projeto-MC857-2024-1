@@ -1,8 +1,0 @@
-Tarefa 2024-04-19
-
-Objetivo:comando_buscar_videos_de_usuario: corrigir implementação e/ou programa de teste
-
-
-No arquivo comando_buscar_videos_de_usuario_IMP, quand se quería buscar videos de outros usuários, estava sendo passado o identificador 
-do usuário ao invés do objeto usuário.Já no arquivo comando_buscar_videos_de_usuario_TST, o teste estava passando o id do usuário no 
-formato errado. Em ambos os casos, os erros foram corrigidos.

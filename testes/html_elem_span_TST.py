@@ -5,6 +5,8 @@ import util_testes
 from util_testes import escreve_resultado_html
 import sys
 
+ok_global = True
+
 def cria_pagina():
   """Cria uma página com uma lista "<ul>...</ul>", cada entrada
   da qual contém vários elementos "<span>...</span>"."""
@@ -33,10 +35,24 @@ def cria_linha(texto):
     "Quousque tandem: [" + t3 + "]" \
     "</li>"
   return linha
+  
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
-pag = cria_pagina()
-frag = True # Resultado é só um fragmento de página?
-pretty = False # Deve formatar o HTML para facilitar view source?
-util_testes.escreve_resultado_html(html_elem_span, "diversos", pag, frag, pretty)
+  global ok_global
+  
+  modulo = html_elem_span
+  funcao = cria_pagina
+  frag = True  # Resultado é só um fragmento de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
-sys.stderr.write("Testes terminados normalmente.");
+testa_gera("T1", str)
+
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.");
+else:
+  aviso_erro("Alguns testes falharam", True)

@@ -19,23 +19,37 @@ assert res == None
 sys.stderr.write("Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-def testa_processa(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_processa(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = comando_buscar_respostas_de_comentario
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
 # Sessão em que o usuário dela é o administrador.
 ses_adm_id = "S-00000001"
 ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
+assert ses_adm != None
 
-# Teste passando um id do comentario
-id_com = {'comentario': "V-00000002"}
+# Comentário com respostas:
+com1_id = "C-00000002"
+testa_processa(" str, sesA-comR",  str, ses_adm, {'comentario': com1_id })
+testa_processa(" str, sesN-comR",  str, None,    {'comentario': com1_id })
 
-testa_processa("T1", ses_adm, {'comentario': id_com })
+# Comentário sem respostas:
+com2_id = "C-00000003"
+testa_processa(" str, sesA-semR",  str, ses_adm, {'comentario': id_com2_id })
+testa_processa(" str, sesN-semR",  str, None,    {'comentario': id_com2_id })
 
-sys.stderr.write("Testes terminados normalmente.")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.")
+else:
+  aviso_erro("Alguns testes falharam", True)

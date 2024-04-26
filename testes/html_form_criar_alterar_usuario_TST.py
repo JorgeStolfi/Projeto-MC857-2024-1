@@ -22,15 +22,20 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-def testa_gera(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+ok_global = True # Vira {False} se algum teste falha.
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = html_form_criar_alterar_usuario
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
 # Sessao de usuário  administrador:
 sesA1_id = "S-00000006"
@@ -75,9 +80,9 @@ for tag, erros in (
           rot_teste = tag + "-ses" + str(id_ses) + "-usr" + str(id_usr) + "-na" + str(na)
           texto_bt = "Cadastrar" if id_usr == None else "Alterar"
           comando_bt = "cadastrar_usuario" if id_usr == None else "alterar_usuario"
-          testa_gera(rot_teste, id_usr, atrs, ses_admin, texto_bt, comando_bt)
+          testa_gera(rot_teste, str, id_usr, atrs, ses_admin, texto_bt, comando_bt)
 
-
-
-
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)

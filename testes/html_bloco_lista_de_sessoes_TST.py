@@ -13,20 +13,30 @@ assert res == None
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-sessoes = ["S-00000001", "S-00000002", "S-00000003"]
+ok_global = True # Vira {False} se algum teste falha.
 
-def testa_html_bloco_lista_de_sessoes(rot_teste, *args):
-  """Testa {funcao(*args)}, grava resultado
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
+  global ok_global
   modulo = html_bloco_lista_de_sessoes
   funcao = modulo.gera
   frag = True     # Resultado é só um fragmento de página?
   pretty = False  # Deve formatar o HTML para facilitar view source?
-  util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
+
+sessoes = ["S-00000001", "S-00000002", "S-00000003"]
 
 for ver in (False, True):
   for fechar in (False, True):
     tag = "ver" + str(ver)[0] + "-fechar" + str(fechar)[0] 
-    testa_html_bloco_lista_de_sessoes("muitas-" + tag, sessoes, ver, fechar)
-    testa_html_bloco_lista_de_sessoes("lhufas-" + tag, [], ver, fechar)
+    testa_gera("muitas-" + tag, str, sessoes, ver, fechar)
+    testa_gera("lhufas-" + tag, str, [],      ver, fechar)
+
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente")
+else:
+  aviso_erro("Alguns testes falharam")

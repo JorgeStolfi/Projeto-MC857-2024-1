@@ -10,12 +10,8 @@ from util_erros import erro_prog, aviso_prog, mostra
 import sys
 from obj_raiz import ultimo_identificador
 
-# ----------------------------------------------------------------------
 sys.stderr.write("  Conectando com base de dados...\n")
 db_base_sql.conecta("DB", None, None)
-
-# ----------------------------------------------------------------------
-# Funções de teste:
 
 ok_global = True # Vira {False} se um teste falha.
 

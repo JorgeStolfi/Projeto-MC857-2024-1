@@ -8,102 +8,88 @@ import html_elem_input
 import html_elem_paragraph
 import html_elem_table
 import html_elem_button_submit
+import html_bloco_tabela_de_campos
 import util_testes
 
 import sys
 
-def testa_form_simples(rot_teste):
-  """Testa {html_elem_form.gera} com um formulário consistindo de um único
-  campo texto e um botão "submit":"""
+# !!! Reescrever usando util_testes.testa_gera !!!
 
-  ht_corpo = html_elem_paragraph(None, "Balacobaco")
+ok_global = True
+
+def testa_gera(rot_teste, res_esp, *args):
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
+  global ok_global
+  modulo = html_elem_form
+  funcao = cria_form_de_teste
   
-  # Cria botao de interacao com o ht_form
-  ht_botao = html_elem_button_submit.gera("Botao", 'urltest', None, '#55ee55', obrigatorio)
-
-  # Counteudo do formulário:
-  ht_campos = \
-    ht_table + \
-    ht_botao
-
-  # Cria formulário:
-  ht_form = html_elem_form.gera(ht_campos)
   frag = True # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.escreve_resultado_html(html_elem_form, "completo", ht_form, frag, pretty)
-  
-  # cria campo de texto com valor inicial
-  ht_rot_teste = html_elem_label.gera("campo de texto", ": ")
-  ht_campo = html_elem_input.gera("text", "texto1", None, "blabla", None, True, None, None, False)
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
 
-  # cria campo de texto sem valor inicial, com dica
-  ht_rot_teste = html_elem_label.gera("campo de texto", ": ")
-  ht_campo = html_elem_input.gera("text", "texto2", None, None, None, True, "Lorem ipusm", None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
+def cria_form_de_teste(multipart):
+  """Cria um formulário com vários campos"""
 
-  # cria campo de senha
-  ht_rot_teste = html_elem_label.gera("campo de senha", ": ")
-  ht_campo = html_elem_input.gera("password", "senha", None, None, None, True, None, None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
-
-  # cria campo numerico
-  ht_rot_teste = html_elem_label.gera("campo numerico", ": ")
-  ht_campo = html_elem_input.gera("number", "pernas", None, "17", "5", True, None, None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
-
-  # cria campo escondido
-  ht_rot_teste = html_elem_label.gera("campo escondido", ": ")
-  ht_campo = html_elem_input.gera("hidden", "segredo", None, "boo", None, True, None, None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
-
-testa_form_trivial("trivial")
-
-def testa_form_tabela(rot_teste):
+  atrs = {}.copy()
   linhas = [].copy()
   
-  # cria campo de texto com valor inicial
-  ht_rot_teste = html_elem_label.gera("campo de texto", ": ")
-  ht_campo = html_elem_input.gera("text", "texto1", None, "blabla", None, True, None, None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
+  # Cria formulário:
+  
+  linhas.append(("texto sem valor e sem dica",     "text",       "texto1",  True, None, ))
 
-  # cria campo de texto sem valor inicial, com dica
-  ht_rot_teste = html_elem_label.gera("campo de texto", ": ")
-  ht_campo = html_elem_input.gera("text", "texto2", None, None, None, True, "Lorem ipusm", None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
+  linhas.append(("texto com valor e sem dica",     "text",       "texto2",  True, None, ))
+  atrs['texto2'] = "Valor de {atrs}"
 
-  # cria campo de senha
-  ht_rot_teste = html_elem_label.gera("campo de senha", ": ")
-  ht_campo = html_elem_input.gera("password", "senha", None, None, None, True, None, None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
+  linhas.append(("texto sem valor e com dica",     "text",       "texto3",  True, "Lorem ipsum", ))
 
-  # cria campo numerico
-  ht_rot_teste = html_elem_label.gera("campo numerico", ": ")
-  ht_campo = html_elem_input.gera("number", "pernas", None, "17", "5", True, None, None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
+  linhas.append(("texto com valor, readonly",      "text",       "texto4",  False, None, ))
+  atrs['texto4'] = "Valor de {atrs}"
 
-  # cria campo escondido
-  ht_rot_teste = html_elem_label.gera("campo escondido", ": ")
-  ht_campo = html_elem_input.gera("hidden", "segredo", None, "boo", None, True, None, None, False)
-  linhas.append((ht_rot_teste, ht_campo,))
+  linhas.append(("senha",                          "password",   "senha",   True, None, ))
 
-  # Monta a tabela com os fragmentos HTML:
-  ht_table = html_elem_table.gera(linhas, ["TIPO", "ELEMENTO"])
+  linhas.append(("Número com valor, min e dica",   "number",     "pernas1", True, "Min 4", ))
+  atrs['pernas1'] = 7
+  atrs['pernas1_min'] = 4
+
+  linhas.append(("Número com min+dica, sem valor", "number",     "pernas2", True, "Min 4", ))
+  atrs['pernas2_min'] = 4
+
+  linhas.append(("campo upload arquivo",           "file",       "upload1", True, "Escolha", ))
+  
+  linhas.append(("texto longo com dica",           "textarea",   "parag1",  True, "blabla", ))
+
+  linhas.append(("texto longo com valor",          "textarea",   "parag2",  True,  None, ))
+  atrs['parag2'] = "Valor de {atrs}\nSegunda linha"
+
+  linhas.append(("texto longo sem valor ou dica",  "textarea",   "parag3",  True,  None, ))
+ 
+  linhas.append(("escondido",                      "hidden",     "segredo", False, None, ))
+  atrs['segredo'] = "O chefe está roubando da firma"
 
   # Cria botao de interacao com o ht_form
-  ht_botao = html_elem_button_submit.gera("Botao", 'url test', None, '#55ee55')
+  ht_botao = html_elem_button_submit.gera("Botao", 'urltest', None, '#55ee55')
 
+  # Monta a tabela com os fragmentos HTML:
+  ht_tabela = html_bloco_tabela_de_campos.gera(linhas, atrs)
+  
   # Counteudo do formulário:
   ht_campos = \
-    ht_table + \
+    ht_tabela + \
     ht_botao
 
   # Cria formulário:
-  ht_form = html_elem_form.gera(ht_campos)
-  
-  frag = True # Resultado é só um fragmento de página?
-  pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.escreve_resultado_html(html_elem_form, rot_teste, ht_form, frag, pretty)
+  ht_form = html_elem_form.gera(ht_campos, multipart)
 
-testa_form_tabela("tabela")
+  return ht_form
 
-sys.stderr.write("Testes terminados normalmente.")
+for multipart in False, True:
+  rot_teste = "mult" + str(multipart)[0]
+  testa_gera(rot_teste, str, multipart)
+
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.")
+else:
+  aviso_erro("Alguns testes falharam", True)

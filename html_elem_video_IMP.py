@@ -4,7 +4,7 @@ def gera(nome, alt, tam):
   com {tam} pixels de altura."""
 
   #Se receber valor {None}, converte string para vazia
-  if nome is None or nome == "": nome = "virus.mp4"
+  if nome is None or nome == "": nome = "V-00000001.mp4"
 
   port_size_x = tam
   port_size_y = tam

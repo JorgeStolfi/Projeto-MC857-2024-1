@@ -8,6 +8,7 @@ import html_bloco_tabela_de_campos
 def gera(id_autor, atrs):
 
   atrs = atrs.copy() # Para não alterar o original.
+  atrs['autor'] = id_autor
   
   dados_linhas = [].copy()
 
@@ -20,8 +21,12 @@ def gera(id_autor, atrs):
   ht_submit = html_elem_button_submit.gera("Enviar", "fazer_upload_video", None, '#55ee55')
   ht_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, '#ee5555')
 
-  ht_conteudo = f"{ht_tabela}\n{ht_rotulo} {ht_upload}\n\n{ht_submit}\n{ht_cancel}"
+  ht_conteudo = \
+    ht_tabela + "<br/>\n" + \
+    ht_submit + "\n" + \
+    ht_cancel
 
-  ht_form = html_elem_form.gera(ht_conteudo)
+  multipart = True
+  ht_form = html_elem_form.gera(ht_conteudo, multipart)
   
   return ht_form

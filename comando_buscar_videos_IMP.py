@@ -31,8 +31,6 @@ def processa(ses, cmd_args):
       erros += util_valida_campo.titulo_de_video(chave, val, False)
     elif chave == 'autor':
       erros += util_valida_campo.identificador(chave, val, "U", False)
-    elif chave == 'arq':
-      erros += util_valida_campo.nome_de_arq_video(chave, val, "U", False)
     elif chave == 'data':
       # !!! Devia aceitar data parcial e intervalo de datas !!!
       erros += util_valida_campo.data(chave, val, "U", False)
@@ -51,15 +49,6 @@ def processa(ses, cmd_args):
         if vid == None:
           erros.append(f"Vídeo '{id_vid}' não existe")
         else:
-          lista_ids_vid = [ id_vid ]
-      elif 'arq' in cmd_args:
-        # Busca por arquivo de vídeo determinado:
-        arq = cmd_args['arq']
-        vid = obj_video.busca_por_arquivo(arq)
-        if vid == None:
-          erros.append(f"Arquivo de vídeo '{arq}' não existe")
-        else:
-          id_vid = obj_video.obtem_identificador(vid)
           lista_ids_vid = [ id_vid ]
       else:
         # Busca por campos aproximados:
@@ -84,6 +73,6 @@ def processa(ses, cmd_args):
     # Argumentos com erro ou não encontrou nada.
     # Repete a página de busca, com eventuais mensagens de erro:
     admin = obj_sessao.de_administrador(ses)
-    pag = html_pag_buscar_videos.gera(ses, cmd_atrs, admin, erros)
+    pag = html_pag_buscar_videos.gera(ses, cmd_args, erros)
 
   return pag

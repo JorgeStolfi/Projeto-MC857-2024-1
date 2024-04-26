@@ -3,9 +3,9 @@ import obj_video
 import obj_usuario
 import obj_comentario
 
-def gera(id_com, atrs_com, edita_texto):
+def gera(id_com, atrs, edita_texto):
 
-  atrs = atrs.copy() # Para não alterar o original.
+  atrs_tab = atrs.copy() # Para não alterar o original.
   
   edita_tudo = (id_com == None)
   
@@ -13,7 +13,7 @@ def gera(id_com, atrs_com, edita_texto):
 
   if id_com != None:
     # Ver ou alterar um comentário existente:
-    atrs.update( { 'comentario': id_com } )
+    atrs_tab.update( { 'comentario': id_com } )
     dados_linhas.append( ( "Identificador",  "text",  'comentario',   False, None, ) )
     dados_linhas.append( ( "Data",           "date",  'data',         False, None, ) )
 
@@ -22,5 +22,5 @@ def gera(id_com, atrs_com, edita_texto):
   dados_linhas.append( ( "Pai",      "text",     'pai',       False,   None,  ) )
   dados_linhas.append( ( "Texto",    "textarea", 'texto',     edita_texto,   None,  ) )
 
-  ht_bloco = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_com)
+  ht_bloco = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_tab)
   return ht_bloco

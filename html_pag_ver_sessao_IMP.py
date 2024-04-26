@@ -18,7 +18,7 @@ def gera(ses, ses_a_ver, erros):
     fecha_btn = html_elem_button_simples.gera('Fechar sessão', 'fechar_sessao', cmd_args, '#FF7700')
     ht_bloco_ses += fecha_btn
     
-  ht_form_ses = html_elem_form.gera(ht_bloco_ses)
+  ht_form_ses = html_elem_form.gera(ht_bloco_ses, False)
 
   pag = html_pag_generica.gera(ses, ht_bloco_ses, erros)
   return pag

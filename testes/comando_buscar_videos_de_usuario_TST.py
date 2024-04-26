@@ -15,24 +15,29 @@ assert res == None
 sys.stderr.write("  Criando objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
-# Usuário a examinar: 
+ok_global = True # Vira {False} se algum teste falha.
 
-def testa_comando_buscar_videos_de_usuario(rot_teste, *cmd_args):
-    """Testa {funcao(*cmd_args)}, grava resultado
+def testa_processa(rot_teste, res_esp, *args):
+    """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
     em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
-    modulo = comando_buscar_videos_de_usuario
-    funcao = modulo.processa
-    frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
-    pretty = True  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-    util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, frag, pretty, *cmd_args)
-
-
+  global ok_global
+  modulo = comando_buscar_videos_de_usuario
+  funcao = modulo.processa
+  frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
+  pretty = True  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
+  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok_global = ok_global and ok
+  return ok
+ 
 id_ses = "S-00000001"
 ses1 = obj_sessao.busca_por_identificador(id_ses)
 
 # Sessão de usuário comum:
-testa_comando_buscar_videos_de_usuario("teste1", ses1, {'usuario': 'U-00000001'})  
+testa_processa("teste1",  str, ses1, {'usuario': 'U-00000001'})  
 
-sys.stderr.write("Testes terminados normalmente.\n")
+if ok_global:
+  sys.stderr.write("Testes terminados normalmente.\n")
+else:
+  aviso_erro("Alguns testes falharam", True)
  

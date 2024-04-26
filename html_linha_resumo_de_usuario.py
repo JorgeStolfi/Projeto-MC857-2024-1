@@ -5,6 +5,6 @@ def gera(usr):
   um objeto da classe {obj_usuario.Classe}.
   
   O fragmento mostra apenas nome e email, e um botão "Ver" que
-  dispara um comando HTTP "solicitar_pag_alterar_usuario"
+  dispara um comando HTTP "ver_usuario"
   para mostrar os dados correntes do usuário."""
   return html_linha_resumo_de_usuario_IMP.gera(usr)

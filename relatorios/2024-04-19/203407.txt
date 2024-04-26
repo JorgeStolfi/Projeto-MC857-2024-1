@@ -1,9 +1,0 @@
-19/04
-
-* 203407 comando_buscar_videos: completar implementação e programa de teste. Permitir busca por data parcial, como '2024' ou '2024-03'
-
-Primeiro, vi que não era possível executar o projeto, tentei entender quais eram os problemas mas não obtive sucesso.
-Também tive problemas em entender como o método de busca deveria funcionar.  Não entendi como fazer as buscas a partir da data.
-Olhando o obj_video, percebemos que ele já possui uma data no ISO (aaaa-mm-dd hh:mm:ss fuso), então ao meu ver, uma busca 
-no nível do comando_buscar_videos.
-Infelizmente não consegui completar a atividade ):
