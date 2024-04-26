@@ -76,7 +76,7 @@ def gera_botoes_linha_principal(logado, nome_usuario, admin):
 
   if logado:
     # Gera outros botões de usuario normal logado
-    hts_botoes += gera_botoes_linha_principal_logado(nome_usuario, admin)
+    hts_botoes += gera_botoes_linha_principal_logado()
   else:
     # Gera outros botões de usuário deslogado:
     hts_botoes += gera_botoes_linha_principal_deslogado()
@@ -99,7 +99,7 @@ def gera_botoes_linha_principal_deslogado():
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_principal_deslogado: hts_botoes = %s\n" % str(hts_botoes))
   return hts_botoes
 
-def gera_botoes_linha_principal_logado(nome_usuario, admin):
+def gera_botoes_linha_principal_logado():
   """Gera uma lista de fragmentos HTML com os botões da linha princpal do menu
   geral, que só aparecem para um usuário que está logado."""
   
@@ -115,7 +115,6 @@ def gera_botoes_linha_principal_logado(nome_usuario, admin):
       html_elem_button_simples.gera("Meus Comentários",   'buscar_comentarios_de_usuario', None, cor_bt_meus),
       html_elem_button_simples.gera("Subir Video",        'solicitar_pag_upload_video',    None, cor_bt_meus),
       html_elem_button_simples.gera("Sair", 'fazer_logout', None, cor_bt_sair),
-      gera_nome_usuario(nome_usuario, admin)
     )
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_principal_logado: hts_botoes = %s\n" % str(hts_botoes))
   return hts_botoes
@@ -135,8 +134,3 @@ def gera_botoes_linha_admin():
   hts_botoes = [ ht_busca_obj_form, ]
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_admin: hts_botoes = %s\n" % str(hts_botoes))
   return hts_botoes
-
-def gera_nome_usuario(nome_usuario, admin):
-  """Gera o texto "Oi {nome}" para o menu geral.  O parâmetro {admin} diz se é administrador."""
-  res = html_elem_span.gera(None, "Oi " + nome_usuario)
-  return res

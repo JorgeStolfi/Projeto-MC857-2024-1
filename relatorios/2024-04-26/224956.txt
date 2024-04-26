@@ -1,0 +1,10 @@
+Inicialmente minha tarefa consistia em refatorar os testes da função html_elem_form para usar a função {util_testes.testa_funcao_que_gera_html}, porém isso
+já estava implementado. Então minha tarefa passou a ser mover a mensagem de oi do usuário logado e adicionar um avatar ao lado.
+
+Para isso, primeiramente eu tirei a função gera_nome_usuario e sua chamada do html_bloco_menu_geral_IMP, já que agora essa informação não vai estar mais lá,
+e movi para o arquivo html_pag_generica_IMP, de modo que essa informação seja visível em todas as páginas. Após isso, eu peguei alguns avatares da internet
+e os salvei na pasta avatares recém criada. Com isso eu criei a função gera_nome_e_avatar_usuario que copia a função gera_nome_usuario, adicionando o
+avatar do usuário do lado, a identificação do avatar é feita através do id do usuário e o tamanho da imagem foi fixado como 20px. 
+
+Também foi necessário modificar o método do_geral do arquivo processa_comando_http_IMP para replicar o comportamento dos arquivos presentes na pasta imagens, 
+onde as imagens são lidas e salvas ao invés de serem interpretadas como uma página.
