@@ -4,6 +4,8 @@ import obj_usuario
 import html_elem_span
 import html_elem_button_simples
 import html_elem_label
+from datetime import datetime
+from dateutil import tz
 
 def gera(ses, bt_ver, bt_fechar):
   ses_id = obj_sessao.obtem_identificador(ses)
@@ -15,12 +17,11 @@ def gera(ses, bt_ver, bt_fechar):
 
   # Formata informações em HTML:
   ht_ses_id = formata_texto(ses_id)
-  ht_usr_id = formata_texto(obj_usuario.obtem_identificador(ses_usr))
   ht_aberta = formata_texto("Aberta" if ses_aberta else "Fechada")
   ht_cookie = formata_texto(ses_cookie)
   ht_data = formata_texto(ses_data)
 
-  ht_campos = [ ht_ses_id, ht_usr_id, ht_aberta, ht_cookie, ht_data ]
+  ht_campos = [ ht_ses_id, ht_aberta, ht_cookie, ht_data ]
   
   args_bt = {'sessao': ses_id} # Argumentos para os botões.
   cor_bt_admin = '#FFA700' # Cor para botões de adminstrador.
@@ -42,4 +43,3 @@ def formata_texto(txt):
   """Formata o texto {txt} com um estilo apropriado."""
   estilo = "font-weight:bold"
   return html_elem_span.gera(estilo, txt)
-
