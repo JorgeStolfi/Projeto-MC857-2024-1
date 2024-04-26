@@ -4,8 +4,6 @@ import obj_usuario
 import html_elem_span
 import html_elem_button_simples
 import html_elem_label
-from datetime import datetime
-from dateutil import tz
 
 def gera(ses, bt_ver, bt_fechar):
   ses_id = obj_sessao.obtem_identificador(ses)
