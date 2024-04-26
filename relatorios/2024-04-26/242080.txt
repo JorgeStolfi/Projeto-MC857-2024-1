@@ -1,0 +1,13 @@
+Para fazer a implementação segui a descrição dada no docstring de `comando_buscar_comentarios.processa()`.
+
+A primeira validação implementada foi se a sessão, caso exista, está aberta. Utilizando o método `obj_sessao.aberta()`.
+
+A segunda validação foi do campo de busca 'comentário', caso ele tenha sido providenciado, validamos se existe um comentário com esse identificar usando o método `obj_comentario.busca_por_identificador()`, caso exista, é adicionado à lista de ids de comentários que serão retornados.
+
+Em seguida checamos os demais parâmetros de busca, um a um, caso tenha sido providenciados, caso contrário são ignorados.
+Utilizamos os métodos da classe {obj_comentario} para fazer as buscas, alguns dos métodos, como a busca por pai, texto e data ainda não foram implementados em {obj_comentario}.
+
+Não sabia se deveria implementar esse métodos de busca que estão faltando na outra classe, então apenas adicionei o métodos abstratos (placeholders) sem a implementação, e referenciei eles aqui.
+
+Por fim, checamos se a lista de ids de comentários não está vazia, e se não ocorreu nenhum erro.
+Caso não tenha ocorrido nenhum erro, retornamos a lista de ids de comentários usando `html_pag_generica.gera()`.
