@@ -1,0 +1,7 @@
+No 'comando_ver_usuario_TST' implementei as 3 situações possíveis do comando 'ver_usuario':
+
+1. Sem usuario e sem ses
+2. com o ses admin e sem user
+3. um ses e com user
+
+Assim contemplando as 3 situações possíveis do comando da função comando_ver_usuario_IMP.processa()
