@@ -2,7 +2,6 @@ import html_pag_ver_usuario
 import html_pag_mensagem_de_erro
 import obj_sessao
 import obj_usuario
-import obj_usuario
 
 def processa(ses, cmd_args):
   # Páginas geradas pelo sistema deveriam garantir estas condições:
