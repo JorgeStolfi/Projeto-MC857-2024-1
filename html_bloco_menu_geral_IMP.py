@@ -3,6 +3,8 @@ import html_elem_span
 import html_elem_button_submit
 import html_elem_input
 import html_elem_form
+import obj_sessao
+import obj_usuario
 
 from util_erros import erro_prog
 
@@ -99,18 +101,32 @@ def gera_botoes_linha_principal_deslogado():
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_principal_deslogado: hts_botoes = %s\n" % str(hts_botoes))
   return hts_botoes
 
-def gera_botoes_linha_principal_logado():
-  """Gera uma lista de fragmentos HTML com os botões da linha princpal do menu
+def gera_botoes_linha_principal_logado(nome_usuario, admin):
+  """Gera uma lista de fragmentos HTML com os botões da linha principal do menu
   geral, que só aparecem para um usuário que está logado."""
   
   if bmu_debug: sys.stderr.write("    > gera_botoes_linha_principal_logado\n")
 
   cor_bt_meus = "#eeffee"
   cor_bt_sair = "#ffcc88"
+
+  # Verificar o número de sessões do usuário para mostrar
+  # no botão "Minhas Sessões"
+  usrs = obj_usuario.busca_por_nome(nome_usuario)
+
+  num_ses = 0
+  if (usrs != None and len(usrs) > 0):
+    usr = obj_usuario.busca_por_identificador(usrs[0]);
+    num_ses = len(obj_sessao.busca_por_usuario(usr, True));
+  
+  if (num_ses == 0):
+    my_ses_but_text = "Minhas Sessões"
+  else:
+    my_ses_but_text = "Minhas Sessões (%d)" % num_ses
   
   hts_botoes = (
       html_elem_button_simples.gera("Minha Conta",        'ver_usuario',                   None, cor_bt_meus),
-      html_elem_button_simples.gera("Minhas Sessões",     'buscar_sessoes_de_usuario',     None, cor_bt_meus), 
+      html_elem_button_simples.gera(my_ses_but_text,     'buscar_sessoes_de_usuario',     None, cor_bt_meus), 
       html_elem_button_simples.gera("Meus Videos",        'buscar_videos_de_usuario',      None, cor_bt_meus),
       html_elem_button_simples.gera("Meus Comentários",   'buscar_comentarios_de_usuario', None, cor_bt_meus),
       html_elem_button_simples.gera("Subir Video",        'solicitar_pag_upload_video',    None, cor_bt_meus),

@@ -1,0 +1,13 @@
+Na tarefa da aula do dia 26/04/2024 fiquei responsável por adicionar o número
+de sessões abertas do usuário junto do botão "Minhas Sessões" no menu geral da página,
+apenas quando o usuário está logado.
+
+No caso específico, precisei alterar o arquivo 'html_bloco_menu_geral_IMP', apenas
+dentro da função 'gera_botoes_linha_principal_logado', já que só logados deveriam ver
+esse botão.
+
+Comecei buscando o id do usuário pelo seu nome, e depois com o id encontrado, busquei
+pelo usuário em si, recebendo um objeto da classe usuário. Com esse objeto, chamei
+a função 'obj_sessao.busca_por_usuario' e recebi uma lista com os ids das sessões abertas
+pelo usuário. Pra finalizar, peguei o tamanho dessa lista, e passei como uma varíavel
+para a string do texto do botão 'Minhas Sessões'.
