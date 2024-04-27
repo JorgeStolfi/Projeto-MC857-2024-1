@@ -65,7 +65,7 @@ def cria(atrs):
 
   # Data de upload:
   if 'data' in atrs: raise ErroAtrib("data não pode ser especificada")
-  data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %z")
+  data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
   atrs['data'] = data
 
   # Determina o identificador esperado do vídeo:
