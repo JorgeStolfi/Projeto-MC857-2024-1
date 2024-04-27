@@ -7,7 +7,7 @@ def processa(ses, cmd_args):
   quer examinar os atributos de um determinado usuário.
   
   O parâmetro {ses} é a sessão de login que emitiu o comando. Deve ser
-  {None} (se quem pediu não está logado), ou uma objeto de tipo
+  {None} (se quem pediu não está logado), ou um objeto de tipo
   {obj_sessao.Classe}, atualmente aberta.
   
   O parâmetro {cmd_args} deve ser um dicionário com um único campo
@@ -16,9 +16,9 @@ def processa(ses, cmd_args):
   supõe que é o dono da sessão {ses} (que nesse caso não pode ser {None}).
   
   Alguns campos, como 'email', só podem ser vistos por administradores
-  ou pelo poprio usuário em questão.  O campo 'senha' nunca é exibido.
+  ou pelo próprio usuário em questão.  O campo 'senha' nunca é exibido.
   
-  Normalmente a função devolve uma página que exibe o usuario, criada
+  Normalmente a função devolve uma página que exibe o usuário, criada
   por {html_pag_ver_usuario.gera}. Dependendo de quem pediu, a página
   pode ter botões para alterar os dados do usuário, e buscar vídeos,
   sessões, e comentários do usuário.
