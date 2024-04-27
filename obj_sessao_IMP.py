@@ -148,6 +148,10 @@ def busca_por_campo(chave, val):
   lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
   return lista_ids
 
+def busca_por_semelhanca(args, unico):
+  global tabela
+  return obj_raiz.busca_por_semelhanca(args, unico, tabela)
+
 def fecha(ses):
   global tabela
   if (ses is not None) and (obj_sessao.obtem_atributo(ses,'aberta')):

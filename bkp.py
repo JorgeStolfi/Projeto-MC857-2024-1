@@ -5,7 +5,6 @@ import html_pag_generica
 import html_pag_buscar_sessoes
 import util_valida_campo
 import html_pag_mensagem_de_erro
-import obj_usuario
 from util_erros import ErroAtrib
 
 def processa(ses, cmd_args):
@@ -14,7 +13,6 @@ def processa(ses, cmd_args):
   assert cmd_args != None and type(cmd_args) is dict
   
   erros = [].copy()
-  ht_bloco = None
 
   # Valida os valores dos atributos da busca, e elimina campos {None}:
   cmd_args_cp = cmd_args.copy()
@@ -26,8 +24,6 @@ def processa(ses, cmd_args):
       erros += util_valida_campo.identificador(chave, val, "U", False)
     elif chave == 'sessao':
       erros += util_valida_campo.identificador(chave, val, "S", False)
-    elif chave == 'aberta':
-      continue
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Campo '{chave}' inválido"
@@ -44,21 +40,19 @@ def processa(ses, cmd_args):
       if 'usuario' in cmd_args:
         # Deve haver um único usuário com esse identificador:
         id_usr = cmd_args['usuario']
-        obj_usr = obj_usuario.busca_por_identificador(id_usr) if id_usr != None else None
+        obj_usr = obj_sessao.busca_por_usuario(id_usr, soh_abertas) if id_usr != None else None
         if obj_usr == None:
           erros.append(f"Usuário '{id_usr}' não existe")
         else:
-          obj_sect = obj_sessao.busca_por_usuario(obj_usr, soh_abertas) if obj_usr != None else None
-          for item in obj_sect:
-            lista_ids_sessoes.append(item)
-      elif 'sessao' in cmd_args:
+          lista_ids_sessoes = [ id_usr ]
+      if 'sessao' in cmd_args:
         # Deve haver uma única sessão com esse identificador:
         id_sessao = cmd_args['sessao']
         obj_sect = obj_sessao.busca_por_identificador(id_sessao) if id_sessao != None else None
         if obj_sect == None:
           erros.append(f"Sessão '{id_sessao}' não existe")
         else:
-          lista_ids_sessoes = [ id_sessao ]
+          lista_ids_sessoes = [ obj_sect ]
       else:
         # Busca por campos aproximados:
         lista_ids_sessoes = obj_sessao.busca_por_semelhanca(cmd_args, False)
@@ -78,6 +72,9 @@ def processa(ses, cmd_args):
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela
+  else:
+    # Não encontrou nenhuma sessão.
+    ht_bloco = None
 
   if ht_bloco == None:
     pag = html_pag_mensagem_de_erro(ses, erros)
