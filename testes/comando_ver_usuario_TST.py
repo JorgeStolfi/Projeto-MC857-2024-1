@@ -6,7 +6,7 @@ import obj_sessao
 import obj_video
 import util_testes
 from util_erros import erro_prog, aviso_prog, mostra
-import comando_ver_objeto
+import comando_ver_usuario
 
 import sys
 
@@ -32,9 +32,24 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-aviso_prog('!!! programa de teste do modulo {comando_ver_usuario} ainda nao foi escrito !!!', True)
+
+# Obtem uma sessao de um usuario que é de administrador:
+id_ses = "S-00000001"
+ses1 = obj_sessao.busca_por_identificador(id_ses)
+
+# sem user e sem ses
+testa_processa("acesso_invalido",  str, None, {})
+
+# sem user
+testa_processa("Sem usuario",  str, ses1, {})
+
+
+# comando completo
+testa_processa("uso_comum",  str, ses1, {'usuario': 'U-00000001'})
+
+
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  aviso_erro("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam")

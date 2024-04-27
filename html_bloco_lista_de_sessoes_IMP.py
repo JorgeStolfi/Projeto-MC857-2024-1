@@ -11,7 +11,7 @@ def gera(lista_ids_ses, bt_ver, bt_fechar):
 
   # Linha de cabeçalho:
   est_cab = html_estilo_cabecalho_de_tabela.gera()
-  cabs_raw = ['Sessão', 'Usuário', 'Aberta?', 'Cookie', 'Data de Criação']
+  cabs_raw = ['Sessão', 'Aberta?', 'Cookie', 'Data de Criação']
   cabecalho = [].copy()
   for cb in cabs_raw:
     cabecalho.append(html_elem_div.gera(est_cab, cb))

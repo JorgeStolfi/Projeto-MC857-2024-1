@@ -43,6 +43,11 @@ def gera(ses, ht_conteudo, erros):
   else:
     ht_multi_ses = None
 
+  if logado:
+    ht_nome_usuario = gera_nome_e_avatar_usuario(id_usr, nome_usuario, admin)
+  else:
+    ht_nome_usuario = None
+
   # Mensagens de erro - quebra e limpa:
   if erros == None:
     erros = []
@@ -67,7 +72,15 @@ def gera(ses, ht_conteudo, erros):
     ht_cabe + "<br/>\n" + \
     ht_menu + "<br/>\n" + \
     ( ht_multi_ses + "<br/>\n" if ht_multi_ses != None else "" ) + \
+    ( ht_nome_usuario + "<br/>\n" if ht_nome_usuario != None else "" ) + \
     ht_erros + "<br/>\n" + \
     ht_conteudo + "<br/>\n" + \
     ht_roda
   return pagina
+
+def gera_nome_e_avatar_usuario(id_usr, nome_usuario, admin):
+  """Gera o avatar e o texto "Oi {nome}" para uma página genérica.  O parâmetro {admin} diz se é administrador."""
+  avatar = ("<img src=\"avatares/avatar_" + id_usr + ".png\" style=\"float:left;height:20px;\"/>")
+  nome = html_elem_span.gera(None, "Oi,  " + nome_usuario)
+  
+  return avatar + "&nbsp;" + nome

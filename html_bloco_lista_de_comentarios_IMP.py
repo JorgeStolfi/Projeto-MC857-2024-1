@@ -10,7 +10,7 @@ def gera(lista_ids_com, mostra_autor, mostra_video, mostra_pai):
   # Linha de cabeçalho:
   est_cab = html_estilo_cabecalho_de_tabela.gera()
   # !!! Apresentar TODOS os campos, considerando {mostra_autor} e {mostra_video}. !!! 
-  cabs_raw = ['Video', 'Autor',  'Data', 'Comentário',  'Texto', 'Link']
+  cabs_raw = ['Video', 'Autor',  'Comentário', 'Data',  'Texto','']
   hts_cabecalho = [].copy()
   for cb in cabs_raw:
     if cb == 'Autor':
@@ -19,10 +19,11 @@ def gera(lista_ids_com, mostra_autor, mostra_video, mostra_pai):
     elif cb == 'Video':
       if mostra_video:
         hts_cabecalho.append(html_elem_div.gera(est_cab, cb))
-    elif cb == 'Pai':
+    elif cb == 'Comentário':
       if mostra_pai:
         hts_cabecalho.append(html_elem_div.gera(est_cab, cb))
     else:
+     
       hts_cabecalho.append(html_elem_div.gera(est_cab, cb))
 
   # Linhas da tabela - uma lista de listas de fragmentos HTML:

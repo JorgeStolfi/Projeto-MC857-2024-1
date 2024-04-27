@@ -1,0 +1,3 @@
+Na aula de hoje fiquei responsável por consertar o html_bloco_lista_de_comentarios_IMP
+As coisas estavam fora de ordem e no if tinha um problema com o cabeçalho.
+Ao organizar estas coisas, tudo funcionou :)

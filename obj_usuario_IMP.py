@@ -4,7 +4,6 @@ import obj_usuario
 import db_obj_tabela
 import db_tabelas_do_sistema
 import db_conversao_sql
-import util_identificador
 import util_valida_campo
 
 from util_erros import ErroAtrib, erro_prog, mostra
@@ -96,14 +95,14 @@ def busca_por_identificador(id_usr):
 def busca_por_email(em):
   global tabela
   unico = True
-  if tabela.debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_email}: email = {em}\n");
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_email}: email = {em}\n");
   id_usr = obj_raiz.busca_por_campo('email', em, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > id encontrado = {id_usr}\n");
   return id_usr
 
 def busca_por_nome(nome):
   global tabela
-  if tabela.debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_nome}: nome = {nome}\n");
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_nome}: nome = {nome}\n");
   args = { 'nome': nome }
   unico = False
   lista_ids = obj_raiz.busca_por_semelhanca(args, unico, tabela)
@@ -231,34 +230,9 @@ def _valida_nome_completo(chave, val, nulo_ok):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: branco antes ou depois do nome" ]
     if '  ' in val:
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: você inseriu dos espaços seguidos" ]
-      
-    # !!! Tem que verificar TODAS as ocorrências de "'", "-", etc. !!!
-    if "'" in val:
-      letraSeguinte = val.split("'")[1][0]
-      letraAnterior = val.split("'")[0][-1]
-      if not (letraSeguinte.isupper() and not letraSeguinte.isspace()):
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita maiúscula após o apostrofe" ]
-      if not letraAnterior.isalpha():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do apostrofe" ]
-    if "." in val:
-      letraSeguinte = val.split(".")[1][0]
-      letraAnterior = val.split(".")[0][-1]
-      if not letraSeguinte.isspace():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita espaço após o ponto" ]
-      if not letraAnterior.isalpha():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do ponto" ]
-    if "-" in val:
-      letraSeguinte = val.split("-")[1][0]
-      letraAnterior = val.split("-")[0][-1]
-      if not( letraAnterior.isalpha or letraAnterior == "."):
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
-      if not letraSeguinte.isupper():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
-        
-    # !!! Combinar com código abaixo !!!
     if (not val[0].isupper()):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: começa com letra minúscula" ]
-    elif (not val[-1].isalpha()):
+    if (not val[-1].isalpha()):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o último caractere não é uma letra" ]
     else:
         for i in range(1, n):
@@ -345,7 +319,6 @@ def _valida_nome_parcial(chave, val, nulo_ok):
       elif (digito == " "):
           if (not val[i+1].isalpha()):
             erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
-              
   return erros
 
 def valida_nome_de_usuario(chave, val, nulo_ok, eh_completo = True):
@@ -506,7 +479,7 @@ def def_obj_mem(usr, id_usr, atrs_SQL):
   Em qualquer caso, os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
   global tabela
-  if tabela.debug: mostra(0,"obj_usuario_IMP.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
+  if tabela.debug: mostra(0,"obj_usuario.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
   if usr == None:
     usr = cria_obj_mem(id_usr, atrs_SQL)
   else:

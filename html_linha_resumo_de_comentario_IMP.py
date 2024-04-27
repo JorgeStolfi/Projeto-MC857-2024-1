@@ -1,7 +1,7 @@
 import obj_comentario
 import obj_usuario
 import obj_video
-
+import sys
 import html_elem_paragraph
 import html_elem_span
 import html_elem_button_simples
@@ -11,13 +11,9 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
   estilo_texto = f"font-family: Courier; font-size: 20px; font-weight: bold; padding: 2px; text-align: left; color: #263238;"
 
   com_atrs = obj_comentario.obtem_atributos(com)
+
+  sys.stderr.write('\n'.join(str(i)+str(j) for i,j in com_atrs.items()))
   itens_resumo = []
-  
-  if mostra_video:
-    video = com_atrs['video']
-    video_id = obj_video.obtem_identificador(video)
-    ht_video = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, video_id))
-    itens_resumo.append(ht_video)
 
   if mostra_autor:
     autor = com_atrs['autor']
@@ -25,6 +21,12 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
     ht_autor = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, autor_id))
     itens_resumo.append(ht_autor)
   
+  if mostra_video:
+    video = com_atrs['video']
+    video_id = obj_video.obtem_identificador(video)
+    ht_video = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, video_id))
+    itens_resumo.append(ht_video)
+
   if mostra_pai:
     pai = com_atrs['pai']
     if pai != None:
@@ -35,6 +37,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
     itens_resumo.append(ht_pai)
 
   data = com_atrs['data']
+  
   ht_data = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, data))
   itens_resumo.append(ht_data)
 
@@ -43,6 +46,8 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
   ht_texto = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, texto[:max_texto]))
   itens_resumo.append(ht_texto)
 
+  
+  
   bt_args = { 'comentario': obj_comentario.obtem_identificador(com) }
   bt_ver = html_elem_button_simples.gera("Ver", "buscar_comentarios_de_video", bt_args, "#eeeeee")
   itens_resumo.append(bt_ver)
