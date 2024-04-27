@@ -1,0 +1,8 @@
+Relatório de 04/26/2024:
+
+    A tarefa diária que me foi designada consistia em fazer a implementação e testes do módulo {comando_buscar_sessoes} especificada na interface do arquivo 
+comando_buscar_sessoes.py. Após leitura da descrição, foram encontradas dificuldades com o entendimento e com as funções de busca de sessão, com relação ao retorno 
+destas funções. Mas as dúvidas foram sanadas pelo professor e a implementação pôde ser finalizada.
+    Durante a implementação foram executados diversos testes com o testa.sh para funções auxiliares - obj.sessao, por exemplo - que também 
+auxiliaram na resolução de problemas. Além disso, os objetivos descritos na interface puderam ser atingidos.
+    

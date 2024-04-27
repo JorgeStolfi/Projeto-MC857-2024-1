@@ -4,6 +4,8 @@ import html_pag_generica
 import html_pag_alterar_comentario
 import obj_usuario #adicionado
 import html_pag_mensagem_de_erro #adicionado
+import html_pag_ver_comentario #adicionado
+import obj_video #adicionado
 from util_erros import ErroAtrib
 
 def msg_campo_obrigatorio(nome_do_campo):
@@ -19,7 +21,7 @@ def processa(ses, cmd_args):
 
   atrs_mod = cmd_args.copy() # Por via das dúvidas.
   erros = [].copy()
-  
+
   usr_ses = obj_sessao.obtem_usuario(ses)
   assert usr_ses is not None
   ses_admin = obj_usuario.obtem_atributos(usr_ses)['administrador']
@@ -34,10 +36,21 @@ def processa(ses, cmd_args):
   else:
     autor = obj_comentario.obtem_atributo(com, 'autor')
     autor_id = obj_usuario.obtem_identificador(autor)
-   
+
     if not (ses_admin or autor == usr_ses):
       erros.append(f"Você não tem permissão para alterar este comentário")
     
+    # Verificando se há tentativa de alterar atributos que não podem ser alterados
+    if 'autor' in atrs_mod:
+      atrs_mod['autor'] = obj_usuario.busca_por_identificador(atrs_mod['autor']) # Converter ID para obj_usuario
+      if atrs_mod['autor'] != autor:
+        erros.append(f"Não é possível alterar o autor do comentário")
+  
+    if 'video' in atrs_mod:
+      atrs_mod['video'] = obj_video.busca_por_identificador(atrs_mod['video']) # Converter ID para obj_video
+      if atrs_mod['video'] != obj_comentario.obtem_atributo(com, 'video'):
+        erros.append(f"Não é possível alterar o vídeo em que este comentário foi feito")
+  
   if len(erros) == 0:
     # Tenta editar o comentario:
     try:

@@ -1,0 +1,9 @@
+Realizei as seguintes alterações nos arquivos. 
+
+Resumo das alterações
+obj_video_IMP.py:
+obtem_dimensoes_do_arquivo: Modificada para extrair a duração, altura e largura do arquivo de vídeo usando ffprobe.
+obj_video.py:
+cria: Adicionada conversão da duração para inteiro antes de armazenar no dicionário de atributos.
+obj_video_TST.py:
+verifica_video: Adicionada impressão dos valores de duração, altura e largura para visualização no resultado do teste.

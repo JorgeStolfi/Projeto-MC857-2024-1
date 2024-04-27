@@ -160,6 +160,20 @@ def busca_por_filhos(id_com):
   assert type(id_com) is str
   lista_ids = obj_raiz.busca_por_campo('pai', id_com, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {','.join(lista_ids)}\n");
+
+def busca_por_pai(id_pai):
+  # !! BUSCA POR PAI AINDA NÃO IMPLEMENTADA !!
+  lista_ids = []
+  return lista_ids
+
+def busca_por_texto(texto):
+  # !! BUSCA POR TEXTO AINDA NÃO IMPLEMENTADA !!
+  lista_ids = []
+  return lista_ids
+
+def busca_por_data(data):
+  # !! BUSCA POR DATA AINDA NÃO IMPLEMENTADA !!
+  lista_ids = []
   return lista_ids
   
 def ultimo_identificador():

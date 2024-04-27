@@ -52,7 +52,7 @@ def cria(usr, cookie):
   global tabela
   if tabela.debug: sys.stderr.write(f"  > {obj_sessao.cria}({str(usr)},{str(cookie)})\n")
 
-  criacao = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %z")
+  criacao = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
   atrs = {
     'usr': usr,
     'criacao': criacao,
@@ -147,6 +147,10 @@ def busca_por_campo(chave, val):
   global tabela
   lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
   return lista_ids
+
+def busca_por_semelhanca(args, unico):
+  global tabela
+  return obj_raiz.busca_por_semelhanca(args, unico, tabela)
 
 def fecha(ses):
   global tabela

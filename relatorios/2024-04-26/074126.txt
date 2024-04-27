@@ -1,0 +1,6 @@
+# implementação de comando_ver_comentario_TST.py
+Houve um gigante progresso em relação aos labs anteriores:
+- Aprendi a usar melhor o git
+- import comando_ver_comentario
+- erro_prog("Alguns testes falharam")
+- testa_processa(tag,  str, ses_C1, {'comentario': id_com}) #testes implementados para ses_adm e ses_comum

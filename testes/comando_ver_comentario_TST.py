@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import db_base_sql
+import comando_ver_comentario # edit
 import db_tabelas_do_sistema
 import obj_sessao
 import obj_comentario
@@ -41,9 +42,31 @@ assert obj_sessao.de_administrador(ses_A1)
 ses_C1 = obj_sessao.busca_por_identificador("S-00000003")
 assert not obj_sessao.de_administrador(ses_C1)
 
-aviso_prog('!!! programa de teste do modulo {comando_ver_comentario} ainda nao foi escrito !!!', True)
+#Teste de modulo comando_ver_comentario para sessão administrador
+aviso_prog('!!! programa de teste do modulo {comando_ver_comentario} para sessão administrador', True) # edit comment
+for tag, id_com in ( \
+    ("C01_adm", "C-00000001"),
+    ("C02_adm", "C-00000002"),
+    ("C03_adm", "C-00000003"),
+    ("C04_adm", "C-00000004"),
+    ("C05_adm", "C-00000005"),
+    ("C06_adm", "C-00000006"),
+  ):
+  testa_processa(tag,  str, ses_C1, {'comentario': id_com})
+
+#Teste de modulo comando_ver_comentario para sessão comum
+aviso_prog('!!! programa de teste do modulo {comando_ver_comentario} para sessão comum', True) # edit comment
+for tag, id_com in ( \
+    ("C01_comum", "C-00000001"),
+    ("C02_comum", "C-00000002"),
+    ("C03_comum", "C-00000003"),
+    ("C04_comum", "C-00000004"),
+    ("C05_comum", "C-00000005"),
+    ("C06_comum", "C-00000006"),
+  ):
+  testa_processa(tag,  str, ses_C1, {'comentario': id_com})
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  aviso_erro("Alguns testes falharam")
+  erro_prog("Alguns testes falharam") #edit

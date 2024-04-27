@@ -7,6 +7,7 @@ def gera(atrs, admin):
 
   dados_linhas = (
       ( "Usuário", "text",     "usuario", True,  "U-nnnnnnnn" ),
+      ( "Sessão", "text",     "sessao", True,  "S-nnnnnnnn" ),
       ( "Aberta",  "checkbox", "aberta",  True,  ""           )
     )
 

@@ -152,6 +152,24 @@ def busca_por_filhos(id_com):
   ou {None} se o comentario nao teve resposta."""
   return obj_comentario_IMP.busca_por_filhos(id_com)
 
+def busca_por_pai(id_pai):
+  """Localiza comentários que são respostas ao comentário com identificador {id_pai}
+  e devolve o uma lista com os identificadores desses comentários (não os objetos);
+  ou {None} se o comentário não tem respostas."""
+  return obj_comentario_IMP.busca_por_pai(id_pai)
+
+def busca_por_texto(texto):
+  """Localiza comentários que contém a string {texto} no campo de texto
+  e devolve o uma lista com os identificadores desses comentários (não os objetos);
+  ou {None} se nenhum comentário contém o texto."""
+  return obj_comentario_IMP.busca_por_texto(texto)
+
+def busca_por_data(data):
+  """Localiza comentários postados com uma data aproximada de data {data} 
+  e devolve o uma lista com os identificadores desses comentários (não os objetos);
+  ou {None} se nenhum comentário foi postado na data."""
+  return obj_comentario_IMP.busca_por_data(data)
+
 def ultimo_identificador():
   """Devolve o identificador do último comentário inserido na tabela.
   Se ainda não houver nenhum comentário, devolve "C-00000000"."""

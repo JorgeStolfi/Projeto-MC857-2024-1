@@ -62,6 +62,7 @@ sys.stderr.write("  Obtendo dois usuários para teste:\n")
 
 usr1 = obj_usuario.busca_por_identificador("U-00000001")
 usr2 = obj_usuario.busca_por_identificador("U-00000002")
+ses1 = obj_sessao.busca_por_usuario("U-00000001", False)
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_sessao.cria}:\n")

@@ -4,6 +4,16 @@ import html_bloco_menu_geral
 import util_testes
 import sys
 
+import db_base_sql
+import db_tabelas_do_sistema
+
+sys.stderr.write("  Conectando com base de dados...\n")
+res = db_base_sql.conecta("DB", None, None)
+assert res == None
+
+sys.stderr.write("  Criando alguns objetos...\n")
+db_tabelas_do_sistema.cria_todos_os_testes(True)
+
 ok_global = True # Vira {False} se algum teste falha.
 
 def testa_gera(rot_teste, res_esp, *args):
@@ -19,8 +29,8 @@ def testa_gera(rot_teste, res_esp, *args):
   return ok
 
 testa_gera("deslogado", str, False, None,            False)
-testa_gera("comum",     str, True,  "José Primeiro", False)
-testa_gera("admin",     str, True,  "Geraldo Ente",  True)
+testa_gera("comum",     str, True,  "João Segundo", False)
+testa_gera("admin",     str, True,  "José Primeiro",  True)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")

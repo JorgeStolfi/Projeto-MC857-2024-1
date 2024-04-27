@@ -9,7 +9,7 @@ def processa(ses, cmd_args):
     erros.append("precisa estar logado para executar este comando")
   else:
     usr_ses = obj_sessao.obtem_usuario(ses)
-    admin = obj_sessao.de_administrador(ses);
+    admin = obj_sessao.de_administrador(ses)
     if 'sessao' not in cmd_args:
       # Identificador da sessão não foi especificado, supõe que é a corrente:
       ses_a_ver = ses
