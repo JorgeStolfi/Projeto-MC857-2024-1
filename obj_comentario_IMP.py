@@ -8,6 +8,7 @@ import db_tabelas_do_sistema
 import db_conversao_sql
 import util_identificador
 import util_valida_campo
+import time
 
 from util_erros import ErroAtrib, erro_prog, mostra
 
@@ -53,12 +54,18 @@ def cria(atrs):
   global tabela
   if tabela.debug: mostra(0, f"  > obj_comentario.cria({str(atrs)}) ...")
 
+  # Data de postagem:
+  if 'data' in atrs: raise ErroAtrib("data não pode ser especificada")
+  data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+  atrs['data'] = data
+
   erros = valida_atributos(None, atrs)
   if len(erros) != 0: raise ErroAtrib(erros)
 
   com = obj_raiz.cria(atrs, tabela, def_obj_mem)
   assert type(com) is obj_comentario.Classe
   if tabela.debug: sys.stderr.write(f"  < {obj_comentario.cria}\n")
+  time.sleep(1.1)
   return com
 
 def muda_atributos(com, mods_mem):
@@ -123,18 +130,18 @@ def cria_testes(verb):
   inicializa_modulo(True)
   lista_atrs = \
     [ 
-      ( "C-00000001", "V-00000001", "U-00000001", "2024-04-05 08:00:00 UTC", None,         "Supimpa!\nDeveras!", ),
-      ( "C-00000002", "V-00000001", "U-00000002", "2024-04-05 08:10:00 UTC", "C-00000001", "Né não! Acho... Talvez...", ),
-      ( "C-00000003", "V-00000002", "U-00000002", "2024-04-05 08:20:00 UTC", None,         "Falta sal.", ),
-      ( "C-00000004", "V-00000003", "U-00000003", "2024-04-05 08:30:00 UTC", None,         "Soberbo!", ),
-      ( "C-00000005", "V-00000001", "U-00000003", "2024-04-05 08:40:00 UTC", "C-00000002", "É sim!", ),
-      ( "C-00000006", "V-00000003", "U-00000003", "2024-04-05 08:50:00 UTC", None,         "Supercílio! " + "k"*60, ),
+      ( "C-00000001", "V-00000001", "U-00000001", None,         "Supimpa!\nDeveras!", ),
+      ( "C-00000002", "V-00000001", "U-00000002", "C-00000001", "Né não! Acho... Talvez...", ),
+      ( "C-00000003", "V-00000002", "U-00000002", None,         "Falta sal.", ),
+      ( "C-00000004", "V-00000003", "U-00000003", None,         "Soberbo!", ),
+      ( "C-00000005", "V-00000001", "U-00000003", "C-00000002", "É sim!", ),
+      ( "C-00000006", "V-00000003", "U-00000003", None,         "Supercílio! " + "k"*60, ),
     ]
-  for id_com, id_vid, id_autor, data, id_pai, texto in lista_atrs:
+  for id_com, id_vid, id_autor, id_pai, texto in lista_atrs:
     vid = obj_video.busca_por_identificador(id_vid)
     autor = obj_usuario.busca_por_identificador(id_autor)
     pai = obj_comentario.busca_por_identificador(id_pai)
-    atrs = { 'video': vid, 'autor': autor, 'data': data, 'pai': pai, 'texto': texto }
+    atrs = { 'video': vid, 'autor': autor, 'pai': pai, 'texto': texto }
     com = cria(atrs)
     assert com != None and type(com) is obj_comentario.Classe
     id_com_atu = obj_comentario.obtem_identificador(com)

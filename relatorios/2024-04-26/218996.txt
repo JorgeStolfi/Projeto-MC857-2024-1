@@ -1,0 +1,13 @@
+No dia de hoje minha tarefa era apenas criar os testes da pagina de postar comentarios. Criei 2 testes:
+    - Um teste para criar um comentario sem um comentario pai
+    - Um teste para criar um comentario com um comentario pai(comentario de resposta por exemplo)
+
+No entanto além dos testes, tambem tive que fazer alguns ajustes no código responsavel por criar um comentario,
+pois o mesmo tinha alguns problemas como por exemplo: 
+    - Não tinha um botão na tela para que o usuário colocasse um comentario no video.
+    - Não estava passando o valor da data de criação do comentario.
+    - Não estava recuperando o valor do texto que o usuario digitava na tela(tinha uma confusão com o campo titulo).
+    - Após criar o comentario, o valor do texto não era exibido na pagina que mostrava o respectivo comentario.
+    - Não era possivel o usuario digitar o autor, video e comentario pai.
+
+Uma coisa que não consegui fazer a tempo é fazer a data do comentario ser exibida na pagina que mostra os comentarios do video.

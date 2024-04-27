@@ -6,15 +6,15 @@ import html_elem_button_submit
 def gera(atrs):
 
   dados_linhas = ( 
-    ("autor", "text", "autor", False, None),
-    ("video", "text", "video", False, None),
-    ("pai", "text", "pai", False, None),
+    ("autor", "text", "autor", True, None),
+    ("video", "text", "video", True, None),
+    ("pai", "text", "pai", True, None),
     ("texto", "text", "texto", True, "Texto exemplo.")
   )
 
   ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
   
-  ht_submit = html_elem_button_submit.gera("Enviar", "fazer_postar_comentario", None, '#55ee55')
+  ht_submit = html_elem_button_submit.gera("Enviar", "postar_comentario", None, '#55ee55')
   ht_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, '#ee5555')
   ht_conteudo = \
     ( ht_tabela + "\n" ) + \
