@@ -90,6 +90,45 @@ def obtem_atributo(com, chave):
   global tabela
   return obj_raiz.obtem_atributo(com, chave)
 
+def obtem_comentarios_raiz(vid):
+  assert vid != None and isinstance(vid, obj_video.Classe)
+
+  # Pega os ids comentarios do video
+  lista_id_coms = obj_comentario.busca_por_video(vid.id)
+  lista_id_coms_raiz = []
+
+  for com_id in lista_id_coms:
+    if obj_comentario.obtem_atributo(busca_por_identificador(com_id), 'pai') == None:
+      lista_id_coms_raiz.append(com_id)
+
+  return lista_id_coms_raiz
+
+def monta_no(com):
+  if com == None:
+    return None
+  id_filhos = busca_por_filhos(com.id)
+  lista_coms_filhos = []
+  lista_saida = [com]
+  for id in id_filhos:
+    lista_coms_filhos.append(busca_por_identificador(id))
+  for com_filho in lista_coms_filhos:
+    
+    lista_saida.append((com_filho, monta_no(com_filho)))
+  return tuple(lista_saida)
+
+def obtem_arvore(vid, com, max_coms):
+  # Ainda não implementado o numero maximo de comentarios
+  assert type(max_coms) is int
+
+  # Se comentário não for passado, retorna lista com os comentarios na raiz do video
+  if com == None:
+    return obtem_comentarios_raiz(vid)
+  
+  # Senão, retorna arvore de comentarios
+  assert com != None and isinstance(com, obj_comentario.Classe)
+  raiz = monta_no(com)
+  return raiz
+
 def busca_por_identificador(id_com):
   global tabela
   com = obj_raiz.busca_por_identificador(id_com, tabela, def_obj_mem)
@@ -111,6 +150,15 @@ def busca_por_autor(id_usr):
   if tabela.debug: sys.stderr.write(f"  > {obj_comentario_IMP.busca_por_nome}: id_usr = {id_usr}\n");
   assert type(id_usr) is str
   lista_ids = obj_raiz.busca_por_campo('autor', id_usr, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {','.join(lista_ids)}\n");
+  return lista_ids
+
+def busca_por_filhos(id_com):
+  global tabela
+  unico = False
+  if tabela.debug: sys.stderr.write(f"  > {obj_comentario_IMP.busca_por_filhos}: id_com = {id_com}\n");
+  assert type(id_com) is str
+  lista_ids = obj_raiz.busca_por_campo('pai', id_com, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {','.join(lista_ids)}\n");
   return lista_ids
   
