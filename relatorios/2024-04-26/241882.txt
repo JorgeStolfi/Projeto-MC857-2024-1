@@ -1,0 +1,10 @@
+Tarefa:
+obj_usuario_IMP.py: Corrigir {valida_nome_de_usuario} - juntar código repetido,
+verificar TODAS as ocorrências de "'", "-", etc.
+
+Como determinado pela tarefa, foi removida a duplicação de código para a validação dos símbolos
+correspondentes. Além disso, um dos códigos duplicados que existia previamente checava somente a primeira
+ocorrência de um determinado símbolo. No novo código quaisquer ocorrências de "'", '"', "-" e "." são
+devidamente validadas.
+
+Ao fim da refatoração, os testes unitários foram executados sem a ocorrência de nenhum erro.
