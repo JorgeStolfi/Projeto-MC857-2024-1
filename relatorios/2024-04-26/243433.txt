@@ -1,0 +1,3 @@
+Essa tarefa foi bem desafiadora pois envolvia entender com profundidade como um teste era formulado. Achei estranho nos
+exemplos o valor esperado ser "str". Mas depois entendi pois quando se trata de um teste de uma função que retorna html,
+tal valor esperado nao faz tanto sentido. Em seguida criei a maior parte dos casos de teste que julguei relevante.
