@@ -19,7 +19,7 @@ def gera(lista_ids_com, mostra_autor, mostra_video, mostra_pai):
     elif cb == 'Video':
       if mostra_video:
         hts_cabecalho.append(html_elem_div.gera(est_cab, cb))
-    elif cb == 'Pai':
+    elif cb == 'Comentário':
       if mostra_pai:
         hts_cabecalho.append(html_elem_div.gera(est_cab, cb))
     else:
