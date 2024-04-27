@@ -46,7 +46,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
   ht_texto = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, texto[:max_texto]))
   itens_resumo.append(ht_texto)
 
-  comentarios = obj_comentario.obtem_identificador(com)
+  
   
   bt_args = { 'comentario': obj_comentario.obtem_identificador(com) }
   bt_ver = html_elem_button_simples.gera("Ver", "buscar_comentarios_de_video", bt_args, "#eeeeee")
