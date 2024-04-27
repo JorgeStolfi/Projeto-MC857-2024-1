@@ -96,14 +96,14 @@ def busca_por_identificador(id_usr):
 def busca_por_email(em):
   global tabela
   unico = True
-  if tabela.debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_email}: email = {em}\n");
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_email}: email = {em}\n");
   id_usr = obj_raiz.busca_por_campo('email', em, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > id encontrado = {id_usr}\n");
   return id_usr
 
 def busca_por_nome(nome):
   global tabela
-  if tabela.debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_nome}: nome = {nome}\n");
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_nome}: nome = {nome}\n");
   args = { 'nome': nome }
   unico = False
   lista_ids = obj_raiz.busca_por_semelhanca(args, unico, tabela)
