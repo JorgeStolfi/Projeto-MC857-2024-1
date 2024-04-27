@@ -1,0 +1,8 @@
+relatório do dia 26/04/2024
+
+apos solicitado iniciei a implementação do codigo que extraia uma imagem 'thumb' no arquivo obj_vid_imp na função ja existente "cria" 
+adicionando principalmente o codifo na linha 78 e comentando de forma adequada quando julguei necessario para tal implementação utiliai duas 
+bibliiotecas importadas respectivamente "cv2" e 'os' com função de manipular o video e manipular diretórios respectivamente apor o termino 
+do codigo escrevi e o relatório e vou terminar faendo o upload do arquivo e do arquivo alterado respectivamente.
+
+Atenciosamente Arimã Batista

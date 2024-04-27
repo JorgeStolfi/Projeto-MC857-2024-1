@@ -8,6 +8,9 @@ import db_conversao_sql
 import util_identificador
 import util_valida_campo
 
+import cv2
+import os
+
 from util_erros import ErroAtrib, erro_prog, mostra
 
 from datetime import datetime, timezone
@@ -71,6 +74,36 @@ def cria(atrs):
 
   # Nome do arquivo de vídeo:
   nome_arq = f"videos/{id_vid}.mp4"
+
+  #extrai umagem thumb do video
+  video_path = nome_arq
+  thumb_dir = "thumb"
+  #verifica a existencia do diretório
+  if not os.path.exists(thumb_dir):
+    os.makedirs(thumb_dir)
+  #carrega o video
+  cap = cv2.VideoCapture(video_path)
+  #captura as dimensões do video
+  width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+  height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+  #escolhe o frame video
+  frame_number = 0
+
+  while True:
+    ret, frame = cap.read()
+
+    if not ret:
+        break
+
+    thumb = cv2.resize(frame, (width, height))
+
+    filename = f"V-{frame_number:08d}.png"
+
+    cv2.imwrite(os.path.join(thumb_dir, filename), thumb)
+
+    frame_number += 1
+  cap.release()
+  #termino
 
   if 'conteudo' in atrs:
     # Grava o conteúdo em disco:
