@@ -31,6 +31,6 @@ def gera(vid):
 
   # TODO: ver_video precisa ser implementado
   bt_arg = {'video': obj_video.obtem_identificador(vid)}
-  bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_arg, "#eeeeee")
+  bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_arg, "#ffcc88")
 
   return [ht_usr, ht_titulo, ht_data, ht_duracao, ht_largura, ht_altura, bt_ver]
