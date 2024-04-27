@@ -4,7 +4,6 @@ import obj_usuario
 import db_obj_tabela
 import db_tabelas_do_sistema
 import db_conversao_sql
-import util_identificador
 import util_valida_campo
 
 from util_erros import ErroAtrib, erro_prog, mostra
@@ -231,57 +230,36 @@ def valida_nome_de_usuario(chave, val, nulo_ok):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: branco antes ou depois do nome" ]
     if '  ' in val:
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: você inseriu dos espaços seguidos" ]
-      
-    # !!! Tem que verificar TODAS as ocorrências de "'", "-", etc. !!!
-    if "'" in val:
-      letraSeguinte = val.split("'")[1][0]
-      letraAnterior = val.split("'")[0][-1]
-      if not (letraSeguinte.isupper() and not letraSeguinte.isspace()):
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita maiúscula após o apostrofe" ]
-      if not letraAnterior.isalpha():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do apostrofe" ]
-    if "." in val:
-      letraSeguinte = val.split(".")[1][0]
-      letraAnterior = val.split(".")[0][-1]
-      if not letraSeguinte.isspace():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita espaço após o ponto" ]
-      if not letraAnterior.isalpha():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do ponto" ]
-    if "-" in val:
-      letraSeguinte = val.split("-")[1][0]
-      letraAnterior = val.split("-")[0][-1]
-      if not( letraAnterior.isalpha or letraAnterior == "."):
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
-      if not letraSeguinte.isupper():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
-        
-    # !!! Combinar com código abaixo !!!
     if (not val[0].isupper()):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: começa com letra minúscula" ]
-    elif (not val[-1].isalpha()):
+    if (not val[-1].isalpha()):
       erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o último caractere não é uma letra" ]
-    else:
-        for i in range(1, n):
-          digito = val[i]
-          if (digito == "."):
-              if (not val[i-1].isalpha()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não segue uma letra" ]
-              elif (val[i+1] != " "):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não é seguido por um espaço em branco" ]
-          elif (digito == "'"):
-              if (not val[i-1].isalpha()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não segue uma letra" ]
-              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não é seguido por uma letra maiúscula" ]
-          elif (digito == "-"):
-              if (not (val[i-1].isalpha() or val[i-1] != ".")):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não segue uma letra ou um ponto" ]
-              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não é seguido por uma letra maiúscula" ]
-          elif (digito == " "):
-              if (not val[i+1].isalpha()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
+    
+    for i in range(1, n):
+      digito = val[i]
 
+      if digito == '-':
+        if not (val[i-1].isalpha() or val[i-1] == '.'):
+          print('hellooo', i, val[i-1], val[i-1].isalpha(), val[i+1], val[i+1].isalpha(), val)
+          erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
+        if not val[i+1].isupper():
+          erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
+
+      if digito == '.':
+        if not val[i+1].isspace():
+          erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita espaço após o ponto" ]
+        if not val[i-1].isalpha():
+          erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do ponto" ]
+
+      if digito == "'":
+        if not val[i+1].isupper() or val[i+1].isspace():
+          erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita maiúscula após o apostrofe" ]
+        if not val[i-1].isalpha():
+          erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do apostrofe" ]
+
+      if digito.isspace():
+        if i+1 == n or not val[i+1].isalpha():
+          erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
   return erros
 
 def valida_senha(chave, val, nulo_ok):
@@ -436,7 +414,7 @@ def def_obj_mem(usr, id_usr, atrs_SQL):
   Em qualquer caso, os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
   global tabela
-  if tabela.debug: mostra(0,"obj_usuario_IMP.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
+  if tabela.debug: mostra(0,"obj_usuario.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
   if usr == None:
     usr = cria_obj_mem(id_usr, atrs_SQL)
   else:

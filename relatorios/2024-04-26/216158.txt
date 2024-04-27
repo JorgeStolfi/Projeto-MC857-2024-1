@@ -1,0 +1,1 @@
+Tirei o usuario da tabela de sessoes e arrumei a formatação da data de criação da sessão

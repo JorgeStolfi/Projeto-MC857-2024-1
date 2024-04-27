@@ -52,7 +52,7 @@ def cria(usr, cookie):
   global tabela
   if tabela.debug: sys.stderr.write(f"  > {obj_sessao.cria}({str(usr)},{str(cookie)})\n")
 
-  criacao = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %z")
+  criacao = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
   atrs = {
     'usr': usr,
     'criacao': criacao,

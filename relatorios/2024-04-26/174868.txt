@@ -1,0 +1,6 @@
+A minha tarefa foi alterar o método gera do módulo html_elem_textarea para aceitar dois parâmetros adicionais, altura e largura.
+
+Para fazer isso, eu adicionei os parâmetros nos 3 arquivos, o html_elem_textarea.py, o IMP e também no arquivo de testes.
+Depois de receber os parâmetros, removi uma linha que gerava redundância no background-color caso a textarea fosse readonly, e adicionei tanto o paramêtro de background (caso readonly) e os valores de altura e largura (caso diferentes de None) na tag style utilizada no html.
+
+Por fim, modifiquei a única utilização desse método no código, que ocorre na implementação do módulo html_bloco_tabela_de_campos, passando o valor de 300 para largura e 150 para altura.

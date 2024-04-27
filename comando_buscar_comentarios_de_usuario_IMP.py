@@ -4,6 +4,7 @@ import obj_usuario
 import html_bloco_titulo
 import html_pag_generica
 import html_bloco_lista_de_comentarios
+import html_pag_mensagem_de_erro
 import obj_comentario
 
 def processa(ses, cmd_args):

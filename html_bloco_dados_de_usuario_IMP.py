@@ -52,14 +52,15 @@ def gera(id_usr, atrs, ses_admin, ses_proprio):
       usr = obj_usuario.busca_por_identificador(id_usr)
       assert usr != None
       nab = len(obj_sessao.busca_por_usuario(usr, True))
-      if nab > 0:
+      if nab > 0 and not ses_proprio:
         ht_bt_sessoes = html_elem_button_simples.gera(f"Ver sessões ({nab})", "buscar_sessoes_de_usuario", {'usuario': id_usr}, '#eeee55')
 
-    # Mas qualquer um pode ver os vídeos de {usr}
-    ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': id_usr}, '#eeee55')
+    if not ses_proprio:
+      # Mas qualquer um pode ver os vídeos de {usr}
+      ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': id_usr}, '#eeee55')
   
-    # Assim como qualquer um pode ver seus comentários
-    ht_bt_comentarios = html_elem_button_simples.gera(f"Ver comentarios", "buscar_comentarios_de_usuario", {'usuario': id_usr}, '#eeee55')
+      # Assim como qualquer um pode ver seus comentários
+      ht_bt_comentarios = html_elem_button_simples.gera(f"Ver comentarios", "buscar_comentarios_de_usuario", {'usuario': id_usr}, '#eeee55')
 
   ht_bloco = \
     ht_table + "<br/>" + \

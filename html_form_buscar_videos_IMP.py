@@ -7,10 +7,13 @@ import html_elem_form
 
 def gera(atrs):
 
+  # Tupla contendo as seguintes informações: {rot} {tipo} {chave} {editavel} {dica}
+  # Para um maior detalhamento, cheque a documentação de `html_bloco_tabela_de_campos.gera`.
   dados_linhas = (
       ( "ID",       "text",   'video',  True,  "V-NNNNNNNN",      ),
       ( "Título",   "text",   'titulo', True,  "Bla bla bla",     ),
       ( "Autor",    "text",   'usr',    True,  "Fulano de tal",   ),
+      ( "Data",     "text",   'data',   True,  "2024",            ),
     )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)

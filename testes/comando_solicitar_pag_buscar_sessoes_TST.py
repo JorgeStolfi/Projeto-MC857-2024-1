@@ -6,6 +6,7 @@ import obj_sessao
 import obj_usuario
 import db_base_sql
 import util_testes
+from util_erros import erro_prog
 
 import sys
 
@@ -31,9 +32,21 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-aviso_prog("!!! programa de teste de {comando_solicitar_pag_buscar_sessoes} ainda não escrito !!!")
+
+not_admin_ses = obj_sessao.busca_por_identificador("S-00000003")
+admin_ses = obj_sessao.busca_por_identificador("S-00000001")
+
+test_suites = [
+  ('t01', str, None, {}), # Mostra pagina de erro: somente administradores podem acessar
+  ('t02', str, not_admin_ses, {}), # Mostra pagina de erro: somente administradores podem acessar
+  ('t03', str, admin_ses, {}), # Mostra pagina com formulario de busca por sessoes
+  ('t04', 'AssertionError', admin_ses, {'any_arg': 'any_val'}), # Levanta AssertionError por conta de argumentos espúrios
+]
+
+for suite in test_suites:
+  testa_processa(*suite)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  aviso_erro("Alguns testes falharam")
+  erro_prog("Alguns testes falharam")
