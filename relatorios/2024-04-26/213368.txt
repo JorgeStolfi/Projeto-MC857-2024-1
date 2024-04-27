@@ -1,0 +1,3 @@
+Objetivo: Acertar o cabeçalho das colunas.
+
+No arquivo html_bloco_lista_de_comentarios_IMP.py,  a lista cabs_raw estava com a ordem dos cabeçalhos errada. A ordem foi arrumada e os cabelos agora estão corretos.
