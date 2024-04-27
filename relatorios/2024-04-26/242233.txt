@@ -1,0 +1,12 @@
+Minha tarefa era implementar mais casos de teste para o modulo comando_alterar_comentario.
+
+Inicialmente ao rodar o teste recebi um erro dizendo que os campos 'autor' e 'video' deveriam ser objetos das classes obj_usuario e obj_video respectivamente
+ao invés de simplesmente strings dos seus identificadores, então em comando_alterar_comentario_IMP.processa eu fiz a conversão dos identificadores recebidos para
+os objetos em si.
+
+Na definição de comando_alterar_comentario.processa está descrito que os atributos do comentário que não podem ser alterados também podem estar dentro de cmd_args,
+desde que seus valores sejam iguais aos valores que estão no obj_comentario, então fiz uma verificação para os campos 'video' e 'autor' em 
+comando_alterar_comentario_IMP.processa (linhas 43 a 52)
+
+Também criei dois novos casos de teste em comando_alterar_comentario_TST. Ambos devem falhar, um quando há tentativa de alterar o autor e outro quando há tentativa
+de alterar o vídeo ao qual o comentário pertence. Todos os 4 casos de teste estão tendo os resultados esperados.
