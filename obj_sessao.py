@@ -158,6 +158,13 @@ def busca_por_usuario(usr, soh_abertas):
   Se {usr} é {None} ou não existem tais sessões, devolve uma lista vazia."""
   return obj_sessao_IMP.busca_por_usuario(usr, soh_abertas)
 
+def busca_por_semelhanca(args, unico):
+  """Similar a {busca_por_campos}, mas aceita alguns valores na base de dados 
+  que são semelhantes aos valores em {args}, em vez de iguais a eles.  Vide
+  {db_tabela_generica.busca_por_semelhanca}."""
+  # !!! Deveria ter especificação exato/aproximado para cada campo. !!!
+  return obj_sessao_IMP.busca_por_semelhanca(args, unico)
+
 def fecha(ses):
   """Registra o logout do usuário na sessão {ses}, mudando o atributo 'aberta'
   permanentemente para {False}. Também altera esse campo na base de dados.
