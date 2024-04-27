@@ -110,6 +110,19 @@ def obtem_atributos(com):
   exceto identificador. Dá erro se {com} é {None}."""
   return obj_comentario_IMP.obtem_atributos(com)
 
+def obtem_comentarios_raiz(vid):
+  """Retorna uma lista, possivelmente vazia, de comentarios de um vídeo que não
+  tem nenhum pai"""
+  return obj_comentario_IMP.obtem_comentarios_raiz(vid)
+
+def obtem_arvore(vid, com, max_coms):
+  """"Determina toda arvore de comentarios cuja raiz é o comentario {com} até o maximo
+  de {max_coms} comentarios. Se {com} for {None}, pega todos os comentarios cuja raiz
+  é o video {vid}. O resultado é uma arvore aonde cada nó é uma tupla o primeiro elemento
+  é um comentario {com} e os demais são sub-arvores que tem esse comentario como pai
+  """
+  return obj_comentario_IMP.obtem_arvore(vid, com, max_coms)
+
 def obtem_atributo(com, chave):
   """Retorna o atributo do comentário {com} com a {chave} dada. 
   Equivale a {obtem_atributos(com)[chave]}. Dá erro se {com} é {None}."""
@@ -132,6 +145,12 @@ def busca_por_autor(id_usr):
   e devolve o uma lista com os identificadores desses comentários (não os objetos);
   ou {None} se o usuário não postou nenhum comentário."""
   return obj_comentario_IMP.busca_por_autor(id_usr)
+
+def busca_por_filhos(id_com):
+  """Localiza comentários postados em resposta ao comentario com identificador {id_com}
+  e devolve uma lista com os identificadores desses comentários (não os objetos);
+  ou {None} se o comentario nao teve resposta."""
+  return obj_comentario_IMP.busca_por_filhos(id_com)
 
 def busca_por_pai(id_pai):
   """Localiza comentários que são respostas ao comentário com identificador {id_pai}

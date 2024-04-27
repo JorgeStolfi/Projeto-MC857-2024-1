@@ -98,6 +98,38 @@ def verifica_busca_multipla(rot_teste, chave, val, idents):
   sys.stderr.write("  %s\n" % ("-" * 70))
   return
 
+def imprime_arvore_tuplas(raiz):
+  """
+  Tenta imprimir a tupla para teste
+  <Não funcionando> 
+  """
+  if raiz == None:
+    sys.stderr.write("Vazio")
+  elif len(raiz) < 1:
+    sys.stderr.write("(Comentario Folha: %s)" % str(raiz))
+  else:
+    sys.stderr.write("(Comentario %s, " % str(raiz[0]))
+    sys.stderr.write("[")
+    imprime_arvore_tuplas(raiz[1:])
+    sys.stderr.write("])")
+
+def verifica_obtem_arvore(vid, com):
+  """"Testa o metodo obtem arvores, que dado um comentario retorna a arvore de comentarios
+  relacionados"""
+  sys.stderr.write("  testando {obj_comentario.obtem_arvore de comentario id \"%s\" do video \"%s\"}:\n" % (com.id, vid.id))
+
+  arvore1 = obj_comentario.obtem_arvore(vid, com, 10)
+  arvore2 = obj_comentario.obtem_arvore(vid, None, 10)
+  # Deve retornar arvore dos comentarios do video vid a partir do comentario com
+  sys.stderr.write(str(arvore1))
+  sys.stderr.write("\n")
+  imprime_arvore_tuplas(arvore1)
+
+  # Deve retornar >lista< de todos os comentarios de um video que nao tenham pai
+  sys.stderr.write(str(arvore2))
+  sys.stderr.write("\n")
+  return
+
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  Obtendo alguns comentários para teste:\n")
@@ -167,6 +199,13 @@ verifica_busca_multipla("bu2", 'autor', id_usr_bu2, ( ident_cr0, ))
 
 id_usr_bu3 = "U-00000004"
 verifica_busca_multipla("bu3", 'autor', id_usr_bu3, ( ))
+
+# ----------------------------------------------------------------------
+sys.stderr.write("  testando {obj_comentario.obtem_arvore()}:\n")
+
+verifica_obtem_arvore(vid_cr0, cmt_cr0)
+
+verifica_obtem_arvore(vid_cr1, cmt_cr1)
 
 # ----------------------------------------------------------------------
 # Veredito final:

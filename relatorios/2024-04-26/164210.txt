@@ -1,0 +1,12 @@
+Tarefa: Criar a função 'obtem_arvore' em 'obj_comentario' que deve retornar a arvore de comentarios em 
+resposta a um video. Caso o comentario seja nulo, retornar uma lista dos comentarios sem pai no video.
+
+
+Iniciei criando as funções auxiliares: 
+- 'busca_por_filhos' para buscar todos os comentarios que tem o comentario passado por parametro como pai; 
+- 'obtem_comentarios_raiz' para buscar todos os comentarios de um determinado video em que o pai é None
+
+Tentei criar a função 'monta_no' para montar a arvore, porém não deu tempo de verificar se esta funcionando 
+adequadamente.
+
+Tambem criei começo de testes para a função 'obtem_arvore'
