@@ -83,7 +83,7 @@ def cria(atrs):
     assert os.path.exists(nome_arq), f"Item 'conteudo' ausente e arquivo {nome_arq} não existe"
   
   duracao, largura, altura = obtem_dimensoes_do_arquivo(nome_arq)
-  atrs['duracao'] = duracao
+  atrs['duracao'] = int(duracao)  # Convertendo duração para inteiro
   atrs['largura'] = largura
   atrs['altura'] = altura
 
@@ -222,7 +222,7 @@ def obtem_dimensoes_do_arquivo(nome_arq):
     "-select_streams",
     "v:0",
     "-show_entries",
-    "stream=width,height",
+    "stream=width,height,duration",  # Incluindo duração
     "-of",
     "json",
     nome_arq
@@ -230,10 +230,10 @@ def obtem_dimensoes_do_arquivo(nome_arq):
 
   result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
   data = json.loads(result.stdout)
-  
-  duracao = 5000 # !!! Tem que obter do arquivo também !!!
-  largura = data["streams"][0]["width"]
-  altura = data["streams"][0]["height"]
+
+  duracao = float(data["streams"][0]["duration"]) * 1000  # Convertendo para milissegundos
+  largura = int(data["streams"][0]["width"])
+  altura = int(data["streams"][0]["height"])
   return duracao, largura, altura
 
 def valida_atributos(vid, atrs_mem):
