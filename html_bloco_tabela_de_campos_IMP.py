@@ -61,7 +61,7 @@ def gera_input_ou_textarea(tipo, chave, ident, val, val_min, dica, editavel):
     dica = None
 
   if tipo == "textarea":
-    ht_input = html_elem_textarea.gera(None, chave, ident, ht_val, editavel, dica, None, False)
+    ht_input = html_elem_textarea.gera(None, chave, ident, ht_val, editavel, dica, None, False, 150, 300)
   else:
     if tipo != 'number':
       # Ignora {val_min}:
