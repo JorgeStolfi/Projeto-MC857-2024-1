@@ -36,6 +36,7 @@ import comando_postar_comentario
 import comando_solicitar_pag_alterar_comentario
 import comando_alterar_comentario
 import comando_solicitar_pag_buscar_comentarios
+import comando_solicitar_pag_postar_comentario
 import comando_buscar_comentarios
 import comando_buscar_comentarios_de_video
 import comando_buscar_comentarios_de_usuario
@@ -535,6 +536,10 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/solicitar_pag_buscar_comentarios':
       # Quer formumlário para buscar comentarios por campos variados:
       pag = comando_solicitar_pag_buscar_comentarios.processa(ses, cmd_args)
+
+    elif cmd == '/solicitar_pag_postar_comentario':
+      # Quer formumlário para postar comentarios por campos variados:
+      pag = comando_solicitar_pag_postar_comentario.processa(ses, cmd_args)
       
     elif cmd == '/buscar_comentarios':
       # Busca de comentáriso com certos atributos:

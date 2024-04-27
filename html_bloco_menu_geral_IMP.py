@@ -51,6 +51,7 @@ def gera_botoes_de_busca(admin):
   ht_bt_usr = html_elem_button_simples.gera("Buscar usuários",    'solicitar_pag_buscar_usuarios',     None, cor_bt_busca)
   ht_bt_vid = html_elem_button_simples.gera("Buscar videos",      'solicitar_pag_buscar_videos',       None, cor_bt_busca)
   ht_bt_com = html_elem_button_simples.gera("Buscar Comentários", 'solicitar_pag_buscar_comentarios',  None, cor_bt_busca)
+  ht_bt_com = html_elem_button_simples.gera("Inserir Comentarios", 'solicitar_pag_postar_comentario',  None, cor_bt_busca)
 
   hts_botoes = [ ht_bt_usr, ht_bt_vid, ht_bt_com ]
 

@@ -31,10 +31,26 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-# Sessao de teste
-ses = obj_sessao.busca_por_identificador("S-00000001")
+dados = { \
+  'autor': "U-00000001",
+  'video': 'V-00000001',
+  'texto': 'Texto Teste',
+}
 
-aviso_prog("!!! html_pag_postar_comentario_TST.py ainda não escrito !!!", True)
+# Testa inserir dados no form de comentarios sem um comentarios pai
+ses = obj_sessao.busca_por_identificador("S-00000001")
+testa_gera("T1-success", str, ses, dados, None)
+
+dados = { \
+  'autor': "U-00000001",
+  'video': 'V-00000001',
+  'pai': 'C-00000001',
+  'texto': 'Texto Teste',
+}
+
+# Testa inserir dados no form de comentarios com um comentarios pai
+ses = obj_sessao.busca_por_identificador("S-00000001")
+testa_gera("T2-success", str, ses, dados, None)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")

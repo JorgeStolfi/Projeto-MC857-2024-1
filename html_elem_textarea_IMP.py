@@ -35,5 +35,5 @@ def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio, alt
       ht_cmd + \
       ht_obrigatorio + \
       ht_estilo + \
-    "></textarea>"
+    ">"+ val_ini +"</textarea>"
   return ht_input_textarea

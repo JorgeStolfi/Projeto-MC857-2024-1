@@ -1,6 +1,7 @@
 
 import html_pag_login
 import html_pag_postar_comentario
+import html_pag_ver_comentario
 import obj_comentario
 import obj_video
 import obj_usuario
@@ -31,7 +32,7 @@ def processa(ses, cmd_args):
       erros += ex.args[0]
       
   if com != None:
-    pag = html_pag_ver_comentario.gera(ses, com)
+    pag = html_pag_ver_comentario.gera(ses, com, erros)
   else:
     # Repete a página de postar comentarios com os mesmos argumentos e mens de erro:
     assert len(erros) > 0
@@ -83,10 +84,10 @@ def converte_argumentos(cmd_args, usr_ses, erros):
     
   if 'data' in cmd_args: del cmd_args['data']
   
-  if 'titulo' in cmd_args and cmd_args['titulo'] != None:
-    titulo = cmd_args['titulo']
-    if 'titulo' in cmd_args: del cmd_args['titulo']
-    atrs_com['titulo'] = titulo
+  if 'texto' in cmd_args and cmd_args['texto'] != None:
+    texto = cmd_args['texto']
+    if 'texto' in cmd_args: del cmd_args['texto']
+    atrs_com['texto'] = texto
   
   if len(cmd_args) != 0:
     erros.append(f"Argumentos espurios: {str(cmd_args)}")
