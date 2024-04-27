@@ -12,12 +12,6 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
 
   com_atrs = obj_comentario.obtem_atributos(com)
   itens_resumo = []
-  
-  if mostra_video:
-    video = com_atrs['video']
-    video_id = obj_video.obtem_identificador(video)
-    ht_video = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, video_id))
-    itens_resumo.append(ht_video)
 
   if mostra_autor:
     autor = com_atrs['autor']
@@ -25,6 +19,12 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
     ht_autor = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, autor_id))
     itens_resumo.append(ht_autor)
   
+  if mostra_video:
+    video = com_atrs['video']
+    video_id = obj_video.obtem_identificador(video)
+    ht_video = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, video_id))
+    itens_resumo.append(ht_video)
+
   if mostra_pai:
     pai = com_atrs['pai']
     if pai != None:
