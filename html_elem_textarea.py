@@ -1,6 +1,6 @@
 import html_elem_textarea_IMP
 
-def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio):
+def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio, altura, largura):
   """Gera o HTML para um elemento de textarea  "<textarea ... ></textarea>".
   Este fragmento geralmente é incluído em um formulário "<form>...</form>".
   Veja a função {html_elem_form.gera}.
@@ -39,5 +39,7 @@ def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio):
   O parâmetro {obrigatorio} indica se o campo deve ser obrigatóriamente preenchido ou não.
   Isso altera visualmente a forma como o campo é exibido para o usuário pelo navegador. O valor
   default deste parâmetro é False, por questões de compatibilidade.
+
+  Os parâmetros altura e largura definem o tamanho da textarea, caso tenham valores diferentes de None
   """  
-  return html_elem_textarea_IMP.gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio)
+  return html_elem_textarea_IMP.gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio, altura, largura)

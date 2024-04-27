@@ -8,6 +8,9 @@ import db_conversao_sql
 import util_identificador
 import util_valida_campo
 
+import cv2
+import os
+
 from util_erros import ErroAtrib, erro_prog, mostra
 
 from datetime import datetime, timezone
@@ -72,6 +75,36 @@ def cria(atrs):
   # Nome do arquivo de vídeo:
   nome_arq = f"videos/{id_vid}.mp4"
 
+  #extrai umagem thumb do video
+  video_path = nome_arq
+  thumb_dir = "thumb"
+  #verifica a existencia do diretório
+  if not os.path.exists(thumb_dir):
+    os.makedirs(thumb_dir)
+  #carrega o video
+  cap = cv2.VideoCapture(video_path)
+  #captura as dimensões do video
+  width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+  height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+  #escolhe o frame video
+  frame_number = 0
+
+  while True:
+    ret, frame = cap.read()
+
+    if not ret:
+        break
+
+    thumb = cv2.resize(frame, (width, height))
+
+    filename = f"V-{frame_number:08d}.png"
+
+    cv2.imwrite(os.path.join(thumb_dir, filename), thumb)
+
+    frame_number += 1
+  cap.release()
+  #termino
+
   if 'conteudo' in atrs:
     # Grava o conteúdo em disco:
     conteudo = atrs['conteudo']
@@ -83,7 +116,7 @@ def cria(atrs):
     assert os.path.exists(nome_arq), f"Item 'conteudo' ausente e arquivo {nome_arq} não existe"
   
   duracao, largura, altura = obtem_dimensoes_do_arquivo(nome_arq)
-  atrs['duracao'] = duracao
+  atrs['duracao'] = int(duracao)  # Convertendo duração para inteiro
   atrs['largura'] = largura
   atrs['altura'] = altura
 
@@ -222,7 +255,7 @@ def obtem_dimensoes_do_arquivo(nome_arq):
     "-select_streams",
     "v:0",
     "-show_entries",
-    "stream=width,height",
+    "stream=width,height,duration",  # Incluindo duração
     "-of",
     "json",
     nome_arq
@@ -230,10 +263,10 @@ def obtem_dimensoes_do_arquivo(nome_arq):
 
   result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
   data = json.loads(result.stdout)
-  
-  duracao = 5000 # !!! Tem que obter do arquivo também !!!
-  largura = data["streams"][0]["width"]
-  altura = data["streams"][0]["height"]
+
+  duracao = float(data["streams"][0]["duration"]) * 1000  # Convertendo para milissegundos
+  largura = int(data["streams"][0]["width"])
+  altura = int(data["streams"][0]["height"])
   return duracao, largura, altura
 
 def valida_atributos(vid, atrs_mem):

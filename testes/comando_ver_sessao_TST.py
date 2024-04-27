@@ -7,6 +7,7 @@ import db_tabelas_do_sistema
 import obj_usuario
 import obj_sessao
 import util_testes
+from util_erros import aviso_erro
 
 sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB",None,None)

@@ -27,42 +27,70 @@ obj_video.inicializa_modulo(True)
 ok_global = True # Vira {False} se um teste falha.
 
 def verifica_video(rot_teste, vid, id_vid, atrs):
-  """Testes básicos de consistência do objeto {vid} da classe {obj_video.Classe}, dados
-  {id_vid} e atributos esperados {atrs}.  Retorna {True} se não detectou erros."""
-  
-  ok = True
+    """Testes básicos de consistência do objeto {vid} da classe {obj_video.Classe}, dados
+    {id_vid} e atributos esperados {atrs}.  Retorna {True} se não detectou erros."""
+    
+    ok = True
 
-  sys.stderr.write(f"  {rot_teste}: verificando video {id_vid}")
-  st_atrs = str(util_testes.trunca_tamanho(atrs, 2000))
-  sys.stderr.write(f" atrs = {st_atrs}\n")
-  
-  if vid != None and type(vid) is obj_video.Classe:
+    sys.stderr.write(f"  {rot_teste}: verificando video {id_vid}")
+    st_atrs = str(util_testes.trunca_tamanho(atrs, 2000))
+    sys.stderr.write(f" atrs = {st_atrs}\n")
     
-    sys.stderr.write("  testando {obtem_autor()}:\n")
-    usr1 = obj_video.obtem_autor(vid)
-    if 'autor' in atrs:
-      if usr1 != atrs['autor']:
-        aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(usr),True)
-        ok = False
-    
-    sys.stderr.write("  testando {obtem_data_de_upload()}:\n")
-    data1 = obj_video.obtem_data_de_upload(vid)
-    if data1 == None or not isinstance(data1, str):
-      aviso_prog("retornou " + str(data1),True)
-      ok = False
-    
-    for chave, val in atrs.items():
-      if chave != 'conteudo':
-        # Buscas por objeto (como autor) devem usar o ID:
-        if isinstance(val, obj_raiz.Classe):
-          val = obj_raiz.obtem_identificador(val)
-        sys.stderr.write(f"  testando {'{'}busca_por_campo('{chave}', {val}){'}'}:\n")
-        id_list_vid1 = obj_video.busca_por_campo(chave, val)
-        if not id_vid in id_list_vid1:
-          aviso_prog("retornou " + str(id_list_vid1) + ", devia ter " + str(id_vid),True)
-          ok = False
+    if vid != None and type(vid) is obj_video.Classe:
+        
+        sys.stderr.write("  testando {obtem_autor()}:\n")
+        usr1 = obj_video.obtem_autor(vid)
+        if 'autor' in atrs:
+            if usr1 != atrs['autor']:
+                aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(atrs['autor']),True)
+                ok = False
+        
+        sys.stderr.write("  testando {obtem_data_de_upload()}:\n")
+        data1 = obj_video.obtem_data_de_upload(vid)
+        if data1 == None or not isinstance(data1, str):
+            aviso_prog("retornou " + str(data1),True)
+            ok = False
+        
+        for chave, val in atrs.items():
+            if chave != 'conteudo':
+                # Buscas por objeto (como autor) devem usar o ID:
+                if isinstance(val, obj_raiz.Classe):
+                    val = obj_raiz.obtem_identificador(val)
+                sys.stderr.write(f"  testando {'{'}busca_por_campo('{chave}', {val}){'}'}:\n")
+                id_list_vid1 = obj_video.busca_por_campo(chave, val)
+                if not id_vid in id_list_vid1:
+                    aviso_prog("retornou " + str(id_list_vid1) + ", devia ter " + str(id_vid),True)
+                    ok = False
+        
+        # Teste de duração
+        sys.stderr.write("  testando {obtem_atributo(duracao)}:\n")
+        duracao1 = obj_video.obtem_atributo(vid, 'duracao')
+        if 'duracao' in atrs:
+            if duracao1 != atrs['duracao']:
+                aviso_prog("retornou " + str(duracao1) + ", deveria ter retornado " + str(atrs['duracao']),True)
+                ok = False
+        sys.stderr.write(f"    duracao = {duracao1}\n")  # Imprimindo a duração
+        
+        # Teste de altura
+        sys.stderr.write("  testando {obtem_atributo(altura)}:\n")
+        altura1 = obj_video.obtem_atributo(vid, 'altura')
+        if 'altura' in atrs:
+            if altura1 != atrs['altura']:
+                aviso_prog("retornou " + str(altura1) + ", deveria ter retornado " + str(atrs['altura']),True)
+                ok = False
+        sys.stderr.write(f"    altura = {altura1}\n")  # Imprimindo a altura
+        
+        # Teste de largura
+        sys.stderr.write("  testando {obtem_atributo(largura)}:\n")
+        largura1 = obj_video.obtem_atributo(vid, 'largura')
+        if 'largura' in atrs:
+            if largura1 != atrs['largura']:
+                aviso_prog("retornou " + str(largura1) + ", deveria ter retornado " + str(atrs['largura']),True)
+                ok = False
+        sys.stderr.write(f"    largura = {largura1}\n")  # Imprimindo a largura
 
-  return ok
+    return ok
+
   
   
 def testa_obj_video_cria_muda(rot_teste, valido, modif, id_vid, atrs):
