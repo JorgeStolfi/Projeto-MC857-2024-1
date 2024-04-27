@@ -4,7 +4,6 @@ import obj_usuario
 import db_obj_tabela
 import db_tabelas_do_sistema
 import db_conversao_sql
-import util_identificador
 import util_valida_campo
 
 from util_erros import ErroAtrib, erro_prog, mostra
@@ -96,14 +95,14 @@ def busca_por_identificador(id_usr):
 def busca_por_email(em):
   global tabela
   unico = True
-  if tabela.debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_email}: email = {em}\n");
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_email}: email = {em}\n");
   id_usr = obj_raiz.busca_por_campo('email', em, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > id encontrado = {id_usr}\n");
   return id_usr
 
 def busca_por_nome(nome):
   global tabela
-  if tabela.debug: sys.stderr.write(f"  > {obj_usuario_IMP.busca_por_nome}: nome = {nome}\n");
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_nome}: nome = {nome}\n");
   args = { 'nome': nome }
   unico = False
   lista_ids = obj_raiz.busca_por_semelhanca(args, unico, tabela)
@@ -240,19 +239,20 @@ def valida_nome_de_usuario(chave, val, nulo_ok):
       digito = val[i]
 
       if digito == '-':
-        if not val[i-1].isalpha() or not val[i-1] == '.':
+        if not (val[i-1].isalpha() or val[i-1] == '.'):
+          print('hellooo', i, val[i-1], val[i-1].isalpha(), val[i+1], val[i+1].isalpha(), val)
           erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
-        if i+1 == n or not val[i+1].isupper():
+        if not val[i+1].isupper():
           erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
 
       if digito == '.':
-        if i+1 == n or not val[i+1].isspace():
+        if not val[i+1].isspace():
           erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita espaço após o ponto" ]
         if not val[i-1].isalpha():
           erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do ponto" ]
 
       if digito == "'":
-        if i+1 == n or not val[i+1].isupper() or val[i+1].isspace():
+        if not val[i+1].isupper() or val[i+1].isspace():
           erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita maiúscula após o apostrofe" ]
         if not val[i-1].isalpha():
           erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do apostrofe" ]
@@ -414,7 +414,7 @@ def def_obj_mem(usr, id_usr, atrs_SQL):
   Em qualquer caso, os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
   global tabela
-  if tabela.debug: mostra(0,"obj_usuario_IMP.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
+  if tabela.debug: mostra(0,"obj_usuario.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
   if usr == None:
     usr = cria_obj_mem(id_usr, atrs_SQL)
   else:
