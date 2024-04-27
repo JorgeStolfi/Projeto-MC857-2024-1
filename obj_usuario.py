@@ -169,13 +169,18 @@ def verifica_criacao(usr, id_usr, atrs):
   imprme diagnósticos em {sys.stderr}."""
   return obj_usuario_IMP.verifica_criacao(usr, id_usr, atrs)
 
-def valida_nome_de_usuario(chave, val, nulo_ok):
+def valida_nome_de_usuario(chave, val, nulo_ok, eh_completo = True):
   """O parâmetro {val} deve ser um string com aparência de
   nome de usuário, com no mínimo 6 e no máximo 60 caracteres.
   
+  O parâmetro {eh_completo} foi implementado para permitir com que 
+  pudéssemos validar tanto nomes parciais quando completos. Caso o campo
+  não seja informado, considera-se que estamos validando um nome completo.
+  
   São permitidas apenas letras acentuadas do conjunto ISO-Latin-1,
   brancos (ASCII octal 040), hífens (055), pontos (056), e apóstrofes
-  (047). Além disso as seguintes regras devem ser obedecidas:
+  (047). Além disso as seguintes regras devem ser obedecidas para a validação
+  de um nome completo:
   
     * O nome deve começar com letra maiúscula.
     * O nome deve terminar com letra maiúscula ou minúscula. 
@@ -188,8 +193,18 @@ def valida_nome_de_usuario(chave, val, nulo_ok):
     * Cada branco deve ser seguido de uma letra maiúscula ou minúscula.
   Estas regras implicam que finais como "Júnior", "Junior", "Neto", etc
   não pode ser abreviados ("Jr.", "Nt.", etc.)and segundo >= 0
+  
+  Já para um nome parcial, nomes a partir de 2 caracteres são aceitos e 
+  as seguintes regras são consideradas:
+  
+    * O nome pode começar com letra maiúscula ou minúscula.
+    * Não há restrições para como o nome deve terminar
+    * A palavra pode começar com uma apóstrofe
+    * Apóstrofes podem ser seguidas por letras maiúsculas (ou não).
+    * A palavra pode começar com um hífen
+    * Caso a palavra não comece com um hífen, ele deve seguir um ponto ou uma letra maiúscula ou minúscula.
   """
-  return obj_usuario_IMP.valida_nome_de_usuario(chave, val, nulo_ok)
+  return obj_usuario_IMP.valida_nome_de_usuario(chave, val, nulo_ok, eh_completo)
   
 def valida_senha(chave, val, nulo_ok):
   """O valor {val} deve ser uma cadeia de caracteres visíveis do conjunto ASCII,
