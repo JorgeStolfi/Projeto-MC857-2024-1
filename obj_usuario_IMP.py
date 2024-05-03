@@ -302,24 +302,10 @@ def valida_email(chave, val, nulo_ok):
     erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: deve ser string" ]
   else:
     padrao_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    if not re.match(padrao_email, val):
+    padrao_email_aux=r'@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(padrao_email, val) and not re.match(padrao_email_aux, val):
       erros += [ f"campo '{chave}' = '%s' não é um email válido" % ( str(val))]
 
-    #Validar se o campo usuario e campo dominio estão dentro dos padrões de, respectivamente 64 e 255 caracteres
-    else:
-      partes = val.split('@')
-      usuario = partes[0]
-      dominio = partes[1]
-      if not 1< len(usuario) < 64:
-        erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: usuario inválido "]
-      if not 1< len(dominio) < 255:
-        erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: dominio inválido "]
-      
-      #validar as partes do dominio
-      partes_dominio = dominio.split('.')
-      for parte in partes_dominio:
-        if not 1 < len(parte) < 64:
-          erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: dominio inválido "]
   return erros
 
 def liga_diagnosticos(val):
