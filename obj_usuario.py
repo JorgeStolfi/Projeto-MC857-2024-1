@@ -97,11 +97,11 @@ def obtem_atributo(usr, chave):
   Equivale a {obtem_atributos(usr)[chave]}"""
   return obj_usuario_IMP.obtem_atributo(usr, chave)
 
-def busca_por_identificador(id_usr):
+def obtem_objeto(id_usr):
   """Localiza um usuario com identificador {id_usr} (uma string da forma
   "U-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_usuario.Classe}.
   Se {id_usr} é {None} ou tal usuário não existe, devolve {None}."""
-  return obj_usuario_IMP.busca_por_identificador(id_usr)
+  return obj_usuario_IMP.obtem_objeto(id_usr)
 
 def busca_por_email(em):
   """Localiza um usuário cujo endereço de email é {em} (um string da forma
@@ -162,49 +162,53 @@ def verifica_criacao(usr, id_usr, atrs):
   
   Especificamente, testa se {obtem_identificador(usr)} devolve
   o identificador esperado {id_usr}, {obtem_atributos(usr)} devolve 
-  os atributos esperados {atrs}, e {busca_por_identificador(id_usr)}
+  os atributos esperados {atrs}, e {obtem_objeto(id_usr)}
   devolve o próprio {usr}.
   
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
   return obj_usuario_IMP.verifica_criacao(usr, id_usr, atrs)
 
-def valida_nome_de_usuario(chave, val, nulo_ok, eh_completo = True):
-  """O parâmetro {val} deve ser um string com aparência de
-  nome de usuário, com no mínimo 6 e no máximo 60 caracteres.
-  
-  O parâmetro {eh_completo} foi implementado para permitir com que 
-  pudéssemos validar tanto nomes parciais quando completos. Caso o campo
-  não seja informado, considera-se que estamos validando um nome completo.
-  
-  São permitidas apenas letras acentuadas do conjunto ISO-Latin-1,
-  brancos (ASCII octal 040), hífens (055), pontos (056), e apóstrofes
-  (047). Além disso as seguintes regras devem ser obedecidas para a validação
-  de um nome completo:
-  
-    * O nome deve começar com letra maiúscula.
-    * O nome deve terminar com letra maiúscula ou minúscula. 
-    * Cada ponto deve seguir uma letra maiúscula ou minúscula.
-    * Cada ponto deve ser seguido por um branco.
-    * Cada apóstrofe deve seguir uma letra maiúscula ou minúscula.
-    * Cada apóstrofe deve ser seguido por uma letra maiúscula.
-    * Cada hífen deve seguir um ponto ou uma letra maiúscula ou minúscula.
-    * Cada hífen deve ser seguido por uma letra maiúscula.
-    * Cada branco deve ser seguido de uma letra maiúscula ou minúscula.
-  Estas regras implicam que finais como "Júnior", "Junior", "Neto", etc
-  não pode ser abreviados ("Jr.", "Nt.", etc.)and segundo >= 0
-  
-  Já para um nome parcial, nomes a partir de 2 caracteres são aceitos e 
-  as seguintes regras são consideradas:
-  
-    * O nome pode começar com letra maiúscula ou minúscula.
-    * Não há restrições para como o nome deve terminar
-    * A palavra pode começar com uma apóstrofe
-    * Apóstrofes podem ser seguidas por letras maiúsculas (ou não).
-    * A palavra pode começar com um hífen
-    * Caso a palavra não comece com um hífen, ele deve seguir um ponto ou uma letra maiúscula ou minúscula.
+def valida_nome(chave, val, nulo_ok, parcial):
   """
-  return obj_usuario_IMP.valida_nome_de_usuario(chave, val, nulo_ok, eh_completo)
+  Verifica a validade de um string {val} que vai ser o atributo 'nome' 
+  de um usuário (se {parcial} for {False}) ou uma parte do nome 
+  que vai ser usada numa busca de usuários.
+  
+  O parâmetro {val} deve ter nomáximo 60 caracteres, e no mínimo 6 se
+  completo ou 3 se parcial. São permitidas apenas letras acentuadas do
+  conjunto ISO-Latin-1, brancos (ASCII octal 040), hífens (055), pontos
+  (056), e apóstrofes (047). Além disso as seguintes regras devem ser
+  obedecidas para a validação de um nome completo ({parcial == False}):
+  
+    * (C) O nome deve começar com letra maiúscula.
+    * (C) O nome deve terminar com letra maiúscula ou minúscula.
+    
+    * (T) Cada ponto deve seguir uma letra maiúscula ou minúscula.
+    * (T) Cada ponto deve ser seguido por um branco.
+    * (T) Cada apóstrofe deve seguir uma letra maiúscula ou minúscula.
+    * (T) Cada apóstrofe deve ser seguido por uma letra maiúscula.
+    * (T) Cada hífen deve seguir um ponto ou uma letra maiúscula ou minúscula.
+    * (T) Cada hífen deve ser seguido por uma letra maiúscula.
+    * (T) Cada branco deve ser seguido de uma letra maiúscula ou minúscula.
+    
+  Estas regras excluem nomes como "José M.'Souza", "Pedro L- Smith",
+  "João M.", "Maria Costa", etc. Em particular, elas implicam que
+  qualificadores finais como "Júnior", "Junior", "Neto", etc não podem
+  ser abreviados ("Jr.", "Nt.", etc.).
+  
+  Se {parcial} é {True}, {val} pode ser uma substring de um nome válido.
+  Assim, nesse caso as regras marcadas com (C) não são exigidas, e
+  as regras marcadas com (T) são consideradas satisfeitas se o caractere
+  anterior ou seguinte não existe.  Por exemplo, numa busca parcial 
+  {val} pode ser "-Gravas", "José P.", "'Hara", "fina " (com branco final),
+  etc.  
+  
+  Note a distinção entre maoúsculas e minúsculas é sempre relevante para
+  a verificação das regras acima, mesmo que na busca em si ela venha a 
+  ser ignorada.
+  """
+  return obj_usuario_IMP.valida_nome(chave, val, nulo_ok, parcial)
   
 def valida_senha(chave, val, nulo_ok):
   """O valor {val} deve ser uma cadeia de caracteres visíveis do conjunto ASCII,

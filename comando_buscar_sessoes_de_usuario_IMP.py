@@ -21,7 +21,7 @@ def processa(ses, cmd_args):
   if 'usuario' in cmd_args:
     # Alguém quer ver sessões de usuário específico:
     id_usr = cmd_args['usuario']
-    usr = obj_usuario.busca_por_identificador(id_usr)
+    usr = obj_usuario.obtem_objeto(id_usr)
     if id_usr != id_usr_ses and not obj_sessao.de_administrador(ses):
       # Usuário comum não pode ver sessãoes de outros:
       erros.append(f"Permissão negada")

@@ -30,10 +30,10 @@ def testa_gera(rot_teste, res_esp, *args):
   return ok
 
 # sessao do admin
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
 
 # sessao de teste
-ses1 = obj_sessao.busca_por_identificador("S-00000001")
+ses1 = obj_sessao.obtem_objeto("S-00000001")
 
 testa_gera("S-E0",  str, ses, ses1, None)
 testa_gera("S-E2",  str, ses, ses1, ["Veja a mensagem abaixo", "Veja a mensagem acima"])

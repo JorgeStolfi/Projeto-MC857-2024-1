@@ -65,7 +65,6 @@ def cria(atrs):
   com = obj_raiz.cria(atrs, tabela, def_obj_mem)
   assert type(com) is obj_comentario.Classe
   if tabela.debug: sys.stderr.write(f"  < {obj_comentario.cria}\n")
-  time.sleep(1.1)
   return com
 
 def muda_atributos(com, mods_mem):
@@ -97,89 +96,51 @@ def obtem_atributo(com, chave):
   global tabela
   return obj_raiz.obtem_atributo(com, chave)
 
-def obtem_comentarios_raiz(vid):
-  assert vid != None and isinstance(vid, obj_video.Classe)
-
-  # Pega os ids comentarios do video
-  lista_id_coms = obj_comentario.busca_por_video(vid.id)
-  lista_id_coms_raiz = []
-
-  for com_id in lista_id_coms:
-    if obj_comentario.obtem_atributo(busca_por_identificador(com_id), 'pai') == None:
-      lista_id_coms_raiz.append(com_id)
-
-  return lista_id_coms_raiz
-
-def monta_no(com):
-  if com == None:
-    return None
-  id_filhos = busca_por_filhos(com.id)
-  lista_coms_filhos = []
-  lista_saida = [com]
-  for id in id_filhos:
-    lista_coms_filhos.append(busca_por_identificador(id))
-  for com_filho in lista_coms_filhos:
-    
-    lista_saida.append((com_filho, monta_no(com_filho)))
-  return tuple(lista_saida)
-
-def obtem_arvore(vid, com, max_coms):
-  # Ainda não implementado o numero maximo de comentarios
-  assert type(max_coms) is int
-
-  # Se comentário não for passado, retorna lista com os comentarios na raiz do video
-  if com == None:
-    return obtem_comentarios_raiz(vid)
-  
-  # Senão, retorna arvore de comentarios
-  assert com != None and isinstance(com, obj_comentario.Classe)
-  raiz = monta_no(com)
-  return raiz
-
-def busca_por_identificador(id_com):
+def obtem_objeto(id_com):
   global tabela
-  com = obj_raiz.busca_por_identificador(id_com, tabela, def_obj_mem)
+  com = obj_raiz.obtem_objeto(id_com, tabela, def_obj_mem)
   assert com == None or type(com) is obj_comentario.Classe
   return com
 
-def busca_por_video(id_vid):
+def busca_por_video(id_vid, sem_pai):
   global tabela
   unico = False
-  if tabela.debug: sys.stderr.write(f"  > {obj_comentario_IMP.busca_por_video}: id_vid = {id_vid}\n");
+  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_video}: {id_vid} = " + f"{id_vid}\n");
   assert type(id_vid) is str
-  id_com = obj_raiz.busca_por_campo('video', id_vid, unico, tabela)
-  if tabela.debug: sys.stderr.write(f"    > id encontrado = {id_com}\n");
-  return id_com
+  unico = False
+  if sem_pai:
+    atrs = { 'video': id_vid, 'pai': None }
+    lista_ids = obj_raiz.busca_por_campos(atrs, unico, tabela)
+  else:
+    lista_ids = obj_raiz.busca_por_campo('video', id_vid, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > ids encontrados = {lista_ids}\n");
+  return lista_ids
 
 def busca_por_autor(id_usr):
   global tabela
-  unico = False
-  if tabela.debug: sys.stderr.write(f"  > {obj_comentario_IMP.busca_por_nome}: id_usr = {id_usr}\n");
+  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_nome}: {id_usr} = " + f"{id_usr}\n");
   assert type(id_usr) is str
+  unico = False
   lista_ids = obj_raiz.busca_por_campo('autor', id_usr, unico, tabela)
-  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {','.join(lista_ids)}\n");
+  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
   return lista_ids
 
-def busca_por_filhos(id_com):
-  global tabela
-  unico = False
-  if tabela.debug: sys.stderr.write(f"  > {obj_comentario_IMP.busca_por_filhos}: id_com = {id_com}\n");
-  assert type(id_com) is str
-  lista_ids = obj_raiz.busca_por_campo('pai', id_com, unico, tabela)
-  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {','.join(lista_ids)}\n");
-
 def busca_por_pai(id_pai):
-  # !! BUSCA POR PAI AINDA NÃO IMPLEMENTADA !!
-  lista_ids = []
+  global tabela
+  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_pai}: {id_pai} = " + f"{id_pai}\n");
+  assert type(id_pai) is str
+  unico = False
+  lista_ids = obj_raiz.busca_por_campo('pai', id_pai, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
   return lista_ids
 
 def busca_por_texto(texto):
-  # !! BUSCA POR TEXTO AINDA NÃO IMPLEMENTADA !!
+  # !!! BUSCA POR TEXTO AINDA NÃO IMPLEMENTADA !!!
   lista_ids = []
   return lista_ids
 
 def busca_por_data(data):
-  # !! BUSCA POR DATA AINDA NÃO IMPLEMENTADA !!
+  # !!! BUSCA POR DATA AINDA NÃO IMPLEMENTADA !!!
   lista_ids = []
   return lista_ids
   
@@ -197,12 +158,15 @@ def cria_testes(verb):
       ( "C-00000003", "V-00000002", "U-00000002", None,         "Falta sal.", ),
       ( "C-00000004", "V-00000003", "U-00000003", None,         "Soberbo!", ),
       ( "C-00000005", "V-00000001", "U-00000003", "C-00000002", "É sim!", ),
-      ( "C-00000006", "V-00000003", "U-00000003", None,         "Supercílio! " + "k"*60, ),
+      ( "C-00000006", "V-00000003", "U-00000004", None,         "Supercílio! " + "k"*60, ),
+      ( "C-00000007", "V-00000001", "U-00000004", "C-00000002", "Batata!", ),
+      ( "C-00000008", "V-00000001", "U-00000002", None,         "Inefável!", ),
+      ( "C-00000009", "V-00000001", "U-00000001", "C-00000005", "Larga mão dessa!\nCoisa feia!\nRespeite os mais bodosos...", ),
     ]
   for id_com, id_vid, id_autor, id_pai, texto in lista_atrs:
-    vid = obj_video.busca_por_identificador(id_vid)
-    autor = obj_usuario.busca_por_identificador(id_autor)
-    pai = obj_comentario.busca_por_identificador(id_pai)
+    vid = obj_video.obtem_objeto(id_vid)
+    autor = obj_usuario.obtem_objeto(id_autor)
+    pai = obj_comentario.obtem_objeto(id_pai)
     atrs = { 'video': vid, 'autor': autor, 'pai': pai, 'texto': texto }
     com = cria(atrs)
     assert com != None and type(com) is obj_comentario.Classe
@@ -230,10 +194,7 @@ def valida_atributos(com, atrs):
   Se {com} é {None}, supõe que um novo comentário está sendo criado. Se {com}
   não é {None}, deve ser um objeto de tipo {obj_comentario.Classe},
   e supõe que {atrs} sao alterações a aplicar nesse
-  comentário. 
-  
-  O comentário pai, se existir, deve ter data estritamente menor que 
-  a data de {com}."""
+  comentário. """
   global tabela
   
   erros = [].copy();
@@ -270,10 +231,6 @@ def valida_atributos(com, atrs):
     vid_pai = obj_comentario.obtem_atributo(pai_fin, 'video')
     if vid_pai != vid_fin: 
       erros.append(f"videos diferentes pai = {str(vid_pai)} com = {str(vid_fin)}")
-      
-    data_pai = obj_comentario.obtem_atributo(pai_fin, 'data')
-    if data_pai >= data_fin: 
-      erros.append(f"comentarios fora de ordem cronológica {data_pai} {data_fin}")
       
   # Verifica completude:
   nargs = 0 # Número de campos em {atrs} reconhecidos.
@@ -355,3 +312,34 @@ def modifica_obj_mem(com, atrs_mod_SQL):
       erro_prog("tipo do campo '" + chave + "' incorreto")
     com.atrs[chave] = val_mem
   return com
+
+def obtem_conversa(raizes):
+  global tabela
+  if raizes == None: raizes = [] # Simplify.
+  assert isinstance(raizes, list) or isinstance(raizes, tuple)
+  
+  conversa = [].copy()
+  
+  for id_com in raizes:
+    com = obj_comentario.obtem_objeto(id_com)
+    if com == None: erro_prog(f"comentario {id_com} não existe")
+    arv = obtem_arvore(com)
+    conversa.append(arv)
+    
+  return conversa
+
+def obtem_arvore(com):
+  global tabela
+  assert com == None or isinstance(com, obj_comentario.Classe)
+  if com == None: return None
+  id_com = obj_comentario.obtem_identificador(com)
+  
+  arv = [ id_com ]
+  
+  lista_ids_filhos = busca_por_pai(id_com)
+
+  if lista_ids_filhos != None:
+    subarvs = obtem_conversa(lista_ids_filhos)
+    arv += subarvs
+
+  return arv

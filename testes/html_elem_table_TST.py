@@ -26,20 +26,23 @@ def testa_gera(rot_teste, res_esp, *args):
   return ok
 
 def cria_tabela():
-  cabecalho=("Coluna 1", "Coluna 2")
-
-  ht_val = [None]*3
-  ht_val[0] = html_elem_input.gera("text", 'veiculo', "ident0", None, None, True, "Me edite!", None, False)
-  ht_val[1] = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
-  ht_val[2] = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
+  val = [None]*3
+  val[0] = html_elem_input.gera("text", 'veiculo', "ident0", None, None, True, "Me edite!", None, False)
+  val[1] = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
+  val[2] = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
 
   linhas = [].copy()
+  ht_lab_cab = "<th style=\"background:green; padding: 10px 20px 30px 40px;\">" + "Coluna 1" + "</th>" 
+  ht_val_cab = "<th>" + "Coluna 2" + "</th>" 
+  cabecalhos = ( ht_lab_cab, ht_val_cab )
+  linhas.append(cabecalhos)
 
   for i in range(3):
-    ht_lab = html_elem_label.gera(f"Teste {i:03d}", ":")
-    linhas.append((ht_lab, ht_val[i]))
+    ht_lab = "<td style=\"background:green;\">" + html_elem_label.gera(f"Teste {i:03d}", ":") + "</td>"
+    ht_val = "<td style=\"font-size: 20px;\">" + val[i] + "</td>"
+    linhas.append((ht_lab, ht_val))
 
-  ht_tab = html_elem_table.gera(linhas, cabecalho)
+  ht_tab = html_elem_table.gera(linhas)
   return ht_tab
 
 testa_gera("Teste", str)

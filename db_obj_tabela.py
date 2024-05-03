@@ -46,13 +46,13 @@ class Classe(db_obj_tabela_IMP.Classe_IMP):
   Sua função é evitar leituras desnecessárias da tabela, e garantir que
   não há duas ou mais cópias de cada objeto na memória. O cache é
   gerenciado automaticamente pelas funções {acrescenta_objeto}, {atualiza_objeto},
-  {busca_por_identificador}, e {busca_por_indice} abaixo.
+  {obtem_objeto}, e {busca_por_indice} abaixo.
   
   Cada objeto no cache é uma cópia fiel de uma linha da tabela, exceto
   que os valores são convertidos de tipos compatíveis com SQL para tipos
   Python na memória.
   
-  A função {busca_por_identificador} de da subclasse {classe} primeiro
+  A função {obtem_objeto} de da subclasse {classe} primeiro
   procura o objeto no {.cache} da tabela correspondente. Se encontrar,
   devolve esse objeto. Se não encontrar, lê linha da tabela, cria o
   objeto na memória, e acrescenta ao cache.
@@ -94,7 +94,7 @@ class Classe(db_obj_tabela_IMP.Classe_IMP):
 #     no cache está inconsistente com sua linha na base de dados.
 #     Portanto, a função {def_obj} não deve tentar fazer buscas na 
 #     tabela {tab}, nem acessar essa linha dessa tabela.
-#     Ela pode porém chamar {busca_por_identificador} para 
+#     Ela pode porém chamar {obtem_objeto} para 
 #     converter campos de {atrs_SQL} que são identificadores 
 #     para objetos.
 #
@@ -171,7 +171,7 @@ def atualiza_objeto(tab, def_obj, ident, mods_SQL):
   A função devolve o próprio objeto {obj}."""
   return db_obj_tabela_IMP.atualiza_objeto(tab, def_obj, ident, mods_SQL)
 
-def busca_por_identificador(tab, def_obj, ident):
+def obtem_objeto(tab, def_obj, ident):
   """Procura na tabela {tab} um objeto com o identificador {ident}, que deve ter a forma 
   "{let}-{ind}" onde {ind} é o índice na tabela. 
   
@@ -181,10 +181,10 @@ def busca_por_identificador(tab, def_obj, ident):
   cria um objeto {obj} chamando {def_obj(None,ident,atrs_SQL)} onde {atrs_SQL} é
   o conteúdo dessa linha, e armazena esse objeto {obj} no cache.  Nos dois casos, devolve o 
   objeto {obj}.  Se não existir a linha {ind} na tabela em disco, devolve {None}."""
-  return db_obj_tabela_IMP.busca_por_identificador(tab, def_obj, ident)
+  return db_obj_tabela_IMP.obtem_objeto(tab, def_obj, ident)
 
 def busca_por_indice(tab, def_obj, ind):
-  """Mesmo que {busca_por_identificador}, mas quer o indice inteiro {ind} da linha da tabela,
+  """Mesmo que {obtem_objeto}, mas quer o indice inteiro {ind} da linha da tabela,
   em vez do identificador do objeto."""
   return db_obj_tabela_IMP.busca_por_indice(tab, def_obj, ind)
 
@@ -208,25 +208,22 @@ def busca_por_campo(tab, chave, valor, res_cols):
   return db_obj_tabela_IMP.busca_por_campo(tab, chave, valor, res_cols)
 
 def busca_por_campos(tab, args, res_cols):
-  """Semelhante a {busca_por_campo}, mas procura linhas com certos valores 
-  em certas colunas, especificados pelo dicionário {args}.  Especificamente,
-  para cada par {ch,val} em {args}, exige que a coluna {ch} da tabela
-  tenha valor {val}."""
-  return db_obj_tabela_IMP.busca_por_campos(tab, args, res_cols)
-
-def busca_por_semelhanca(tab, args, res_cols):
-  """Similar a {busca_por_campos}, mas exige que os valores nas
-  linhas da tabela sejam apenas similares aos valores especificados em {args},
-  em vez de iguais a eles.
-
-  O valor A é semelhante ao valor B se o valor A contém o valor B, sem
+  """
+  Semelhante a {busca_por_campo}, mas procura linhas com certos valores 
+  em certas colunas, especificados pelo dicionário {args}.  
+  
+  Basicamente, para cada par {ch,val} em {args}, exige que a coluna {ch} da tabela
+  tenha valor {val}.  
+  
+  Entretanto, se {val} começa e termina com '%', exige apenas que o valor na
+  coluna {ch} seja apenas similar ao valor especificado em {val} (menos
+  esses caracteres '%'), como no operador 'LIKE' do SQL Especificamente,
+  o valor A é semelhante ao valor B se o valor A contém o valor B, sem
   distinção de letras maiúsculas e minúsculas. O valor 'João da Silva' é
   semelhante aos valores 'João', 'joão', 'da', e 'Silva', por
   exemplo.
-  
-  !!! Deveria aceitar também uma lista {exatos} dizendo campos para busca exata. !!!
-  !!! Melhor: deveria aceitar REs como valores em {args}."""
-  return db_obj_tabela_IMP.busca_por_semelhanca(tab, args, res_cols)
+  """
+  return db_obj_tabela_IMP.busca_por_campos(tab, args, res_cols)
 
 def muda_diagnosticos(tab, val):
   """Liga (se {val} é {True}) ou desliga (se {val} é {False}) os 

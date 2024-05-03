@@ -31,7 +31,7 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
  
 id_ses = "S-00000001"
-ses1 = obj_sessao.busca_por_identificador(id_ses)
+ses1 = obj_sessao.obtem_objeto(id_ses)
 
 # Sessão de usuário comum:
 testa_processa("teste1",  str, ses1, {'usuario': 'U-00000001'})  

@@ -32,8 +32,8 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-ses_admin = obj_sessao.busca_por_identificador("S-00000001")
-ses_comum = obj_sessao.busca_por_identificador("S-00000003")
+ses_admin = obj_sessao.obtem_objeto("S-00000001")
+ses_comum = obj_sessao.obtem_objeto("S-00000003")
 
 # Testa erro de sessão inválida
 testa_processa(" str, sessaoInvalida",  str, None, {})

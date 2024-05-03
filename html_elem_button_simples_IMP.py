@@ -1,4 +1,4 @@
-import html_estilo_de_botao
+import html_estilo_botao
 from util_erros import erro_prog
 import re
 
@@ -14,8 +14,13 @@ def gera(texto, URL, cmd_args, cor_fundo):
         sep = '&'
 
   # Constrói o botão propriamente dito:
-  estilo = html_estilo_de_botao.gera(cor_fundo)
-  html = "<button type=\"button\" style=\"" + estilo + "\" onclick=\"location.href='" + URL + "'\">" + texto + "</button>"
+  estilo = html_estilo_botao.gera(cor_fundo)
+  html = \
+    "<button" + \
+    " type=\"button\"" + \
+    " style=\"" + estilo + "\n\"" + \
+    " onclick=\"location.href='" + URL + "'\"" + \
+    ">" + texto + "</button>"
   return html
       
 def verifica_chave(chave): 

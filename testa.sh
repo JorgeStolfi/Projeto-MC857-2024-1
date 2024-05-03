@@ -31,7 +31,7 @@ mkdir -p testes/saida
 ( cd testes/saida && if [[ ! ( -r videos ) ]]; then ln -s ../videos; fi )
 
 # Limpa arquivos de rodadas anteriores:
-rm -f ${otext} ${opage} ${opref}.*.html 
+rm -fv ${otext} ${opage} ${opref}.*.html 
 
 echo "=== executando teste \"testes/${modulo}_TST.py\" ======================" 1>&2
 export PYTHONPATH=".:testes:..:/usr/lib/python3.6/site-packages/sos/plugins" ; \

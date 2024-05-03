@@ -1,55 +1,49 @@
 import obj_comentario
 import obj_usuario
 import obj_video
+import html_elem_item_de_resumo
 import sys
-import html_elem_paragraph
-import html_elem_span
 import html_elem_button_simples
 
 def gera(com, mostra_autor, mostra_video, mostra_pai):
-  estilo_parag = "\n display:block; word-wrap:break-word;  width: 100%;\n  margin-top: 10px;\n  margin-bottom: 2px;\n  text-indent: 0px;\n  line-height: 75%;"
-  estilo_texto = f"font-family: Courier; font-size: 20px; font-weight: bold; padding: 2px; text-align: left; color: #263238;"
-
-  com_atrs = obj_comentario.obtem_atributos(com)
-
-  sys.stderr.write('\n'.join(str(i)+str(j) for i,j in com_atrs.items()))
-  itens_resumo = []
-
-  if mostra_autor:
-    autor = com_atrs['autor']
-    autor_id = obj_usuario.obtem_identificador(autor)
-    ht_autor = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, autor_id))
-    itens_resumo.append(ht_autor)
   
-  if mostra_video:
-    video = com_atrs['video']
-    video_id = obj_video.obtem_identificador(video)
-    ht_video = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, video_id))
-    itens_resumo.append(ht_video)
+  com_id = obj_comentario.obtem_identificador(com) if com != None else None
+  atrs = obj_comentario.obtem_atributos(com) if com != None else None
 
-  if mostra_pai:
-    pai = com_atrs['pai']
-    if pai != None:
-      pai_id = obj_comentario.obtem_identificador(pai)
-      ht_pai = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, pai_id))
+  itens_resumo = [].copy()
+  
+  colunas = [ 'comentario', 'video', 'autor',  'pai', 'data',  'texto' ]
+  for chave in colunas:
+    if chave == 'comentario':
+     mostra = True
+     texto = com_id if com != None else "Comentário"
+    elif chave == 'video':
+      mostra = mostra_video
+      texto = obj_video.obtem_identificador(atrs['video']) if com != None else "Vídeo"
+    elif chave == 'pai':
+      mostra = mostra_pai
+      if com == None:
+        texto = "Pai"
+      else:
+        pai = atrs['pai'] if 'pai' in atrs else None
+        texto = obj_comentario.obtem_identificador(pai) if pai != None else " "
+    elif chave == 'autor':
+      mostra = mostra_autor;
+      texto = obj_usuario.obtem_identificador(atrs['autor']) if com != None else "Autor"
     else:
-      ht_pai = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, pai))
-    itens_resumo.append(ht_pai)
-
-  data = com_atrs['data']
+      mostra = True
+      texto = str(atrs[chave]) if com != None else chave.capitalize()
+      
+    if mostra:
+      cab = (com == None)
+      cor_fundo = None
+      alinha = "left"
+      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo,alinha)
+      itens_resumo.append(ht_item)
   
-  ht_data = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, data))
-  itens_resumo.append(ht_data)
-
-  texto = com_atrs['texto']
-  max_texto = 30
-  ht_texto = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, texto[:max_texto]))
-  itens_resumo.append(ht_texto)
-
-  
-  
-  bt_args = { 'comentario': obj_comentario.obtem_identificador(com) }
-  bt_ver = html_elem_button_simples.gera("Ver", "buscar_comentarios_de_video", bt_args, "#eeeeee")
-  itens_resumo.append(bt_ver)
+  if com != None:
+    bt_args = { 'comentario': com_id }
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, "#eeeeee")
+    itens_resumo.append("<td>" + bt_ver + "</td>")
 
   return itens_resumo

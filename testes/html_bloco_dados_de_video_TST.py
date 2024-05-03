@@ -38,7 +38,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Testes com video existente:
 vid1_id = "V-00000001"
-vid1 = obj_video.busca_por_identificador(vid1_id)
+vid1 = obj_video.obtem_objeto(vid1_id)
 assert vid1 != None
 vid1_atrs = obj_video.obtem_atributos(vid1)
 
@@ -47,7 +47,7 @@ for edita_titulo in False, True:
   testa_gera(tag, str, vid1_id, vid1_atrs, edita_titulo)
 
 # Teste com video a carregar:
-vid2_autor = obj_usuario.busca_por_identificador("U-00000003")
+vid2_autor = obj_usuario.obtem_objeto("U-00000003")
 vid2_atrs_nul = { 'autor': vid2_autor, }
 vid2_atrs_tit = { 'autor': vid2_autor, 'titulo': "Panacéia patética", }
 

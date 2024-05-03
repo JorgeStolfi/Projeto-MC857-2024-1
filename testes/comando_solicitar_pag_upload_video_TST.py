@@ -30,11 +30,11 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # Uma sessão de administrador:
-ses_A1 = obj_sessao.busca_por_identificador("S-00000001")
+ses_A1 = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses_A1)
 
 # Uma sessão de usuário comum:
-ses_C1 = obj_sessao.busca_por_identificador("S-00000003")
+ses_C1 = obj_sessao.obtem_objeto("S-00000003")
 assert not obj_sessao.de_administrador(ses_C1)
 
 testa_processa("A1",  str, ses_A1, {})

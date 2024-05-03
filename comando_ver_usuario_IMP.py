@@ -18,10 +18,11 @@ def processa(ses, cmd_args):
       erros.append("O identificador do usuário não foi especificado")
     else:
       usr_ses = obj_sessao.obtem_usuario(ses)
+      assert usr_ses != None
       usr = usr_ses
       id_usr = obj_usuario.obtem_identificador(usr)
   else:
-    usr = obj_usuario.busca_por_identificador(id_usr)
+    usr = obj_usuario.obtem_objeto(id_usr)
     if usr == None:
       erros.append(f"O usuário {id_usr} não existe")
   

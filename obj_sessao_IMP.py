@@ -126,19 +126,20 @@ def de_administrador(ses):
   usr = obtem_usuario(ses)
   return obj_usuario.obtem_atributo(usr, 'administrador')
 
-def busca_por_identificador(id_ses):
+def obtem_objeto(id_ses):
   global tabela
   if id_ses == None: return None
-  ses = obj_raiz.busca_por_identificador(id_ses, tabela, def_obj_mem)
+  ses = obj_raiz.obtem_objeto(id_ses, tabela, def_obj_mem)
   return ses
 
 def busca_por_usuario(usr, soh_abertas):
   global tabela
   if usr == None: return [].copy()
   id_usr = obj_usuario.obtem_identificador(usr)
+  sys.stderr.write(f"  @#@ usr = {str(usr)} id_usr = {str(id_usr)} tabela = {str(tabela)}\n")
   lista_ids_ses = obj_raiz.busca_por_campo('usr', id_usr, False, tabela) # IDs das sessões deste usuário.
   if soh_abertas:
-    lista_ses = list(map(lambda id: busca_por_identificador(id), lista_ids_ses)) # Pega objetos.
+    lista_ses = list(map(lambda id: obtem_objeto(id), lista_ids_ses)) # Pega objetos.
     lista_ses_abertas = list(filter(lambda ses: aberta(ses), lista_ses))
     lista_ids_ses = list(map(lambda ses: obtem_identificador(ses), lista_ses_abertas))
   return lista_ids_ses
@@ -176,7 +177,7 @@ def cria_testes(verb):
       ( "S-00000006", "U-00000008", "FGHIJKLMNOP", True  ),
     ]
   for id_ses_esp, id_usr, cookie, admin_esp in lista_ucs:
-    usr = obj_usuario.busca_por_identificador(id_usr)
+    usr = obj_usuario.obtem_objeto(id_usr)
     assert usr != None and type(usr) is obj_usuario.Classe
     ses = cria(usr, cookie)
     id_ses = obj_sessao.obtem_identificador(ses)

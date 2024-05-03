@@ -1,4 +1,4 @@
-import html_estilo_de_botao
+import html_estilo_botao
 import html_elem_input
 
 def gera(texto, URL, cmd_args, cor_fundo):
@@ -17,7 +17,7 @@ def gera(texto, URL, cmd_args, cor_fundo):
       args_html += ht_input
 
   # O botão propriamente dito:
-  estilo = html_estilo_de_botao.gera(cor_fundo)
+  estilo = html_estilo_botao.gera(cor_fundo)
   html = args_html + \
     "<input" + \
     " type=\"submit\"" + \

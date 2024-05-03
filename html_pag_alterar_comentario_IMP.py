@@ -14,7 +14,7 @@ def gera(ses, id_com, atrs, erros):
   assert erros == None or type(erros) is tuple or type(erros) is list
   
   # Obtem o comentário a ver:
-  com = obj_comentario.busca_por_identificador(id_com) 
+  com = obj_comentario.obtem_objeto(id_com) 
   assert com != None, f"Comentário {id_com} não existe"
   
   # Cria o formulário básico:

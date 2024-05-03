@@ -32,19 +32,22 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
+# Um comentário sem pai:
 com1_id = "C-00000001"
-com1 = obj_comentario.busca_por_identificador(com1_id)
+com1 = obj_comentario.obtem_objeto(com1_id)
+assert obj_comentario.obtem_atributo(com1, 'pai') == None
 
-com2_id = "C-00000002"
-com2 = obj_comentario.busca_por_identificador(com2_id)
+# Um comentário com pai:
+com2_id = "C-00000005"
+com2 = obj_comentario.obtem_objeto(com2_id)
+assert obj_comentario.obtem_atributo(com2, 'pai') != None
 
-com5_id = "C-00000005"
-com5 = obj_comentario.busca_por_identificador(com5_id)
-
-for ver in False, True:
-  testa_gera("TCOMENT1",  list, com1, ver, ver, ver)
-  testa_gera("TCOMENT2",  list, com2, ver, ver, ver)
-  testa_gera("TCOMENT5",  list, com5, ver, ver, ver)
+for ms_autor in False, True:
+  for ms_video in False, True:
+    for ms_pai in False, True:
+      xargs = f"aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}_"
+      testa_gera(xargs + "C1",  list, com1, ms_autor, ms_video, ms_pai)
+      testa_gera(xargs + "C2",  list, com2, ms_autor, ms_video, ms_pai)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")

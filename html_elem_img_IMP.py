@@ -1,16 +1,14 @@
 
-def gera(nome, alt, tam):
-  """Constrói o HTML para a imagem com nome {nome} e texto alternativo {alt},
-  com {tam} pixels de altura."""
+def gera(arquivo, descr, alt_px):
 
-  #Se receber valor {None}, converte string para vazia
-  if nome is None:
-      nome = ""
-
-  #Se campo nome não for string {vazia} carrega imagem solicitada, senão carrega imagem cinza.png
-  if nome and not nome.isspace():
-      ht_img = ("<img src=\"imagens/" + nome + "\" alt=\"" + alt + "\" style=\"float:left;height:%dpx;\"/>" % tam)
+  # Se receber valor {None}, converte string para vazia
+  if arquivo is None: 
+    arquivo = "imagens/cinza.png"
+    if descr == None: descr = "** Imagem não especificada."
   else:
-      ht_img = ("<img src=\"imagens/cinza.png" + nome + "\" alt=\"" + alt + "\" style=\"float:left;height:%dpx;\"/>" % tam)
+    if descr == None: descr = f"Imagem {arquivo}"
+
+  # O atributo {alt} é para quando a imagem não pode ser mostrada; {title} é o que aparece no mouse hover.
+  ht_img = ("<img src=\"%s\" alt=\"%s\" title=\"%s\" style=\"float:left;height:%dpx;\"/>" % (arquivo, descr, descr, alt_px))
 
   return ht_img

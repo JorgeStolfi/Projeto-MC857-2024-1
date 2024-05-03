@@ -28,8 +28,6 @@ def testa_funcao_validadora(rot_teste, valido, funcao, *args):
   ok_global = ok_global and ok
   return ok
 
-# ==================================# !!! Implementar conforme documentação na interface !!!====================================
-
 func_bool = util_valida_campo.booleano
 for val in None, True, False, 410:
   for nulo_ok in False, True:
@@ -73,19 +71,6 @@ testa_funcao_validadora("data_ZonaINvalida_bad",      False,  func_data, 'niver'
 
 testa_funcao_validadora("data_None_nulokT_ok",   True,   func_data, 'niver', None, True) 
 testa_funcao_validadora("data_None_nulokF_bad",  False,  func_data, 'niver', None, False)
-
-func_titulo_video = util_valida_campo.titulo_de_video
-#positivo
-testa_funcao_validadora("titulo_valido_ok",      True,   func_titulo_video, 'titulo', 'Velozes e Furiosos 2', True)
-testa_funcao_validadora("titulo_validoNone_ok",  True,   func_titulo_video, 'titulo', None,                   True)
-
-#Negativo
-testa_funcao_validadora("titulo_menos10Caracteres_bad",      False, func_titulo_video, 'titulo', 'Val', True)
-testa_funcao_validadora("titulo_mais60_Caracteres_bad",      False, func_titulo_video, 'titulo', ("a"*62), True)
-testa_funcao_validadora("titulo_caracterNaoIso_bad",         False, func_titulo_video, 'titulo', 'Titulo Sem ISO ぁ', True)
-testa_funcao_validadora("titulo_primeiraLetraMinuscula_bad", False, func_titulo_video, 'titulo', 'titulo minusculo comeco', True)
-testa_funcao_validadora("titulo_finalBranco_bad",            False, func_titulo_video, 'titulo', 'Titulo final branco  ', True)
-testa_funcao_validadora("titulo_duploBranco_bad",            False, func_titulo_video, 'titulo', 'Titulo duplo  branco', True)
 
 # ----------------------------------------------------------------------
 # Veredito final:

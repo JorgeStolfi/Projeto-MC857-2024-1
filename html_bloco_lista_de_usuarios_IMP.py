@@ -4,20 +4,16 @@ import html_elem_table
 import html_elem_div
 import html_elem_span
 import sys
-import html_estilo_cabecalho_de_tabela
 
 def gera(lista_ids_usr):
-  # Linha de cabeçalho:
-  est_cab = html_estilo_cabecalho_de_tabela.gera()
-  cabs_raw = ['Usuário', 'Email']
-  cabecalho = [].copy()
-  for cb in cabs_raw:
-    cabecalho.append(html_elem_div.gera(est_cab, cb))
-
   linhas = [].copy()
+  
+  cabecalhos = html_linha_resumo_de_usuario.gera(None)
+  linhas.append(cabecalhos)
+
   for id_usr in lista_ids_usr:
     # busca por identificador da usuario no banco
-    usr = obj_usuario.busca_por_identificador(id_usr)
+    usr = obj_usuario.obtem_objeto(id_usr)
 
     # Gera uma lista de fragmentos HTML com as informacoes dessa usuario
     res_campos = html_linha_resumo_de_usuario.gera(usr)
@@ -26,6 +22,6 @@ def gera(lista_ids_usr):
     linhas.append(res_campos)
 
   # Gera a tabela HTML a partir da lista de linhas
-  ht_tabela = html_elem_table.gera(linhas, cabecalho)
+  ht_tabela = html_elem_table.gera(linhas)
 
   return ht_tabela

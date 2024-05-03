@@ -14,7 +14,7 @@ def gera(ses, id_vid, atrs, erros):
   assert erros == None or type(erros) is tuple or type(erros) is list
   
   # Obtem o vídeo a ver:
-  vid = obj_video.busca_por_identificador(id_vid) 
+  vid = obj_video.obtem_objeto(id_vid) 
   assert vid != None, f"Vídeo {id_vid} não existe"
   
   # Cria o formulário básico:

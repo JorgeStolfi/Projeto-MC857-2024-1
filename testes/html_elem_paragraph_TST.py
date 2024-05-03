@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-import html_elem_paragraph; from html_elem_paragraph import *
+import html_elem_paragraph
 import util_testes
 
 import sys

@@ -19,7 +19,13 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-testa_gera("1", str, "GO.png", "Texto alternativo da imagem", 100)
+testa_gera("arqT-descrT", str, "imagens/wikimedia_dog.png", "Careta canina", 200)
+
+testa_gera("arqT-descrN", str, "imagens/wikimedia_dog.png", None, 200)
+
+testa_gera("arqN-descrT", str, None, "Use sua imaginação", 200)
+
+testa_gera("arqN-descrN", str, None, None, 200)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.");

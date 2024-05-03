@@ -1,1 +1,0 @@
-Implement tests for comando_ver_video using *erro_prog* and list of video ids from V-00000001 to V-00000004.

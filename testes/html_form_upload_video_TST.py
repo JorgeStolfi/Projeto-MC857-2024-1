@@ -38,7 +38,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Testes das funções de {gera_html_elem_form}:
 usr1_id = "U-00000003"
-usr1 = obj_usuario.busca_por_identificador(usr1_id)
+usr1 = obj_usuario.obtem_objeto(usr1_id)
 
 atrs1 = { 'arq': "banana.mp4", 'titulo': "Bananas comendo macacos", }
 

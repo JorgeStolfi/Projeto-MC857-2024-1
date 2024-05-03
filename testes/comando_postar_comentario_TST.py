@@ -38,7 +38,7 @@ def testa_processa(ses, cmd_args, deveria_postar):
   sys.stderr.write(f"  ultimo comentário depois = {ult_id_new}\n")
   
   if ult_id_new != ult_id_old:
-    com_new_obj = obj_comentario.busca_por_identificador(ult_id_new)
+    com_new_obj = obj_comentario.obtem_objeto(ult_id_new)
     com_new_atrs = obj_comentario.obtem_atributos(com_new_obj) if com_new_obj != None else None
     sys.stderr.write(f"  comentario postado = {com_new_id} atrs = {str(com_new_atrs)}\n")
     if deveria_postar:

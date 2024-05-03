@@ -5,6 +5,7 @@ import html_bloco_cabecalho
 import html_bloco_menu_geral
 import html_bloco_erro
 import html_elem_span
+import html_estilo_texto
 import html_bloco_rodape
 
 import re
@@ -13,74 +14,48 @@ import sys
 pgn_debug = False
 
 def gera(ses, ht_conteudo, erros):
+
+  titulo = "Oito-Cinco-Sete"
+  
+  # Cabeçalho de página HTML:
+  ht_abre = \
+    "<!DOCTYPE HTML>\n" + \
+    "<html>\n" + \
+    "<head>\n" + \
+    "<link rel=\"icon\" href=\"imagens/favicon.png\" type=\"image/x-icon\"> " +  \
+    "<link rel=\"shortcut icon\" href=\"imagens/favicon.png\" type=\"image/x-icon\"> " +  \
+    "<link rel=\"icon\" href=\"imagens/favicon-32x32.png\" sizes=\"32x32\"> " +  \
+    "<link rel=\"shortcut icon\" href=\"imagens/favicon-32x32.png\" sizes=\"32x32\" type=\"image/png\"> " + \
+    "<meta charset=\"UTF-8\"/>\n" + \
+    "<title>" + titulo + "</title>\n" + \
+    "</head>\n" + \
+    "<body style=\"background-color:#eeeeee; text-indent: 0px\">"  
+
   # Cabeçalho das páginas:
-  ht_cabe = html_bloco_cabecalho.gera("Oito-Cinco-Sete", True)
-
-  logado = (ses != None)
-  if logado:
-    usr = obj_sessao.obtem_usuario(ses)
-
-    nome_usuario = obj_usuario.obtem_atributos(usr)['nome']
-    admin = obj_usuario.obtem_atributos(usr)['administrador']
-    id_usr = obj_usuario.obtem_identificador(usr)
-    num_ses = len(obj_sessao.busca_por_usuario(usr, True));
-    if pgn_debug: sys.stderr.write("  > usuario %s num_ses = %d\n" % (id_usr, num_ses))
-  else:
-    nome_usuario = None
-    admin = False
-    num_ses = 0
+  ht_cabe = html_bloco_cabecalho.gera(titulo, True)
 
   # Menu geral no alto da página:
-  ht_menu = html_bloco_menu_geral.gera(logado, nome_usuario, admin)
+  usr = obj_sessao.obtem_usuario(ses) if ses != None else None
+  ht_menu = html_bloco_menu_geral.gera(usr)
 
-  # Mensagem de multiplas sessoes:
-  if num_ses > 1:
-    estilo_multi_ses = None; # cor_texto = "#FF0000" cor_fundo = "#eeeeee"
-    if num_ses == 2:
-      ht_multi_ses = html_elem_span.gera(estilo_multi_ses, "Você tem outra sessao aberta.")
-    else:
-      ht_multi_ses = html_elem_span.gera(estilo_multi_ses, "Você tem outras %d sessoes abertas." % (num_ses-1))
-  else:
-    ht_multi_ses = None
-
-  if logado:
-    ht_nome_usuario = gera_nome_e_avatar_usuario(id_usr, nome_usuario, admin)
-  else:
-    ht_nome_usuario = None
-
-  # Mensagens de erro - quebra e limpa:
-  if erros == None:
-    erros = []
-  elif type(erros) == str:
-    # Split lines, create a list:
-    erros = re.split('[\n]', erros)
-  assert type(erros) is list or type(erros) is tuple
-  erros = [ er for er in erros if er != None ]
-  erros = [ er.strip() for er in erros ]
-  erros = [ er for er in erros if len(er) > 0 ]
-  if len(erros) != 0:
-    erros = "<br/>\n" + "<br/>\n".join(erros)
-    ht_erros = html_bloco_erro.gera(erros) + "\n"
-  else:
-    ht_erros = ""
+  # Mensagens de erro, ou "":
+  ht_erros = html_bloco_erro.gera(erros)
 
   # Rodapé da página:
   ht_roda = html_bloco_rodape.gera()
+    
+  # Fecha arquivo HTML:
+  ht_fecha = \
+    "  </body>\n" + \
+    "</html>\n"
 
   # Monta a página:
   pagina = \
+    ht_abre + "\n" + \
     ht_cabe + "<br/>\n" + \
     ht_menu + "<br/>\n" + \
-    ( ht_multi_ses + "<br/>\n" if ht_multi_ses != None else "" ) + \
-    ( ht_nome_usuario + "<br/>\n" if ht_nome_usuario != None else "" ) + \
-    ht_erros + "<br/>\n" + \
+    ( ( ht_erros + "<br/>\n" ) if ht_erros != "" else "") + \
     ht_conteudo + "<br/>\n" + \
-    ht_roda
+    ht_roda + "\n" + \
+    ht_fecha
   return pagina
-
-def gera_nome_e_avatar_usuario(id_usr, nome_usuario, admin):
-  """Gera o avatar e o texto "Oi {nome}" para uma página genérica.  O parâmetro {admin} diz se é administrador."""
-  avatar = ("<img src=\"avatares/avatar_" + id_usr + ".png\" style=\"float:left;height:20px;\"/>")
-  nome = html_elem_span.gera(None, "Oi,  " + nome_usuario)
-  
-  return avatar + "&nbsp;" + nome

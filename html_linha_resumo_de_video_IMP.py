@@ -1,36 +1,46 @@
 import obj_video
 import obj_usuario
-import html_elem_paragraph
+import html_elem_item_de_resumo
 import html_elem_span
 import html_elem_button_simples
+import html_estilo_texto
 
-def gera(vid):
-  atrs = obj_video.obtem_atributos(vid)
+def gera(vid, mostra_autor):
 
-  estilo_parag = "\n display:block; word-wrap:break-word;  width: 100%;\n  margin-top: 10px;\n  margin-bottom: 2px;\n  text-indent: 0px;\n  line-height: 75%;"
-  estilo_texto = f"font-family: Courier; font-size: 20px; font-weight: bold; padding: 2px; text-align: left; color: #263238;"
+  atrs = obj_video.obtem_atributos(vid) if vid != None else None
 
-  autor = atrs['autor']
-  id_autor = obj_usuario.obtem_identificador(autor)
-  ht_usr = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, id_autor))
+  itens_resumo = []
 
-  titulo = atrs['titulo']
-  ht_titulo = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, titulo))
+  colunas = [ 'video', 'autor', 'data', 'duracao', 'largura', 'altura', 'titulo' ]
+  
+  destaque = False
+  for chave in colunas:
+    if chave == 'video':
+      mostra = True
+      texto = obj_video.obtem_identificador(vid) if vid != None else "Vídeo"
+    elif chave == 'autor':
+      mostra = mostra_autor
+      texto = obj_usuario.obtem_identificador(atrs['autor']) if vid != None else "Autor"
+    elif chave == 'duracao':
+      mostra = True
+      texto = f"{atrs[chave]/1000:.3f} s" if vid != None else "Duração"
+    elif chave == 'altura' or chave == 'largura':
+      mostra = True
+      texto = f"{str(atrs[chave])} px" if vid != None else chave.capitalize()
+    else:
+      mostra = True
+      texto = atrs[chave] if vid != None else chave.capitalize()
+      
+    if mostra:
+      cab = (vid == None)
+      cor_fundo = None
+      alinha = "left"
+      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha)
+      itens_resumo.append(ht_item)
 
-  data = atrs['data']
-  ht_data = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, data))
+  if vid != None:
+    bt_args = { 'video': obj_video.obtem_identificador(vid) }
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_args, "#ffcc88")
+    itens_resumo.append("<td>" + bt_ver + "</td>")
 
-  duracao = atrs['duracao']
-  ht_duracao = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, str(duracao)))
-
-  largura = atrs['largura']
-  ht_largura = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, str(largura)))
-
-  altura = atrs['altura']
-  ht_altura = html_elem_paragraph.gera(estilo_parag, html_elem_span.gera(estilo_texto, str(altura)))
-
-  # TODO: ver_video precisa ser implementado
-  bt_arg = {'video': obj_video.obtem_identificador(vid)}
-  bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_arg, "#ffcc88")
-
-  return [ht_usr, ht_titulo, ht_data, ht_duracao, ht_largura, ht_altura, bt_ver]
+  return itens_resumo

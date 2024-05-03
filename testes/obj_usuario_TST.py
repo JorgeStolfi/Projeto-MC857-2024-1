@@ -16,7 +16,7 @@ obj_usuario.inicializa_modulo(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-def testa_valida(rot_teste, funcao, res_esp, *args):
+def testa_funcao_validadora(rot_teste, funcao, res_esp, *args):
   global ok_global
   modulo = obj_usuario
   html = False   # Resultados string já são HTML?
@@ -26,53 +26,74 @@ def testa_valida(rot_teste, funcao, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-funcao = obj_usuario.valida_nome_de_usuario
-for xrot, xvalido, val in \
-    ( ( "Nulo",               True,  None,                                     ),
-      ( "Valido",             True,  "José da Silvã P. O'Hara Costa-Gravas",   ), 
-      ( "ApostInvalido",      False, "José' da Silva P. O'Hara Costa-Gravas",  ),
-      ( "ApostInválido",      False, "José da Silva P'. O'Hara Costa-Gravas ", ),
-      ( "MuitoCurto",         False, "José", ),
-      ( "Incerto",            True,  "Ba'Ana", ),
-      ( "Valido",             True,  "Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghij", ),
-      ( "MuitoLongo",         False, "José Josefino Josualdo Josismar Josias Josenildo Josafá Josênio", ),
-      ( "HifenInvalido",      False, "José-da Silva P. O'Hara Costa-Gravas",    ),
-      ( "BrancoInicial",      False, " José da Silva P. O'Hara Costa-Gravas",   ),
-      ( "BrancoFinal",        False, "José da Silva P. O'Hara Costa-Gravas ",   ),
-      ( "BrancoDuplo",        False, "José da Silva P.  O'Hara Costa-Gravas",   ),
-      ( "PontoInválido",      False, "José da Silva P.O'Hara Costa-Gravas ",    ),
-      ( "CaracsInvalidos",    False, "Elon X-φ ≥ 17",                           )
+funcao = obj_usuario.valida_nome
+# {xvalid} = válido em qualquer caso (depende de {nulo_ok}).
+# {xvalparc} = válido se {parcial = True} (depende de {nulo_ok}).
+for xrot, xvalid, xvalparc, val in \
+    ( # Válidos como parciais e completos:
+      ( "Nulo",               True,   True,   None, ),
+      ( "Valido1",            True,   True,   "José da Silvã P. O'Hara Costa-Gravas",   ), 
+      ( "Valido2",            True,   True,   "P.-Louis Sant'Ana", ),
+      ( "Valido3",            True,   True,   "Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghij", ),
+      ( "Valido4",            True,   True,   "Abcdefghij", ),
+      # Válidos só como parciais:
+      ( "MuitoCurtoFull9",    False,  True,   "José Josias",   ),
+      ( "BrancoInicial",      False,  True,   " José da Silva P. O'Hara Costa-Gravas",   ),
+      ( "BrancoFinal",        False,  True,   "José da Silva P. O'Hara Costa-Gravas ",   ),
+      # Inválidos mesmo somo parciais: 
+      ( "MuitoCurtoParc2",    False,  False,  "Jo",             ),
+      ( "CaracsInvalidos",    False,  False,  "Elon X-φ ≥ 17",  ),
+      ( "BrancoDuplo",        False,  False,  "José da Silva P.  O'Hara Costa-Gravas",   ),
+      ( "MuitoLongo",         False,  False,  "José Josefino Josualdo Josismar Josias Josenildo Josafá Josênio", ),
+      ( "ApostInvalido1",     False,  False,  "José' da Silva P. O'Hara Costa-Gravas",   ),
+      ( "ApostInvalido2",     False,  False,  "José da Silva P'. O'Hara Costa-Gravas",   ),
+      ( "HifenInvalido1",     False,  False,  "José-da Silva P-. O'Hara Costa-Gravas",   ),
+      ( "HifenInvalido2",     False,  False,  "José-da Silva O'Hara Costa-Gravas",       ),
+      ( "PontoInvalido2",     False,  False,  "José da Silva P.O'Hara Costa-Gravas ",    ),
+      ( "ApostInicial",       False,  True,   "'Hara Costa-Gravas",  ),
+      ( "ApostFinal",         False,  True,   "José da Silva O'",    ),
+      ( "Hifeninicial",       False,  True,   "José-da Silva P. O'Hara Costa-Gravas",    ),
+      ( "HifenFinal",         False,  True,   "Costa-",      ),
+      ( "PontoInicial",       False,  True,   ".-Louis",     ),
+      ( "PontoFinal",         False,  True,   "José da S.",  ),
     ):
-  for nulo_ok in ( False, True ) if (val == None or xrot == "A") else ( False, ):
-    if xvalido or ( val != None and not nulo_ok):
-      valido = xvalido and (val != None or nulo_ok)
-      rot_teste = "nome_" + xrot + "_nulok" + str(nulo_ok)[0] + ("_ok" if valido else "_bad")
-      res_esp = [] if valido else list
-      testa_valida(rot_teste, funcao, res_esp,  "padrinho", val, nulo_ok)
+  for nulo_ok in ( False, True ):
+    for parcial in ( False, True ):
+      if val == None:
+        valido = nulo_ok
+      elif parcial:
+        valido = xvalparc
+      else:
+        valido = xvalid
+      # Exclui casos repetitivos: 
+      if (not nulo_ok) or (nulo_ok and (val == None or xrot == "Valido1")):
+        rot_teste = "nome_" + xrot + "_nulok" + str(nulo_ok)[0] + "_parcial" + str(parcial)[0] + ("_ok" if valido else "_bad")
+        res_esp = [] if valido else list
+        testa_funcao_validadora(rot_teste, funcao, res_esp,  "padrinho", val, nulo_ok, parcial)
       
 # ======================================================================
 
 funcao = obj_usuario.valida_senha
-testa_valida("senha_Valida_ok",         funcao, [],   'password', "123(meia)4", True) 
-testa_valida("senha_MuitoCurta_bad",    funcao, list, 'password', "123",        True) 
-testa_valida("senha_MuitoRepetida_bad", funcao, list, 'password', "111111111",  True) 
-testa_valida("senha_SoLetras_bad",      funcao, list, 'password', "Segredo",    True) 
-testa_valida("senha_MuitoLonga_bad",    funcao, list, 'password', "X"+("a"*60), True) 
+testa_funcao_validadora("Valida_ok",         funcao, [],   'password', "123(meia)4", True) 
+testa_funcao_validadora("MuitoCurta_bad",    funcao, list, 'password', "123",        True) 
+testa_funcao_validadora("MuitoRepetida_bad", funcao, list, 'password', "111111111",  True) 
+testa_funcao_validadora("SoLetras_bad",      funcao, list, 'password', "Segredo",    True) 
+testa_funcao_validadora("MuitoLonga_bad",    funcao, list, 'password', "X"+("a"*60), True) 
 
-testa_valida("senha_None_nulokT_ok",    funcao, [],   'password', None, True)  
-testa_valida("senha_None_nulokF_bad",   funcao, list, 'password', None, False)
+testa_funcao_validadora("None_nulokT_ok",    funcao, [],   'password', None, True)  
+testa_funcao_validadora("None_nulokF_bad",   funcao, list, 'password', None, False)
 
 # ======================================================================
 
 funcao = obj_usuario.valida_email
-testa_valida("email_Valido_ok",          funcao, [],    'spam-to', "quem_123@ic.u-camp.br", True) 
-testa_valida("email_DuasArrobas_bad",    funcao, list,  'spam-to', "123@456@onde.br",       True) 
-testa_valida("email_NenhumaArroba_bad",  funcao, list,  'spam-to', "nenhures",              True) 
-testa_valida("email_HostSemPonto_bad",   funcao, list,  'spam-to', "tomate@beringela",      True) 
-testa_valida("email_MuitoLonga_bad",     funcao, list,  'spam-to', "X"+("a"*64)+"@gov.br",  True) 
+testa_funcao_validadora("Valido_ok",          funcao, [],    'spam-to', "quem_123@ic.u-camp.br", True) 
+testa_funcao_validadora("DuasArrobas_bad",    funcao, list,  'spam-to', "123@456@onde.br",       True) 
+testa_funcao_validadora("NenhumaArroba_bad",  funcao, list,  'spam-to', "nenhures",              True) 
+testa_funcao_validadora("HostSemPonto_bad",   funcao, list,  'spam-to', "tomate@beringela",      True) 
+testa_funcao_validadora("MuitoLonga_bad",     funcao, list,  'spam-to', "X"+("a"*64)+"@gov.br",  True) 
 
-testa_valida("email_None_nulokT_ok",     funcao, [],    'spam-to', None, True) 
-testa_valida("email_None_nulokF_bad",    funcao, list,  'spam-to', None, False)
+testa_funcao_validadora("None_nulokT_ok",     funcao, [],    'spam-to', None, True) 
+testa_funcao_validadora("None_nulokF_bad",    funcao, list,  'spam-to', None, False)
 
 # ======================================================================
 

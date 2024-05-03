@@ -40,11 +40,8 @@ ids_usuarios = [
   "U-00000009",
 ]
 
-for ver in (False, True):
-  for fechar in (False, True):
-    tag = "ver" + str(ver)[0] + "-fechar" + str(fechar)[0] 
-    testa_gera("muitas-" + tag, str, ids_usuarios)
-    testa_gera("lhufas-" + tag, str, ids_usuarios)
+testa_gera("muitos", str, ids_usuarios)
+testa_gera("lhufos", str, ids_usuarios)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")

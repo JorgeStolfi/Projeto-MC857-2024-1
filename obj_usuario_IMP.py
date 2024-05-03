@@ -86,9 +86,9 @@ def obtem_atributo(usr, chave):
   global tabela
   return obj_raiz.obtem_atributo(usr,chave)
 
-def busca_por_identificador(id_usr):
+def obtem_objeto(id_usr):
   global tabela
-  usr = obj_raiz.busca_por_identificador(id_usr, tabela, def_obj_mem)
+  usr = obj_raiz.obtem_objeto(id_usr, tabela, def_obj_mem)
   assert usr == None or type(usr) is obj_usuario.Classe
   return usr
 
@@ -163,7 +163,7 @@ def cria_testes(verb):
         'administrador' : False,
       },
       { 'id': "U-00000007",
-        'nome': "Jeferson Setimo", 
+        'nome': "Jeferson Sétimo", 
         'senha': "U-00000007", 
         'email': "setimo@ic.unicamp.br",
         'administrador' : False,
@@ -209,123 +209,63 @@ def confere_e_elimina_conf_senha(args):
 def verifica_criacao(usr, id_usr, atrs):
   return obj_raiz.verifica_criacao(usr, obj_usuario.Classe, id_usr, atrs, None, tabela, def_obj_mem)
 
-def _valida_nome_completo(chave, val, nulo_ok):
+def valida_nome(chave, val, nulo_ok, parcial):
   erros = [].copy()
+  epref = f"campo '{chave}' = \"{val}\" não é nome válido: "
   if val == None:
     if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
   elif type(val) is not str:
-    erros += [ f"campo '{chave}' = \"{str(val)}\" não é nome válido: deve ser string" ]
+    erros += [ epref + f"deve ser string" ]
   else:
-    nmin = 6
+    nmin = 3 if parcial else 10
     nmax = 60
     n = len(val)
     if n < nmin:
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: é muito curto ({n} caracteres, mínimo {nmin})" ]
+      erros += [ epref + f"é muito curto ({n} caracteres, mínimo {nmin})" ]
     elif n > nmax:
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: é muito longo ({n} caracteres, máximo {nmax})" ]
-    padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
-    if not re.match(padrao, val):
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: tem caracteres não permitidos" ]
-    if val[0].isspace() or val[-1].isspace():
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: branco antes ou depois do nome" ]
-    if '  ' in val:
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: você inseriu dos espaços seguidos" ]
-    if (not val[0].isupper()):
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: começa com letra minúscula" ]
-    if (not val[-1].isalpha()):
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o último caractere não é uma letra" ]
-    else:
-        for i in range(1, n):
-          digito = val[i]
-          if (digito == "."):
-              if (not val[i-1].isalpha()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não segue uma letra" ]
-              elif (val[i+1] != " "):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não é seguido por um espaço em branco" ]
-          elif (digito == "'"):
-              if (not val[i-1].isalpha()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não segue uma letra" ]
-              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não é seguido por uma letra maiúscula" ]
-          elif (digito == "-"):
-              if (not (val[i-1].isalpha() or val[i-1] != ".")):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não segue uma letra ou um ponto" ]
-              elif (not val[i+1].isalpha() or not val[i+1].isupper()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não é seguido por uma letra maiúscula" ]
-          elif (digito == " "):
-              if (not val[i+1].isalpha()):
-                erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
-              
-  return erros
+      erros += [ epref + f"é muito longo ({n} caracteres, máximo {nmax})" ]
 
-def _valida_nome_parcial(chave, val, nulo_ok):
-  erros = [].copy()
-  if val == None:
-    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
-  elif type(val) is not str:
-    erros += [ f"campo '{chave}' = \"{str(val)}\" não é nome válido: deve ser string" ]
-  else:
-    nmin = 2
-    nmax = 60
-    n = len(val)
-    if n < nmin:
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: é muito curto ({n} caracteres, mínimo {nmin})" ]
-    elif n > nmax:
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: é muito longo ({n} caracteres, máximo {nmax})" ]
-    padrao = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
-    if not re.match(padrao, val):
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: tem caracteres não permitidos" ]
+    re_car_validos = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
+    if not re.match(re_car_validos, val):
+      erros += [ epref + f"tem caracteres não permitidos" ]
+
+    if not parcial and (val[0].isspace() or val[-1].isspace()):
+      erros += [ epref + f"branco antes ou depois do nome" ]
+
     if '  ' in val:
-      erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: você inseriu dos espaços seguidos" ]
-      
-    # !!! Tem que verificar TODAS as ocorrências de "'", "-", etc. !!!
-    # Nomes podem começar ou terminar com "'", "-"" e ".". Por isso, ignoramos a validação desses casos.
-    val = val[1:n-1]
-    if "'" in val:
-      letraSeguinte = val.split("'")[1][0]
-      letraAnterior = val.split("'")[0][-1]
-      if not (letraSeguinte.isupper() and not letraSeguinte.isspace()):
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita maiúscula após o apostrofe" ]
-    if "." in val:
-      letraSeguinte = val.split(".")[1][0]
-      letraAnterior = val.split(".")[0][-1]
-      if not letraAnterior.isalpha():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra antes do ponto" ]
-    if "-" in val:
-      letraSeguinte = val.split("-")[1][0]
-      letraAnterior = val.split("-")[0][-1]
-      if not( letraAnterior.isalpha or letraAnterior == "."):
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra ou ponto antes do hífen" ]
-      if not letraSeguinte.isupper():
-        erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: necessita uma letra maiuscula apos o hífen" ]
+      erros += [ epref + f"tem dois ou mais espaços seguidos" ]
+
+    if not parcial and not val[0].isupper():
+      erros += [ epref + f"primeiro caractere '{val[0]}' não é letra maiúscula" ]
+
+    if not parcial and not val[-1].isalpha():
+      erros += [ epref + f"o último caractere '{val[-1]}' não é uma letra" ]
     
-    for i in range(len(val)):
-      digito = val[i]
-      if (digito == "."):
-          if (not val[i-1].isalpha()):
-            erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não segue uma letra" ]
-          elif (val[i+1] != " "):
-            erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o ponto não é seguido por um espaço em branco" ]
-      elif (digito == "'"):
-          if (not val[i-1].isalpha()):
-            erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não segue uma letra" ]
-          elif (not val[i+1].isalpha() or not val[i+1].isupper()):
-            erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o apóstrofe não é seguido por uma letra maiúscula" ]
-      elif (digito == "-"):
-          if (not (val[i-1].isalpha() or val[i-1] != ".")):
-            erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não segue uma letra ou um ponto" ]
-          elif (not val[i+1].isalpha() or not val[i+1].isupper()):
-            erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o hífen não é seguido por uma letra maiúscula" ]
-      elif (digito == " "):
-          if (not val[i+1].isalpha()):
-            erros += [ f"campo '{chave}' = \"{val}\" não é nome válido: o espaço em branco não é seguido por uma letra" ]  
-  return erros
+    re_pto_prev = r"[^a-zA-ZÀ-ÖØ-öø-ÿ][.]" if parcial else r"(^|[^a-zA-ZÀ-ÖØ-öø-ÿ])[.]"
+    if re.match(re_pto_prev, val):
+      erros += [ epref + f"um ponto deve seguir uma letra" ]
+      
+    re_pto_prox = r"[.][^-\s]" if parcial else r"[.]([^-\s]|$)"
+    if re.match(re_pto_prox, val):
+      erros += [ epref + f"um ponto deve ser seguido por hífen ou um espaço em branco" ]
+    
+    re_apo_prev = r"[^a-zA-ZÀ-ÖØ-öø-ÿ][']" if parcial else r"(^|[^a-zA-ZÀ-ÖØ-öø-ÿ])[']"
+    if re.match(re_apo_prev, val):
+      erros += [ epref + f"um apóstrofe deve seguir uma letra" ]
+      
+    re_apo_prox = r"['][^A-ZÀ-ÖØ-Þ]" if parcial else r"[']([^A-ZÀ-ÖØ-Þ]|$)"
+    if re.match(re_apo_prox, val):
+      erros += [ epref + f"um apóstrofe deve ser seguido por uma letra maiúscula" ]
+    
+    re_hif_prev = r"[^a-zA-ZÀ-ÖØ-öø-ÿ.][-]" if parcial else r"(^|[^a-zA-ZÀ-ÖØ-öø-ÿ.])[-]"
+    if re.match(re_hif_prev, val):
+      erros += [ epref + f"um hífen deve seguir uma letra ou um ponto" ]
+      
+    re_hif_prox = r"[-][^A-ZÀ-ÖØ-Þ]" if parcial else r"[-]([^A-ZÀ-ÖØ-Þ]|$)"
+    if re.match(re_hif_prox, val):
+      erros += [ epref + f"um hífen deve ser seguido por uma letra maiúscula" ]
 
-def valida_nome_de_usuario(chave, val, nulo_ok, eh_completo = True):
-  if (eh_completo):
-    return _valida_nome_completo(chave, val, nulo_ok)
-  else:
-    return _valida_nome_parcial(chave, val, nulo_ok)
+  return erros
 
 def valida_senha(chave, val, nulo_ok):
   # O padrão {re} para caracter ASCII visível é [!-~], e para
@@ -406,9 +346,12 @@ def valida_atributos(usr, atrs):
   
   # Validade dos campos fornecidos:
   if 'nome' in atrs:
-    erros += valida_nome_de_usuario('nome', atrs['nome'], False)
+    nome_nulo_ok = False
+    nome_parcial = False
+    erros += valida_nome('nome', atrs['nome'], nome_nulo_ok, nome_parcial)
   if 'email' in atrs:
-    erros += valida_email('Email', atrs['email'], False)
+    email_nulo_ok = False
+    erros += valida_email('Email', atrs['email'], email_nulo_ok)
   if 'administrador' in atrs:
     erros += util_valida_campo.booleano('Administrador', atrs['administrador'], False)
      
@@ -420,7 +363,8 @@ def valida_atributos(usr, atrs):
     senha = None
   
   # Valida a senha:
-  erros += valida_senha('Senha', senha, (usr != None))
+  senha_nula_ok = (usr != None) # Pode ser nula na criação? !!!
+  erros += valida_senha('Senha', senha, senha_nula_ok)
 
   # Acrescenta 'administrador' se não está presente, converte para booleano se está:
   if 'administrador' not in atrs:

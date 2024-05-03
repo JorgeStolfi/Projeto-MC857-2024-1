@@ -14,6 +14,8 @@ def processa(ses, cmd_args):
  
   erros = [].copy()
   
+  mostra_autor = False; # Deve mostar o autor de cada vídeo?
+  
   # Obtem o usuário {usr_ses} dono da sessão:
   usr_ses = obj_sessao.obtem_usuario(ses); assert usr_ses != None
   id_usr_ses = obj_usuario.obtem_identificador(usr_ses)
@@ -22,7 +24,7 @@ def processa(ses, cmd_args):
   if 'usuario' in cmd_args:
     # Alguém quer ver videos de usuário específico:
     id_autor = cmd_args['usuario']
-    autor = obj_usuario.busca_por_identificador(id_autor)
+    autor = obj_usuario.obtem_objeto(id_autor)
     autor = obj_usuario.obtem_identificador(autor)
   else:
     # Usuário da sessão {ses} quer ver os próprios videos:
@@ -44,7 +46,8 @@ def processa(ses, cmd_args):
         ht_titulo = html_bloco_titulo.gera("Meus vídeos")
       else:
         ht_titulo = html_bloco_titulo.gera(f"Vídeos de {id_autor}")
-      ht_tabela = html_bloco_lista_de_videos.gera(lista_ids_videos)
+      
+      ht_tabela = html_bloco_lista_de_videos.gera(lista_ids_videos, mostra_autor)
       ht_bloco = \
         ht_titulo + "<br/>\n" + \
         ht_tabela

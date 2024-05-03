@@ -18,7 +18,7 @@ def processa(ses, cmd_args):
     erros.append("O identificador do vídeo não foi especificado")
     vid = None
   else:
-    vid = obj_video.busca_por_identificador(id_vid)
+    vid = obj_video.obtem_objeto(id_vid)
     if vid == None:
       erros.append(f"O vídeo {id_vid} não existe")
   

@@ -33,7 +33,7 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-usr1 = obj_usuario.busca_por_identificador("U-00000001")
+usr1 = obj_usuario.obtem_objeto("U-00000001")
 assert usr1 != None
 
 testa_gera("N", str)

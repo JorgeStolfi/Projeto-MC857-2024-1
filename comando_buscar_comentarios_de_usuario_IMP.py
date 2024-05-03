@@ -27,7 +27,7 @@ def processa(ses, cmd_args):
   if 'usuario' in cmd_args:
     # Alguém quer ver comentários de usuário específico:
     id_autor = cmd_args['usuario']
-    autor = obj_usuario.busca_por_identificador(id_autor)
+    autor = obj_usuario.obtem_objeto(id_autor)
   else:
     autor = usr_ses
     id_autor = id_usr_ses

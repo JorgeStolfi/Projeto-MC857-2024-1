@@ -34,7 +34,7 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # Obtem sessao de teste
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses)
 
 sys.stderr.write("!!! Escrever as chamadas de {testa_processa} e conferir se alterou !!!\n")

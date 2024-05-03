@@ -34,7 +34,7 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
   
 # Obtem sessao de teste
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
   
 def testa_atualiza_nome_com_sucesso():
   novo_nome = "John First"
@@ -43,7 +43,7 @@ def testa_atualiza_nome_com_sucesso():
       'nome': novo_nome,
   }
   testa_processa("Nome-OK", str, ses, cmd_args)
-  updated_user = obj_usuario.busca_por_identificador("U-00000001")
+  updated_user = obj_usuario.obtem_objeto("U-00000001")
   assert obj_usuario.obtem_atributo(updated_user, "nome") == novo_nome, "nome não atualizado"
 
 def testa_atualiza_email_com_sucesso():
@@ -53,7 +53,7 @@ def testa_atualiza_email_com_sucesso():
       'email': email_novo,
   }
   testa_processa("Email-OK", str, ses, cmd_args)
-  updated_user = obj_usuario.busca_por_identificador("U-00000001")
+  updated_user = obj_usuario.obtem_objeto("U-00000001")
   assert obj_usuario.obtem_atributo(updated_user, "email") == email_novo, "email não atualizado"
 
 def testa_atualiza_email_repetido_falha():
@@ -64,7 +64,7 @@ def testa_atualiza_email_repetido_falha():
   }
   testa_processa("Email-Dup", str, ses, cmd_args)
 
-  updated_user = obj_usuario.busca_por_identificador("U-00000001")
+  updated_user = obj_usuario.obtem_objeto("U-00000001")
   assert obj_usuario.obtem_atributo(updated_user, "email") != email_dup, "email duplicado aceito"
 
 # Executa os testes

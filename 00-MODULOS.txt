@@ -1,5 +1,5 @@
 # Módulos em ordem de teste:
-# Last edited on 2024-04-26 18:06:00 by stolfi
+# Last edited on 2024-05-03 15:31:12 by stolfi
 
 + util_erros
 + util_testes
@@ -21,9 +21,9 @@
 
 + db_tabelas_do_sistema
 
-+ html_estilo_cabecalho_de_tabela
-+ html_estilo_de_botao
++ html_estilo_botao
 + html_estilo_titulo
++ html_estilo_texto
 
 + html_elem_button_simples
 + html_elem_button_submit
@@ -43,9 +43,12 @@
 + html_bloco_titulo
 + html_bloco_rodape
 + html_bloco_erro
++ html_bloco_bemvindo
 + html_bloco_menu_geral
 
 + html_bloco_tabela_de_campos
+
++ html_elem_item_de_resumo
 
 + html_bloco_dados_de_sessao
 + html_linha_resumo_de_sessao
@@ -137,6 +140,7 @@
 ? comando_buscar_comentarios_de_video
 ? comando_buscar_comentarios_de_usuario
 ? comando_buscar_respostas_de_comentario
+? comando_ver_conversa
 
 ? comando_ver_objeto
 

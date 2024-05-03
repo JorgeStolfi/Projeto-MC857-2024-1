@@ -34,10 +34,11 @@ ids_videos = [
   "V-00000004",
 ]
 
-for ver in (False, True):
-  tag = "ver" + str(ver)[0] 
-  testa_gera("ComVideos-" + tag, str, ids_videos)
-  testa_gera("SemVideos-" + tag, str, ())
+for mostra_autor in (False, True):
+  for lista in (), ids_videos:
+    xlista = "Sem" if len(lista) == 0 else "Com"
+    rot_teste = f"{xlista}Videos_autor{str(mostra_autor)[0]}" 
+    testa_gera(rot_teste, str, lista, mostra_autor)
   
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")

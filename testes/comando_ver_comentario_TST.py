@@ -35,15 +35,14 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # Obtem uma sessao de um usuario que é de administrador:
-ses_A1 = obj_sessao.busca_por_identificador("S-00000001")
+ses_A1 = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses_A1)
 
 # Obtem uma sessao de um usuario comum:
-ses_C1 = obj_sessao.busca_por_identificador("S-00000003")
+ses_C1 = obj_sessao.obtem_objeto("S-00000003")
 assert not obj_sessao.de_administrador(ses_C1)
 
 #Teste de modulo comando_ver_comentario para sessão administrador
-aviso_prog('!!! programa de teste do modulo {comando_ver_comentario} para sessão administrador', True) # edit comment
 for tag, id_com in ( \
     ("C01_adm", "C-00000001"),
     ("C02_adm", "C-00000002"),
@@ -52,10 +51,9 @@ for tag, id_com in ( \
     ("C05_adm", "C-00000005"),
     ("C06_adm", "C-00000006"),
   ):
-  testa_processa(tag,  str, ses_C1, {'comentario': id_com})
+  testa_processa(tag,  str, ses_A1, {'comentario': id_com})
 
 #Teste de modulo comando_ver_comentario para sessão comum
-aviso_prog('!!! programa de teste do modulo {comando_ver_comentario} para sessão comum', True) # edit comment
 for tag, id_com in ( \
     ("C01_comum", "C-00000001"),
     ("C02_comum", "C-00000002"),
@@ -69,4 +67,4 @@ for tag, id_com in ( \
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  erro_prog("Alguns testes falharam") #edit
+  erro_prog("Alguns testes falharam")

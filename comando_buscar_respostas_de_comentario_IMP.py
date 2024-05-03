@@ -14,7 +14,7 @@ def processa(ses, cmd_args):
   
   # Obtém o comentário {com_pai} em questão e seu identificador {id_com_pai}:
   id_com_pai = cmd_args['comentario']
-  com_pai = obj_comentario.busca_por_identificador(id_com_pai) if id_com_pai != None else None
+  com_pai = obj_comentario.obtem_objeto(id_com_pai) if id_com_pai != None else None
   
   if com_pai == None:
     erros.append(f"Comentário {id_com_pai} não existe")

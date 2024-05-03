@@ -30,10 +30,10 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # Sessões de teste
-ses_comum = obj_sessao.busca_por_identificador("S-00000001")
+ses_comum = obj_sessao.obtem_objeto("S-00000001")
 
 # Obtém um usuário administrador
-admin = obj_video.busca_por_identificador("U-00000001")
+admin = obj_video.obtem_objeto("U-00000001")
 assert obj_video.obtem_atributo(admin, 'administrador')
 ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX")
 

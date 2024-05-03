@@ -49,7 +49,7 @@ def gera(id_usr, atrs, ses_admin, ses_proprio):
   if id_usr != None:
     # Somente admininstrador ou o próprio podem ver as sessões de {usr}:
     if ses_admin or ses_proprio:
-      usr = obj_usuario.busca_por_identificador(id_usr)
+      usr = obj_usuario.obtem_objeto(id_usr)
       assert usr != None
       nab = len(obj_sessao.busca_por_usuario(usr, True))
       if nab > 0 and not ses_proprio:

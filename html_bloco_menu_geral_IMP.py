@@ -3,6 +3,7 @@ import html_elem_span
 import html_elem_button_submit
 import html_elem_input
 import html_elem_form
+import html_bloco_bemvindo
 import obj_sessao
 import obj_usuario
 
@@ -14,12 +15,19 @@ import sys
 
 bmu_debug = False
 
-def gera(logado, nome_usuario, admin):
-  ht_menu = \
-    gera_linha(gera_botoes_de_busca(admin)) + \
-    gera_linha(gera_botoes_linha_principal(logado, nome_usuario, admin))
-  if admin:
-    ht_menu += gera_linha(gera_botoes_linha_admin())
+def gera(usr):
+  usr_admin = obj_usuario.obtem_atributo(usr, 'administrador') if usr != None else False
+  
+  hts_linhas = [].copy()
+  
+  # Mensagem de boas-vindas:
+  hts_linhas.append(html_bloco_bemvindo.gera(usr))
+  hts_linhas.append(gera_linha(gera_botoes_de_busca(usr)))
+  hts_linhas.append(gera_linha(gera_botoes_linha_principal(usr)))
+  if usr_admin:
+    hts_linhas.append(gera_linha(gera_botoes_linha_admin(usr)))
+  
+  ht_menu = "".join(hts_linhas)
   return ht_menu
 
 def gera_linha(botoes):
@@ -38,52 +46,70 @@ def gera_linha(botoes):
 # Cada função abaixo devolve uma lista de fragmentos HTML, cada um 
 # descrevendo um botão (ou outro elemento de uma linha de menu).
 
-def gera_botoes_de_busca(admin):
+def gera_botoes_de_busca(usr):
   """Gera uma lista de fragmentos de HTML que descrevem os botões 
   de busca do menu: "Buscar usuários", "Buscar vídeos", "Buscar comentários", 
-  "Buscar sessões". Este último só aparece se o usuário for administrador."""
+  "Buscar sessões". 
   
-  cor_bt_busca = "#eeccff"
-
+  Os dois primeiros aparecem sempre, mesmo para um usuário que não está
+  logado ({usr = None}). O último só aparece se o usuário {usr} não for {None}
+  e for um administrador."""
+  
   if bmu_debug: sys.stderr.write("    > gera_botoes_de_busca\n")
 
+  cor_bt_busca = "#eeccff"
+  usr_admin = obj_usuario.obtem_atributo(usr, 'administrador') if usr != None else False
+
+  hts_botoes = [].copy()
+  
   # Botões da primeira linha que sempre aparecem:
-  ht_bt_usr = html_elem_button_simples.gera("Buscar usuários",    'solicitar_pag_buscar_usuarios',     None, cor_bt_busca)
-  ht_bt_vid = html_elem_button_simples.gera("Buscar videos",      'solicitar_pag_buscar_videos',       None, cor_bt_busca)
-  ht_bt_com = html_elem_button_simples.gera("Buscar Comentários", 'solicitar_pag_buscar_comentarios',  None, cor_bt_busca)
-  ht_bt_com = html_elem_button_simples.gera("Inserir Comentarios", 'solicitar_pag_postar_comentario',  None, cor_bt_busca)
+  ht_bt_busc_usr = html_elem_button_simples.gera("Buscar usuários",    'solicitar_pag_buscar_usuarios',     None, cor_bt_busca)
+  hts_botoes.append(ht_bt_busc_usr)
+  
+  ht_bt_busc_vid = html_elem_button_simples.gera("Buscar videos",      'solicitar_pag_buscar_videos',       None, cor_bt_busca)
+  hts_botoes.append(ht_bt_busc_vid)
 
-  hts_botoes = [ ht_bt_usr, ht_bt_vid, ht_bt_com ]
+  ht_bt_busc_com = html_elem_button_simples.gera("Buscar Comentários", 'solicitar_pag_buscar_comentarios',  None, cor_bt_busca)
+  hts_botoes.append(ht_bt_busc_com)
 
-  if admin:
+  if usr_admin:
     # Buscar sessões só para administrador
-    ht_bt_ses = html_elem_button_simples.gera("Buscar Sessões",     'solicitar_pag_buscar_sessoes',      None, cor_bt_busca)
-    hts_botoes.append(ht_bt_ses)
+    ht_bt_busc_ses = html_elem_button_simples.gera("Buscar Sessões",     'solicitar_pag_buscar_sessoes',      None, cor_bt_busca)
+    hts_botoes.append(ht_bt_busc_ses)
+
   if bmu_debug: sys.stderr.write("    < gera_botoes_de_busca: hts_botoes = %s\n" % str(hts_botoes))
+  
   return hts_botoes
 
-def gera_botoes_linha_principal(logado, nome_usuario, admin):
-  """Gera uma lista de fragmentos de HTML que descrevem os botões da linha principal do menu
-  geral.  Estes botões são mostrados para todos os usuários, mas
+def gera_botoes_linha_principal(usr):
+  """Gera uma lista de fragmentos de HTML que descrevem os botões 
+  da linha principal do menu geral.
+  
+  Estes botões são mostrados para todos os usuários, mas
   dependem do tipo de usuário (normal ou administrador) e se o
-  usuário está logado."""
+  usuário está usr_id.  Os parâmetros {"""
 
   if bmu_debug: sys.stderr.write("    > gera_botoes_linha_principal\n")
 
-  # Botões da primeira linha que sempre aparecem:
-  
   cor_bt_home = "#60a3bc"
 
-  ht_bt_principal = html_elem_button_simples.gera("Principal", 'pag_principal', None, cor_bt_home)
-  hts_botoes = [ ht_bt_principal ]
+  hts_botoes = [].copy()
 
-  if logado:
-    # Gera outros botões de usuario normal logado
-    hts_botoes += gera_botoes_linha_principal_logado()
+  # Botões que sempre aparecem:
+  ht_bt_principal = html_elem_button_simples.gera("Principal", 'pag_principal', None, cor_bt_home)
+  hts_botoes.append(ht_bt_principal)
+
+  # Botões que dependem de estar logado ou não:
+
+  if usr != None:
+    # Gera outros botões de usuario normal logado:
+    hts_botoes += gera_botoes_linha_principal_logado(usr)
   else:
     # Gera outros botões de usuário deslogado:
     hts_botoes += gera_botoes_linha_principal_deslogado()
+  
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_principal: hts_botoes = %s\n" % str(hts_botoes))
+
   return hts_botoes
 
 def gera_botoes_linha_principal_deslogado():
@@ -95,50 +121,60 @@ def gera_botoes_linha_principal_deslogado():
   cor_bt_login = "#55ff55"
   cor_bt_novo =  "#88eeff"
 
-  hts_botoes = (
-    html_elem_button_simples.gera("Entrar",     'solicitar_pag_login',             None, cor_bt_login),
-    html_elem_button_simples.gera("Cadastrar",  'solicitar_pag_cadastrar_usuario', None, cor_bt_novo),
-  )
+  hts_botoes = [].copy()
+  
+  ht_bt_entrar = html_elem_button_simples.gera("Entrar",     'solicitar_pag_login',             None, cor_bt_login)
+  hts_botoes.append(ht_bt_entrar)
+  
+  ht_bt_cadastrar = html_elem_button_simples.gera("Cadastrar",  'solicitar_pag_cadastrar_usuario', None, cor_bt_novo)
+  hts_botoes.append(ht_bt_cadastrar)
+
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_principal_deslogado: hts_botoes = %s\n" % str(hts_botoes))
+
   return hts_botoes
 
-def gera_botoes_linha_principal_logado(nome_usuario, admin):
+def gera_botoes_linha_principal_logado(usr):
   """Gera uma lista de fragmentos HTML com os botões da linha principal do menu
-  geral, que só aparecem para um usuário que está logado."""
+  geral, que só aparecem para um usuário {usr} que está logado ({usr != None})."""
   
   if bmu_debug: sys.stderr.write("    > gera_botoes_linha_principal_logado\n")
+
+  # Obtem atributos do usuário:
+  assert usr != None
+  usr_admin = obj_usuario.obtem_atributo(usr, 'administrador')
+  usr_nome = obj_usuario.obtem_atributo(usr, 'nome')
+  usr_num_ses = len(obj_sessao.busca_por_usuario(usr, soh_abertas = True)) # Para botão "Minhas Sessões".
 
   cor_bt_meus = "#eeffee"
   cor_bt_sair = "#ffcc88"
 
-  # Verificar o número de sessões do usuário para mostrar
-  # no botão "Minhas Sessões"
-  usrs = obj_usuario.busca_por_nome(nome_usuario)
+  hts_botoes = [].copy()
+ 
+  ht_bt_conta = html_elem_button_simples.gera("Minha Conta", 'ver_usuario', None, cor_bt_meus)
+  hts_botoes.append(ht_bt_conta)
 
-  num_ses = 0
-  if (usrs != None and len(usrs) > 0):
-    usr = obj_usuario.busca_por_identificador(usrs[0]);
-    num_ses = len(obj_sessao.busca_por_usuario(usr, True));
+  ht_bt_ses_texto = "Minhas Sessões (%d)" % usr_num_ses
+  ht_bt_ses = html_elem_button_simples.gera(ht_bt_ses_texto, 'buscar_sessoes_de_usuario', None, cor_bt_meus)
+  hts_botoes.append(ht_bt_ses)
+
+  ht_bt_vid = html_elem_button_simples.gera("Meus Videos", 'buscar_videos_de_usuario', None, cor_bt_meus)
+  hts_botoes.append(ht_bt_vid)
   
-  if (num_ses == 0):
-    my_ses_but_text = "Minhas Sessões"
-  else:
-    my_ses_but_text = "Minhas Sessões (%d)" % num_ses
+  ht_bt_com = html_elem_button_simples.gera("Meus Comentários", 'buscar_comentarios_de_usuario', None, cor_bt_meus)
+  hts_botoes.append(ht_bt_com)
   
-  hts_botoes = (
-      html_elem_button_simples.gera("Minha Conta",        'ver_usuario',                   None, cor_bt_meus),
-      html_elem_button_simples.gera(my_ses_but_text,     'buscar_sessoes_de_usuario',     None, cor_bt_meus), 
-      html_elem_button_simples.gera("Meus Videos",        'buscar_videos_de_usuario',      None, cor_bt_meus),
-      html_elem_button_simples.gera("Meus Comentários",   'buscar_comentarios_de_usuario', None, cor_bt_meus),
-      html_elem_button_simples.gera("Subir Video",        'solicitar_pag_upload_video',    None, cor_bt_meus),
-      html_elem_button_simples.gera("Sair", 'fazer_logout', None, cor_bt_sair),
-    )
+  ht_bt_upload = html_elem_button_simples.gera("Subir Video", 'solicitar_pag_upload_video', None, cor_bt_meus)
+  hts_botoes.append(ht_bt_upload)
+  
+  ht_bt_sair = html_elem_button_simples.gera("Sair", 'fazer_logout', None, cor_bt_sair)
+  hts_botoes.append(ht_bt_sair)
+
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_principal_logado: hts_botoes = %s\n" % str(hts_botoes))
   return hts_botoes
 
-def gera_botoes_linha_admin():
+def gera_botoes_linha_admin(usr):
   """Gera uma lista de fragmentos de HTML com os botões da linha do menu
-  geral que só aparece se o usuário está logado
+  geral que só aparece se o usuário está usr_id
   e é um administrador."""
   
   if bmu_debug: sys.stderr.write("    > gera_botoes_linha_admin\n")

@@ -41,7 +41,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Testes com comentário existente:
 com1_id = "C-00000001"
-com1 = obj_comentario.busca_por_identificador(com1_id)
+com1 = obj_comentario.obtem_objeto(com1_id)
 assert com1 != None
 com1_atrs = obj_comentario.obtem_atributos(com1)
 
@@ -51,9 +51,9 @@ for edita_texto in False, True:
   testa_gera(tag, str, com1_id, com1_atrs, edita_texto)
 
 # Teste com comentário a criar, título em branco:
-com2_autor = obj_usuario.busca_por_identificador("U-00000002")
-com2_video = obj_video.busca_por_identificador("V-00000002")
-com2_pai = obj_comentario.busca_por_identificador("C-00000003")
+com2_autor = obj_usuario.obtem_objeto("U-00000002")
+com2_video = obj_video.obtem_objeto("V-00000002")
+com2_pai = obj_comentario.obtem_objeto("C-00000003")
 com2_atrs_nul = { 'autor': com2_autor, 'video': com2_video, 'pai': com2_pai, }
 tag = f"V2-novo"
 testa_gera(tag + "-aN",  str, None, com2_atrs_nul, True)

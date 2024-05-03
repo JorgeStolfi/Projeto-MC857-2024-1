@@ -44,7 +44,7 @@ def processa(ses, cmd_args):
       if 'usuario' in cmd_args:
         # Deve haver um único usuário com esse identificador:
         id_usr = cmd_args['usuario']
-        obj_usr = obj_usuario.busca_por_identificador(id_usr) if id_usr != None else None
+        obj_usr = obj_usuario.obtem_objeto(id_usr) if id_usr != None else None
         if obj_usr == None:
           erros.append(f"Usuário '{id_usr}' não existe")
         else:
@@ -54,18 +54,18 @@ def processa(ses, cmd_args):
       elif 'sessao' in cmd_args:
         # Deve haver uma única sessão com esse identificador:
         id_sessao = cmd_args['sessao']
-        obj_sect = obj_sessao.busca_por_identificador(id_sessao) if id_sessao != None else None
+        obj_sect = obj_sessao.obtem_objeto(id_sessao) if id_sessao != None else None
         if obj_sect == None:
           erros.append(f"Sessão '{id_sessao}' não existe")
         else:
           lista_ids_sessoes = [ id_sessao ]
       else:
-        # Busca por campos aproximados:
-        lista_ids_sessoes = obj_sessao.busca_por_semelhanca(cmd_args, False)
+        # Busca por campos:
+        lista_ids_sessoes = obj_sessao.busca_por_campos(cmd_args, False)
 
       if len(lista_ids_sessoes) == 0:
         # Não encontrou nenhuma sessão:
-        erros.append("Não foi encontrado nenhuma sessão com os dados fornecidos")
+        erros.append("Não foi encontrada nenhuma sessão com os dados fornecidos")
     except ErroAtrib as ex:
       erros += ex.args[0]
 

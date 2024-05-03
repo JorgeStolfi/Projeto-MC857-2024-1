@@ -34,7 +34,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Sessao de usuário  administrador:
 sesA1_id = "S-00000006"
-sesA1 = obj_sessao.busca_por_identificador(sesA1_id)
+sesA1 = obj_sessao.obtem_objeto(sesA1_id)
 assert sesA1 != None
 assert obj_sessao.aberta(sesA1)
 assert obj_sessao.de_administrador(sesA1)
@@ -44,7 +44,7 @@ assert usrA1_id == "U-00000008"
 
 # Sessão de usuário comum:
 sesC1_id = "S-00000003"
-sesC1 = obj_sessao.busca_por_identificador(sesC1_id)
+sesC1 = obj_sessao.obtem_objeto(sesC1_id)
 assert sesC1 != None
 assert obj_sessao.aberta(sesC1)
 assert not obj_sessao.de_administrador(sesC1)
@@ -56,13 +56,13 @@ ses_dic = { 'A': sesA1, 'C': sesC1, }
 
 # Um vídeo de {usrC1}:
 vidC1_id = "V-00000002"
-vidC1 = obj_video.busca_por_identificador(vidC1_id)
+vidC1 = obj_video.obtem_objeto(vidC1_id)
 assert vidC1 != None
 assert obj_video.obtem_atributo(vidC1, 'autor') == usrC1
 
 # Um vídeo de outro usuário, nenhum dos dois:
 vidC2_id = "V-00000004"
-vidC2 = obj_video.busca_por_identificador(vidC2_id)
+vidC2 = obj_video.obtem_objeto(vidC2_id)
 assert vidC2 != None
 assert obj_video.obtem_atributo(vidC2, 'autor') != usrC1
 assert obj_video.obtem_atributo(vidC2, 'autor') != usrA1
@@ -78,7 +78,7 @@ for st, ses in ses_dic.items():
   for vt, id_vid in vid_dic.items():
     for et, erros in erros_dic.items():
       if ses == sesA1 or (ses == sesC1 and id_vid == vidC1_id):
-        vid = obj_video.busca_por_identificador(id_vid)
+        vid = obj_video.obtem_objeto(id_vid)
         atrs_tot = obj_video.obtem_atributos(vid)
         atrs_som = { 'titulo': "Alteradus", }
         atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }

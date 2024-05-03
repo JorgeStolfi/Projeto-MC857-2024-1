@@ -35,13 +35,17 @@ ids_comentarios = [
   "C-00000004",
   "C-00000005",
   "C-00000006",
+  "C-00000007",
+  "C-00000008",
+  "C-00000009",
 ]
 
-for ver in (False, True):
-  tag = "ver" + str(ver)[0]
-  testa_gera("muitas-" + tag, str, ids_comentarios, ver, ver, ver)
-  testa_gera("lhufas-" + tag, str, [],              ver, ver, ver)
-
+for ms_autor in False, True:
+  for ms_video in False, True:
+    for ms_pai in False, True:
+      xargs = f"_aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}"
+      testa_gera("muitas" + xargs, str, ids_comentarios, ms_autor, ms_video, ms_pai)
+      testa_gera("lhufas" + xargs, str, [],              ms_autor, ms_video, ms_pai)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")

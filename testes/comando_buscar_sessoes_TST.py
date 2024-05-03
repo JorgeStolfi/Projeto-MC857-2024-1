@@ -33,7 +33,7 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-assert False, "!!! comand_buscar_sessoes_TST.py ainda não escrito !!!"
+assert False, "!!! comando_buscar_sessoes_TST.py ainda não escrito !!!"
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.")

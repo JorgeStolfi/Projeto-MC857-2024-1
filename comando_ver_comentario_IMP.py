@@ -11,18 +11,18 @@ def processa(ses, cmd_args):
   
   erros = [].copy()
 
-  # Obtém o comentário {vid}:
-  id_vid = cmd_args['comentario'] if 'comentario' in cmd_args else None
+  # Obtém o comentário {com}:
+  id_com = cmd_args['comentario'] if 'comentario' in cmd_args else None
   if 'comentario' == None:
     erros.append("O identificador do comentário não foi especificado")
-    vid = None
+    com = None
   else:
-    vid = obj_comentario.busca_por_identificador(id_vid)
-    if vid == None:
-      erros.append(f"O comentário {id_vid} não existe")
+    com = obj_comentario.obtem_objeto(id_com)
+    if com == None:
+      erros.append(f"O comentário {id_com} não existe")
   
-  if vid == None:
+  if com == None:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
   else:
-    pag = html_pag_ver_comentario.gera(ses, vid, erros)
+    pag = html_pag_ver_comentario.gera(ses, com, erros)
   return pag

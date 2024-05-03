@@ -2,8 +2,8 @@
 
 import db_base_sql
 import db_tabelas_do_sistema
+import obj_usuario
 import obj_sessao
-import obj_video
 import util_testes
 from util_erros import erro_prog, aviso_prog, mostra
 import comando_ver_usuario
@@ -34,20 +34,37 @@ def testa_processa(rot_teste, res_esp, *args):
 
 
 # Obtem uma sessao de um usuario que é de administrador:
-id_ses = "S-00000001"
-ses1 = obj_sessao.busca_por_identificador(id_ses)
+sesA_id = "S-00000001"
+sesA = obj_sessao.obtem_objeto(sesA_id)
+assert sesA != None and obj_sessao.de_administrador(sesA)
+usrA = obj_sessao.obtem_usuario(sesA)
 
-# sem user e sem ses
-testa_processa("acesso_invalido",  str, None, {})
+# Obtem uma sessao de um usuario comum:
+sesC_id = "S-00000003"
+sesC = obj_sessao.obtem_objeto(sesC_id)
+assert sesC != None and not obj_sessao.de_administrador(sesC)
+usrC = obj_sessao.obtem_usuario(sesC)
 
-# sem user
-testa_processa("Sem usuario",  str, ses1, {})
+# Obtem um usuário que não é nenhum dos dois:
+usrD_id = "U-00000004"
+usrD = obj_usuario.obtem_objeto(usrD_id)
+assert usrD != None and usrD != usrA and usrD != usrC
 
+# Identificador de usuário inexistente:
+usrI_id = "U-23000004"
+usrI = obj_usuario.obtem_objeto(usrI_id)
+assert usrI == None 
 
-# comando completo
-testa_processa("uso_comum",  str, ses1, {'usuario': 'U-00000001'})
-
-
+for xses, ses in ("N", None), ("A", sesA), ("C", sesC):
+  ses_usr = obj_sessao.obtem_usuario(ses) if ses != None else None
+  ses_usr_id = obj_usuario.obtem_identificador(ses_usr) if ses_usr != None else None
+  # Usuário a ver é: implícito, o dono da sessão (explícito), terceiro, ou inexistente:
+  for xusr, usr_id in ("N", None), ("P", ses_usr_id), ("T", usrD_id), ("I", usrI_id):
+    # Caso {ses==None,xusr=="P"} é igual a {ses==None,xusr=="N"}:
+    if not (ses == None and xusr == "P"):
+      rot_teste = f"ses{xses}_usr{xusr}"
+      cmd_args = { 'usuario': usr_id } if usr_id != None else {}
+      testa_processa(rot_teste, str, ses, cmd_args )
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")

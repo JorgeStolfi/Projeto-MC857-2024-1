@@ -25,6 +25,7 @@ def testa_processa(rot_teste, res_esp, *args):
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   global ok_global
+
   modulo = comando_buscar_usuarios
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
@@ -33,48 +34,57 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-# Sessão em que o usuário dela é o administrador.
-ses_adm_id = "S-00000001"
-ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
-assert obj_sessao.de_administrador(ses_adm), f"sessão {ses_adm_id} não é de administrador" 
+# Sessão cujo usuário é o administrador.
+sesA_id = "S-00000001"
+sesA = obj_sessao.obtem_objeto(sesA_id)
+assert obj_sessao.de_administrador(sesA), f"sessão {sesA_id} não é de administrador" 
 
-# Testa com busca por identificador_que existe:
-args_id_usr = {'usuario': "U-00000002"}
+# Sessão cujo usuário é comum (não) administrador.
+sesC_id = "S-00000003"
+sesC = obj_sessao.obtem_objeto(sesC_id)
+assert not obj_sessao.de_administrador(sesC), f"sessão {sesC_id} é de administrador" 
 
-# Testa com busca por email que existe:
-args_email = {'email': "primeiro@gmail.com"}
+for ses in None, sesA, sesC:
 
-# Testa com busca por nome que existe:
-args_nome = {'nome': "João Segundo"}
+  admin = obj_sessao.de_administrador(ses) if ses != None else False
+  rad = "sesN_" if ses == None else f"ses{str(admin)[0]}_"
 
-# Testa com busca por email que não existe:
-args_email_no = {'email': "naoexiste@email.com"}
+  # Testa com busca por identificador_que existe:
+  args_id_usr = {'usuario': "U-00000002"}
+  testa_processa(rad + "usuario",    str, ses, args_id_usr)
 
-# Testa com busca por primeiro nome:
-args_primeiro_nome = {'nome': "João"}
+  # Testa com busca por email que existe:
+  args_email = {'email': "primeiro@gmail.com"}
+  testa_processa(rad + "email_ok",   str, ses, args_email)
 
-# Testa com busca por sobrenome:
-args_sobrenome = {'nome': "Segundo"}
+  # Testa com busca por email que não existe:
+  args_email_no = {'email': "naoexiste@email.com"}
+  testa_processa(rad + "email_no",   str, ses, args_email_no)
 
-# Testa com nome aproximado:
-args_nome_aproximado = {'nome': "joão segundo"}
+  # --- Testes abaixo devem retornar somente "João Segundo" ---
 
-# Testa com nome parcial:
-args_nome_parcial = {'nome': "jo"}
+  # Testa com busca por nome que existe:
+  args_nome = {'nome': "João Segundo"}
+  testa_processa(rad + "nome",             str, ses, args_nome)
 
-testa_processa("usuario",    str, ses_adm, args_id_usr)
-testa_processa("email_ok",   str, ses_adm, args_email)
-testa_processa("email_no",   str, ses_adm, args_email_no)
+  # Testa com busca por primeiro nome:
+  args_primeiro_nome = {'nome': "João"}
+  testa_processa(rad + "primeiro_nome",    str, ses, args_primeiro_nome)
 
-# Testes abaixo devem retornar somente "João Segundo"
-testa_processa("nome",           str, ses_adm, args_nome)
-testa_processa("primeiro_nome",  str, ses_adm, args_primeiro_nome)
-testa_processa("sobrenome",  str, ses_adm, args_sobrenome)
-testa_processa("nome_aproximado",  str, ses_adm, args_nome_aproximado)
+  # Testa com busca por sobrenome:
+  args_sobrenome = {'nome': "Segundo"}
+  testa_processa(rad + "sobrenome",        str, ses, args_sobrenome)
 
-# Teste abaixo deve retornar todos usuários que começam com "Jo"
-# (José Primeiro, João Segundo, Josenildo Quinto, Joaquim Oitavo e Jonas Nono)
-testa_processa("nome_parcial",  str, ses_adm, args_nome_parcial)
+  # Testa com nome aproximado:
+  args_nome_aproximado = {'nome': "joão segundo"}
+  testa_processa(rad + "nome_aproximado",  str, ses, args_nome_aproximado)
+
+  # --- Testes abaixo devem retornar somente "João Segundo" ---
+
+  # Teste abaixo deve retornar todos usuários que começam com "Jo"
+  # (José Primeiro, João Segundo, Josenildo Quinto, Joaquim Oitavo e Jonas Nono)
+  args_nome_parcial = {'nome': "jo"}
+  testa_processa(rad + "nome_parcial",  str, ses, args_nome_parcial)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.")

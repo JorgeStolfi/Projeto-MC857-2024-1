@@ -32,15 +32,15 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # Sessão de administrador:
-ses_A1 = obj_sessao.busca_por_identificador("S-00000001")
+ses_A1 = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses_A1)
 
 # Sessão de usuário comum, aberta:
-ses_C1 = obj_sessao.busca_por_identificador("S-00000003")
+ses_C1 = obj_sessao.obtem_objeto("S-00000003")
 assert not obj_sessao.de_administrador(ses_C1)
 
 # Sessão de usuário comum, não aberta:
-ses_C2 = obj_sessao.busca_por_identificador("S-00000004")
+ses_C2 = obj_sessao.obtem_objeto("S-00000004")
 assert not obj_sessao.de_administrador(ses_C2)
 obj_sessao.fecha(ses_C2)
 

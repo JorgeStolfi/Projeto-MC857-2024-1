@@ -45,7 +45,7 @@ def processa(ses, cmd_args):
       if 'video' in cmd_args:
         # Busca por vídeo determinado:
         id_vid = cmd_args['video']
-        vid = obj_video.busca_por_identificador(id_vid)
+        vid = obj_video.obtem_objeto(id_vid)
         if vid == None:
           erros.append(f"Vídeo '{id_vid}' não existe")
         else:

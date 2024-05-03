@@ -36,7 +36,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Video:
 vidC1_id = "V-00000002"
-vidC1 = obj_video.busca_por_identificador(vidC1_id)
+vidC1 = obj_video.obtem_objeto(vidC1_id)
 assert vidC1 != None
 
 for ses_admin in False, True:

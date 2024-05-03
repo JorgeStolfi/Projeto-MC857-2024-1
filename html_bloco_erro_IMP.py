@@ -1,28 +1,49 @@
+import html_estilo_titulo
+import html_estilo_texto
 import html_elem_span
 import html_elem_paragraph
 import html_elem_button_simples
 import re
 
 def gera(erros):
-  # Cabeçalho espalhafatoso:
-  estilo_cabecalho = f"font-family: Courier; font-size: 24px; font-weight: bold; padding: 5px; text-align: left; color: #880000;"
-  ht_tit = html_elem_span.gera(estilo_cabecalho, "Não foi possível completar a operação")
+  
+  # Quebra e limpa as mensagens:
+  if erros == None:
+    erros = []
+  elif type(erros) == str:
+    # Quebra em linhas:
+    erros = re.split('[\n]', erros)
+  assert type(erros) is list or type(erros) is tuple
+  erros = [ er for er in erros if er != None ]
+  erros = [ er.strip() for er in erros ]
+  erros = [ er for er in erros if len(er) > 0 ]
+  if len(erros) == 0:
+    ht_bloco_final = ""
+  else:
+    ht_erros = "<br/>\n" + "<br/>\n".join(erros)
 
-  if type(erros) is list or type(erros) is tuple:
-    erros = "\n".join(erros)
+    # Cabeçalho espalhafatoso:
+    estilo_cabecalho = html_estilo_titulo.gera("#b00000")
+    ht_tit = html_elem_span.gera(estilo_cabecalho, "Não foi possível completar a operação")
 
-  # Processa quebras de linha em {erros}:
-  erros = re.sub(r'\n', r'<br/>Erro: \n', erros)
+    if type(erros) is list or type(erros) is tuple:
+      erros = "\n".join(erros)
 
-  # Formata a mensagem:
-  estilo_erro = f"font-family: Courier; font-size: 20px; font-weight: bold; padding: 5px; text-align: left; color: #000000;"
-  ht_erros = html_elem_span.gera(estilo_erro, erros)
+    # Processa quebras de linha em {erros}:
+    erros = re.sub(r'\n', r'<br/>Erro: \n', erros)
 
-  # Junta as partes:
-  ht_tudo = ht_tit + "<br/>" + ht_erros
+    # Formata a mensagem:
+    cor_texto = "#000000"
+    cor_fundo = None
+    margens = None
+    estilo_erro = html_estilo_texto.gera("20px", "bold", cor_texto, cor_fundo, margens)
+    ht_erros = html_elem_span.gera(estilo_erro, erros)
 
-  # Formata:
-  estilo_parag = " width: 600px; margin-top: 2px;margin-bottom: 2px; text-indent: 0px; align: center;"
-  bloco_final = html_elem_paragraph.gera(estilo_parag, ht_tudo)
+    # Junta as partes:
+    ht_tudo = ht_tit + "<br/>" + ht_erros
 
-  return bloco_final
+    # Formata:
+    estilo_parag = " width: 600px; margin-top: 2px;margin-bottom: 2px; text-indent: 0px; align: center;"
+    ht_bloco_final = html_elem_paragraph.gera(estilo_parag, ht_tudo)
+
+  return ht_bloco_final

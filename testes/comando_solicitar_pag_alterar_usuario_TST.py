@@ -32,7 +32,7 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # sessão usada no teste
-sessao1 = obj_sessao.busca_por_identificador("S-00000001")
+sessao1 = obj_sessao.obtem_objeto("S-00000001")
 assert sessao1 != None
 
 cmd_args1 = {}

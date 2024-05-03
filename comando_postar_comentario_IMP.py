@@ -50,7 +50,7 @@ def converte_argumentos(cmd_args, usr_ses, erros):
   assert 'video' in cmd_args and cmd_args['video'] != None, "Campo 'video' não especificado"
   id_video = cmd_args['video']
   if 'video' in cmd_args: del cmd_args['video']
-  video = obj_video.busca_por_identificador(id_video)
+  video = obj_video.obtem_objeto(id_video)
   if video == None:
     erros.append(f"video {ìd_video} não existe")
   else:
@@ -59,7 +59,7 @@ def converte_argumentos(cmd_args, usr_ses, erros):
   if 'pai' in cmd_args and cmd_args['pai'] != None:
     id_pai = cmd_args['pai']
     if 'pai' in cmd_args: del cmd_args['pai']
-    pai = obj_comentario.busca_por_identificador(id_pai)
+    pai = obj_comentario.obtem_objeto(id_pai)
     if pai == None:
       erros.append(f"comentario {ìd_pai} não existe")
     elif obj_comentario.obtem_atributo(pai, 'video') != video:
@@ -72,7 +72,7 @@ def converte_argumentos(cmd_args, usr_ses, erros):
   if 'autor' in cmd_args and cmd_args['autor'] != None:
     id_autor = cmd_args['autor']
     if 'autor' in cmd_args: del cmd_args['autor']
-    autor = obj_usuario.busca_por_identificador(id_autor)
+    autor = obj_usuario.obtem_objeto(id_autor)
     if autor == None:
       erros.append(f"usuario {ìd_autor} não existe")
     elif autor != usr_ses:

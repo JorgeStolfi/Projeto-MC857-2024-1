@@ -1,22 +1,24 @@
 import html_linha_resumo_de_sessao_IMP
 
 def gera(ses, bt_ver, bt_fechar):
-  """Retorna uma lista de fragmentos HTML que descreve dados principais de uma
-  sessão: identificador da sessão, usuário dono da sessão, um booleano
-  indicando se a sessão está aberta ou não, o cookie da sessão
-  a data de criação da sessão, e opcionalmente botões para atuar na sessão
-  como especificado por {bt_ver} e {bt_fechar}
-
-  O resultado é uma tupla com fragmentos separados para cada um desses
-  campos, que pode ser usada como uma linha do argumento de {html_elem_table.gera}.
-
-  Se {bt_ver} é {True}, um dos elementos da tupla será um fragmento HTML
-  que descreve um botão "Ver". Quando clicado, esse botão emitirá o comando
-  HTTP "ver_sessao" com o identificador da sessão como argumento 
-  com chave 'sessao'.
-
-  Se {bt_fechar} é {True}, um dos elementos da tupla será um fragmento HTML
-  que descreve um botão "Fechar". Quando clicado, esse botão emitirá o comando
-  HTTP "fechar_sessao" com o identificador da sessão como argumento com chave
-  'sessao'."""
+  """
+  Retorna uma lista de fragmentos HTML com os valores dos principais
+  atributos do objeto {ses} da classe {obj_sessao.Classe}, incluindo o
+  identificador {ses_id}. Esta função serve para gerar os elementos de
+  uma linha da tabela produzida por {html_bloco_lista_de_sessoes.gera}.
+  
+  Se {ses} for {None}, o resultado é uma lista com os cabeçalhos das
+  colunas da tabela ("Sessão", "Usuário", etc.), em vez dos valores
+  dos atributos.
+  
+  Cada elemento do resultado estará formatado com um estilo adequado.
+  Veja {html_elem_item_de_resumo.gera}.
+  
+  Se o booleano {bt_ver} é {True}, resultado inclui também um botão
+  "Ver" que dispara um comando HTTP "ver_sessao". Se o booleano
+  {bt_fechar} é {True}, o resultado inclui também um botão "Fechar" que
+  dispara um comando HTTP "fechar_sessao". O argumento desses comandos
+  será {{ 'sessao': ses_id }}. Estes botões não aparecem se {ses} é
+  {None} (linha de cabeçalhos).
+  """
   return html_linha_resumo_de_sessao_IMP.gera(ses, bt_ver, bt_fechar)

@@ -34,7 +34,7 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # Obtem uma sessao de um usuario que é de administrador:
-ses1 = obj_sessao.busca_por_identificador("S-00000001")
+ses1 = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses1)
 
 for tag, id_obj in ( \

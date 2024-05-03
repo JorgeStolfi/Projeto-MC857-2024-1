@@ -33,9 +33,9 @@ def testa_processa(rot_teste, res_esp, *args):
 
 # Sessao de teste:
 sessoes = [
-  obj_sessao.busca_por_identificador("S-00000001"),
-  obj_sessao.busca_por_identificador("S-00000002"),
-  obj_sessao.busca_por_identificador("S-00000003")
+  obj_sessao.obtem_objeto("S-00000001"),
+  obj_sessao.obtem_objeto("S-00000002"),
+  obj_sessao.obtem_objeto("S-00000003")
 ]
 assert sessoes != None
 

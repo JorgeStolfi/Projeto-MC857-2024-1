@@ -31,18 +31,24 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-dados_linhas = \
-  [ ("Nome",          "text",     "itNome",        True,  "",                    ),
-    ("Idade",         "number",   "itIdade",       True,  "XX",                  ),
-    ("Telefone",      "tel",      "itTel",         False, "+XX (XX) XXXXX-XXXX", ),
-    ("Email",         "email",    "itEmail",       False, "email@domain.com",    ),
-    ("Carro",         "text",     "itCarro",       True,  "Marca-ano",           ),
-    ("Administrador", "checkbox", "checkboxAdmin", True,  "",                    ),
-    ("Patrocinador",  "text",     "itPatro",       False, "U-NNNNNNNN",          ),
-  ]
+linhas = [].copy()
+for ed in False, True:
+  linhas += \
+    [ ("Nome",          "text",     "itNome",        ed, (""                    if ed else None), ),
+      ("Carro",         "text",     "itCarro",       ed, ("Marca-ano"           if ed else None), ),
+      ("Idade",         "number",   "itIdade",       ed, ("XX"                  if ed else None), ),
+      ("Telefone",      "tel",      "itTel",         ed, ("+XX (XX) XXXXX-XXXX" if ed else None), ),
+      ("Email",         "email",    "itEmail",       ed, ("email@domain.com"    if ed else None), ),
+      ("Administrador", "checkbox", "checkboxAdmin", ed, (""                    if ed else None), ),
+      ("Patrocinador",  "text",     "itPatro",       ed, ("U-NNNNNNNN"          if ed else None), ),
+      ("Lema",          "textarea", "itLema",        ed, ("Seu lema"            if ed else None), ),
+    ]
+
+linhas.append( ("Segredo", "hidden", "itSegredo", False, None, ) )
+
   
 usr3_id = "U-00000003"
-usr3 = obj_usuario.busca_por_identificador(usr3_id)
+usr3 = obj_usuario.obtem_objeto(usr3_id)
 assert usr3 != None
 
 atrs = \
@@ -50,12 +56,14 @@ atrs = \
     'itIdade': 22,
     'itTel': "+55(19)12345-6789",
     'itEmail': "joaopedroii@email.com",
-    'itCarro': "Cybertruck-2019",
+    'itCarro': "Cybertruck 2019",
     'checkboxAdmin': True,
-    'itPatro': usr3
+    'itPatro': usr3,
+    'itLema': "Unidos Grudaremos",
+    'itSegredo': "Polichinelo é fofoqueiro",
   }
 
-testa_gera("teste", str, dados_linhas, atrs)
+testa_gera("teste", str, linhas, atrs)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")

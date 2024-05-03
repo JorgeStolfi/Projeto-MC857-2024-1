@@ -26,23 +26,23 @@ obj_video.inicializa_modulo(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_video(rot_teste, vid, id_vid, atrs):
+def verifica_video(rot_teste, vid, id_vid, atrs_esp):
     """Testes básicos de consistência do objeto {vid} da classe {obj_video.Classe}, dados
-    {id_vid} e atributos esperados {atrs}.  Retorna {True} se não detectou erros."""
+    {id_vid} e atributos esperados {atrs_esp}.  Retorna {True} se não detectou erros."""
     
     ok = True
 
     sys.stderr.write(f"  {rot_teste}: verificando video {id_vid}")
-    st_atrs = str(util_testes.trunca_tamanho(atrs, 2000))
-    sys.stderr.write(f" atrs = {st_atrs}\n")
+    st_atrs = str(util_testes.trunca_tamanho(atrs_esp, 2000))
+    sys.stderr.write(f" atrs_esp = {st_atrs}\n")
     
     if vid != None and type(vid) is obj_video.Classe:
         
         sys.stderr.write("  testando {obtem_autor()}:\n")
         usr1 = obj_video.obtem_autor(vid)
-        if 'autor' in atrs:
-            if usr1 != atrs['autor']:
-                aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(atrs['autor']),True)
+        if 'autor' in atrs_esp:
+            if usr1 != atrs_esp['autor']:
+                aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(atrs_esp['autor']),True)
                 ok = False
         
         sys.stderr.write("  testando {obtem_data_de_upload()}:\n")
@@ -51,7 +51,7 @@ def verifica_video(rot_teste, vid, id_vid, atrs):
             aviso_prog("retornou " + str(data1),True)
             ok = False
         
-        for chave, val in atrs.items():
+        for chave, val in atrs_esp.items():
             if chave != 'conteudo':
                 # Buscas por objeto (como autor) devem usar o ID:
                 if isinstance(val, obj_raiz.Classe):
@@ -65,33 +65,31 @@ def verifica_video(rot_teste, vid, id_vid, atrs):
         # Teste de duração
         sys.stderr.write("  testando {obtem_atributo(duracao)}:\n")
         duracao1 = obj_video.obtem_atributo(vid, 'duracao')
-        if 'duracao' in atrs:
-            if duracao1 != atrs['duracao']:
-                aviso_prog("retornou " + str(duracao1) + ", deveria ter retornado " + str(atrs['duracao']),True)
+        if 'duracao' in atrs_esp:
+            if duracao1 != atrs_esp['duracao']:
+                aviso_prog("retornou " + str(duracao1) + ", deveria ter retornado " + str(atrs_esp['duracao']),True)
                 ok = False
         sys.stderr.write(f"    duracao = {duracao1}\n")  # Imprimindo a duração
         
         # Teste de altura
         sys.stderr.write("  testando {obtem_atributo(altura)}:\n")
         altura1 = obj_video.obtem_atributo(vid, 'altura')
-        if 'altura' in atrs:
-            if altura1 != atrs['altura']:
-                aviso_prog("retornou " + str(altura1) + ", deveria ter retornado " + str(atrs['altura']),True)
+        if 'altura' in atrs_esp:
+            if altura1 != atrs_esp['altura']:
+                aviso_prog("retornou " + str(altura1) + ", deveria ter retornado " + str(atrs_esp['altura']),True)
                 ok = False
         sys.stderr.write(f"    altura = {altura1}\n")  # Imprimindo a altura
         
         # Teste de largura
         sys.stderr.write("  testando {obtem_atributo(largura)}:\n")
         largura1 = obj_video.obtem_atributo(vid, 'largura')
-        if 'largura' in atrs:
-            if largura1 != atrs['largura']:
-                aviso_prog("retornou " + str(largura1) + ", deveria ter retornado " + str(atrs['largura']),True)
+        if 'largura' in atrs_esp:
+            if largura1 != atrs_esp['largura']:
+                aviso_prog("retornou " + str(largura1) + ", deveria ter retornado " + str(atrs_esp['largura']),True)
                 ok = False
         sys.stderr.write(f"    largura = {largura1}\n")  # Imprimindo a largura
 
     return ok
-
-  
   
 def testa_obj_video_cria_muda(rot_teste, valido, modif, id_vid, atrs):
   """Se {modif} é {False}, testa {obj_video.cria(atrs)} e ignora {id_vid}.
@@ -113,7 +111,7 @@ def testa_obj_video_cria_muda(rot_teste, valido, modif, id_vid, atrs):
     st_atrs = str(util_testes.trunca_tamanho(atrs, 2000))
     if modif:
       sys.stderr.write(f"  testando obj_video.muda_atributos id = {id_vid} atrs = {st_atrs}\n")
-      vid = obj_video.busca_por_identificador(id_vid)
+      vid = obj_video.obtem_objeto(id_vid)
       assert vid != None, f"video {id_vid} não existe"
       obj_video.muda_atributos(vid, atrs)
     else:
@@ -159,9 +157,9 @@ def testa_obj_video_cria_muda(rot_teste, valido, modif, id_vid, atrs):
 # ----------------------------------------------------------------------
 sys.stderr.write("  Obtendo dois usuários para teste:\n")
 
-usr1 = obj_usuario.busca_por_identificador("U-00000001")
-usr2 = obj_usuario.busca_por_identificador("U-00000002")
-usr4 = obj_usuario.busca_por_identificador("U-00000004")
+usr1 = obj_usuario.obtem_objeto("U-00000001")
+usr2 = obj_usuario.obtem_objeto("U-00000002")
+usr4 = obj_usuario.obtem_objeto("U-00000004")
 
 # Obtendo uns bytes válidos de video:
 byt1 = open("videos/V-00000002.mp4", 'rb').read()
@@ -191,7 +189,7 @@ testa_obj_video_cria_muda("cr2_ok", True, False, None, cr2_atrs)
 
 # Teste OK - alteração de título:
 md0_vid_id = "V-00000001"
-md0_vid = obj_video.busca_por_identificador(md0_vid_id)
+md0_vid = obj_video.obtem_objeto(md0_vid_id)
 assert md0_vid != None
 md0_tit = "Não gostei do título!"
 md0_atrs = {
@@ -202,7 +200,7 @@ assert obj_video.obtem_atributo(md0_vid, 'titulo') == md0_tit
 
 # Teste com erro - alteração de alguns atributos imutáveis:
 md1_vid_id = "V-00000001"
-md1_vid = obj_video.busca_por_identificador(md1_vid_id)
+md1_vid = obj_video.obtem_objeto(md1_vid_id)
 assert md1_vid != None
 md1_dur = obj_video.obtem_atributo(md1_vid, 'duracao')
 md1_atrs = {
@@ -213,7 +211,7 @@ assert obj_video.obtem_atributo(md1_vid, 'duracao') == md1_dur
 
 # Teste OK - alteração sem mudar nada:
 md2_vid_id = "V-00000002"
-md2_vid = obj_video.busca_por_identificador(md2_vid_id)
+md2_vid = obj_video.obtem_objeto(md2_vid_id)
 md2_tit = obj_video.obtem_atributo(md2_vid, 'titulo') 
 md2_atrs = {
   'titulo': md2_tit,
@@ -224,7 +222,7 @@ testa_obj_video_cria_muda("md2_nul", True, True, md2_vid_id, md2_atrs)
 
 # Outro teste com erro - alteração de autor:
 md3_vid_id = "V-00000001"
-md3_vid = obj_video.busca_por_identificador(md3_vid_id)
+md3_vid = obj_video.obtem_objeto(md3_vid_id)
 assert md3_vid != None
 md3_autor = obj_video.obtem_atributo(md3_vid, 'autor')
 assert md3_autor != usr4
@@ -233,6 +231,54 @@ md3_atrs = {
 }
 testa_obj_video_cria_muda("md3_bad", False, True, md3_vid_id, md3_atrs)
 assert obj_video.obtem_atributo(md3_vid, 'autor') == md3_autor
+
+# ----------------------------------------------------------------------
+# Testa {valida_titulo}:
+
+def testa_funcao_validadora(rot_teste, funcao, res_esp, *args):
+  """Para testar funções de validação de atributos."""
+  global ok_global
+  modulo = obj_usuario
+  html = False   # Resultados string já são HTML?
+  frag = False   # Resultados HTML são só fragmentos?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  ok = util_testes.testa_funcao(rot_teste, modulo, funcao, res_esp, html,frag,pretty, *args)
+  ok_global = ok_global and ok
+  return ok
+
+
+funcao = obj_video.valida_titulo
+# {xvalid} = válido em qualquer caso (depende de {nulo_ok}).
+# {xvalparc} = válido se {parcial = True} (depende de {nulo_ok}).
+for xrot, xvalid, xvalparc, val in \
+  ( # Validos em qualquer caso:
+      ( "Nulo",                     True,   True,  None,  ),
+      ( "Valido1",                  True,   True,  "Velozes e Furiosos 2", ),
+      ( "Valido3",                  True,   True,  "Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghij", ),
+      ( "Valido4",                  True,   True,  "Abcdefghij", ),
+      # Validos só como parciais:"          
+      ( "InícioNaoMaius",           False,  True,  "simbora!"),
+      ( "FinalBranco",              False,  True,  "Nada "),
+      ( "MuitoCurtoFull9",          False,  False, "Valinoria"),
+      # Inválidos em qualquer caso:         
+      ( "MuitoCurtoParcial3",       False,  False, "Val"),
+      ( "MuitoLongo",               False,  False, "V" + ("r"*57) + "um!"),
+      ( "CaracsInvalidos",          False,  False, "Titulo X-φ ≥ ぁ"),
+      ( "BrancoDuplo",              False,  False, "Coisa  coisa"),
+    ):
+  for nulo_ok in ( False, True ):
+    for parcial in ( False, True ):
+      if val == None:
+        valido = nulo_ok
+      elif parcial:
+        valido = xvalparc
+      else:
+        valido = xvalid
+      # Exclui casos repetitivos: 
+      if (not nulo_ok) or (nulo_ok and (val == None or xrot == "Valido1")):
+        rot_teste = "nome_" + xrot + "_nulok" + str(nulo_ok)[0] + "_parcial" + str(parcial)[0] + ("_ok" if valido else "_bad")
+        res_esp = [] if valido else list
+        testa_funcao_validadora(rot_teste, funcao, res_esp,  "padrinho", val, nulo_ok, parcial)
 
 # ----------------------------------------------------------------------
 # Veredito final:

@@ -32,20 +32,4 @@ def data(chave, val, nulo_ok):
   e o segundo {SS} de "01" a "60" [sic]."""
   return util_valida_campo_IMP.data(chave, val, nulo_ok)
 
-def nome_de_arq_video(chave, val, nulo_ok):
-  """O nome de um arquivo de vídeo deve ser uma cadeia não vazia de caracteres ASCII 
-  contendo apenas letras, dígitos, e underscores [A-Za-z0-9_], seguida da extensão
-  ".mp4".  O nome, menos a extensão, deve ter no mínimo 4 e no máximo 12 caracteres."""
-  return util_valida_campo_IMP.nome_de_arq_video(chave, val, nulo_ok)
- 
-def titulo_de_video(chave, val, nulo_ok):
-  """O título de um vídeo deve ser uma string não vazia com 
-  no mínimo 10 e no máximo 60 caracters.
-  
-  Por enquanto, são permitidos apenas caracters visíveis ASCII [!-~], brancos, e as 
-  letras acentuadas do conjunto ISO-Latin-1. O título deve começar com uma letra
-  maiúscula, não pode terminar com brancos, e não pode ter dois ou mais brancos
-  seguidos."""
-  return util_valida_campo_IMP.titulo_de_video(chave, val, nulo_ok)
- 
   

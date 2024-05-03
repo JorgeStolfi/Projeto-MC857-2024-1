@@ -31,13 +31,13 @@ def testa_processa(rot_teste, res_esp, *args):
  
 # Uma sessão de admnistrador:
 ses_A1_id = "S-00000001"
-ses_A1 = obj_sessao.busca_por_identificador(ses_A1_id)
+ses_A1 = obj_sessao.obtem_objeto(ses_A1_id)
 assert ses_A1 != None
 assert obj_sessao.de_administrador(ses_A1)
 
 # Uma sessão de usuário comum:
 ses_C1_id = "S-00000003"
-ses_C1 = obj_sessao.busca_por_identificador(ses_C1_id)
+ses_C1 = obj_sessao.obtem_objeto(ses_C1_id)
 assert ses_C1 != None
 assert not obj_sessao.de_administrador(ses_C1)
 

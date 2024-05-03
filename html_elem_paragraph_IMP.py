@@ -1,5 +1,5 @@
 
 def gera(estilo, conteudo):
-  est = (" style=\"" + estilo + "\"" if estilo != None and estilo != "" else "")
-  html = "<p" + est + ">" + conteudo + "</p>\n"
+  ht_est = (" style=\"" + estilo + "\"" if estilo != None and estilo != "" else "")
+  html = "<p" + ht_est + ">" + conteudo + "</p>\n"
   return html

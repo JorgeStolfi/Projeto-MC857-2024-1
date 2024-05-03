@@ -34,13 +34,13 @@ def testa_gera(rot_teste, res_esp, *args):
   return ok
 
 usr1_ident = "U-00000001"
-usr1 = obj_usuario.busca_por_identificador(usr1_ident)
+usr1 = obj_usuario.obtem_objeto(usr1_ident)
 
 usr2_ident = "U-00000002"
-usr2 = obj_usuario.busca_por_identificador(usr2_ident)
+usr2 = obj_usuario.obtem_objeto(usr2_ident)
 
 usr5_ident = "U-00000005"
-usr5 = obj_usuario.busca_por_identificador(usr5_ident)
+usr5 = obj_usuario.obtem_objeto(usr5_ident)
 
 testa_gera("TUSER1",  list, usr1)
 testa_gera("TUSER2",  list, usr2)

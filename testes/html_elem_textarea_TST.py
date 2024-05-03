@@ -17,21 +17,15 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
    
-testa_gera("text_dica",   str, "Peso",    "peso", "idpeso", None,         True,  "Máximo 50 kg", "vade_retro", True, None, None)
-testa_gera("text_vini",   str, "Peso",    "peso", "idpeso", None,         True,  None,           "vade_retro", True, None, None)
-testa_gera("text_rdonly", str, "Peso",    "peso", None,     "50",         False, None,           "vade_retro", True, None, None)
+for alt, lar in ((None,None), (40, 800), (900, 300)):
+  dim = f"{alt:04d}x{lar:04d}" if alt != None else ""
+  testa_gera(f"text_dica" + dim,   str, "Titulo",  'peso',   "idtitu", None,             True,  "[dica] Título",   "vade_retro", True, alt, lar)
+  testa_gera(f"text_vini" + dim,   str, "Titulo",  'peso',   "idtitu", None,             True,  None,              "vade_retro", True, alt, lar)
+  testa_gera(f"text_rdonly" + dim, str, "Titulo",  'peso',   None,     "[val] Lusíadas", False, None,              "vade_retro", True, alt, lar)
 
-testa_gera("text_obrTV",  str, "Usuario", "user", "iduser", "U-12345678", True,  None,           "do_it", True, None, None)
-testa_gera("text_obrFV",  str, None,      "user", "iduser", "U-12345678", True,  None,           "do_it", True, None, None)
-testa_gera("text_obrFN",  str, None,      "user", "iduser", None,         True,  "Seu UID",      "do_it", True, None, None)
-
-testa_gera("text_dica_with_size",   str, "Peso",    "peso", "idpeso", None,         True,  "Máximo 50 kg", "vade_retro", True, 150, 300)
-testa_gera("text_vini_with_size",   str, "Peso",    "peso", "idpeso", None,         True,  None,           "vade_retro", True, 150, 300)
-testa_gera("text_rdonly_with_size", str, "Peso",    "peso", None,     "50",         False, None,           "vade_retro", True, 150, 300)
-
-testa_gera("text_obrTV_with_size",  str, "Usuario", "user", "iduser", "U-12345678", True,  None,           "do_it", True, 150, 300)
-testa_gera("text_obrFV_with_size",  str, None,      "user", "iduser", "U-12345678", True,  None,           "do_it", True, 150, 300)
-testa_gera("text_obrFN_with_size",  str, None,      "user", "iduser", None,         True,  "Seu UID",      "do_it", True, 150, 300)
+  testa_gera(f"text_obrTV" + dim,  str, "Fofoca",  'fofoca', "idfofo", "[val] Magina!",  True,  None,              "manda_brasa", True, alt, lar)
+  testa_gera(f"text_obrFV" + dim,  str, None,      'fofoca', "idfofo", "[val] Nossa!",   True,  None,              "manda_brasa", True, alt, lar)
+  testa_gera(f"text_obrFN" + dim,  str, None,      'fofoca', "idfofo", None,             True,  "[dica] Conta aí", "manda_brasa", True, alt, lar)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.");

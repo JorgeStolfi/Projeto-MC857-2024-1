@@ -8,8 +8,9 @@ import obj_sessao
 import obj_video
 import db_base_sql
 import util_testes
-from util_erros import ErroAtrib
+from util_erros import ErroAtrib, aviso_prog
 
+import re
 import sys
 
 # Conecta o banco e carrega as informações para o teste
@@ -23,7 +24,7 @@ db_tabelas_do_sistema.cria_todos_os_testes(True)
 ok_global = True # Vira {False} se algum teste falha.
 
 def testa_processa(rot_teste, res_esp, *args):
-  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, e grava esse resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   global ok_global
@@ -34,50 +35,102 @@ def testa_processa(rot_teste, res_esp, *args):
   ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
+  
+def verifica_atributos(com, atrs_esp):
+  """Verifica se os atributos do comentário {com} foram alterados
+  conforme o dicionário {atrs_esp}. """
+  global ok_global
+  
+  sys.stderr.write(f"    verificando o efeito:\n")
+
+  ok = True
+  atrs_esp = atrs_esp.copy() # Para não estragar o original.
+  
+  # Confere e elimina 'comentario' de {atrs_esp}:
+  com_id = obj_comentario.obtem_identificador(com)
+  atrs_atu = obj_comentario.obtem_atributos(com)
+  if 'comentario' in atrs_esp:
+    com_id_mod = atrs_esp['comentario'];
+    if com_id_mod != obj_comentario.obtem_identificador(com):
+      sys.stderr.write(f"    identificador incorreto {com_id} != {com_id_mod}\n")
+      ok = False
+    atrs_esp.pop('comentario')
+    
+  # Confere demais campos:
+  for chave, val in atrs_atu.items():
+    if chave in atrs_esp:
+      if atrs_esp[chave] != atrs_atu[chave]:
+        xatu = re.sub("\n", r"\\n", str(atrs_atu[chave]))
+        xesp = re.sub("\n", r"\\n", str(atrs_esp[chave]))
+        sys.stderr.write(f"    valor de '{chave}' NÃO bate «{xatu}» != «{xesp}»\n")
+        ok = False
+      atrs_esp.pop(chave)
+
+  if atrs_esp != dict():
+    sys.stderr.write(f"    campos espúrios em {'{'}atrs_esp{'}'} = {atrs_esp}\n")
+    ok = False
+    
+  if ok: 
+    sys.stderr.write(f"    CONFERE!\n")
+  else:
+    sys.stderr.write(f"    ** teste falhou\n")
+  
+  sys.stderr.write(f"  {('~'*70)}\n")
+
+
+  ok_global = ok_global and ok
+  return ok
 
 # Obtem sessao de teste
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses)
 
 
 # Comentarios existentes para teste(criados por obj_comentario.cria_testes)
+# 
+# ( "C-00000001", "V-00000001", "U-00000001", None,         "Supimpa!\nDeveras!", ),
+# ( "C-00000002", "V-00000001", "U-00000002", "C-00000001", "Né não! Acho... Talvez...", ),
+# ( "C-00000003", "V-00000002", "U-00000002", None,         "Falta sal.", ),
+# ( "C-00000004", "V-00000003", "U-00000003", None,         "Soberbo!", ),
+# ( "C-00000005", "V-00000001", "U-00000003", "C-00000002", "É sim!", ),
+# ( "C-00000006", "V-00000003", "U-00000003", None,         "Supercílio! " + "k"*60, ),
 
-#( "C-00000001", "V-00000001", "U-00000001", "2024-04-05 08:00:00 UTC", None,         "Supimpa!\nDeveras!", ),
-#( "C-00000002", "V-00000001", "U-00000002", "2024-04-05 08:10:00 UTC", "C-00000001", "Né não! Acho... Talvez...", ),
-#( "C-00000003", "V-00000002", "U-00000002", "2024-04-05 08:20:00 UTC", None,         "Falta sal.", ),
-#( "C-00000004", "V-00000003", "U-00000003", "2024-04-05 08:30:00 UTC", None,         "Soberbo!", ),
-#( "C-00000005", "V-00000001", "U-00000003", "2024-04-05 08:40:00 UTC", "C-00000002", "É sim!", ),
-#( "C-00000006", "V-00000003", "U-00000003", "2024-04-05 08:50:00 UTC", None,         "Supercílio! " + "k"*60, ),
 
-# Executar o teste
+# comentario de teste:
+com1_id = "C-00000001"
+com1 = obj_comentario.obtem_objeto(com1_id)
+assert com1 != None
 
-#T1 : alteração bem sucedida somente com campo que será alterado
-cmd_args = {
-  'comentario': "C-00000001",  'texto' : "Texto de teste"
-}
-testa_processa("T1", str, ses, cmd_args)
+sys.stderr.write("\n")
 
-#T2 : alteração sem sucesso. Tentou alterar o vídeo ao qual o comentário pertence
-cmd_args = {
-  'comentario': "C-00000001", 'video' : "V-00000002", 'texto' : "Texto de teste" 
-}
-testa_processa("T2", str, ses, cmd_args)
+sys.stderr.write("  tentativa de alteração do campo 'texto' apenas, deve dar certo:\n")
+cmd_args_01 = { 'comentario': com1_id,  'texto': "Texto Novo", }
+testa_processa("T1", str, ses, cmd_args_01)
+verifica_atributos(com1, cmd_args_01) # Deve ter alterado.
 
-#T3 : alteração sem sucesso. Tentou alterar o autor do comentário
-cmd_args = {
-  'comentario': "C-00000001", 'autor' : "U-00000003", 'texto' : "Texto de teste" 
-}
-testa_processa("T3", str, ses, cmd_args)
+sys.stderr.write("  tentativa de alteração do campo 'video', deve falhar:\n")
+com1_atrs = obj_comentario.obtem_atributos(com1) # Atributos atuais.
+cmd_args_02 = { 'comentario': com1_id, 'video': "V-00000002", 'texto': "Retiro o que disse" }
+testa_processa("T2", str, ses, cmd_args_02)
+verifica_atributos(com1, com1_atrs) # Não devem ter mudado.
 
-#T4 : alteração bem sucedida com campos 'autor' e 'video' com valores iguais aos do comentario
-cmd_args = {
-  'comentario': "C-00000001",  'texto' : "Texto de teste", 'autor' : "U-00000001", 'video' : "V-00000001"
-}
-testa_processa("T4", str, ses, cmd_args)
+sys.stderr.write("  tentativa de alteração do campo 'autor', deve falhar:\n")
+com1_atrs = obj_comentario.obtem_atributos(com1) # Atributos atuais.
+cmd_args_03 = { 'comentario': com1_id, 'autor': "U-00000003", 'texto': "Pensando bem..." }
+testa_processa("T3", str, ses, cmd_args_03)
+verifica_atributos(com1, com1_atrs) # Não devem ter mudado.
 
-# !!! Deveria ter mais testes !!!
+sys.stderr.write("  tentativa de alteração com campos imutaveis iguais aos atuais, deve dar certo:\n")
+com1_atrs = obj_comentario.obtem_atributos(com1) # Atributos atuais.
+cmd_args_04 = { 'comentario': com1_id,  }
+cmd_args_04['video'] = obj_video.obtem_identificador(com1_atrs['video']) 
+cmd_args_04['autor'] = obj_usuario.obtem_identificador(com1_atrs['autor']) 
+cmd_args_04['pai'] = obj_comentario.obtem_identificador(com1_atrs['pai']) if com1_atrs['pai'] != None else None 
+cmd_args_04['texto'] = "Ora bolas!"
+testa_processa("T4", str, ses, cmd_args_04)
+verifica_atributos(com1, cmd_args_04) # Devem ter mudado.
 
 if ok_global:
   sys.stderr.write("Teste terminado normalmente\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

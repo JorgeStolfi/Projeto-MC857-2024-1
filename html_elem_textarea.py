@@ -23,23 +23,27 @@ def gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio, alt
   
   O valor do campo poderá ser editado pelo usuário apenas se {editavel} for {True}.
   Se for {False}, {val_ini} não pode ser {None}.
-  
-  O parâmetro {dica} é um texto que será mostrado no campo, se {val_ini}
-  for {None}, para orientar o preenchimento (resulta em "<input ...
-  placeholder='{dica}' .../>"). Este campo NÃO será devolvido ao
-  servidor Se for {None}, o campo estará inicialmente em branco.
-  
-  O parâmetro {cmd}, se não for {None}, é o comando que será enviado ao 
-  servidor via POST, quando o usuário alterar este campo, em vez do
-  "action" default do formulário.
-  
+
   O parâmetro {ident}, se não for {None}, será um string usado 
-  no atributo "id="  do "<textarea>".
+  no atributo "id=" do "<textarea>".
+  
+  Os parâmetros seguintes só tem efeito se {editavel} for {True}.
+  
+    * {dica} é um texto que será mostrado no campo, se {val_ini}
+    for {None}, para orientar o preenchimento (resulta em "<input ...
+    placeholder='{dica}' .../>"). Este campo NÃO será devolvido ao
+    servidor Se for {None}, o campo estará inicialmente em branco.
+    Se o campo não é editável, a {dica} deve ser {None}.
 
-  O parâmetro {obrigatorio} indica se o campo deve ser obrigatóriamente preenchido ou não.
-  Isso altera visualmente a forma como o campo é exibido para o usuário pelo navegador. O valor
-  default deste parâmetro é False, por questões de compatibilidade.
+    * {cmd}, se não for {None}, é o comando que será enviado ao 
+    servidor via POST, quando o usuário alterar este campo, em vez do
+    "action" default do formulário.
 
-  Os parâmetros altura e largura definem o tamanho da textarea, caso tenham valores diferentes de None
+    * {obrigatorio} indica se o campo deve ser obrigatóriamente preenchido ou não.
+    Isso altera visualmente a forma como o campo é exibido para o usuário pelo navegador. O valor
+    default deste parâmetro é False, por questões de compatibilidade.
+
+    * {altura} e {largura} definem o tamanho da textarea, caso
+    tenham valores diferentes de {None}.
   """  
   return html_elem_textarea_IMP.gera(rot_campo, chave, ident, val_ini, editavel, dica, cmd, obrigatorio, altura, largura)

@@ -38,7 +38,7 @@ def processa(ses, dados):
       if id_usr == None:
         erro_email = "Usuário " + email + " não está cadastrado"
       else:
-        usr = obj_usuario.busca_por_identificador(id_usr)
+        usr = obj_usuario.obtem_objeto(id_usr)
         assert usr != None
         atrs_usr = obj_usuario.obtem_atributos(usr)
         if atrs_usr["senha"] != senha:

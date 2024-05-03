@@ -55,7 +55,7 @@ def testa_processa(rot_teste, ses, cmd_args, deveria_cadastrar):
   
   # Verifica se já existe usuário com esse email:
   usr_old_id = obj_usuario.busca_por_email(cmd_args["email"])
-  usr_old = obj_usuario.busca_por_identificador(usr_old_id) if usr_old_id != None else None
+  usr_old = obj_usuario.obtem_objeto(usr_old_id) if usr_old_id != None else None
   usr_old_atrs = obj_usuario.obtem_atributos(usr_old) if usr_old != None else None
   if usr_old_id != None:
     sys.stderr.write(f"  usuario existente com esse email = {usr_old_id} atrs = {usr_old_atrs}\n")
@@ -66,7 +66,7 @@ def testa_processa(rot_teste, ses, cmd_args, deveria_cadastrar):
   ok = ok and util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, ses, cmd_args) 
 
   usr_new_id = obj_usuario.busca_por_email(cmd_args["email"])
-  usr_new = obj_usuario.busca_por_identificador(usr_new_id) if usr_new_id != None else None
+  usr_new = obj_usuario.obtem_objeto(usr_new_id) if usr_new_id != None else None
   usr_new_atrs = obj_usuario.obtem_atributos(usr_new) if usr_new != None else None
   if usr_new_id != None:
     sys.stderr.write(f"  usuario criado = {usr_new_id} atrs = {usr_new_atrs}\n")
@@ -74,11 +74,11 @@ def testa_processa(rot_teste, ses, cmd_args, deveria_cadastrar):
   
   if usr_old_id != None:
     if usr_new_id != usr_old_id:
-      sys.stderr.write(f"  !! cadastrou dois usuários com mesmo email\n")
+      aviso_prog(f"Cadastrou dois usuários com mesmo email\n")
       ok = False
     else:
       if deveria_cadastrar:
-        sys.stderr.write(f"  parâmetro {'{'}deveria_cadastrar{'{'} = {deveria_cadastrar} inconsistente\n")
+        erro_prog(f"Parâmetro {'{'}deveria_cadastrar{'{'} = {deveria_cadastrar} inconsistente\n")
         ok = False
   else:
     if usr_new_id != None and not deveria_cadastrar:

@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-import html_pag_ver_usuario
+import html_pag_ver_comentario
 import db_base_sql
 import util_testes
 import db_tabelas_do_sistema
@@ -23,7 +23,7 @@ def testa_gera(rot_teste, res_esp, *args):
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   
   global ok_global
-  modulo = html_pag_ver_usuario
+  modulo = html_pag_ver_comentario
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
@@ -32,10 +32,10 @@ def testa_gera(rot_teste, res_esp, *args):
   return ok
 
 # Sessao do admin
-ses1 = obj_sessao.busca_por_identificador("S-00000001")
+ses1 = obj_sessao.obtem_objeto("S-00000001")
 
 # Comentário de teste:
-com1 = obj_comentario.busca_por_identificador("C-00000002")
+com1 = obj_comentario.obtem_objeto("C-00000002")
 
 testa_gera("C-E0",  "AssertionError", ses1, com1, None)
 testa_gera("C-E2",  "AssertionError", ses1, com1, ["Veja a mensagem abaixo", "Veja a mensagem acima"])

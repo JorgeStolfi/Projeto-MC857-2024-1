@@ -97,11 +97,11 @@ def obtem_atributo(obj, chave):
   Não serve para obter o identificador."""
   return obj_raiz_IMP.obtem_atributo(obj, chave)
 
-def busca_por_identificador(id_obj, tabela, def_obj_mem):
+def obtem_objeto(id_obj, tabela, def_obj_mem):
   """Localiza um objeto com identificador {id_obj} (uma string da forma
   "{X}-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_raiz.Classe}.
   Se {id_obj} é {None} ou tal objeto não existe, devolve {None}."""
-  return obj_raiz_IMP.busca_por_identificador(id_obj, tabela, def_obj_mem)
+  return obj_raiz_IMP.obtem_objeto(id_obj, tabela, def_obj_mem)
 
 def busca_por_campo(chave, val, unico, tabela):
   """Procura objetos cujo atributo {chave} tem valor {val}. 
@@ -115,26 +115,28 @@ def busca_por_campo(chave, val, unico, tabela):
   return obj_raiz_IMP.busca_por_campo(chave, val, unico, tabela)
 
 def busca_por_campos(args, unico, tabela):
-  """Procura objetos com atributos {args}, na memória ou na base de dados.
+  """
+  Semelhante a {busca_por_campo}, mas procura linhas com certos valores 
+  em certos campos, especificados pelo dicionário {args}.
   
-  Especificamente, para todo par {ch: val} em {args}, exige que o valor
-  do atributo {ch} do objeto seja {val}. 
+  Basicamente, para cada par {ch,val} em {args}, exige que a coluna {ch} da tabela
+  tenha valor {val}.  
+  
+  Entretanto, se {val} começa e termina com '%', exige apenas que o
+  valor na coluna {ch} seja apenas similar ao valor especificado em
+  {val} (menos esses caracteres '%'). Especificamente, o valor A é
+  semelhante ao valor B se o valor A contém o valor B, sem distinção de
+  letras maiúsculas e minúsculas. O valor 'João da Silva' é semelhante
+  aos valores 'João', 'joão', 'da', e 'Silva', por exemplo.
   
   Se {unico} for {False}, devolve uma lista, possivelmente vazia,
   com os identificadores dos objetos encontrados (NÃO os objetos).
   
   Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
   ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
-  se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
+  se houver apenas um.  Em qualquer outro case, termina o programa com erro.
+  """
   return obj_raiz_IMP.busca_por_campos(args, unico, tabela)
-
-def busca_por_semelhanca(args, unico, tabela):
-  """Similar a {busca_por_campos}, mas aceita valores na tabela semelhantes 
-  aos valores em {args}, em vez de iguais a eles.  Vide
-  {db_obj_tabela.busca_por_semelhanca}."""
-  # !!! Deveria ter especificação exato/aproximado para cada campo. !!!
-  # !!! Corrigir clientes !!!
-  return obj_raiz_IMP.busca_por_semelhanca(args, unico, tabela)
   
 def ultimo_identificador(tabela):
   """Retorna o identificador do último objeto na tabela {tabela},
@@ -152,7 +154,7 @@ def verifica_criacao(obj, tipo, id_obj, atrs, ignore, tabela, def_obj_mem):
   
   Especificamente, testa se {obtem_identificador(obj)} devolve
   o identificador esperado {id_obj}, {obtem_atributos(obj)} devolve 
-  os atributos esperados {atrs}, e {busca_por_identificador(id_obj)}
+  os atributos esperados {atrs}, e {obtem_objeto(id_obj)}
   devolve o próprio {obj}.  
   
   O parâmetro {ignore} deve ser {None}, ou uma lista de chaves

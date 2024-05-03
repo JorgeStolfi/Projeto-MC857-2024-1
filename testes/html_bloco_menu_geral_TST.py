@@ -1,6 +1,8 @@
 #! /usr/bin/python3
 
 import html_bloco_menu_geral
+import obj_usuario
+
 import util_testes
 import sys
 
@@ -27,10 +29,18 @@ def testa_gera(rot_teste, res_esp, *args):
   ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
+  
+  
+# Usuários para teste:
+usrA = obj_usuario.obtem_objeto("U-00000001")
+assert obj_usuario.obtem_atributo(usrA, 'administrador')
 
-testa_gera("deslogado", str, False, None,            False)
-testa_gera("comum",     str, True,  "João Segundo", False)
-testa_gera("admin",     str, True,  "José Primeiro",  True)
+usrC = obj_usuario.obtem_objeto("U-00000003")
+assert not obj_usuario.obtem_atributo(usrC, 'administrador')
+
+testa_gera("deslogado", str, None)
+testa_gera("comum",     str, usrC)
+testa_gera("admin",     str, usrA)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")

@@ -34,7 +34,7 @@ def testa_gera(rot_teste, res_esp, *args):
   return ok
 
 # Testes do modulo:
-ses1 = obj_sessao.busca_por_identificador("S-00000001")
+ses1 = obj_sessao.obtem_objeto("S-00000001")
 assert ses1 != None
 testa_gera("S",  str, ses1)
 

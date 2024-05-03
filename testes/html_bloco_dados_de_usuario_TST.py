@@ -39,7 +39,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Sessao de usuário  administrador:
 sesA1_id = "S-00000006"
-sesA1 = obj_sessao.busca_por_identificador(sesA1_id)
+sesA1 = obj_sessao.obtem_objeto(sesA1_id)
 assert sesA1 != None
 assert obj_sessao.aberta(sesA1)
 assert obj_sessao.de_administrador(sesA1)
@@ -49,7 +49,7 @@ assert usrA1_id == "U-00000008"
 
 # Sessão de usuário comum:
 sesC1_id = "S-00000003"
-sesC1 = obj_sessao.busca_por_identificador(sesC1_id)
+sesC1 = obj_sessao.obtem_objeto(sesC1_id)
 assert sesC1 != None
 assert obj_sessao.aberta(sesC1)
 assert not obj_sessao.de_administrador(sesC1)
@@ -59,15 +59,15 @@ assert usrC1_id == "U-00000002"
 
 # Usuario comum que não é dono de nenhuma das duas sessões:
 usrC2_id = "U-00000003"
-usrC2 = obj_usuario.busca_por_identificador(usrC2_id)
+usrC2 = obj_usuario.obtem_objeto(usrC2_id)
 assert usrC2 != None
 assert not obj_usuario.obtem_atributo(usrC2,'administrador')
 
 for id_ses in None, sesA1_id, sesC1_id:
   for id_usr in None, usrC1_id, usrC2_id, usrA1_id:
-    ses = obj_sessao.busca_por_identificador(id_ses) if id_ses != None else None
+    ses = obj_sessao.obtem_objeto(id_ses) if id_ses != None else None
     ses_admin = obj_sessao.de_administrador(ses) if ses != None else False
-    usr = obj_usuario.busca_por_identificador(id_usr) if id_usr != None else None
+    usr = obj_usuario.obtem_objeto(id_usr) if id_usr != None else None
     ses_usr = obj_sessao.obtem_usuario(ses) if ses != None else None
     ses_usr_id = obj_usuario.obtem_identificador(ses_usr) if ses_usr != None else None
     ses_proprio = (id_usr != None and id_usr == ses_usr_id)

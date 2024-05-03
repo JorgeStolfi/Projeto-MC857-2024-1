@@ -13,10 +13,10 @@ def gera():
   
   ht_rot_campo = html_elem_label.gera("Senha", ": ")
   ht_campo = html_elem_input.gera("password", "senha", None, None, None, True, None, None, False)
-  linhas.append((ht_rot_campo, ht_campo,))
+  linhas.append(("<td>" + ht_rot_campo + "</td>", "<td>" + ht_campo + "</td>",))
 
   # Monta a tabela com os fragmentos HTML:
-  ht_table = html_elem_table.gera(linhas, None)
+  ht_table = html_elem_table.gera(linhas)
 
   ht_bt_login = html_elem_button_submit.gera("Entrar", 'fazer_login', None, '#55ee55')
 

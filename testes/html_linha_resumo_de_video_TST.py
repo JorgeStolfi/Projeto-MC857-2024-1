@@ -35,13 +35,13 @@ def testa_gera(rot_teste, res_esp, *args):
 ids_videos = [
   "V-00000001",
   "V-00000002",
-  "V-00000003",
-  "V-00000004",
 ]
 
-for vid_ident in ids_videos:
-  vid = obj_video.busca_por_identificador(vid_ident)
-  testa_gera(vid_ident, list, vid)
+for vid_id in ids_videos:
+  for mostra_autor in False, True:
+    vid = obj_video.obtem_objeto(vid_id)
+    rot_teste = f"{vid_id[2:]}_autor{str(mostra_autor)[0]}"
+    testa_gera(rot_teste, list, vid, mostra_autor)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")

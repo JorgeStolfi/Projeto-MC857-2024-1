@@ -31,7 +31,7 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
   
 id_ses1 = "S-00000001" # Sessao do usuário fechador.
-ses1 = obj_sessao.busca_por_identificador(id_ses1)
+ses1 = obj_sessao.obtem_objeto(id_ses1)
 assert ses1 != None
 assert obj_sessao.aberta(ses1)
 

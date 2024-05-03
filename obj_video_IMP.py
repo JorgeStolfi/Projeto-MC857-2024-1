@@ -10,6 +10,7 @@ import util_valida_campo
 
 import cv2
 import os
+import re
 
 from util_erros import ErroAtrib, erro_prog, mostra
 
@@ -75,36 +76,6 @@ def cria(atrs):
   # Nome do arquivo de vídeo:
   nome_arq = f"videos/{id_vid}.mp4"
 
-  #extrai umagem thumb do video
-  video_path = nome_arq
-  thumb_dir = "thumb"
-  #verifica a existencia do diretório
-  if not os.path.exists(thumb_dir):
-    os.makedirs(thumb_dir)
-  #carrega o video
-  cap = cv2.VideoCapture(video_path)
-  #captura as dimensões do video
-  width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-  height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-  #escolhe o frame video
-  frame_number = 0
-
-  while True:
-    ret, frame = cap.read()
-
-    if not ret:
-        break
-
-    thumb = cv2.resize(frame, (width, height))
-
-    filename = f"V-{frame_number:08d}.png"
-
-    cv2.imwrite(os.path.join(thumb_dir, filename), thumb)
-
-    frame_number += 1
-  cap.release()
-  #termino
-
   if 'conteudo' in atrs:
     # Grava o conteúdo em disco:
     conteudo = atrs['conteudo']
@@ -116,9 +87,25 @@ def cria(atrs):
     assert os.path.exists(nome_arq), f"Item 'conteudo' ausente e arquivo {nome_arq} não existe"
   
   duracao, largura, altura = obtem_dimensoes_do_arquivo(nome_arq)
-  atrs['duracao'] = int(duracao)  # Convertendo duração para inteiro
+  atrs['duracao'] = duracao
   atrs['largura'] = largura
   atrs['altura'] = altura
+
+  # Extrai imagem thumb do video:
+  thumb_dir = "thumbs"
+  #verifica a existencia do diretório
+  if not os.path.exists(thumb_dir):
+    os.makedirs(thumb_dir)
+  # Carrega o video !!! Má Idéia !!!
+  fluxo = cv2.VideoCapture(nome_arq)
+
+  # Obtém o frame 0 do vídeo:
+  successo, capa = fluxo.read()
+  assert successo, "captura de frame falhou"
+  fluxo.release()
+
+  nome_thumb = f"{thumb_dir}/{id_vid}.png"
+  cv2.imwrite(nome_thumb, capa)
 
   erros = valida_atributos(None, atrs)
   if len(erros) != 0: raise ErroAtrib(erros)
@@ -173,10 +160,10 @@ def obtem_data_de_upload(vid):
   assert vid != None and isinstance(vid, obj_video.Classe)
   return obj_raiz.obtem_atributo(vid, 'data')
 
-def busca_por_identificador(id_vid):
+def obtem_objeto(id_vid):
   global tabela
   if id_vid == None: return None
-  vid = obj_raiz.busca_por_identificador(id_vid, tabela, def_obj_mem)
+  vid = obj_raiz.obtem_objeto(id_vid, tabela, def_obj_mem)
   return vid
 
 def busca_por_campo(chave, val):
@@ -214,7 +201,7 @@ def cria_testes(verb):
       ( "V-00000004", "U-00000004", "Vírus",     ),
     ]
   for id_vid_esp, id_autor, titulo in lista_ats:
-    autor = obj_usuario.busca_por_identificador(id_autor)
+    autor = obj_usuario.obtem_objeto(id_autor)
     assert autor != None and type(autor) is obj_usuario.Classe
     atrs_cria = {
       'autor': autor,
@@ -233,6 +220,42 @@ def cria_testes(verb):
 def verifica_criacao(vid, id_vid, atrs):
   ignore = [ 'conteudo' ]
   return obj_raiz.verifica_criacao(vid, obj_video.Classe, id_vid, atrs, ignore, tabela, def_obj_mem)
+
+def valida_titulo(chave, val, nulo_ok, parcial):
+
+  # Erro crasso de programa, não deveria acontecer:
+  assert val == None or type(val) is str, "argumento de tipo inválido"
+  
+  # !!! Tratar o parâmetro {parcial} !!!
+ 
+  erros = [].copy() 
+
+  if val is None:
+    if not nulo_ok: erros.append(f"campo '{chave}' não pode ser omitido")
+  else:
+    n = len(val)
+    nmin = 10
+    nmax = 60
+    if len(val) < nmin:
+      erros.append(f"campo '{chave}' = \"{str(val)}\" muito curto ({n} caracteres, mínimo {nmin})")
+    elif len(val) > nmax:
+      erros.append(f"campo '{chave}' = \"{str(val)}\" muito longo ({n} caracteres, máximo {nmax})")
+
+    if not val[0].isupper():
+      erros.append(f"campo '{chave}' = \"{str(val)}\" a primeira letra deve ser maiúscula")
+
+    if val[-1].isspace():
+      erros.append(f"campo '{chave}' = \"{str(val)}\" não pode terminar com espaços")
+
+    if "  "  in val:
+      erros.append(f"campo '{chave}' = \"{str(val)}\" não pode conter dois espaços seguidos")
+
+    # Caracterers válidos ISO-Latin-1:
+    padrao = r'^[A-Za-z0-9À-ÖØ-öø-ÿ!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~\s]+$'
+    if not re.match(padrao, val):
+      erros.append(f"campo '{chave}' = \"{str(val)}\" contém caracteres não permitidos")
+
+  return erros
 
 def liga_diagnosticos(val):
   global tabela
@@ -264,7 +287,7 @@ def obtem_dimensoes_do_arquivo(nome_arq):
   result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
   data = json.loads(result.stdout)
 
-  duracao = float(data["streams"][0]["duration"]) * 1000  # Convertendo para milissegundos
+  duracao = int(float(data["streams"][0]["duration"]) * 1000)  # Convertendo para milissegundos
   largura = int(data["streams"][0]["width"])
   altura = int(data["streams"][0]["height"])
   return duracao, largura, altura

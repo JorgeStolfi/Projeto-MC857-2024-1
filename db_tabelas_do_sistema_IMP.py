@@ -18,13 +18,13 @@ def inicializa_todas(limpa):
 def identificador_para_objeto(id_obj):
   letra = id_obj[0];
   if letra == "U":
-    obj = obj_usuario.busca_por_identificador(id_obj)
+    obj = obj_usuario.obtem_objeto(id_obj)
   elif letra == "S":
-    obj = obj_sessao.busca_por_identificador(id_obj)
+    obj = obj_sessao.obtem_objeto(id_obj)
   elif letra == "V":
-    obj = obj_video.busca_por_identificador(id_obj)
+    obj = obj_video.obtem_objeto(id_obj)
   elif letra == "C":
-    obj = obj_comentario.busca_por_identificador(id_obj)
+    obj = obj_comentario.obtem_objeto(id_obj)
   else:
     erro_prog("identificador '" + id_obj + " inválido")
   return obj

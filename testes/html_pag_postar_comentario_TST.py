@@ -38,7 +38,7 @@ dados = { \
 }
 
 # Testa inserir dados no form de comentarios sem um comentarios pai
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
 testa_gera("T1-success", str, ses, dados, None)
 
 dados = { \
@@ -49,7 +49,7 @@ dados = { \
 }
 
 # Testa inserir dados no form de comentarios com um comentarios pai
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
 testa_gera("T2-success", str, ses, dados, None)
 
 if ok_global:

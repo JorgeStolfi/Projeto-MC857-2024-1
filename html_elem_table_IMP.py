@@ -1,22 +1,19 @@
-def gera(linhas, cabecalho):
-  ht_tab = "<table>\n"
+import sys
 
-  # Adiciona cabecalho
-  if cabecalho != None:
-    ht_tab += "<tr>\n"
-    for el in cabecalho:
-      ht_tab += "<th>" + el + "</th>"
-    ht_tab += "</tr>\n"
+def gera(linhas):
 
-  # Adiciona linhas de cada coluna
+  ht_tabela = "<table>\n"
+
+  # Adiciona linhas:
   for lin in linhas:
-    ht_lin = "<tr>\n"
+    assert len(lin) > 0, "linha de tabela não pode ser vazia"
 
+    # Adiciona os elementos da linha
+    ht_elems = ""
     for el in lin:
-      ht_el = "<td>" + el + "</td>\n"
-      ht_lin += ht_el
-   
-    ht_lin += "</tr>\n"
-    ht_tab += ht_lin
-  ht_tab += "</table>"
-  return ht_tab
+      ht_elems += "    " + el + "\n"
+    ht_linha = "  <tr>\n" + ht_elems + "  </tr>\n"
+
+    ht_tabela += ht_linha
+  ht_tabela += "</table>"
+  return ht_tabela

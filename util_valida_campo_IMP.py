@@ -83,37 +83,3 @@ def nome_de_arq_video(chave, val, nulo_ok):
       erros += [ f"campo '{chave}' = \"{nome_arq}\" é nome de arquivo inválido: muito longo ({n} caracteres, maximo {nmax})" ]
 
   return erros
-
-def titulo_de_video(chave, val, nulo_ok):
-
-  # Erro crasso de programa, não deveria acontecer:
-  assert val == None or type(val) is str, "argumento de tipo inválido"
- 
-  erros = [].copy() 
-
-  if val is None:
-    if not nulo_ok: erros.append(f"campo '{chave}' não pode ser omitido")
-  else:
-    n = len(val)
-    nmin = 10
-    nmax = 60
-    if len(val) < nmin:
-      erros.append(f"campo '{chave}' = \"{str(val)}\" muito curto ({n} caracteres, mínimo {nmin})")
-    elif len(val) > nmax:
-      erros.append(f"campo '{chave}' = \"{str(val)}\" muito longo ({n} caracteres, máximo {nmax})")
-
-    if not val[0].isupper():
-      erros.append(f"campo '{chave}' = \"{str(val)}\" a primeira letra deve ser maiúscula")
-
-    if val[-1].isspace():
-      erros.append(f"campo '{chave}' = \"{str(val)}\" não pode terminar com espaços")
-
-    if "  "  in val:
-      erros.append(f"campo '{chave}' = \"{str(val)}\" não pode conter dois espaços seguidos")
-
-    # Caracterers válidos ISO-Latin-1:
-    padrao = r'^[A-Za-z0-9À-ÖØ-öø-ÿ!"#$%&\'()*+,\-./:;<=>?@\[\]^_`{|}~\s]+$'
-    if not re.match(padrao, val):
-      erros.append(f"campo '{chave}' = \"{str(val)}\" contém caracteres não permitidos")
-
-  return erros

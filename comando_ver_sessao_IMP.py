@@ -17,7 +17,7 @@ def processa(ses, cmd_args):
     else: 
       # Quer ver uma sessão diferente da corrente:
       id_ses_a_ver = cmd_args['sessao']
-      ses_a_ver = obj_sessao.busca_por_identificador(id_ses_a_ver)
+      ses_a_ver = obj_sessao.obtem_objeto(id_ses_a_ver)
       if ses_a_ver == None:
         erros.append("sessão inexistente")
     if ses_a_ver != None:

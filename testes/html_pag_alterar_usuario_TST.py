@@ -33,14 +33,14 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Sessao de usuário  administrador:
 sesA1_id = "S-00000006"
-sesA1 = obj_sessao.busca_por_identificador(sesA1_id)
+sesA1 = obj_sessao.obtem_objeto(sesA1_id)
 assert sesA1 != None
 assert obj_sessao.aberta(sesA1)
 assert obj_sessao.de_administrador(sesA1)
 
 # Sessão de usuário comum:
 sesC1_id = "S-00000003"
-sesC1 = obj_sessao.busca_por_identificador(sesC1_id)
+sesC1 = obj_sessao.obtem_objeto(sesC1_id)
 assert sesC1 != None
 assert obj_sessao.aberta(sesC1)
 assert not obj_sessao.de_administrador(sesC1)
@@ -59,7 +59,7 @@ assert usrC1_id == "U-00000002"
 
 # Usuario comum que não é dono de nenhuma das duas sessões:
 usrC2_id = "U-00000003"
-usrC2 = obj_usuario.busca_por_identificador(usrC2_id)
+usrC2 = obj_usuario.obtem_objeto(usrC2_id)
 assert usrC2 != None
 assert not obj_usuario.obtem_atributo(usrC2,'administrador')
 
@@ -75,7 +75,7 @@ for et, erros in erros_dic.items():
     for ut, id_usr in usr_dic.items():
       if id_usr == None or id_ses == sesA1_id or (id_ses == sesC1_id and id_usr == usrC1_id):
         id_ses = obj_sessao.obtem_identificador(ses)
-        usr = obj_usuario.busca_por_identificador(id_usr)
+        usr = obj_usuario.obtem_objeto(id_usr)
         atrs_tot = obj_usuario.obtem_atributos(usr) if usr != None else {}
         atrs_som = { 'nome': "Alteradus", }
         atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }

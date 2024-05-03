@@ -24,7 +24,7 @@ def processa(ses, cmd_args):
   elif cmd_args['usuario'] != None:
     # O parâmetro 'usuario' foi especificado; obtém dados do do dito cujo.
     id_usr = cmd_args['usuario']
-    usr = obj_usuario.busca_por_identificador(id_usr)
+    usr = obj_usuario.obtem_objeto(id_usr)
     if usr == None:
       erros.append(f"usuario '{id_usr}' não existe")
   else:

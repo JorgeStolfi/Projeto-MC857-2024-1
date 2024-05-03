@@ -32,7 +32,7 @@ def testa_gera(rot_teste, res_esp, *args):
   return ok
 
 #sessao de teste
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
 
 for tag, erros in ( 
     ("N", None), 

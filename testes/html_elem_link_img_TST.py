@@ -19,15 +19,14 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
  
-testa_gera("img1",     str, "/logotipo.png", "logotipo",  100, "urlteste")
-
-testa_gera("img2",     str, "/AZ.png",       "AZ",         50, "urlteste")
-
-testa_gera("img3",     str, "/GO.png",       "GO",         75, "urlteste")
-
-testa_gera("imgFalsa", str, "/falsa.png",    "falsa",     150, "urlteste")
-
-testa_gera("noImg",    str, None,            "no image",  150, "urlteste")
+for arquivo in None, "imagens/wikimedia_dog.png":
+  for descr in None, ("Careta canina" if arquivo != None else "Use sua imaginação!"):
+    for url in None, "vai_catar_coquinho?fofoca=Est%E3o+Juntos%21":
+      tag_arq = "arq" + ("N" if arquivo == None else "Y")
+      tag_descr = "descr" + ("N" if descr == None else "Y")
+      tag_url = "url" + ("N" if url == None else "Y")
+      rot_teste = f"{tag_arq}-{tag_descr}-{tag_url}"
+      testa_gera(rot_teste, str, arquivo, descr,  100, url)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.");

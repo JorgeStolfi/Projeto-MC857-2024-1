@@ -29,7 +29,9 @@ def processa(ses, cmd_args):
       erros += obj_usuario.valida_email(chave, val, False)
     elif chave == 'nome':
       # !!! Devia aceitar nome parcial ou RE !!!
-      erros += obj_usuario.valida_nome_de_usuario(chave, val, False, eh_completo=False)
+      nulo_ok = False
+      parcial = True
+      erros += obj_usuario.valida_nome(chave, val, nulo_ok, parcial)
     elif chave == 'administrador' or chave == 'senha':
       erros.append(f"Busca por '{chave}' não é permitida")
     else:
@@ -44,7 +46,7 @@ def processa(ses, cmd_args):
       if 'usuario' in cmd_args:
         # Deve haver um único usuário com esse identificador:
         id_usr = cmd_args['usuario']
-        obj_usr = obj_usuario.busca_por_identificador(id_usr) if id_usr != None else None
+        obj_usr = obj_usuario.obtem_objeto(id_usr) if id_usr != None else None
         if obj_usr == None:
           erros.append(f"Usuário '{id_usr}' não existe")
         else:

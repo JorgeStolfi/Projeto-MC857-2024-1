@@ -50,7 +50,6 @@ def processa(ses, cmd_args):
   if vid != None:
     pag = html_pag_ver_video.gera(ses, vid, erros)
   else:
-    # !!! Devia retornar a página de upload !!!
     pag = html_pag_upload_video.gera(ses, atrs, erros)
 
   return pag

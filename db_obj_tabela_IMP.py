@@ -61,7 +61,7 @@ def acrescenta_objeto(tab, def_obj, atrs_SQL):
 
 def atualiza_objeto(tab, def_obj, ident, mods_SQL):
   # Obtém o objeto com esse identificador e garante que está em {cache}:
-  obj = busca_por_identificador(tab, def_obj, ident)
+  obj = obtem_objeto(tab, def_obj, ident)
   if obj == None:
     # Objeto não existe:
     erro_prog("identificador '" + ident + "' nao encontrado")
@@ -78,14 +78,14 @@ def atualiza_objeto(tab, def_obj, ident, mods_SQL):
     erro_prog("UPDATE da tabela '" + tab.nome + "' falhou")
   return obj
 
-def busca_por_identificador(tab, def_obj, ident):
+def obtem_objeto(tab, def_obj, ident):
   if ident in tab.cache:
     obj = tab.cache[ident]
     assert obj != None
   else:
     ind = util_identificador.para_indice(tab.letra, ident)
-    if tab.debug: sys.stderr.write("busca_por_identificador %s -> %s\n" % (fname, str(ident), str(ind)))
-    obj = busca_por_identificador_e_indice(tab, def_obj, ident, ind)
+    if tab.debug: sys.stderr.write("obtem_objeto %s -> %s\n" % (fname, str(ident), str(ind)))
+    obj = obtem_objeto_e_indice(tab, def_obj, ident, ind)
   return obj
     
 def busca_por_indice(tab, def_obj, ind):
@@ -94,16 +94,16 @@ def busca_por_indice(tab, def_obj, ind):
     obj = tab.cache[ident]
     assert obj != None
   else:
-    obj = busca_por_identificador_e_indice(tab, def_obj, ident, ind)
+    obj = obtem_objeto_e_indice(tab, def_obj, ident, ind)
   return obj
     
-def busca_por_identificador_e_indice(tab, def_obj, ident, ind):
+def obtem_objeto_e_indice(tab, def_obj, ident, ind):
   """Função interna: mesmo que {busca_por identificador}, mas exige o índice inteiro {ind}
   da linha da tabela, além do identificador {ident}."""
   cond = "indice = " + str(ind)
   col_nomes = extrai_nomes_de_cols_SQL(tab.colunas)
   res = db_base_sql.executa_comando_SELECT(tab.nome, cond, col_nomes)
-  if tab.debug: sys.stderr.write("  > busca_por_identificador_e_indice: res = " + str(res) + "\n")
+  if tab.debug: sys.stderr.write("  > obtem_objeto_e_indice: res = " + str(res) + "\n")
   if res == None:
     obj = None
   elif not (type(res) is list or type(res) is tuple): 
@@ -150,55 +150,56 @@ def busca_por_campos(tab, args, res_cols):
   # Converte {args} para condição na linguagem SQL:
   # !!! Verificar a lógica de {res_cols} etc. !!!
   # !!! Melhorar comportamento em caso de erro. !!!
+
+  # Converte {args} para uma condição {cond} na liguagem SQL:
   cond = ""
   sep = ""
   for ch, val in args.items():
-    compador = " = " if val is not None else " IS "
-    val_sql = db_base_sql.codifica_valor(val)
-    cond = cond + sep + ch + compador + val_sql
+    # !!! Deveria validar o campo {ch,val} contra colunas da tabela {tab} !!!
+    if val == None:
+      # Exige que este campo seja nulo:
+      ch_sql = ch
+      compador = " IS " 
+      val_sql = "NULL"
+    elif type(val) is str and val[0] == "%" and val[-1] == "%":
+      # Busca aproximada:
+      if len(val) < 3: erro_prog("busca aproximada por string vazio")
+      ch_sql = "LOWER(" + ch + ")"
+      compador = "LIKE"
+      val_sql = "'" + val.lower() + "'"
+    else:      
+      if type(val) is str and len(val) == 0: 
+        erro_prog("busca por string vazio")
+      if type(val) is not str and type(val) is not int and type(val) is not float: 
+        erro_prog(f"busca por tipo de valor inválido = {type(val)}")
+      ch_sql = ch
+      compador = " = "
+      val_sql = db_base_sql.codifica_valor(val)
+
+    cond += (sep + ch_sql + compador + val_sql)
     sep = " AND "
+
   if res_cols == None:
+    # Por default, devolve lista de identificadores:
     colunas = ['indice']
   else:
     colunas = res_cols
+    
+  # Executa a busca:
   res = db_base_sql.executa_comando_SELECT(tab.nome, cond, colunas)
+  
+  # Finaliza o resultado:
   if res == None:
+    # Não achou nada:
     res = [].copy()
   elif type(res) is str:
+    # {res} deve ser uma mensagem de erro:
     erro_prog("SELECT falhou " + str(res))
   else:
+    # {res} deve ser uma lista de índices, ou de tuplas de valores das colunas pedidas:
     if res_cols == None:
       # Converte lista de índices para lista de identificadores:
       res = util_identificador.de_lista_de_indices(tab.letra, res)
-  return res
-
-def busca_por_semelhanca(tab, args, res_cols):
-  # !!! Melhorar comportamento em caso de erro. !!!
-  # !!! Verificar a lógica de {res_cols} etc. !!!
-  cond = ""
-  sep = ""
-  for chave,val in args.items():
-    # !!! Deveria validar o campo {chave,val} contra {colunas} !!!
-    # !!! Deveria usar {db_base_sql.codifica_valor(val)} antes de pegar {.lower() !!!
-    if val == None:
-      # Skip it. Maybe should require field to be blank instead? 
-      pass
-    elif type(val) is str:
-      cond += (sep + "LOWER(" + chave + ") LIKE '%" + val.lower() + "%'")
-    elif type(val) is int or type(val) is float:
-      cond += (sep + chave + "='" + str(val) + "'")
-    else:
-      erro_prog("valor a buscar tem de tipo inválido: " + str(val))
-    sep = " AND "
-  if tab.debug: sys.stderr.write("  > busca_por_semelhanca: cond = " + str(cond) + "\n")
-  res = db_base_sql.executa_comando_SELECT(tab.nome, cond, ['indice'])
-  if tab.debug: sys.stderr.write("  > busca_por_semelhanca: res = " + str(res) + "\n")
-  if res == None:
-    res = ()
-  elif type(res) is list or type(res) is tuple:
-    res = util_identificador.de_lista_de_indices(tab.letra, res)
-  elif type(res) is str:
-    erro_prog("SELECT falhou " + str(res))
   return res
 
 def num_entradas(tab): 

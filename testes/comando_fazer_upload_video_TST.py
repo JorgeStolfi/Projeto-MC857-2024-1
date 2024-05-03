@@ -57,7 +57,7 @@ def testa_processa(rot_teste, valido, ses, *args):
       ok = False
 
     # Verifica os atributos do vídeo criado:
-    vid_criado = obj_video.busca_por_identificador(id_vid)
+    vid_criado = obj_video.obtem_objeto(id_vid)
     assert vid_criado != None
     atrs_criado = obj_video.obtem_atributos(vid_criado)
     sys.stderr.write(f"  atributos criados = {str(atrs_criado)}\n")
@@ -79,9 +79,9 @@ def testa_processa(rot_teste, valido, ses, *args):
 
 # ----------------------------------------------------------------------
 # Algumas sessões para teste:
-ses_admin1 = obj_sessao.busca_por_identificador("S-00000001") # Do administrador.
-ses_comum1 = obj_sessao.busca_por_identificador("S-00000003") # De um plebeu.
-ses_comum2 = obj_sessao.busca_por_identificador("S-00000004") # De outro plebeu.
+ses_admin1 = obj_sessao.obtem_objeto("S-00000001") # Do administrador.
+ses_comum1 = obj_sessao.obtem_objeto("S-00000003") # De um plebeu.
+ses_comum2 = obj_sessao.obtem_objeto("S-00000004") # De outro plebeu.
 
 # Obtém alguns usuários:
 usr_admin1 = obj_sessao.obtem_usuario(ses_admin1)

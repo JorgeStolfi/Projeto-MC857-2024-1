@@ -22,7 +22,6 @@ db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 ok_global = True  # Vira {False} se algum teste falha.
 
-
 def testa_processa(rot_teste, res_esp, *args):
     """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
     em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
@@ -32,128 +31,92 @@ def testa_processa(rot_teste, res_esp, *args):
     funcao = modulo.processa
     frag = False  # Resultado é só um fragmento de página?
     pretty = False  # Deve formatar o HTML para facilitar view source?
-    ok = util_testes.testa_funcao_que_gera_html(
-        modulo, funcao, rot_teste, res_esp, frag, pretty, *args
-    )
+    ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
     ok_global = ok_global and ok
     return ok
 
+# Sessão para teste:
+ses_id = "S-00000001"
+ses = obj_sessao.obtem_objeto(ses_id)
 
-# Sessão em que o usuário dela é o administrador.
-ses_adm_id = "S-00000001"
-ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
+# Teste passando um id de comentario existente:
+cmd_args_01 = {"comentario": "C-00000001"}
+testa_processa("comE", str, ses, cmd_args_01)
 
-# Teste onde não há sessão aberta, retorna comentarios
-testa_processa("Teste sem sessão aberta", str, None, {"video": "V-00000001"})
+# Teste passando um id de comentario inexistente:
+cmd_args_02 = {"comentario": "C-23000001"}
+testa_processa("comN", str, ses, cmd_args_02)
 
-# Teste passando um id de video existente, retorna comentarios
-testa_processa("Teste video existente", str, ses_adm, {"video": "V-00000001"})
+# Teste sem estar logado:
+cmd_args_03 = {"video": "V-00000003"}
+testa_processa("logF-vidE", str, None, cmd_args_03)
 
-# Teste passando um id de video inexistente, nao retorna comentarios
-testa_processa("Teste video existente", str, ses_adm, {"video": "V-23000001"})
+# Teste passando um id de video existente:
+cmd_args_04 = {"video": "V-00000003"}
+testa_processa("vidE", str, ses, cmd_args_04)
 
-# Teste passando um id de autor existente, retorna comentarios
-testa_processa("Testa autor existente", str, ses_adm, {"autor": "U-00000001"})
+# Teste passando um id de video inexistente:
+cmd_args_05 = {"video": "V-23000001"}
+testa_processa("vidN", str, ses, cmd_args_05)
 
-# Teste passando um id de autor inexistente, nao retorna comentarios
-testa_processa("Testa autor inexistente", str, ses_adm, {"autor": "U-23000001"})
+# Teste passando um id de autor existente:
+cmd_args_06 = {"autor": "U-00000001"}
+testa_processa("autE", str, ses, cmd_args_06)
 
-# Teste passando um id de comentario existente, retorna comentarios
-testa_processa("Teste comentario existente", str, ses_adm, {"comentario": "C-00000001"})
+# Teste passando um id de autor inexistente:
+cmd_args_07 = {"autor": "U-23000001"}
+testa_processa("autN", str, ses, cmd_args_07)
 
-# Teste passando um id de comentario inexistente, nao retorna comentarios
-testa_processa(
-    "Teste comentario inexistente", str, ses_adm, {"comentario": "C-23000001"}
-)
+# Teste passando um id de comentario pai existente:
+cmd_args_08 = {"pai": "C-00000001"}
+testa_processa("paiE", str, ses, cmd_args_08)
 
-# Teste passando um id de comentario pai existente, retorna comentarios
-testa_processa("Teste comentario pai existente", str, ses_adm, {"pai": "C-00000001"})
+# Teste passando um id de comentario existente mas sem filhos:
+cmd_args_09 = {"pai": "C-00000003"}
+testa_processa("paiS", str, ses, cmd_args_09)
 
-# Teste passando um id de comentario pai inexistente, nao retorna comentarios
-testa_processa("Teste comentario pai inexistente", str, ses_adm, {"pai": "C-23000001"})
+# Teste passando um id de comentario pai inexistente:
+cmd_args_10 = {"pai": "C-23000001"}
+testa_processa("paiN", str, ses, cmd_args_10)
 
-# Teste passando um id de comentario existente mas que não é pai, nao retorna comentarios
-testa_processa(
-    "Teste comentario existente mas que não é pai", str, ses_adm, {"pai": "C-00000003"}
-)
+# Teste passando uma data exata que existe:
+com3 = obj_comentario.obtem_objeto("C-00000003")
+dat3 = obj_comentario.obtem_atributo(com3, 'data')
+cmd_args_11 = {"data": dat3}
+testa_processa("datP", str, ses, cmd_args_11)
 
-# Teste passando uma data proxima ANO, retorna comentarios
-testa_processa(
-    "Teste data de comentario existente no momento ANO", str, ses_adm, {"data": "2024"}
-)
+# Teste passando uma data exata que não existe:
+cmd_args_12 = {"data": "2024-01-01 08:00:00 UTC"}
+testa_processa("datP", str, ses, cmd_args_12)
 
-# Teste passando uma data proxima ANO-MES, retorna comentarios
-testa_processa(
-    "Teste data de comentario existente no momento ANO-MES",
-    str,
-    ses_adm,
-    {"data": "2024-04"},
-)
+# Teste passando data corrente ano+mes:
+mes3 = dat3[0:7] # Ano e mes.
+cmd_args_13 = {"data": mes3}
+testa_processa("mesP", str, ses, cmd_args_13)
 
-# Teste passando uma data proxima DATA, retorna comentarios
-testa_processa(
-    "Teste data de comentario existente no momento DATA",
-    str,
-    ses_adm,
-    {"data": "2024-04-05 08:00:00 UTC"},
-)
+# Teste passando o ano corrente:
+cmd_args_14 = {"data": "2024"}
+testa_processa("anoP", str, ses, cmd_args_14)
 
-# Teste passando uma data proxima ANO, retorna comentarios
-testa_processa(
-    "Teste data de comentario existente no momento ANO", str, ses_adm, {"data": "2024"}
-)
+# Teste passando um texto parcial que existe
+cmd_args_15 = {"texto": "sobe"}
+testa_processa("texE", str, ses, cmd_args_15)
 
-# Teste passando uma data não próxima, nao retorna comentarios
-testa_processa(
-    "Teste data de comentario não existente no momento ANO",
-    str,
-    ses_adm,
-    {"data": "2014"},
-)
+# Teste passando um texto que não aparece em nenhum comentário:
+cmd_args_16 = {"texto": "Superhomem"}
+testa_processa("texN", str, ses, cmd_args_16)
 
-# Teste passando um texto que está parecido em um comentário, retorna comentarios
-testa_processa(
-    "Teste texto que está parecido em um comentário", str, ses_adm, {"texto": "soberbo"}
-)
+# Teste passando vários parâmetros com resposta única (supõe lógica "E"):
+cmd_args_17 = {"texto": "talvez", "pai": "C-00000001", "autor": "U-00000002"}
+testa_processa("mulU", str, ses, cmd_args_17)
 
-# Teste passando um texto que não está parecido em um comentário, nao retorna comentarios
-testa_processa(
-    "Teste texto que não está parecido em um comentário",
-    str,
-    ses_adm,
-    {"texto": "Super homem"},
-)
+# Teste passando vários parâmetros com múltiplas respostas (supõe lógica "E"):
+cmd_args_18 = {"autor": "U-00000002", "video": "V-00000001"}
+testa_processa("mulM", str, ses, cmd_args_18)
 
-# Teste passando uma junção de parametros de um comentario existente, retorna comentarios
-testa_processa(
-    "Teste passando uma junção de parametros de um comentario existente",
-    str,
-    ses_adm,
-    {"texto": "talvez", "pai": "C-00000001", "autor": "U-00000002"},
-)
-
-# Teste passando uma junção de parametros existentes mas de comentarios diferentes, nao retorna comentarios
-testa_processa(
-    "Teste passando uma junção de parametros existentes mas de comentarios diferentes",
-    str,
-    ses_adm,
-    {"texto": "soberbo", "pai": "C-00000002", "autor": "U-00000001"},
-)
-
-# Teste passando uma junção de todos os parametros de um comentario existente, retorna comentarios
-testa_processa(
-    "Teste passando uma junção de todos os parametros de um comentario existente",
-    str,
-    ses_adm,
-    {
-        "comentario": "C-00000002",
-        "texto": "talvez",
-        "pai": "C-00000001",
-        "autor": "U-00000002",
-        "video": "V-00000001",
-        "data": "2024-04-05 08:10:00 UTC",
-    },
-)
+# Teste passando vários parâmetros sem resposta (supõe lógica "E"):
+cmd_args_19 = {"autor": "U-00000002", "video": "V-00000004"}
+testa_processa("mulV", str, ses, cmd_args_19)
 
 if ok_global:
     sys.stderr.write("Testes terminados normalmente.")

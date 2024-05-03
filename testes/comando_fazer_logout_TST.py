@@ -38,7 +38,7 @@ testa_processa("Erro", tuple, ses, {})
 assert ses == None
 
 # Testa logout com uma sessao ativa
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
 assert ses != None
 assert obj_sessao.aberta(ses)
 

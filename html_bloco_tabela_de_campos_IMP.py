@@ -24,10 +24,10 @@ def gera(dados_linhas, atrs):
       val = False
     ht_input = gera_input_ou_textarea(tipo, chave, ident, val, vmin, dica, editavel)
     if ht_input != None:
-      linhas.append((ht_rotulo, ht_input,))
+      linhas.append(("<td>" + ht_rotulo + "</td>", "<td>" + ht_input + "</td>",))
 
   # Monta a tabela com os fragmentos HTML:
-  ht_table = html_elem_table.gera(linhas, None)
+  ht_table = html_elem_table.gera(linhas)
   return ht_table
 
 def gera_input_ou_textarea(tipo, chave, ident, val, val_min, dica, editavel):
@@ -61,7 +61,7 @@ def gera_input_ou_textarea(tipo, chave, ident, val, val_min, dica, editavel):
     dica = None
 
   if tipo == "textarea":
-    ht_input = html_elem_textarea.gera(None, chave, ident, ht_val, editavel, dica, None, False, 150, 300)
+    ht_input = html_elem_textarea.gera(None, chave, ident, ht_val, editavel, dica, None, False, 2, 70)
   else:
     if tipo != 'number':
       # Ignora {val_min}:

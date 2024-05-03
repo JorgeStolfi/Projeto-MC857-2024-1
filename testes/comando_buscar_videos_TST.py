@@ -35,7 +35,7 @@ def testa_processa(rot_teste, res_esp, *args):
 
 # Sessão cujo usuário é o administrador.
 ses_admin1_id = "S-00000001"
-ses_admin1 = obj_sessao.busca_por_identificador(ses_admin1_id)
+ses_admin1 = obj_sessao.obtem_objeto(ses_admin1_id)
 assert obj_sessao.de_administrador(ses_admin1), f"sessão {ses_admin1_id} não é de administrador" 
 
 # Um vídeo:

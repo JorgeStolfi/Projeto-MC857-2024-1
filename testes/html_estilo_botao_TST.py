@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-import html_estilo_cabecalho_de_tabela
+import html_estilo_botao
 import util_testes
 import sys
 
@@ -11,7 +11,7 @@ def testa_gera(rot_teste, res_esp, *args):
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   
   global ok_global
-  modulo = html_estilo_cabecalho_de_tabela
+  modulo = html_estilo_botao
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
@@ -19,7 +19,7 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-testa_gera("1", str)
+testa_gera("1", str, '#60a3bc')
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente");

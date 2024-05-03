@@ -30,7 +30,7 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # Sessão de usuário comum:
-ses1 = obj_sessao.busca_por_identificador("S-00000004")
+ses1 = obj_sessao.obtem_objeto("S-00000004")
 assert not obj_sessao.de_administrador(ses1)
 usr1 = obj_sessao.obtem_usuario(ses1)
 usr1_id = obj_usuario.obtem_identificador(usr1)
@@ -38,7 +38,7 @@ testa_processa("teste1-N",  str, ses1, {} )
 testa_processa("teste1-U",  str, ses1, {'usuario': usr1_id } )
 
 # Administrador olhando suas sessões:
-ses2 = obj_sessao.busca_por_identificador("S-00000002")
+ses2 = obj_sessao.obtem_objeto("S-00000002")
 assert obj_sessao.de_administrador(ses2)
 usr2_id = "U-00000002"
 testa_processa("teste2-N",  str, ses2, {} )

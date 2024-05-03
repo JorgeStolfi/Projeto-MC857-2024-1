@@ -44,6 +44,7 @@ import comando_buscar_respostas_de_comentario
 
 import comando_ver_objeto
 
+import html_estilo_texto
 import html_elem_span
 import html_elem_div
 import html_pag_principal
@@ -262,7 +263,7 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
     cookies = dados['cookies']
     if 'sessao' in cookies:
       id_ses = cookies['sessao']
-      ses = obj_sessao.busca_por_identificador(id_ses)
+      ses = obj_sessao.obtem_objeto(id_ses)
     else:
       ses = None
     return ses
@@ -536,10 +537,6 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/solicitar_pag_buscar_comentarios':
       # Quer formumlário para buscar comentarios por campos variados:
       pag = comando_solicitar_pag_buscar_comentarios.processa(ses, cmd_args)
-
-    elif cmd == '/solicitar_pag_postar_comentario':
-      # Quer formumlário para postar comentarios por campos variados:
-      pag = comando_solicitar_pag_postar_comentario.processa(ses, cmd_args)
       
     elif cmd == '/buscar_comentarios':
       # Busca de comentáriso com certos atributos:
@@ -579,7 +576,7 @@ def processa_comando(tipo, ses, dados):
     # Parece mais mensagem de erro que página
     pag = html_pag_mensagem_de_erro.gera(ses, [ "Resultado do comando foi:", pag ])
   
-  sys.stderr.write("    pag resultado = %s\n" % pag)
+  sys.stderr.write("    pag resultado =\n%s\n" % pag)
 
   if mostra_cmd:
     # Acrescenta os dados do comando para depuração:
@@ -624,7 +621,10 @@ def formata_dados_http(cmd, cmd_args, resto, html):
   ht_conteudo = ht_tit + ht_cmd + ht_cmd_args + ht_resto
 
   if html:
-    estilo = f"font-family: Courier; font-size: 18px; font-weight: normal; padding: 5px; text-align: left;"
+    cor_texto = "#000000"
+    cor_fundo = None
+    margens = None
+    estilo = html_estilo_texto.gera("18px", "medium", cor_texto, cor_fundo, margens)
     ht_conteudo = html_elem_span.gera(estilo, ht_conteudo)
     ht_conteudo = "<hr/>\n" + html_elem_div.gera("background-color:#bbbbbb;", ht_conteudo) + "<hr/>\n"
   return ht_conteudo

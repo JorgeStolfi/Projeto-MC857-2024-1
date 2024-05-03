@@ -110,53 +110,42 @@ def obtem_atributos(com):
   exceto identificador. Dá erro se {com} é {None}."""
   return obj_comentario_IMP.obtem_atributos(com)
 
-def obtem_comentarios_raiz(vid):
-  """Retorna uma lista, possivelmente vazia, de comentarios de um vídeo que não
-  tem nenhum pai"""
-  return obj_comentario_IMP.obtem_comentarios_raiz(vid)
-
-def obtem_arvore(vid, com, max_coms):
-  """"Determina toda arvore de comentarios cuja raiz é o comentario {com} até o maximo
-  de {max_coms} comentarios. Se {com} for {None}, pega todos os comentarios cuja raiz
-  é o video {vid}. O resultado é uma arvore aonde cada nó é uma tupla o primeiro elemento
-  é um comentario {com} e os demais são sub-arvores que tem esse comentario como pai
-  """
-  return obj_comentario_IMP.obtem_arvore(vid, com, max_coms)
-
 def obtem_atributo(com, chave):
   """Retorna o atributo do comentário {com} com a {chave} dada. 
   Equivale a {obtem_atributos(com)[chave]}. Dá erro se {com} é {None}."""
   return obj_comentario_IMP.obtem_atributo(com, chave)
 
-def busca_por_identificador(id_com):
+def obtem_objeto(id_com):
   """Localiza um comentario com identificador {id_com} (uma string da forma
   "C-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_comentario.Classe}.
   Se {id_com} é {None} ou tal comentário não existe, devolve {None}."""
-  return obj_comentario_IMP.busca_por_identificador(id_com)
+  return obj_comentario_IMP.obtem_objeto(id_com)
 
-def busca_por_video(id_vid):
-  """Localiza comentários associados ao video com identificador {id_vid}
-  e devolve o uma lista com os identificadores desses comentários (não os objetos);
-  ou {None} se o usuário não postou nenhum comentário."""
-  return obj_comentario_IMP.busca_por_video(id_vid)
-
-def busca_por_autor(id_usr):
-  """Localiza comentários postados pelo usuário com identifiador {id_usr}
-  e devolve o uma lista com os identificadores desses comentários (não os objetos);
-  ou {None} se o usuário não postou nenhum comentário."""
-  return obj_comentario_IMP.busca_por_autor(id_usr)
-
-def busca_por_filhos(id_com):
-  """Localiza comentários postados em resposta ao comentario com identificador {id_com}
-  e devolve uma lista com os identificadores desses comentários (não os objetos);
-  ou {None} se o comentario nao teve resposta."""
-  return obj_comentario_IMP.busca_por_filhos(id_com)
+def busca_por_video(id_vid, sem_pai):
+  """
+  Se {sem_pai} é {False}, localiza todos os comentários associados ao
+  video com identificador {id_vid} e devolve o uma lista com os
+  identificadores desses comentários (não os objetos).
+  
+  Se o booleano {sem_pai} for {True}, retorna apenas os identificadores
+  dos comentários desse vídeo que tem 'pai' {None} (ou seja, são
+  respostas diretas ao vídeo).
+  
+  O resultado será {None} se não há comentários com essas condições.
+  """
+  return obj_comentario_IMP.busca_por_video(id_vid, sem_pai)
 
 def busca_por_pai(id_pai):
   """Localiza comentários que são respostas ao comentário com identificador {id_pai}
   e devolve o uma lista com os identificadores desses comentários (não os objetos);
   ou {None} se o comentário não tem respostas."""
   return obj_comentario_IMP.busca_por_pai(id_pai)
+
+def busca_por_autor(id_usr):
+  """Localiza comentários postados pelo usuário com identifiador {id_usr}
+  e devolve o uma lista com os identificadores desses comentários (não os objetos);
+  ou {None} se o usuário não postou nenhum comentário."""
+  return obj_comentario_IMP.busca_por_autor(id_usr)
 
 def busca_por_texto(texto):
   """Localiza comentários que contém a string {texto} no campo de texto
@@ -169,6 +158,26 @@ def busca_por_data(data):
   e devolve o uma lista com os identificadores desses comentários (não os objetos);
   ou {None} se nenhum comentário foi postado na data."""
   return obj_comentario_IMP.busca_por_data(data)
+
+def obtem_conversa(raizes):
+  """
+  "Determina toda a floresta de comentarios de um vídeo ou a árvore de respostas
+  de um comentário que está pendurada nas {raizes} dadas.
+  
+  O parâmetro {raizes} deve ser uma lista, possivelmente vazia,
+  de identificadores de comentários.
+  
+  O resultado da função uma floresta de comentários: uma lista,
+  possivelmente vazia, cada elemento da qual é uma árvore de
+  comentários. Uma árvore de comentários {arv} é uma lista cujo primeiro
+  elemento {arv[0]} é um identificador de comentário (a raiz), sendo o
+  restante dessa lista {arv[1:]} uma floresta cujas raízes são respostas
+  ao comentário {raiz}.
+  
+  As raízes das árvores da floresta {flor} devolvida pela função são os comentários
+  cujos identificadores estão na lista {raizes}.
+  """
+  return obj_comentario_IMP.obtem_conversa(raizes)
 
 def ultimo_identificador():
   """Devolve o identificador do último comentário inserido na tabela.
@@ -183,7 +192,7 @@ def verifica_criacao(com, id_com, atrs):
   
   Especificamente, testa se {obtem_identificador(com)} devolve
   o identificador esperado {id_com}, {obtem_atributos(com)} devolve 
-  os atributos esperados {atrs}, e {busca_por_identificador(id_com)}
+  os atributos esperados {atrs}, e {obtem_objeto(id_com)}
   devolve o próprio {com}.
   
   Devolve {True} se os testes deram certo, {False} caso contrário. Também

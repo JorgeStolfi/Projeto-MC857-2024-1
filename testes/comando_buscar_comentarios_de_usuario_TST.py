@@ -36,7 +36,7 @@ def testa_processa(rot_teste, res_esp, *args):
   
 # Sessão cujo usuário é o administrador.
 ses_adm_id = "S-00000001"
-ses_adm = obj_sessao.busca_por_identificador(ses_adm_id)
+ses_adm = obj_sessao.obtem_objeto(ses_adm_id)
 
 # Teste passando um id do video
 id_usr1 = {'usuario': "U-00000002"}

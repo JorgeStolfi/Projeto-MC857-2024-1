@@ -131,11 +131,11 @@ def obtem_data_de_upload(vid):
   Dá erro se {vid} é {None}."""
   return obj_video_IMP.obtem_data_de_upload(vid)
 
-def busca_por_identificador(id_vid):
+def obtem_objeto(id_vid):
   """Localiza um video com identificador {id_vid} (uma string da forma
   "V-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_video.Classe}.
   Se {id_vid} é {None} ou tal vídeo não existe, devolve {None}."""
-  return obj_video_IMP.busca_por_identificador(id_vid)
+  return obj_video_IMP.obtem_objeto(id_vid)
 
 def busca_por_campo(campo, val):
   """Localiza todos os vídeos cujo {campo} seja {valor}. Retorna a lista de ids
@@ -182,13 +182,27 @@ def verifica_criacao(vid, id_vid, atrs):
   
   Especificamente, testa se {obtem_identificador(vid)} devolve
   o identificador esperado {id_vid}, {obtem_atributos(vid)} devolve 
-  os atributos esperados {atrs}, e {busca_por_identificador(id_vid)}
+  os atributos esperados {atrs}, e {obtem_objeto(id_vid)}
   devolve o próprio {vid}.
 
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
   return obj_video_IMP.verifica_criacao(vid, id_vid, atrs)
-
+ 
+def valida_titulo(chave, val, nulo_ok, parcial):
+  """O título de um string {val} que vai ser o atributo 'titulo' 
+  de um vídeo (se {parcial} for {False}) ou uma parte do título 
+  que vai ser usada numa busca de vídeos.
+  
+  O parâmetro {val} deve ter nomáximo 60 caracteres, e no mínimo 10 se
+  completo ou 3 se parcial.
+  
+  Por enquanto, são permitidos apenas caracters visíveis ASCII [!-~], brancos, e as 
+  letras acentuadas do conjunto ISO-Latin-1. O título deve começar com uma letra
+  maiúscula, não pode terminar com brancos, e não pode ter dois ou mais brancos
+  seguidos."""
+  return obj_video_IMP.valida_titulo(chave, val, nulo_ok, parcial)
+ 
 def cria_testes(verb):
   """Limpa a tabela de vídeos com {inicializa(True)}, e cria alguns vídeos
   para fins de teste, incluindo-os na tabela.  Não devolve nenhum resultado.

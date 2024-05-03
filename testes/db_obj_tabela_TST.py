@@ -56,10 +56,11 @@ class BoboClasse:
 # Colunas da tabela de objetos {BoboClasse}:
 
 colunas_bob = (
-  ('nome',   type("foo"), 'TEXT',     3,   60),
-  ('email',  type("foo"), 'TEXT',     6,   60),
-  ('CPF',    type("foo"), 'TEXT',    14,   14),
-  ('pernas', type(10),    'INTEGER',  2, 1000)
+  ('nome',   type("foo"), 'TEXT',     3,     60,   ),
+  ('email',  type("foo"), 'TEXT',     6,     60,   ),
+  ('carro',  type("foo"), 'TEXT',     6,     30,   ),
+  ('pernas', type(10),    'INTEGER',  2,   1000,   ),
+  ('peso',   type(10.0),  'NUMERIC',  2.0, 1000.0, ),
 )
 nome_bob = "bobs"
 letra_bob = "X"
@@ -93,14 +94,19 @@ db_obj_tabela.muda_diagnosticos(tab_bob, True)
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {db_obj_tabela.acrescenta_objeto}:\n")
 
+carro1 = "Fort T" 
+carro2 = "Cyberbrick"
+
+pernas1 = 4
+pernas2 = 2
+
 nome1 = "José Primeiro da Silva"
 email1 = "primeiro@ic.unicamp.br"
-CPF1 = "123.456.789-00" 
 atrs1 = {
   "nome": nome1, 
   "email": email1, 
-  "CPF": CPF1, 
-  "pernas": 4
+  "carro": carro1, 
+  "pernas": pernas1
 }
 num_elementos +=1
 ind_bob1 = num_elementos
@@ -108,14 +114,13 @@ id_bob1 = f"X-{ind_bob1:08d}"
 bob1 = db_obj_tabela.acrescenta_objeto(tab_bob, def_bob, atrs1)
 mostra_bob("bob1", bob1, id_bob1, atrs1)
 
-nome2 = "João Segundo da Silva"
+nome2 = "José Segundo da Silva"
 email2 = "segundo@ic.unicamp.br"
-CPF2 = "987.654.321-99"
 atrs2 = {
   "nome": nome2, 
   "email": email2, 
-  "CPF": CPF2, 
-  "pernas": 2
+  "carro": carro2, 
+  "pernas": pernas2
 }
 num_elementos +=1
 ind_bob2 = num_elementos
@@ -123,14 +128,13 @@ id_bob2 = f"X-{ind_bob2:08d}"
 bob2 = db_obj_tabela.acrescenta_objeto(tab_bob, def_bob, atrs2)
 mostra_bob("bob2", bob2, id_bob2, atrs2)
 
-nome3 = "Juca Terceiro de Souza"
+nome3 = "José Terceiro de Souza"
 email3 = "terceiro@ic.unicamp.br"
-CPF3 = "333.333.333-33"
 atrs3 = {
   "nome": nome3, 
   "email": email3, 
-  "CPF": CPF3, 
-  "pernas": 2
+  "carro": carro2, 
+  "pernas": pernas1
 }
 num_elementos +=1
 ind_bob3 = num_elementos
@@ -138,14 +142,13 @@ id_bob3 = f"X-{ind_bob3:08d}"
 bob3 = db_obj_tabela.acrescenta_objeto(tab_bob, def_bob, atrs3)
 mostra_bob("bob3", bob3, id_bob3, atrs3)
 
-nome4 = "Júlo Quarto de Souza"
+nome4 = "José Quarto de Souza"
 email4 = "terceiro@ic.unicamp.br"
-CPF4 = "333.333.333-33"
 atrs4 = {
   "nome": nome4, 
   "email": email4, 
-  "CPF": CPF4, 
-  "pernas": 2
+  "carro": carro1, 
+  "pernas": pernas2
 }
 num_elementos +=1
 ind_bob4 = num_elementos
@@ -154,10 +157,10 @@ bob4 = db_obj_tabela.acrescenta_objeto(tab_bob, def_bob, atrs4)
 mostra_bob("bob4", bob4, id_bob4, atrs4)
 
 # ----------------------------------------------------------------------
-sys.stderr.write("  testando {db_obj_tabela.busca_por_identificador}:\n")
+sys.stderr.write("  testando {db_obj_tabela.obtem_objeto}:\n")
 
 id_bob1_a = id_bob1
-bob1_a = db_obj_tabela.busca_por_identificador(tab_bob, def_bob, id_bob1_a)
+bob1_a = db_obj_tabela.obtem_objeto(tab_bob, def_bob, id_bob1_a)
 mostra_bob("bob1_a", bob1_a, id_bob1, atrs1)
 assert type(bob1_a) is BoboClasse
 verifica_resultado("BID_id" + id_bob1_a, bob1_a, bob1)
@@ -175,29 +178,40 @@ verifica_resultado("BIND_ind" + str(ind_bob2), bob2_a, bob2 )
 sys.stderr.write("  testando {db_obj_tabela.busca_por_campo}:\n")
 
 email_a = email2
+
 res_a = db_obj_tabela.busca_por_campo(tab_bob, 'email', email_a, None) 
 assert type(res_a) is list or type(res_a) is tuple
 res_a = list(res_a)
-verifica_resultado("BC_email" + email_a, res_a, [ id_bob2, ])
+verifica_resultado("BC_a_email", res_a, [ id_bob2, ])
 
-CPF_b = CPF1
-res_b = db_obj_tabela.busca_por_campo(tab_bob, 'CPF', CPF_b, None)
+carro_b = carro1
+res_b = db_obj_tabela.busca_por_campo(tab_bob, 'carro', carro_b, None)
 assert type(res_b) is list or type(res_b) is tuple
 res_b = list(res_b)
-verifica_resultado("BC_CPF" + CPF_b, res_b, [ id_bob1, ])
+verifica_resultado("BC_b_carro", res_b, [ id_bob1, id_bob4, ])
 
-pernas_c = 2
-res_c = db_obj_tabela.busca_por_campos(tab_bob, { 'pernas': pernas_c }, [ 'nome', 'CPF' ])
+# ----------------------------------------------------------------------
+sys.stderr.write("  testando {db_obj_tabela.busca_por_campos}:\n")
+
+# Campos exatos:
+atrs_c = { 'carro': carro1, 'pernas': pernas2 }
+res_c = db_obj_tabela.busca_por_campos(tab_bob, atrs_c, [ 'nome', 'carro' ])
 assert type(res_c) is list or type(res_c) is tuple
 res_c = list(res_c)
-verifica_resultado("BCS_pernas" + str(pernas_c), res_c, [(nome2, CPF2), (nome3, CPF3), (nome4, CPF4), ])
+verifica_resultado("BCS_c_carro_pernas", res_c, [ (nome4, carro1), ])
 
-nome_d = "Souza"
-pernas_d = 2
-res_d = db_obj_tabela.busca_por_semelhanca(tab_bob, { 'nome': nome_d, 'pernas': pernas_d }, None)
+# Campos aproximados:
+atrs_d = { 'nome': "%José%", 'carro': carro1 }
+res_d = db_obj_tabela.busca_por_campos(tab_bob, atrs_d, None)
 assert type(res_d) is list or type(res_d) is tuple
 res_d = list(res_d)
-verifica_resultado("BS_nome" + nome_d + "pernas" + str(pernas_d), res_d, [ id_bob3, id_bob4, ])
+verifica_resultado("BCS_d_nomeParc_carro", res_d, [ id_bob1, id_bob4, ])
+
+atrs_e = { 'nome': "%Quarto%", 'carro': carro1 }
+res_e = db_obj_tabela.busca_por_campos(tab_bob, atrs_e, None) 
+assert type(res_e) is list or type(res_e) is tuple
+res_e = list(res_e)
+verifica_resultado("BCA_e_nomeParc_carro", res_e, [ id_bob4, ])
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {db_obj_tabela.atualiza_objeto}:\n")
@@ -207,7 +221,7 @@ alts1 = {
   "email": "grosso@hotmail.com"
 }
 db_obj_tabela.atualiza_objeto(tab_bob, def_bob, id_bob1, alts1)
-bob1_c = db_obj_tabela.busca_por_identificador(tab_bob, def_bob, id_bob1)
+bob1_c = db_obj_tabela.obtem_objeto(tab_bob, def_bob, id_bob1)
 for chave, val in alts1.items():
   atrs1[chave] = val
 mostra_bob("bob1_c", bob1_c, id_bob1, atrs1)

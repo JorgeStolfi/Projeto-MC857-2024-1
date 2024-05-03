@@ -36,7 +36,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Comentario:
 comC1_id = "C-00000004"
-comC1 = obj_comentario.busca_por_identificador(comC1_id)
+comC1 = obj_comentario.obtem_objeto(comC1_id)
 assert comC1 != None
 
 for ses_admin in False, True:

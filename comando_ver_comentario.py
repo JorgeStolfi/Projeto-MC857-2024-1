@@ -18,7 +18,7 @@ def processa(ses, cmd_args):
   Normalmente a função devolve uma página que
   exibe o comentario, criada por {html_pag_ver_comentario.gera}. Se o comando
   falhou (por exemplo, se o campo {cmd_args['comentario']} está faltando
-  ou é {None}, ou o vídeo indicado não existe), devolve a página principal do site
+  ou é {None}, ou o comentario indicado não existe), devolve a página principal do site
   com as mensagens de erro apropriadas.
   """
   return comando_ver_comentario_IMP.processa(ses, cmd_args)

@@ -34,7 +34,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
 # Sessao de usuário  administrador:
 sesA1_id = "S-00000006"
-sesA1 = obj_sessao.busca_por_identificador(sesA1_id)
+sesA1 = obj_sessao.obtem_objeto(sesA1_id)
 assert sesA1 != None
 assert obj_sessao.aberta(sesA1)
 assert obj_sessao.de_administrador(sesA1)
@@ -44,7 +44,7 @@ assert usrA1_id == "U-00000008"
 
 # Sessão de usuário comum:
 sesC1_id = "S-00000003"
-sesC1 = obj_sessao.busca_por_identificador(sesC1_id)
+sesC1 = obj_sessao.obtem_objeto(sesC1_id)
 assert sesC1 != None
 assert obj_sessao.aberta(sesC1)
 assert not obj_sessao.de_administrador(sesC1)
@@ -56,13 +56,13 @@ ses_dic = { 'A': sesA1, 'C': sesC1, }
 
 # Um comentário de {usrC1}:
 comC1_id = "C-00000002"
-comC1 = obj_comentario.busca_por_identificador(comC1_id)
+comC1 = obj_comentario.obtem_objeto(comC1_id)
 assert comC1 != None
 assert obj_comentario.obtem_atributo(comC1, 'autor') == usrC1
 
 # Um comentário de outro usuário, nenhum dos dois:
 comC2_id = "C-00000005"
-comC2 = obj_comentario.busca_por_identificador(comC2_id)
+comC2 = obj_comentario.obtem_objeto(comC2_id)
 assert comC2 != None
 assert obj_comentario.obtem_atributo(comC2, 'autor') != usrC1
 assert obj_comentario.obtem_atributo(comC2, 'autor') != usrA1
@@ -78,7 +78,7 @@ for st, ses in ses_dic.items():
   for vt, id_vid in com_dic.items():
     for et, erros in erros_dic.items():
       if ses == sesA1 or (ses == sesC1 and id_vid == comC1_id):
-        com = obj_comentario.busca_por_identificador(id_vid)
+        com = obj_comentario.obtem_objeto(id_vid)
         atrs_tot = obj_comentario.obtem_atributos(com)
         atrs_som = { 'texto': "Alteradus", }
         atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }

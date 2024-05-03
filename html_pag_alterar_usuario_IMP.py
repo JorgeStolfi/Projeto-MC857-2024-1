@@ -22,7 +22,7 @@ def gera(ses, id_usr, atrs, erros):
     usr = usr_ses
     id_usr = obj_usuario.obtem_identificador(usr)
   else:
-    usr = obj_usuario.busca_por_identificador(id_usr) 
+    usr = obj_usuario.obtem_objeto(id_usr) 
     assert usr != None, f"Usuário {id_usr} não existe"
 
   # Nesta altura devemos ter o usuário a ver:

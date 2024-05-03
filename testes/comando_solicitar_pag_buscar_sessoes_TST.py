@@ -32,15 +32,16 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
+sesC = obj_sessao.obtem_objeto("S-00000003")
+sesA = obj_sessao.obtem_objeto("S-00000001")
 
-not_admin_ses = obj_sessao.busca_por_identificador("S-00000003")
-admin_ses = obj_sessao.busca_por_identificador("S-00000001")
+lixo_args = {'any_arg': 'any_val'}
 
 test_suites = [
-  ('t01', str, None, {}), # Mostra pagina de erro: somente administradores podem acessar
-  ('t02', str, not_admin_ses, {}), # Mostra pagina de erro: somente administradores podem acessar
-  ('t03', str, admin_ses, {}), # Mostra pagina com formulario de busca por sessoes
-  ('t04', 'AssertionError', admin_ses, {'any_arg': 'any_val'}), # Levanta AssertionError por conta de argumentos espúrios
+  ('t01', str,              None, {}),        # Mostra pagina de erro: somente administradores podem acessar
+  ('t02', str,              sesC, {}),        # Mostra pagina de erro: somente administradores podem acessar
+  ('t03', str,              sesA, {}),        # Mostra pagina com formulario de buscar sessoes
+  ('t04', 'AssertionError', sesA, lixo_args), # Levanta AssertionError por conta de argumentos espúrios
 ]
 
 for suite in test_suites:

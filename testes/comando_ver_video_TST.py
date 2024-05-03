@@ -34,7 +34,7 @@ def testa_processa(rot_teste, res_esp, *args):
 
 
 # Obtem uma sessao de um usuario que é de administrador:
-ses1 = obj_sessao.busca_por_identificador("S-00000001")
+ses1 = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses1)
 
 for id_vid in (
@@ -43,7 +43,8 @@ for id_vid in (
     "V-00000003",
     "V-00000004",
   ):
-  testa_processa(ses1, {'video': id_vid})
+  rot_teste = id_vid
+  testa_processa(rot_teste, str, ses1, {'video': id_vid})
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")

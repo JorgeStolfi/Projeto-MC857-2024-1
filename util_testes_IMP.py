@@ -6,6 +6,8 @@ import json
 from util_erros import ErroAtrib
 from bs4 import BeautifulSoup as bsoup  # Pretty-print of HTML
 
+max_len_debug = 120  # Aumente este valor se necessário
+
 def escreve_resultado_html(modulo, funcao, rot_teste, ht_res, frag, pretty):
   nome_mod = modulo.__name__ + "." if modulo != None else ""
   nome_fun = funcao.__name__ + "."
@@ -33,16 +35,15 @@ def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
 
   ok = True # Este teste deu resultado esperado se {True}, innesperado se {False}.
   
-  max_len = 3000
-  
   sys.stderr.write(f"  {'-'*70}\n")
   sys.stderr.write(f"    testando {modulo.__name__}.{funcao.__name__}\n")
-  st_args = trunca_tamanho(str(args), max_len)
+  st_args = trunca_tamanho(str(args), max_len_debug)
   sys.stderr.write(f"    rot_teste = '{rot_teste}' args = {st_args}'\n")
   
   try:
     res = funcao(*args)
-    st_res = trunca_tamanho(str(res), max_len)
+    st_res = trunca_tamanho(str(res), max_len_debug)
+    st_res = re.sub("\n", r"\\n", st_res)
     sys.stderr.write(f"    retorno normal, resultado = {st_res}\n")
   except AssertionError as ex:
     res = "AssertionError"
@@ -74,17 +75,16 @@ def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
     ht_res = res
   else:
     # Converte resultado para html:
-    max_len = 3000
     if isinstance(res, list) or isinstance(res, tuple):
       ht_res = list()
       # Converte cada elemento:
       for el in res:
         if not isinstance(el, str): el = str(el)
-        st_el = protege_html(trunca_tamanho(el, max_len))
+        st_el = protege_html(trunca_tamanho(el, max_len_debug))
         ht_res.append(st_el);
     else:
       res = str(res)
-      ht_res = protege_html(trunca_tamanho(res, max_len))
+      ht_res = protege_html(trunca_tamanho(res, max_len_debug))
 
   escreve_resultado_html(modulo, funcao, rot_teste, ht_res, (not html or frag), pretty)
 
@@ -191,9 +191,9 @@ def trunca_tamanho(dado, max_len):
   pos_len = max_len - pre_len
 
   # Length of prefix and suffix of truncated lists:
-  max_els = max_len//10
-  pre_els = pre_len//10
-  pos_els = pos_len//10
+  max_els = max(4, max_len//10)
+  pre_els = max(2, pre_len//10)
+  pos_els = max(1, pos_len//10)
   
   max_nbytes = 60;
   

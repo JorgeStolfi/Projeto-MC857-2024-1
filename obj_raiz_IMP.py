@@ -28,7 +28,7 @@ class Classe_IMP:
 def cria(atrs_mem, tabela, def_obj_mem):
   global orz_debug
   if orz_debug: mostra(0,"obj_raiz_IMP.cria(" + str(atrs_mem) + ") ...")
-  assert tabela.colunas != None # Pega módulo não inicializado.
+  assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
 
   # Converte atibutos para formato SQL.
   atrs_SQL = db_conversao_sql.dict_mem_para_dict_SQL(atrs_mem, tabela.colunas, False)
@@ -37,7 +37,8 @@ def cria(atrs_mem, tabela, def_obj_mem):
   return obj
 
 def muda_atributos(obj, mods_mem, tabela, def_obj_mem):
-
+  assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
+  
   # Converte valores de formato memória para formato SQL.
   mods_SQL = db_conversao_sql.dict_mem_para_dict_SQL(mods_mem, tabela.colunas, True)
   res = db_obj_tabela.atualiza_objeto(tabela, def_obj_mem, obj.id, mods_SQL)
@@ -54,14 +55,16 @@ def obtem_atributos(obj):
 def obtem_atributo(obj, chave):
   return obj.atrs[chave]
 
-def busca_por_identificador(id_obj, tabela, def_obj_mem):
+def obtem_objeto(id_obj, tabela, def_obj_mem):
+  assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
   if id_obj == None:
     obj = None
   else:
-    obj = db_obj_tabela.busca_por_identificador(tabela, def_obj_mem, id_obj)
+    obj = db_obj_tabela.obtem_objeto(tabela, def_obj_mem, id_obj)
   return obj
 
 def busca_por_campo(chave, val, unico, tabela):
+  assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
   lista_ids = db_obj_tabela.busca_por_campo(tabela, chave, val, None)
   if unico:
     return util_testes.unico_elemento(lista_ids)
@@ -69,6 +72,7 @@ def busca_por_campo(chave, val, unico, tabela):
     return lista_ids
     
 def busca_por_campos(args, unico, tabela):
+  assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
   res = db_obj_tabela.busca_por_campos(tabela, args, None)
   if res == None: res = [].copy() # Just in case.
   if type(res) is list or type(res) is tuple:
@@ -78,17 +82,8 @@ def busca_por_campos(args, unico, tabela):
   else:
     erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
 
-def busca_por_semelhanca(args, unico, tabela):
-  res = db_obj_tabela.busca_por_semelhanca(tabela, args, None)
-  if res == None: res = [].copy() # Just in case.
-  if type(res) is list or type(res) is tuple:
-    return res
-  elif type(res) is str:
-    erro_prog("busca na tabela falhou, res = " + res)
-  else:
-    erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
-
 def ultimo_identificador(tabela):
+  assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
   num_ents = db_obj_tabela.num_entradas(tabela)
   id_ult = util_identificador.de_indice(tabela.letra, num_ents)
   return id_ult
@@ -133,8 +128,8 @@ def verifica_criacao(obj, tipo, id_obj, atrs, ignore, tabela, def_obj_mem):
         aviso_prog("retornou " + str(atrs_cmp[chave]) + ", deveria ter retornado " + str(atrs_esp[chave]), True)
         ok = False
     
-    if orz_debug: sys.stderr.write("  > testando {obj_raiz.busca_por_identificador()}:\n")
-    obj1 = busca_por_identificador(id_obj, tabela, def_obj_mem)
+    if orz_debug: sys.stderr.write("  > testando {obj_raiz.obtem_objeto()}:\n")
+    obj1 = obtem_objeto(id_obj, tabela, def_obj_mem)
     if obj1 != obj:
       aviso_prog("retornou " + str(obj1) + ", deveria ter retornado " + str(obj), True)
       ok = False

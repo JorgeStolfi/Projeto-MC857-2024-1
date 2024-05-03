@@ -17,7 +17,7 @@ sys.stderr.write("Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 # Sessao de teste:
-ses = obj_sessao.busca_por_identificador("S-00000001")
+ses = obj_sessao.obtem_objeto("S-00000001")
 assert ses != None
 
 ok_global = True # Vira {False} se algum teste falha.
@@ -36,11 +36,11 @@ def testa_gera(rot_teste, res_esp, *args):
   return ok
 
 # Sessao de administrador:
-ses_A = obj_sessao.busca_por_identificador("S-00000001")
+ses_A = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses_A)
 
 # Sessao de usuário comum:
-ses_C = obj_sessao.busca_por_identificador("S-00000003")
+ses_C = obj_sessao.obtem_objeto("S-00000003")
 assert not obj_sessao.de_administrador(ses_C)
 
 ses_dic = { 'N': None, 'A': ses_A, 'C': ses_C, }

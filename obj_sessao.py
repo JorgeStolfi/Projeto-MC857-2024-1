@@ -140,11 +140,11 @@ def de_administrador(ses):
   devolve {False}."""
   return obj_sessao_IMP.de_administrador(ses)
 
-def busca_por_identificador(id_ses):
+def obtem_objeto(id_ses):
   """Localiza uma sessao com identificador {id_ses} (uma string da forma
   "S-{NNNNNNNN}"), e devolve a mesma na forma de um objeto da classe {obj_sessao.Classe}.
   Se {id_ses} é {None} ou tal sessão não existe, devolve {None}."""
-  return obj_sessao_IMP.busca_por_identificador(id_ses)
+  return obj_sessao_IMP.obtem_objeto(id_ses)
 
 def busca_por_campo(campo, val):
   """Localiza todas as sessões cujo atributo {campo} seja {valor}. Retorna a lista de ids
@@ -184,7 +184,7 @@ def verifica_criacao(ses, id_ses, atrs):
   
   Especificamente, testa se {obtem_identificador(ses)} devolve
   o identificador esperado {id_ses}, {obtem_atributos(ses)} devolve 
-  os atributos esperados {atrs}, e {busca_por_identificador(id_ses)}
+  os atributos esperados {atrs}, e {obtem_objeto(id_ses)}
   devolve o próprio {ses}.
   
   Os atributos {atrs} NÃO devem incluir a data 'criacao'.

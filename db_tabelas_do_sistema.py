@@ -20,7 +20,7 @@ def inicializa_todas(limpa):
 
 def identificador_para_objeto(id_obj):
   """Converte um identificador de objeto {id_obj} ("U-{NNNNNNNN}", "S-{NNNNNNNN}" etc.)
-  para o objeto correspondente, com {{modulo}.busca_por_identificador}
+  para o objeto correspondente, com {{modulo}.obtem_objeto}
   onde {modulo} é o módulo indicado pela letra ({usuario}, {sessao}, etc.)."""
   return db_tabelas_do_sistema_IMP.identificador_para_objeto(id_obj)
 

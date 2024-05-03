@@ -24,13 +24,13 @@ ok_global = True # Vira {False} se um teste falha.
 # Usuários e sessões para testes:
 
 usr1_id = "U-00000001"
-usr1 = obj_usuario.busca_por_identificador(usr1_id)  
+usr1 = obj_usuario.obtem_objeto(usr1_id)  
 
 usr2_id = "U-00000002"
-usr2 = obj_usuario.busca_por_identificador(usr2_id)  
+usr2 = obj_usuario.obtem_objeto(usr2_id)  
 
 ses1_id = "S-00000001"
-ses1 = obj_sessao.busca_por_identificador(ses1_id)  
+ses1 = obj_sessao.obtem_objeto(ses1_id)  
 
 # ----------------------------------------------------------------------
 # TESTES DE CONVERSÃO DE VALORES
