@@ -1,0 +1,34 @@
+A atividade de hoje foi para fazer funcionar e testar o módulo {comando_alterar_video}.
+Iniciou-se executando o servidor e confirmando o estado atual do módulo, validando que aparecia um erro informando que o módulo ainda não havia sido implementado ao acessar a página /alterar_video.
+
+As primeiras modificações feitas na classe {comando_alterar_video_IMP} foram as validações necessárias de acordo com o que era especificado no cabeçalho da função, conforme abaixo:
+1. Validação da sessão - a sessão não deveria ser None e deveria estar aberta
+2. Validação se o identificador do vídeo foi enviado no cmd_args
+3. Validação se o usuário tem permissão para alterar o vídeo solicitado (deve ser admin ou o autor do vídeo)
+
+Uma mensagem de erro foi gerada para cada um dos cenários não satisfeitos acima, exibindo-os em uma página genérica com os erros apropriados (html_pag_generica).
+Para facilitar a validação das mensagens de erro, optou-se por já escrever os testes desses casos, assim confirmando o funcionamento completo dessas validações.
+
+Em seguida, partiu-se para a alteração (ou não) do vídeo em si. O cabeçalho da função documentava que os novos dados do vídeo estariam definidos no cmd_args. Porém, como nenhum nome foi definido para cada um dos campos, foi suposto a seguinte estrutura:
+{
+    'autor',
+    'titulo',
+    'data'
+}
+Como a função de alterar vídeo não permitia modificar as dimensões do vídeo ('duracao', 'largura', 'altura') e nem o identificador do mesmo, considerou-se que os três campos descritos acima eram os únicos que poderiam ser modificados, e por isso, apenas consideramos eles no código do {comando_alterar_video}.
+
+Outro ponto observado na documentação do cabeçalho é que, em caso de erro, deveríamos exibir novamente a {html_pag_alterar_video} mas agora com mensagens de erro. Por isso, tal implementação foi feita.
+Dessa forma:
+- Caso o vídeo fosse modificado corretamente, exibe-se a página de alterar vídeo novamente com os dados atualizados
+- Caso houvesse qualquer erro para modificar o vídeo, exibe-se a mesma página de alterar vídeo (com as informações preenchidas) mas com os erros listados!
+
+Modificamos o vídeo chamando o {obj_video} pela função "muda_atributos" com os mesmos dados que recebemos no cmd_args. Caso ocorra algum erro do tipo ErroAtrib, geramos a página {html_pag_alterar_video} com os mesmos dados preenchidos mas informando o problema. Caso qualquer outro erro ocorra, geramos uma página genérica com uma mensagem de erro.
+O vídeo sendo modificado corretamente, exibimos novamente a página {html_pag_alterar_video} com as informações atualizadas.
+
+Finalizando o desenvolvimento, escreveu-se os testes para esses dois outros cenários:
+1. Vídeo alterado com sucesso
+2. Erro ao alterar os atributos do vídeo
+
+Rodando todos os testes uma última vez, garantiu-se que as telas foram exibidas conforme o esperado, garantindo o funcionamento esperado.
+
+Por fim, um ponto importante a relatar é que a página {html_pag_alterar_video} não estava desenvolvida no momento de escrita desse código. Por isso, não foi possível confirmar o preenchimento adequado (com os atributos do vídeo) do formulário e nem a geração propriamente da página nos casos de sucesso.

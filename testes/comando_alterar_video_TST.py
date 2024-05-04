@@ -1,12 +1,12 @@
 #! /usr/bin/python3
 
 import comando_alterar_video
+import db_tabelas_do_sistema
 import obj_video
-import obj_usuario
 import obj_sessao
 import db_base_sql
 import util_testes
-from util_erros import ErroAtrib
+from util_erros import erro_prog
 
 import sys
 
@@ -37,9 +37,37 @@ def testa_processa(rot_teste, res_esp, *args):
 ses = obj_sessao.obtem_objeto("S-00000001")
 assert obj_sessao.de_administrador(ses)
 
-sys.stderr.write("!!! Escrever as chamadas de {testa_processa} e conferir se alterou !!!\n")
+# Video 
+id_vid = 'V-00000001'
+
+# Teste para validar o erro de sessão inválida
+testa_processa("SessaoInvalida", str, None, { 'video': id_vid })
+
+# Teste para validar um video inválido
+testa_processa("VideoInvalido", str, ses, { 'video': None })
+
+# Teste para validar mensagem de alteração não autorizada
+ses_nao_admin = obj_sessao.obtem_objeto("S-00000003")
+testa_processa("NaoAutorizado", str, ses_nao_admin, { 'video': id_vid })
+
+# Teste para validar erro ao alterar vídeo
+testa_processa("ErroAoAlterar", str, ses, { 'video': id_vid, 'titulo': '' })
+
+# Teste para alterar um vídeo com sucesso
+video_attrs = obj_video.obtem_atributos(obj_video.obtem_objeto(id_vid))
+novo_titulo = 'Novo Titulo'
+data_do_video = video_attrs['data']
+autor_do_video = video_attrs['autor']
+
+testa_processa("AlteraComSucesso", str, ses, { 'video': id_vid, 'titulo': novo_titulo, 'data': data_do_video, 'autor': autor_do_video })
+video_atributos_atualizados = obj_video.obtem_atributos(obj_video.obtem_objeto(id_vid))
+
+titulo_atualizou = video_atributos_atualizados['titulo'] == novo_titulo
+assert titulo_atualizou
+ok_global = ok_global and titulo_atualizou
+
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  aviso_erro("Alguns testes falharam")
+  erro_prog("Alguns testes falharam")
