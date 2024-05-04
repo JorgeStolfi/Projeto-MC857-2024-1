@@ -27,6 +27,27 @@ def gera(vid, mostra_autor):
     elif chave == 'altura' or chave == 'largura':
       mostra = True
       texto = f"{str(atrs[chave])} px" if vid != None else chave.capitalize()
+    elif chave == 'nota':
+      mostra = True
+      nota = atrs[chave] if vid != None else 0
+      # Formata a nota de forma condicional com emojis, 
+      # 0 - muito ruim, 1 - ruim, 2 - indiferente, 3 - bom, 4 - muito bom.
+      # -1 - default, sem nota.
+      # A nota é armazenada como float, então é necessário arredondar para int.
+      nota = round(nota)
+      texto = ""
+      if nota == 0:
+        texto = "😠"
+      elif nota == 1:
+        texto = "😞"
+      elif nota == 2:
+        texto = "😐"
+      elif nota == 3:
+        texto = "😊"
+      elif nota == 4:
+        texto = "😍"
+      elif nota == -1: # Nota default
+        texto = "🤔"
     else:
       mostra = True
       texto = atrs[chave] if vid != None else chave.capitalize()

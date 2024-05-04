@@ -53,6 +53,7 @@ def inicializa_modulo(limpa):
       ( 'duracao', type(418),           'INTEGER', False ), # Duração do video em milissegundos.
       ( 'largura', type(418),           'INTEGER', False ), # Largura de cada frame, em pixels.
       ( 'altura',  type(418),           'INTEGER', False ), # Altura de cada frame, em pixels.
+      ( 'nota',    type(418.1),         'FLOAT',   False ), # Nota média do video (0 a 4).
     )
 
   tabela = db_obj_tabela.cria_tabela(nome_tb, letra_tb, classe, colunas, limpa)
@@ -90,6 +91,8 @@ def cria(atrs):
   atrs['duracao'] = duracao
   atrs['largura'] = largura
   atrs['altura'] = altura
+
+  atrs['nota'] = -1.0 # Valor default da nota do vídeo é -1
 
   # Extrai imagem thumb do video:
   thumb_dir = "thumbs"
@@ -301,12 +304,18 @@ def valida_atributos(vid, atrs_mem):
   sessão. """
   global tabela
   
-  erros = [].copy();
+  erros = [].copy()
 
   vid_id = obtem_identificador(vid) if vid is not None else None
 
   if vid != None:
     # Os campos de {atrs} são alterações a aplicar no vídeo {vid}.
+    if isinstance(atrs_mem['nota'], float):
+      erros.append(f"Atributo 'nota' do vídeo {vid_id} não é um float")
+
+    if atrs_mem['nota'] < 0 or atrs_mem['nota'] > 4:
+      erros.append(f"Atributo 'nota' do vídeo {vid_id} fora da faixa (0 a 4)")
+
     for chave in 'duracao', 'altura', 'largura':
       if chave in atrs_mem:
         val_novo = atrs_mem[chave]
