@@ -214,6 +214,16 @@ res_e = list(res_e)
 verifica_resultado("BCA_e_nomeParc_carro", res_e, [ id_bob4, ])
 
 # ----------------------------------------------------------------------
+sys.stderr.write("  testando {db_obj_tabela.busca_por_intervalo}:\n")
+
+resultado = db_obj_tabela.busca_por_intervalo(tab_bob, 'pernas', 0, 4) 
+assert type(resultado) is list or type(resultado) is tuple
+resultado = list(resultado)
+
+# Mocks foram cadastrados apenas com valores de 2 e 4
+verifica_resultado("Pernas encontradas", resultado, [ 2, 4 ])
+
+# ----------------------------------------------------------------------
 sys.stderr.write("  testando {db_obj_tabela.atualiza_objeto}:\n")
 
 alts1 = {

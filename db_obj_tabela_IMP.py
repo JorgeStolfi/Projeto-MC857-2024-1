@@ -202,6 +202,27 @@ def busca_por_campos(tab, args, res_cols):
       res = util_identificador.de_lista_de_indices(tab.letra, res)
   return res
 
+def busca_por_intervalo(tab, chave, val_min, val_max):
+  valor_minimo_convertido = db_base_sql.codifica_valor(val_min)
+  valor_maximo_convertido = db_base_sql.codifica_valor(val_max)
+
+  condicao = f"WHERE {chave} BETWEEN {valor_minimo_convertido} AND {valor_maximo_convertido}"
+
+  # Executa a busca:
+  resultado_busca = db_base_sql.executa_comando_SELECT(tab.nome, condicao, chave)
+  
+  # Finaliza o resultado:
+  if resultado_busca == None:
+    # Não achou nada:
+    resultado_busca = [].copy()
+  elif type(resultado_busca) is str:
+    # {res} deve ser uma mensagem de erro:
+    erro_prog(f"SELECT falhou {resultado_busca}")
+  else:
+    erro_prog("SELECT falhou com erro desconhecido")
+
+  return resultado_busca
+
 def num_entradas(tab): 
   num_ents = db_base_sql.num_entradas(tab.nome, 'indice')
   if not type(num_ents) is int:
