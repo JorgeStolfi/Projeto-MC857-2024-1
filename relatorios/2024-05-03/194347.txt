@@ -1,0 +1,6 @@
+relatorio do dia 03/05/2024
+
+Apro receber a tarefe de pesquisar implemnetações de botões externos ao video para controle do mesmo eu encontrei uma forma de de implementação em css e java script nno video "https://www.youtube.com/watch?app=desktop&v=khEmkygTi54&ab_channel=ProgramadorBR" 
+cujo o titulo é 'COMO CONTROLAR UM VIDEO COM HTML CSS E JAVASCRIPT? - Programador Br no' do canal "@Programadorbr" no youtube e foi a informação mais relevande que encontrei.
+
+Atenciosamente Arimã Batista
