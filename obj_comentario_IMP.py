@@ -135,8 +135,13 @@ def busca_por_pai(id_pai):
   return lista_ids
 
 def busca_por_texto(texto):
-  # !!! BUSCA POR TEXTO AINDA NÃO IMPLEMENTADA !!!
-  lista_ids = []
+  global tabela
+  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_texto}: {texto} = " + f"{texto}\n")
+  assert type(texto) is str
+  unico = False
+  texto += "%" + texto + "%"
+  lista_ids = obj_raiz.busca_por_campos({'texto':texto}, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
   return lista_ids
 
 def busca_por_data(data):
