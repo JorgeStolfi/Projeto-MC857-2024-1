@@ -215,3 +215,10 @@ def liga_diagnosticos(val):
   impressão em {sys.stderr} de mensagens de diagnóstico pelas 
   funções deste módulo."""
   obj_comentario_IMP.liga_diagnosticos(val)
+
+def busca_por_campos(args):
+  """
+  Permite buscar por múltiplos campos de um comentário, onde o argumento {args}
+  representa um dicionário no formato {chave, valor}
+  """
+  obj_comentario_IMP.busca_por_campos(args)

@@ -1,0 +1,14 @@
+Relatório 03-05-2024:
+
+Foi dada a tarefa para de corrigir o módulo comando_buscar_comentarios, de modo que ele
+utilizasse uma função busca_por_campos, de forma a fazer um "and" entre os campos requistados
+para busca, ao invés de um "or", como estava implementado anteriormente.
+Para isso, foi necessário atualizar o módulo obj_comentario_IMP, onde foi implementada
+a função busca_por_campos, que basicamente se utiliza da função já existente, localizada em
+obj_raiz.busca_por_campos, para implementar seu próprio comportamento. Com a implementação feita,
+tal função passou a ser chamada em comando_buscar_comentarios, no lugar nas funções chamada anteriormente.
+
+Debugando os testes, as correções feitas estão funcionais, e geram um SQL correto. Contudo,
+parece que o obj_raiz possui falhas na implementação relacionada ao banco, de forma a não retornar a lista de
+ids que supostamente seria a correta. Como tal parte do repositório foge do escopo definido para minha tarefa,
+tal correção ao módulo obj_raiz não foi implementada.

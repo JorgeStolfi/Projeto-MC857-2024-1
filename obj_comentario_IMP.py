@@ -116,6 +116,13 @@ def busca_por_video(id_vid, sem_pai):
   if tabela.debug: sys.stderr.write(f"    > ids encontrados = {lista_ids}\n");
   return lista_ids
 
+def busca_por_campos(args):
+  global tabela
+  unico = False
+  lista_ids = obj_raiz.busca_por_campos(args, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
+  return lista_ids
+
 def busca_por_autor(id_usr):
   global tabela
   if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_nome}: {id_usr} = " + f"{id_usr}\n");
