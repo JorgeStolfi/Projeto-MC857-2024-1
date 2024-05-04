@@ -1,0 +1,22 @@
+Relatório 03-05-2024 referente a issue:
+'Navegue pelo site e relacione todos os problemas (estéticos, funcionais, etc.) que você encontrar.
+Procure diagnosticar a causa'
+
+(Bug funcional)
+Encontrei um bug no fluxo de fechar sessões. Ao fechar a sessão atual, o comando fechar sessão redireciona
+para a página de login, porém os comandos (Buscar usuários, Buscar vídeos etc) não funcionam e ao clicar
+em 'Principal' somos direcionados novamente para a página inicial como se estivessemos logados, mas nenhuma
+das páginas carrega, além disso o botão 'Sair' não funciona pois nenhuma sessão é reconhecida. Ao buscar
+a causa raiz do problema, identifiquei que o comando, ao ser chamado em 'processa_comando_http_IMP', não
+recebe a nova sessão (parâmetro ses_nova) para este caso, como o comando fazer_logout faz, assim não
+se pode retornar 'None' como a nova sessão e ser de fato deslogado. Nos meus testes, ao implementar este
+parâmetro, o bug foi corrigido.
+
+(Problema estético)
+Além disso, percebi que a página 'Minha conta' exibe um formulário que permite alterar informações de
+e-mail, senha e uma checkbox para definir ou não como administrador. Porém, apesar das informações editáveis,
+não há uma opção de salvar os novos dados (nova senha etc) o que parece um erro estético, acredito que o 
+caminho seria a implementação da edição do usuário ou exibir essas informações como texto ao invés de um
+formulário, evitando induzir a ideia de edição.
+
+Bruno Gonçalves Rodrigues - 232450
