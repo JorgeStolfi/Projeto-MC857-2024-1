@@ -4,6 +4,7 @@ import html_elem_item_de_resumo
 import html_elem_span
 import html_elem_button_simples
 import html_estilo_texto
+import html_elem_link_img
 
 def gera(vid, mostra_autor):
 
@@ -11,7 +12,7 @@ def gera(vid, mostra_autor):
 
   itens_resumo = []
 
-  colunas = [ 'video', 'autor', 'data', 'duracao', 'largura', 'altura', 'titulo' ]
+  colunas = [ 'thumb','video', 'autor', 'data', 'duracao', 'largura', 'altura', 'titulo' ]
   
   destaque = False
   for chave in colunas:
@@ -27,6 +28,11 @@ def gera(vid, mostra_autor):
     elif chave == 'altura' or chave == 'largura':
       mostra = True
       texto = f"{str(atrs[chave])} px" if vid != None else chave.capitalize()
+    elif chave == 'thumb':
+
+      mostra=True
+      texto = html_elem_link_img.gera(atrs[chave],None,40,None)
+
     else:
       mostra = True
       texto = atrs[chave] if vid != None else chave.capitalize()

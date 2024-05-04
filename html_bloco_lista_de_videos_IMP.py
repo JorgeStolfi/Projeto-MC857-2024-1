@@ -3,6 +3,9 @@ import html_linha_resumo_de_video
 import html_elem_table
 import html_elem_div
 import html_bloco_titulo
+import sys
+def reshape(image,size):
+  pass
 
 def gera(lista_ids_vid, mostra_autor):
   
@@ -16,6 +19,10 @@ def gera(lista_ids_vid, mostra_autor):
     # busca por identificador do video no banco
     vid = obj_video.obtem_objeto(id_vid)
 
+    thumb = f'/thumbs/{id_vid}.png'
+
+    vid.atrs.update({'thumb':thumb})
+   
     # Gera uma lista de fragmentos HTML com as informacoes desse video
     linha_vid = html_linha_resumo_de_video.gera(vid, mostra_autor)
 
