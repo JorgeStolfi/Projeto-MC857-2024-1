@@ -1,0 +1,17 @@
+Tarefa de hoje 03/05:
+Acrescentar parâmetros {max_coms} e {max_nivel} à função {obj_comentario.obtem_conversa}.
+Deve encerrar a busca após recolher {max_coms} comentarios e não deve descer mais que {max_nivel}
+na árvore de comentários. Ou seja, se {max_mivel} é 2, só considera os comentários {raizes} e as
+respostas diretas a esses comentários.
+
+
+Implementei até que rapidamente o limite de níveis da arvore da conversa que deveria ser printada,
+porém me atrapalhei bastante na hora de limitar a quantidade de comentários a serem retornados na conversa.
+Não tive tempo de testar com muitos casos de uso...
+Criei um método "obtem_conversa_com_resto" que retorna também quantos comentarios ainda podem ser buscados
+para facilitar na hora de montar a arvore, tenho certeza que tem uma maneira muito mais simples de fazer
+tudo o que eu fiz.
+Comentei alguns testes referentes ao metodo "obtem_arvore" pois ele nao esta mais no "obj_comentario.py"
+então assumi que ele não é mais publico e comentei para poder executar os outros testes
+Também adicionei um valor padrao para o {sem_pai} em "busca_por_video(id_vid, sem_pai=False)" localmente
+para poder executar os testes

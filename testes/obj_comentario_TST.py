@@ -83,6 +83,9 @@ com3 = obj_comentario.obtem_objeto("C-00000003")
 com4 = obj_comentario.obtem_objeto("C-00000004")
 com5 = obj_comentario.obtem_objeto("C-00000005")
 com6 = obj_comentario.obtem_objeto("C-00000006")
+com7 = obj_comentario.obtem_objeto("C-00000007")
+com8 = obj_comentario.obtem_objeto("C-00000008")
+com9 = obj_comentario.obtem_objeto("C-00000009")
 
 sys.stderr.write("  Obtendo alguns vídeos para teste:\n")
 
@@ -168,6 +171,25 @@ id_usr_bu3 = "U-00000004"
 testa_busca_simples("bu3", 'autor', id_usr_bu3, ( ))
 
 # ----------------------------------------------------------------------
+sys.stderr.write("  testando {obj_comentario.obtem_conversa()}:\n")
+
+def testa_obtem_conversa(raizes, max_coms=10, max_nivel=10):
+  """
+  Faltando adicionar as verificações corretamente, atualmente só executa e printa
+  """
+  sys.stderr.write(f"Obtem de {str(raizes)} {max_coms} comentarios, no maximo em {max_nivel} niveis \n")
+  conversa_video = obj_comentario.obtem_conversa(raizes, max_coms, max_nivel)
+  sys.stderr.write(str(conversa_video) + "\n")
+
+testa_obtem_conversa([com1.id, com3.id, com8.id], 5, 10)
+testa_obtem_conversa([com1.id, com8.id], 2, 10)
+testa_obtem_conversa([com1.id, com8.id], 3, 10)
+testa_obtem_conversa([com1.id, com8.id], 4, 10)
+testa_obtem_conversa([com1.id, com8.id], 10, 1)
+testa_obtem_conversa([com1.id, com8.id], 10, 2)
+testa_obtem_conversa([com1.id, com8.id], 7, 3)
+
+# ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_comentario.obtem_arvore()}:\n")
 
 def testa_obtem_arvore(vid, com):
@@ -206,18 +228,20 @@ def imprime_arvore_tuplas(arv, ind):
     for subarv in arv[1:]:
       imprime_arvore_tuplas(subarv, ind+2)
 
-testa_obtem_arvore(vid_cr0, None)
-testa_obtem_arvore(vid_cr0, cmt_cr0)
+# Chamadas comentadas pois o metodo obtem_arvore não é mais público em obj_comentario
 
-testa_obtem_arvore(vid_cr1, None)
-testa_obtem_arvore(vid_cr1, cmt_cr1)
+# testa_obtem_arvore(vid_cr0, None)
+# testa_obtem_arvore(vid_cr0, cmt_cr0)
 
-for vid in vid1, vid2, vid3:
-  testa_obtem_arvore(vid, None)
+# testa_obtem_arvore(vid_cr1, None)
+# testa_obtem_arvore(vid_cr1, cmt_cr1)
 
-for com in com1, com2, com3, com4, com5, com6:
-  vid = obj_comentario.obtem_atributo(com, 'video')
-  testa_obtem_arvore(vid, com)
+# for vid in vid1, vid2, vid3:
+#   testa_obtem_arvore(vid, None)
+
+# for com in com1, com2, com3, com4, com5, com6:
+#   vid = obj_comentario.obtem_atributo(com, 'video')
+#   testa_obtem_arvore(vid, com)
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_comentario.busca_por_campos()}:\n")
@@ -226,7 +250,7 @@ def testa_busca_por_campos(rot_teste, args_bus, idents_esp):
   """Testes de consistência da função {busca_por_campos} dado o dicionário {args_bus}
   com as chaves e valores dos campos de busca {chave}, o valor de busca {val},
   e a lista de identificadores {idents_esp} esperados."""
-  sys.stderr.write(f"  testando {'{'}obj_comentario.busca_por_campos({str(args_bus)}){'}'}:\n" % )
+  sys.stderr.write(f"  testando {'{'}obj_comentario.busca_por_campos({str(args_bus)}){'}'}:\n")
 
   ok = True
   

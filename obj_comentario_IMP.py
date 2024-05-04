@@ -162,6 +162,13 @@ def cria_testes(verb):
       ( "C-00000007", "V-00000001", "U-00000004", "C-00000002", "Batata!", ),
       ( "C-00000008", "V-00000001", "U-00000002", None,         "Inefável!", ),
       ( "C-00000009", "V-00000001", "U-00000001", "C-00000005", "Larga mão dessa!\nCoisa feia!\nRespeite os mais bodosos...", ),
+      ( "C-00000010", "V-00000001", "U-00000004", "C-00000002", "Legalzinho, vai...", ),
+      ( "C-00000011", "V-00000001", "U-00000002", "C-00000005", "Levante deste camastralho!!!", ),
+      ( "C-00000012", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
+      ( "C-00000013", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
+      ( "C-00000014", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
+      ( "C-00000015", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
+      ( "C-00000016", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
     ]
   for id_com, id_vid, id_autor, id_pai, texto in lista_atrs:
     vid = obj_video.obtem_objeto(id_vid)
@@ -313,33 +320,75 @@ def modifica_obj_mem(com, atrs_mod_SQL):
     com.atrs[chave] = val_mem
   return com
 
-def obtem_conversa(raizes):
+def obtem_conversa(raizes, max_coms, max_nivel):
+  """
+  O parâmetro {max_coms} delimita o maximo de comentários a serem retornados na conversa, sem contabilizar as raizes,
+  enquanto {max_nivel} delimita até qual nivel da arvore os comentários serão retornados.
+  """
   global tabela
   if raizes == None: raizes = [] # Simplify.
   assert isinstance(raizes, list) or isinstance(raizes, tuple)
-  
   conversa = [].copy()
+
+  coms_faltando = max_coms
   
   for id_com in raizes:
+    if coms_faltando <= 0:
+      conversa.append([id_com])
+      # Para de procurar mais comentarios, mas adiciona o resto das raizes caso existam
+      continue
     com = obj_comentario.obtem_objeto(id_com)
     if com == None: erro_prog(f"comentario {id_com} não existe")
-    arv = obtem_arvore(com)
+    arv, resto = obtem_arvore(com, coms_faltando, max_nivel - 1)
+    coms_faltando = resto
     conversa.append(arv)
-    
+
   return conversa
 
-def obtem_arvore(com):
+def obtem_conversa_com_resto(raizes, max_coms, max_nivel):
+  """
+  Retorna a quantidade de comentarios que ainda podem ser buscados, junto da conversa.
+  """
+  global tabela
+  if raizes == None: raizes = [] # Simplify.
+  assert isinstance(raizes, list) or isinstance(raizes, tuple)
+  conversa = [].copy()
+
+  coms_faltando = max_coms
+  
+  for id_com in raizes:
+    if coms_faltando <= 0: 
+      conversa.append([id_com])
+      break
+    com = obj_comentario.obtem_objeto(id_com)
+    if com == None: erro_prog(f"comentario {id_com} não existe")
+    arv, resto = obtem_arvore(com, coms_faltando, max_nivel - 1)
+    coms_faltando = resto
+    conversa.append(arv)
+
+  return conversa, coms_faltando
+
+def obtem_arvore(com, max_coms, max_nivel):
   global tabela
   assert com == None or isinstance(com, obj_comentario.Classe)
   if com == None: return None
   id_com = obj_comentario.obtem_identificador(com)
   
   arv = [ id_com ]
+
+  if max_nivel < 0:
+    return arv, max_coms
   
   lista_ids_filhos = busca_por_pai(id_com)
 
-  if lista_ids_filhos != None:
-    subarvs = obtem_conversa(lista_ids_filhos)
-    arv += subarvs
+  coms_faltando = max_coms
 
-  return arv
+  if lista_ids_filhos != None:
+    for id_filho in lista_ids_filhos:
+      # Para execução se alcançou o limite de comentarios
+      if coms_faltando <= 0: break
+      subarvs, resto = obtem_conversa_com_resto([id_filho], coms_faltando - 1, max_nivel)
+      coms_faltando = resto
+      arv += subarvs
+
+  return arv, coms_faltando
