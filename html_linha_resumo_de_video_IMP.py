@@ -40,7 +40,7 @@ def gera(vid, mostra_autor):
 
   if vid != None:
     bt_args = { 'video': obj_video.obtem_identificador(vid) }
-    bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_args, "#ffcc88")
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_args, '#eeee55')
     itens_resumo.append("<td>" + bt_ver + "</td>")
 
   return itens_resumo

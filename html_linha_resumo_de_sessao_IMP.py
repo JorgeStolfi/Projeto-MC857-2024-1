@@ -40,15 +40,14 @@ def gera(ses, bt_ver, bt_fechar):
   
   if ses != None:
     args_bt = { 'sessao': ses_id } # Argumentos para os botões.
-    cor_bt = '#FFA700' # Cor para os botões.
 
     if bt_ver:
-      bt_ver = html_elem_button_simples.gera("Ver", 'ver_sessao', args_bt, cor_bt)
+      bt_ver = html_elem_button_simples.gera("Ver", 'ver_sessao', args_bt, '#eeee55')
       ht_campos.append("<td>" + bt_ver + "</td>")
 
     if bt_fechar:
       if atrs['aberta']:
-        bt_fechar = html_elem_button_simples.gera("Fechar", 'fechar_sessao', args_bt, cor_bt)
+        bt_fechar = html_elem_button_simples.gera("Fechar", 'fechar_sessao', args_bt, '#FF7700')
       else:
         bt_fechar = " "
       ht_campos.append("<td>" + bt_fechar + "</td>")
