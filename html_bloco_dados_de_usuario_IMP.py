@@ -5,7 +5,7 @@ import obj_usuario
 import obj_sessao
 import html_elem_form
 
-def gera(id_usr, atrs, ses_admin, ses_proprio):
+def gera(id_usr, atrs, ses_admin, ses_proprio, readonly):
 
   # Para simplificar
   atrs = {}.copy() if atrs == None else atrs.copy()
@@ -28,17 +28,15 @@ def gera(id_usr, atrs, ses_admin, ses_proprio):
     dados_linhas.append( ( "Identificador", "text",  'usuario',  False, None, ) )
 
   # Mostra sempre o nome:
-  dados_linhas.append( ( "Nome", "text", 'nome',  edcri, None, ) )
+  dados_linhas.append( ( "Nome", "text", 'nome',  edcri and readonly, None, ) )
 
   if edcri:
     # Mostra senha, conf-senha, e email, editáveis
-    dados_linhas.append( ( "E-mail",           "email",    'email',         True,      "xxx@xxx.xxx.xx", ) )
-    dados_linhas.append( ( "Senha",            "password", 'senha',         True,      None,             ) )
-    dados_linhas.append( ( "Confirmar senha",  "password", 'conf_senha',    True,      None,             ) )
+    dados_linhas.append( ( "E-mail",           "email",    'email',         readonly,      "xxx@xxx.xxx.xx", ) )
     
   if ses_admin:
     # Mostra atributo 'admnistrador', editável:
-    dados_linhas.append( ( "Administrador",    "checkbox", 'administrador', ses_admin, None ) )
+    dados_linhas.append( ( "Administrador",    "checkbox", 'administrador', readonly, None ) )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
 
@@ -46,11 +44,14 @@ def gera(id_usr, atrs, ses_admin, ses_proprio):
   ht_bt_sessoes = None # A menos que tenha.
   ht_bt_videos = None # A menos que tenha.
   ht_bt_comentarios = None # A menos que tenha.
+  ht_bt_alterar = None # A menos que tenha.
   if id_usr != None:
     # Somente admininstrador ou o próprio podem ver as sessões de {usr}:
     if ses_admin or ses_proprio:
       usr = obj_usuario.obtem_objeto(id_usr)
       assert usr != None
+      if readonly:
+        ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_usuario", {'usuario': id_usr}, '#eeee55')
       nab = len(obj_sessao.busca_por_usuario(usr, True))
       if nab > 0 and not ses_proprio:
         ht_bt_sessoes = html_elem_button_simples.gera(f"Ver sessões ({nab})", "buscar_sessoes_de_usuario", {'usuario': id_usr}, '#eeee55')
@@ -64,6 +65,7 @@ def gera(id_usr, atrs, ses_admin, ses_proprio):
 
   ht_bloco = \
     ht_table + "<br/>" + \
+    ( ht_bt_alterar + " " if ht_bt_alterar != None else "") + \
     ( ht_bt_sessoes + " " if ht_bt_sessoes != None else "") + \
     ( ht_bt_videos  + " " if ht_bt_videos != None else "") + \
     ( ht_bt_comentarios  + " " if ht_bt_comentarios != None else "")

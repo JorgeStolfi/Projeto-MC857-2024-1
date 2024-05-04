@@ -1,6 +1,6 @@
 import html_bloco_dados_de_usuario_IMP
 
-def gera(id_usr, atrs, ses_admin, ses_proprio):
+def gera(id_usr, atrs, ses_admin, ses_proprio, readonly):
   """
   Retorna um bloco "<table>... </table>" contendo os dados de um usuário {usr}
   cujo identificador é {id_usr}, ou de um usuário a ser criado se {id_usr}
@@ -16,6 +16,8 @@ def gera(id_usr, atrs, ses_admin, ses_proprio):
   que pediu estas informações é administrador ou o próprio {usr},
   respecivamente.  Eles controlam a exibição e edição 
   de certos campos, como especificado abaixo
+
+  O parâmetro booleano {readonly} determina se os dados exibidos serão editáveis.
   
   Se {id_usr} for {None}, retorna uma tabela de campos adequada para
   cadastrar novo usuário. Não haverá um campo para o identificador. O
@@ -52,4 +54,4 @@ def gera(id_usr, atrs, ses_admin, ses_proprio):
   No comando POST gerado por esse botão, o identificador {id_usr} será
   incluído nos argumentos do comando com chave 'usuario'.
   """
-  return html_bloco_dados_de_usuario_IMP.gera(id_usr, atrs, ses_admin, ses_proprio)
+  return html_bloco_dados_de_usuario_IMP.gera(id_usr, atrs, ses_admin, ses_proprio, readonly)
