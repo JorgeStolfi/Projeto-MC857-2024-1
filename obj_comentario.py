@@ -153,11 +153,11 @@ def busca_por_texto(texto):
   ou {None} se nenhum comentário contém o texto."""
   return obj_comentario_IMP.busca_por_texto(texto)
 
-def busca_por_data(data):
-  """Localiza comentários postados com uma data aproximada de data {data} 
+def busca_por_data(data_ini, data_ter):
+  """Localiza comentários postados em um intervalo entre os dois anos, inclusive 
   e devolve o uma lista com os identificadores desses comentários (não os objetos);
-  ou {None} se nenhum comentário foi postado na data."""
-  return obj_comentario_IMP.busca_por_data(data)
+  ou {None} se nenhum comentário foi postado no intervalo de data."""
+  return obj_comentario_IMP.busca_por_data(data_ini, data_ter)
 
 def obtem_conversa(raizes):
   """
