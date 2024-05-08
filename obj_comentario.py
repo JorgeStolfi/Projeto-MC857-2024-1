@@ -159,7 +159,7 @@ def busca_por_data(data_ini, data_ter):
   ou {None} se nenhum comentário foi postado no intervalo de data."""
   return obj_comentario_IMP.busca_por_data(data_ini, data_ter)
 
-def obtem_conversa(raizes):
+def obtem_conversa(raizes, max_coms, max_nivel):
   """
   "Determina toda a floresta de comentarios de um vídeo ou a árvore de respostas
   de um comentário que está pendurada nas {raizes} dadas.
@@ -177,7 +177,7 @@ def obtem_conversa(raizes):
   As raízes das árvores da floresta {flor} devolvida pela função são os comentários
   cujos identificadores estão na lista {raizes}.
   """
-  return obj_comentario_IMP.obtem_conversa(raizes)
+  return obj_comentario_IMP.obtem_conversa(raizes, max_coms, max_nivel)
 
 def ultimo_identificador():
   """Devolve o identificador do último comentário inserido na tabela.
