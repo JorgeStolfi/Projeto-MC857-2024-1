@@ -8,7 +8,7 @@ import db_conversao_sql
 import util_identificador
 import util_valida_campo
 
-import cv2
+# import cv2
 import os
 import re
 
@@ -97,15 +97,15 @@ def cria(atrs):
   if not os.path.exists(thumb_dir):
     os.makedirs(thumb_dir)
   # Carrega o video !!! Má Idéia !!!
-  fluxo = cv2.VideoCapture(nome_arq)
+  # fluxo = cv2.VideoCapture(nome_arq)
 
   # Obtém o frame 0 do vídeo:
-  successo, capa = fluxo.read()
-  assert successo, "captura de frame falhou"
-  fluxo.release()
+  # successo, capa = fluxo.read()
+  # assert successo, "captura de frame falhou"
+  # fluxo.release()
 
   nome_thumb = f"{thumb_dir}/{id_vid}.png"
-  cv2.imwrite(nome_thumb, capa)
+  # cv2.imwrite(nome_thumb, capa)
 
   erros = valida_atributos(None, atrs)
   if len(erros) != 0: raise ErroAtrib(erros)
