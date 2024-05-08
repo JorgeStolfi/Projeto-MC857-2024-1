@@ -131,6 +131,9 @@ def testa_busca_simples(rot_teste, chave, val, idents_esp):
     idents_fun = obj_comentario.busca_por_video(val)
   elif chave == 'autor':
     idents_fun = obj_comentario.busca_por_autor(val)
+  elif chave == 'data':
+    data = int(str(val)[0:4]);
+    idents_fun = obj_comentario.busca_por_data(data-1, data+1)
   else:
     assert False, "** função inexistente"
 
@@ -166,6 +169,20 @@ testa_busca_simples("bu2", 'autor', id_usr_bu2, ( ident_cr0, ))
 
 id_usr_bu3 = "U-00000004"
 testa_busca_simples("bu3", 'autor', id_usr_bu3, ( ))
+
+# ----------------------------------------------------------------------
+sys.stderr.write("  testando {obj_comentario.busca_por_data()}:\n")
+
+# Todos os comentários de teste na base:
+coms_todos = [ \
+    "C-00000001", "C-00000002", "C-00000003",
+    "C-00000004", "C-00000005", "C-00000006",
+    "C-00000007", "C-00000008", "C-00000009",
+  ]
+
+data_bd1 = "2024-04-05 08:00:00 UTC"
+# Interprete o resultado tendo em vista que busca por data é somente em função de intervalo de anos
+testa_busca_simples("bd1", 'data', data_bd1, coms_todos)
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_comentario.obtem_arvore()}:\n")
@@ -226,7 +243,7 @@ def testa_busca_por_campos(rot_teste, args_bus, idents_esp):
   """Testes de consistência da função {busca_por_campos} dado o dicionário {args_bus}
   com as chaves e valores dos campos de busca {chave}, o valor de busca {val},
   e a lista de identificadores {idents_esp} esperados."""
-  sys.stderr.write(f"  testando {'{'}obj_comentario.busca_por_campos({str(args_bus)}){'}'}:\n" % )
+  sys.stderr.write(f"  testando {'{'}obj_comentario.busca_por_campos({str(args_bus)}){'}'}:\n" )
 
   ok = True
   
@@ -242,13 +259,6 @@ def testa_busca_por_campos(rot_teste, args_bus, idents_esp):
 
   sys.stderr.write("  %s\n" % ("-" * 70))
   return
-
-# Todos os comentários de teste na base:
-coms_todos = [ \
-    "C-00000001", "C-00000002", "C-00000003",
-    "C-00000004", "C-00000005", "C-00000006",
-    "C-00000007", "C-00000008", "C-00000009",
-  ]
 
 # Teste passando um id de comentario existente:
 args_bus_01 = {"comentario": "C-00000001"}

@@ -147,9 +147,16 @@ def busca_por_texto(texto):
 
   return lista_ids
 
-def busca_por_data(data):
-  # !!! BUSCA POR DATA AINDA NÃO IMPLEMENTADA !!!
-  lista_ids = []
+def busca_por_data(data_ini, data_ter):
+  global tabela
+  unico = False
+  if tabela.debug: sys.stderr.write(f"  > {obj_comentario_IMP.busca_por_data}: data_ini = {data_ini}, data_ter = {data_ter}\n");
+  data_ini = int(str(data_ini)[0:4]); data_ter = int(str(data_ter)[0:4]);
+  assert data_ini > 1999 and data_ini < 2099 and data_ter > 1999 and data_ter < 2099
+  lista_ids = [].copy();
+  for data in range(data_ini, data_ter+1):
+    lista_ids += obj_raiz.busca_por_campos({'%data%': "{data}-"}, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > id encontrado = {id_com}\n");
   return lista_ids
   
 def ultimo_identificador():
