@@ -1,0 +1,7 @@
+- Instalação do cv2: pip install opencv-python
+- adicionei no script de teste: from util_erros import ErroAtrib, aviso_prog, aviso_erro
+import db_tabelas_do_sistema
+- Dificuldades:
+--Tive uma dificuldade consideralvelmente maior para entender o código do que no lab anterior.
+--Os códigos que poderiam ser usados como referência aparentam estar incompletos.
+--Não conhecia a python keyword "assert"

@@ -6,7 +6,9 @@ import db_base_sql
 import util_testes
 import obj_usuario
 import sys
+from util_erros import ErroAtrib, aviso_prog, erro_prog
 
+# Conecta o banco e carrega as informações para o teste
 sys.stderr.write("  Conectando com base de dados...\n")
 res = db_base_sql.conecta("DB",None,None)
 assert res == None
@@ -29,9 +31,24 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-aviso_prog("!!! programa de teste de {comando_solicitar_pag_buscar_videos} ainda não escrito !!!")
+# Sessão para teste:
+ses_id = "S-00000001"
+ses = obj_sessao.obtem_objeto(ses_id)
+
+# Obtém um usuário administrador
+#admin = obj_video.obtem_objeto("U-00000001")
+#assert obj_video.obtem_atributo(admin, 'administrador')
+#ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX")
+
+testa_processa("NL-e0",  str, None, None)
+#testa_processa("NA-e2",  str, ses_comum, ["banana", "abacate"])
+testa_processa("OK-e0",  str, ses, None)
+#testa_processa("OK-e2",  str, ses, ["Roubar", "Mentir"])
+
+#aviso_prog("!!! programa de teste de {comando_solicitar_pag_buscar_videos} ainda não escrito !!!", False)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  aviso_erro("Alguns testes falharam")
+  #aviso_erro("Alguns testes falharam")
+  erro_prog("Alguns testes falharam")
