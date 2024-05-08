@@ -1,0 +1,17 @@
+Nome: Leonardo Novaes do Nascimento
+RA: 220142
+#### Pagina Principal: Nenhum problema encontrado
+
+### Pagina Buscar Usuário: Ainda falta implementar quando o botão 'buscar' é precionado e os campos não estão preenchidos ou preenchidos com informações erradas
+
+### Pagina Buscar Video: Ainda falta implementar quando o botão 'buscar' é precionado e os campos não estão preenchidos ou preenchidos com informações erradas
+
+### Pagina Buscar Comentário: Ainda precisa ser implementada
+
+### Pagina Ver Video: Ainda precisa ser implementada
+
+### Pagina Ver Usuário: Ainda precisa ser implementada
+
+### Pagina Login:Nenhum problema encontrado
+
+### Pagina Cadastrar: Usuário é cadastrado, porém a pagina não é atualizada corretamente
