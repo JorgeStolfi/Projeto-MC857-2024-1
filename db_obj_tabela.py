@@ -225,6 +225,14 @@ def busca_por_campos(tab, args, res_cols):
   """
   return db_obj_tabela_IMP.busca_por_campos(tab, args, res_cols)
 
+def busca_por_intervalo(tab, chave, val_min, val_max):
+  """
+  Procura na tabela {tab} objetos que têm um valor pentencente a {val_min} e 
+  {val_max}, na coluna de nome {chave}. A {chave} deve ser o nome de uma
+  coluna da tabela, como definido em {colunas}.  
+  """
+  return db_obj_tabela_IMP.busca_por_intervalo(tab, chave, val_min, val_max)
+
 def muda_diagnosticos(tab, val):
   """Liga (se {val} é {True}) ou desliga (se {val} é {False}) os 
   diagnósticos na tabela {tab}.  Retorna {None}."""
