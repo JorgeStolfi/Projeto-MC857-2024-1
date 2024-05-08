@@ -20,6 +20,7 @@ class Classe(obj_video_IMP.Classe_IMP):
     'duracao'  {int}   Duração do vídeo em millissegundos.
     'largura'  {int}   Largura de cada frame, em pixels.
     'altura'   {int}   Atura de cada frame, em pixels.
+    'nota'     {float} Nota média do vídeo (0 a 4).
 
   Outros atributos (categoria, legendas, etc) poderão ser acrescentados
   no futuro.
@@ -76,10 +77,10 @@ def cria(atrs):
   a ser criado. Se a chave 'conteúdo' não existir em {atrs}, supõe que o
   arquivo já está gravado com esse nome.
   
-  Os campos 'duracao',
-  'largura' e 'altura' do objeto serão extraídos desse arquivo. O campo
-  'data' será a data corrente no momento da chamada desta função. O
-  identificador do novo objeto será derivado do seu índice na tabela.
+  Os campos 'duracao', 'largura' e 'altura' do objeto serão extraídos desse arquivo. 
+  O campo 'data' será a data corrente no momento da chamada desta função.
+  O campo 'nota' será inicializado com -1.
+  O identificador do novo objeto será derivado do seu índice na tabela.
   
   Em caso de sucesso, retorna o objeto criado. Caso contrário,
   levanta a exceção {ErroAtrib} com uma lista de mensagens de erro.
