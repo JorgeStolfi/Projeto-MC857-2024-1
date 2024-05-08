@@ -1,7 +1,7 @@
 import html_bloco_tabela_de_campos
 import obj_video
 import obj_usuario
-import obj_comentario
+import html_elem_button_simples
 
 def gera(id_com, atrs, edita_texto):
 
@@ -23,4 +23,8 @@ def gera(id_com, atrs, edita_texto):
   dados_linhas.append( ( "Texto",    "textarea", 'texto',     edita_texto,   None,  ) )
 
   ht_bloco = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_tab)
-  return ht_bloco
+
+  # Botão de conversa
+  ht_bt_conversa = html_elem_button_simples.gera("Ver conversa", 'html_pag_ver_conversa', None, '#808080')
+
+  return ht_bloco + ht_bt_conversa

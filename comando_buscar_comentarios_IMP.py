@@ -11,8 +11,8 @@ def processa(ses, cmd_args):
   # Estas condições deveriam valer para comandos emitidos pelas páginas do site:
   assert ses == None or obj_sessao.aberta(ses), "Sessão inválida"
 
-  erros = [].copy()
-  resultados = [].copy()
+  erros = []
+  resultados = []
 
   # Obtém os valores dos campos para busca, ou {None} se não fornecidos:
   id_com = cmd_args.get("comentario", None)
@@ -23,8 +23,8 @@ def processa(ses, cmd_args):
   data = cmd_args.get("data", None)
 
   if id_com is not None:
-    if id_vid != None or id_aut != None or id_pai != None or texto != None or data != None:
-      erros.append(f"Busca por ID de comentário não permite outros critérios")
+    if id_vid is not None or id_aut is not None or id_pai is not None or texto is not None or data is not None:
+      erros.append("Busca por ID de comentário não permite outros critérios")
     else:
       com = obj_comentario.obtem_objeto(id_com)
       if com is None:
@@ -56,8 +56,7 @@ def processa(ses, cmd_args):
     pag = html_pag_buscar_comentarios.gera(ses, cmd_args, erros)
   else:
     # Elimina repetições e ordena:
-    resultados = list(set(resultados))
-    resultados.sort()
+    resultados = sorted(list(set(resultados)))
     # Converte a lista de identificadores para tabela de atributos:
     ht_bloco = html_bloco_lista_de_comentarios.gera(resultados, True, True, True)
     pag = html_pag_generica.gera(ses, ht_bloco, erros)

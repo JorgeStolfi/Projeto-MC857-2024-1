@@ -32,7 +32,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
       texto = obj_usuario.obtem_identificador(atrs['autor']) if com != None else "Autor"
     else:
       mostra = True
-      texto = str(atrs[chave]) if com != None else chave.capitalize()
+      texto = (str(atrs[chave]) if com != None else chave.capitalize()).replace("\n", "\\n")[:50]
       
     if mostra:
       cab = (com == None)
@@ -43,7 +43,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
   
   if com != None:
     bt_args = { 'comentario': com_id }
-    bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, "#eeeeee")
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, '#eeee55')
     itens_resumo.append("<td>" + bt_ver + "</td>")
 
   return itens_resumo

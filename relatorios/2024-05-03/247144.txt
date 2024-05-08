@@ -1,0 +1,50 @@
+tarefa: Navegue pelo site e relacione todos os problemas (estéticos, funcionais, etc.) que você encontrar. Procure diagnosticar a causa.
+
+
+1 - Inicialmente podemos observar que, não há nenhum video funcional no servidor, do qual nosso reprodutor de video aparece com a mensagem: "No Video with supported format and MIME type found". 
+Causa: 
+    - Dentre as causas inicialmente pensei que realmente pode não haver nenhum video para ele reproduzir, mas a pasta video continha os videos corretamente
+   
+2 - Ná página de cadastro de usuário, independente do usuário que seja criado, aparece a mensagem "Usuário XXX@email.com" já existe. Mesmo não existindo e sendo criado na hora pelo sistema. Deveria retornar uma mensagem semelhante a "Usuário criado com sucesso"
+Causa: O erro é gerado no módulo obj_usuario_IMP na função verifica_email_em_uso, de modo que, a sugestão inicial de causa, e mais óbvia é que o código está inserido o usuário antes de validar se ele já existe. Ou seja, a validação de unicidade do email sempre retornará um erro
+
+3 - Buscar comentários não funciona pois ainda não foi implementada em 
+    html_form_buscar_comentarios.
+4 - Tentei logar e enviar um video do qual o servidor quebra ao tentar enviar um video o servidor quebra.
+        - Ao ir na função de upload de video notei que na linha 53 havia uma função sendo chamada que não existia:     pag = html_pag_upload_video.gera(ses, atrs, erros) - Acredito que esse seja o problema do upload
+possível escrever nos campos
+  - Ao clicar em minha conta e "VER VIDEOS" o servidor quebra
+        causa: Na classe html_bloco_dados_de_usuario existe a criação do botao ver videos aqui:       ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': id_usr}, '#eeee55')
+            -deveria levar a página ver_video, contudo apresenta o erro. Logo o erro pode estar nos módulos:
+                -html_pag_ver_video
+                -comando_ver_video
+                -comando_buscar_videos_de_usuario (acredito estar por aqui a ausência de tratamento do erro)
+        observação: Ao clicarmos em "Meus videos" com o usuário notamos que o mesmo não possui videos, ou seja, provavelmente a problemátioca está envolvida com a ausência do tratamento de erro de um usuário sem nenhum video
+
+
+6 - A página Meus comentários também quebra o servidor ao tentar acessa-la
+    Causa:A chamada para a função buscar_comentários_de_usuário é clara pois ao clicarmos no botão somos direcionados para a URL http://localhost:8081/buscar_comentarios_de_usuario
+        -A função tentar gerar a página via: html_bloco_lista_de_comentarios
+        -Contudo caso o usuario não tenha nenum comentário temos que: ht_conteudo = None
+            -Ou seja, a página deveria devolver um erro ou mensagem do tipo "Usário ainda não possui comentários" mas devolve uma página "The connection was reset"
+
+7 - Ao ir em buscar video e buscar randomicamente um video que não existe o servidor quebra
+Causa: Provavelmente há ausência de tratamente de erro de não existir o video no módulo comando_bucar_videos.py
+5 - Ao clicar em minha conta e alterar dados da minha conta, não existe de forma aparente e/ou intuitiva uma forma de realizar a alteração dos dados. Mesmo que seja possível escrever nos campos
+  - Ao clicar em minha conta e "VER VIDEOS" o servidor quebra
+        causa: Na classe html_bloco_dados_de_usuario existe a criação do botao ver videos aqui:       ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': id_usr}, '#eeee55')
+            -deveria levar a página ver_video, contudo apresenta o erro. Logo o erro pode estar nos módulos:
+                -html_pag_ver_video
+                -comando_ver_video
+                -comando_buscar_videos_de_usuario (acredito estar por aqui a ausência de tratamento do erro)
+        observação: Ao clicarmos em "Meus videos" com o usuário notamos que o mesmo não possui videos, ou seja, provavelmente a problemátioca está envolvida com a ausência do tratamento de erro de um usuário sem nenhum video
+
+
+6 - A página Meus comentários também quebra o servidor ao tentar acessa-la
+    Causa:A chamada para a função buscar_comentários_de_usuário é clara pois ao clicarmos no botão somos direcionados para a URL http://localhost:8081/buscar_comentarios_de_usuario
+        -A função tentar gerar a página via: html_bloco_lista_de_comentarios
+        -Contudo caso o usuario não tenha nenum comentário temos que: ht_conteudo = None
+            -Ou seja, a página deveria devolver um erro ou mensagem do tipo "Usário ainda não possui comentários" mas devolve uma página "The connection was reset"
+
+7 - Ao ir em buscar video e buscar randomicamente um video que não existe o servidor quebra
+Causa: Provavelmente há ausência de tratamente de erro de não existir o video no módulo comando_bucar_videos.py
