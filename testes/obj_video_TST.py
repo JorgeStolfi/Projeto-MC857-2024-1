@@ -259,9 +259,9 @@ for xrot, xvalid, xvalparc, val in \
       # Validos só como parciais:"          
       ( "InícioNaoMaius",           False,  True,  "simbora!"),
       ( "FinalBranco",              False,  True,  "Nada "),
-      ( "MuitoCurtoFull9",          False,  False, "Valinoria"),
+      ( "MuitoCurtoFull9",          False,  True,  "Valinoria"),
       # Inválidos em qualquer caso:         
-      ( "MuitoCurtoParcial3",       False,  False, "Val"),
+      ( "MuitoCurtoParcial3",       False,  False, "Va"),
       ( "MuitoLongo",               False,  False, "V" + ("r"*57) + "um!"),
       ( "CaracsInvalidos",          False,  False, "Titulo X-φ ≥ ぁ"),
       ( "BrancoDuplo",              False,  False, "Coisa  coisa"),

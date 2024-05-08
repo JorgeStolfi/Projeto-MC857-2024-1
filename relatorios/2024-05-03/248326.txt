@@ -1,0 +1,6 @@
+Minha implementação era permitir que o sistema procurasse usuário com somente uma parte do email e não necessariamente o email completo.
+Para realizar isso eu tirei os filtros que verificavam se o email estava completo e alterei o tipo do campo de 'email' para 'text',
+para poder aceitar email parciais.
+
+obs: estava dando um erro de importação no arquivo 'obj_video_IMP' que estava impossibilitando rodar o servidor,
+então comentei a importação do cv2 e da linha 100 a 105.

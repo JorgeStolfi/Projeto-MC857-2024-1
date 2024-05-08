@@ -1,0 +1,13 @@
+Nome: Lucas Jacinto Gonçalves
+RA: 240013
+
+comando_ver_grade_de_videos.py: Este módulo contém a definição da função gerar_grade_de_videos(), que gera uma grade de vídeos com links para assisti-los e títulos exibidos ao passar o mouse.
+comando_ver_grade_de_videos_IMP.py: Neste módulo, foi implementada a função comando_ver_grade_de_videos(), que escolhe um conjunto aleatório de vídeos e mostra-os como uma grade de thumbs utilizando a função definida no módulo videos.py.
+html_bloco_grade_de_videos.py: Este módulo contém a definição da função mostrar_grade_de_videos(), que será implementada no próximo passo.
+html_bloco_grade_de_videos_IMP.py: Aqui é onde a função mostrar_grade_de_videos() foi implementada, utilizando a função comando_ver_grade_de_videos() para gerar a grade de vídeos em HTML.
+Esses módulos trabalham juntos para gerar dinamicamente uma grade de vídeos com links para assisti-los e títulos exibidos ao passar o mouse, permitindo uma experiência interativa para os usuários.
+
+
+
+
+
