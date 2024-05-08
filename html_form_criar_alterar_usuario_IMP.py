@@ -17,7 +17,7 @@ def gera(id_usr, atrs, ses_admin, texto_bt, comando_bt):
   auto = id_usr != None and not ses_admin 
 
   # Constrói tabela com dados:
-  ht_table = html_bloco_dados_de_usuario.gera(id_usr, atrs, ses_admin, auto)
+  ht_table = html_bloco_dados_de_usuario.gera(id_usr, atrs, ses_admin, auto, False)
 
   # Constrói formulário com botões 'Confirmar' e 'Cancelar':
   ht_submit = html_elem_button_submit.gera(texto_bt, comando_bt, None, '#55ee55')

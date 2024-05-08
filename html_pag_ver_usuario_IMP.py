@@ -4,7 +4,7 @@ import obj_sessao
 import html_pag_alterar_usuario
 import html_bloco_dados_de_usuario
 import html_pag_generica
-import html_elem_button_simples
+import html_pag_mensagem_de_erro
 from util_erros import ErroAtrib, erro_prog
 
 def gera(ses, usr, erros):
@@ -28,7 +28,7 @@ def gera(ses, usr, erros):
     atrs_usr = obj_usuario.obtem_atributos(usr)
     
     auto = (usr == usr_ses)
-    ht_bloco = html_bloco_dados_de_usuario.gera(id_usr, atrs_usr, admin, auto)
+    ht_bloco = html_bloco_dados_de_usuario.gera(id_usr, atrs_usr, admin, auto, True)
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
   except ErroAtrib as ex:
     erros += ex.args[0]
