@@ -234,17 +234,17 @@ def valida_titulo(chave, val, nulo_ok, parcial):
     if not nulo_ok: erros.append(f"campo '{chave}' não pode ser omitido")
   else:
     n = len(val)
-    nmin = 10
+    nmin = 3 if parcial else 10
     nmax = 60
     if len(val) < nmin:
       erros.append(f"campo '{chave}' = \"{str(val)}\" muito curto ({n} caracteres, mínimo {nmin})")
     elif len(val) > nmax:
       erros.append(f"campo '{chave}' = \"{str(val)}\" muito longo ({n} caracteres, máximo {nmax})")
 
-    if not val[0].isupper():
+    if not parcial and not val[0].isupper():
       erros.append(f"campo '{chave}' = \"{str(val)}\" a primeira letra deve ser maiúscula")
 
-    if val[-1].isspace():
+    if not parcial and val[-1].isspace():
       erros.append(f"campo '{chave}' = \"{str(val)}\" não pode terminar com espaços")
 
     if "  "  in val:

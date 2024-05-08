@@ -1,0 +1,5 @@
+Minha tarefa se tratava de alterar a função valida_titulo do módulo obj_video para levar em conta o parâmetro "parcial" corretamente.
+Para isso, fiz as seguintes modificações:
+1) Alterei o arquivo obj_video_IMP.py para modificar o tamanho mínimo caso parcial == True;
+2) Alterei outras 2 validações para permitirem que o nome parcial possa começar com letra minúscula e acabar com um espaço em branco;
+3) Alterei 2 testes no arquivo obj_video_TST.py, pois um deles estava com o parâmetro xvalparc errado, e o outro com o valor errado (assumia que um nome de 3 caracteres seria inválido caso parcial, mas não é o caso).
