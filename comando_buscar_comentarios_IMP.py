@@ -1,3 +1,4 @@
+import sys
 import obj_comentario
 import obj_sessao
 import html_bloco_lista_de_comentarios
@@ -31,23 +32,24 @@ def processa(ses, cmd_args):
       else:
         resultados.append(id_com)
   else:
-    # !!! Condição de busca deveria ser "E" não "OU" !!!
-    if id_aut is not None:
-      resultados += obj_comentario.busca_por_autor(id_aut)
+    campos_definidos = []
 
-    if id_vid is not None:
-      resultados += obj_comentario.busca_por_video(id_vid, False)
+    for chave, val in  [
+      ("autor", id_aut),
+      ("video", id_vid), 
+      ("pai", id_pai), 
+      ("texto", texto), 
+      ("data", data)
+      ]:
+      if val is not None:
+        campos_definidos.append((chave, val))
 
-    if id_pai is not None:
-      resultados += obj_comentario.busca_por_pai(id_pai)
+    dict_de_busca = dict(campos_definidos)
+    lista_ids = obj_comentario.busca_por_campos(dict_de_busca)
 
-    if texto is not None:
-      resultados += obj_comentario.busca_por_texto(texto) 
-
-    if data is not None:
-      resultados += obj_comentario.busca_por_data(data) 
-
-    if len(resultados) == 0:
+    resultados += lista_ids if lista_ids is not None else []
+    
+    if len(resultados) == 0 or lista_ids is None:
       erros.append("Nenhum comentário encontrado.")
 
   if len(erros) != 0:
