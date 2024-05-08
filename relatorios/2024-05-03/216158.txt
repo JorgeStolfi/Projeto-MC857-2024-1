@@ -1,0 +1,1 @@
+Modifiquei os comentários na hora de exibir, para truncar 50 caracteres e também substituir a quebra de linha corretamente.

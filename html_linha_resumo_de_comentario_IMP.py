@@ -32,7 +32,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
       texto = obj_usuario.obtem_identificador(atrs['autor']) if com != None else "Autor"
     else:
       mostra = True
-      texto = str(atrs[chave]) if com != None else chave.capitalize()
+      texto = (str(atrs[chave]) if com != None else chave.capitalize()).replace("\n", "\\n")[:50]
       
     if mostra:
       cab = (com == None)
