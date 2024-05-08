@@ -8,7 +8,7 @@ import db_conversao_sql
 import util_identificador
 import util_valida_campo
 
-import cv2
+# import cv2
 import os
 import re
 
@@ -53,6 +53,7 @@ def inicializa_modulo(limpa):
       ( 'duracao', type(418),           'INTEGER', False ), # Duração do video em milissegundos.
       ( 'largura', type(418),           'INTEGER', False ), # Largura de cada frame, em pixels.
       ( 'altura',  type(418),           'INTEGER', False ), # Altura de cada frame, em pixels.
+      ( 'nota',    type(418.1),         'FLOAT',   False ), # Nota média do video (0 a 4).
     )
 
   tabela = db_obj_tabela.cria_tabela(nome_tb, letra_tb, classe, colunas, limpa)
@@ -91,21 +92,23 @@ def cria(atrs):
   atrs['largura'] = largura
   atrs['altura'] = altura
 
+  atrs['nota'] = -1.0 # Valor default da nota do vídeo é -1
+
   # Extrai imagem thumb do video:
   thumb_dir = "thumbs"
   #verifica a existencia do diretório
   if not os.path.exists(thumb_dir):
     os.makedirs(thumb_dir)
   # Carrega o video !!! Má Idéia !!!
-  fluxo = cv2.VideoCapture(nome_arq)
+  # fluxo = cv2.VideoCapture(nome_arq)
 
   # Obtém o frame 0 do vídeo:
-  successo, capa = fluxo.read()
-  assert successo, "captura de frame falhou"
-  fluxo.release()
+  # successo, capa = fluxo.read()
+  # assert successo, "captura de frame falhou"
+  # fluxo.release()
 
   nome_thumb = f"{thumb_dir}/{id_vid}.png"
-  cv2.imwrite(nome_thumb, capa)
+  # cv2.imwrite(nome_thumb, capa)
 
   erros = valida_atributos(None, atrs)
   if len(erros) != 0: raise ErroAtrib(erros)
@@ -234,17 +237,17 @@ def valida_titulo(chave, val, nulo_ok, parcial):
     if not nulo_ok: erros.append(f"campo '{chave}' não pode ser omitido")
   else:
     n = len(val)
-    nmin = 10
+    nmin = 3 if parcial else 10
     nmax = 60
     if len(val) < nmin:
       erros.append(f"campo '{chave}' = \"{str(val)}\" muito curto ({n} caracteres, mínimo {nmin})")
     elif len(val) > nmax:
       erros.append(f"campo '{chave}' = \"{str(val)}\" muito longo ({n} caracteres, máximo {nmax})")
 
-    if not val[0].isupper():
+    if not parcial and not val[0].isupper():
       erros.append(f"campo '{chave}' = \"{str(val)}\" a primeira letra deve ser maiúscula")
 
-    if val[-1].isspace():
+    if not parcial and val[-1].isspace():
       erros.append(f"campo '{chave}' = \"{str(val)}\" não pode terminar com espaços")
 
     if "  "  in val:
@@ -301,12 +304,18 @@ def valida_atributos(vid, atrs_mem):
   sessão. """
   global tabela
   
-  erros = [].copy();
+  erros = [].copy()
 
   vid_id = obtem_identificador(vid) if vid is not None else None
 
   if vid != None:
     # Os campos de {atrs} são alterações a aplicar no vídeo {vid}.
+    if isinstance(atrs_mem['nota'], float):
+      erros.append(f"Atributo 'nota' do vídeo {vid_id} não é um float")
+
+    if atrs_mem['nota'] < 0 or atrs_mem['nota'] > 4:
+      erros.append(f"Atributo 'nota' do vídeo {vid_id} fora da faixa (0 a 4)")
+
     for chave in 'duracao', 'altura', 'largura':
       if chave in atrs_mem:
         val_novo = atrs_mem[chave]

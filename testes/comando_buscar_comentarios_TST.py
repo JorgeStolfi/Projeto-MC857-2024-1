@@ -9,6 +9,7 @@ import obj_comentario
 import obj_sessao
 import obj_usuario
 import obj_video
+from util_erros import aviso_prog
 import util_testes
 
 # Conecta no banco e carrega alimenta com as informações para o teste
@@ -121,4 +122,4 @@ testa_processa("mulV", str, ses, cmd_args_19)
 if ok_global:
     sys.stderr.write("Testes terminados normalmente.")
 else:
-    aviso_erro("Alguns testes falharam", True)
+    aviso_prog("Alguns testes falharam", True)

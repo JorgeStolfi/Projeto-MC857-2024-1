@@ -134,6 +134,9 @@ def testa_busca_simples(rot_teste, chave, val, idents_esp):
     idents_fun = obj_comentario.busca_por_video(val)
   elif chave == 'autor':
     idents_fun = obj_comentario.busca_por_autor(val)
+  elif chave == 'data':
+    data = int(str(val)[0:4]);
+    idents_fun = obj_comentario.busca_por_data(data-1, data+1)
   else:
     assert False, "** função inexistente"
 
@@ -188,6 +191,19 @@ testa_obtem_conversa([com1.id, com8.id], 4, 10)
 testa_obtem_conversa([com1.id, com8.id], 10, 1)
 testa_obtem_conversa([com1.id, com8.id], 10, 2)
 testa_obtem_conversa([com1.id, com8.id], 7, 3)
+=======
+sys.stderr.write("  testando {obj_comentario.busca_por_data()}:\n")
+
+# Todos os comentários de teste na base:
+coms_todos = [ \
+    "C-00000001", "C-00000002", "C-00000003",
+    "C-00000004", "C-00000005", "C-00000006",
+    "C-00000007", "C-00000008", "C-00000009",
+  ]
+
+data_bd1 = "2024-04-05 08:00:00 UTC"
+# Interprete o resultado tendo em vista que busca por data é somente em função de intervalo de anos
+testa_busca_simples("bd1", 'data', data_bd1, coms_todos)
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_comentario.obtem_arvore()}:\n")
@@ -251,7 +267,6 @@ def testa_busca_por_campos(rot_teste, args_bus, idents_esp):
   com as chaves e valores dos campos de busca {chave}, o valor de busca {val},
   e a lista de identificadores {idents_esp} esperados."""
   sys.stderr.write(f"  testando {'{'}obj_comentario.busca_por_campos({str(args_bus)}){'}'}:\n")
-
   ok = True
   
   idents_fun = obj_comentario.busca_por_campos(args_bus)
@@ -266,13 +281,6 @@ def testa_busca_por_campos(rot_teste, args_bus, idents_esp):
 
   sys.stderr.write("  %s\n" % ("-" * 70))
   return
-
-# Todos os comentários de teste na base:
-coms_todos = [ \
-    "C-00000001", "C-00000002", "C-00000003",
-    "C-00000004", "C-00000005", "C-00000006",
-    "C-00000007", "C-00000008", "C-00000009",
-  ]
 
 # Teste passando um id de comentario existente:
 args_bus_01 = {"comentario": "C-00000001"}

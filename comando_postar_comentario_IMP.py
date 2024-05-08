@@ -52,7 +52,7 @@ def converte_argumentos(cmd_args, usr_ses, erros):
   if 'video' in cmd_args: del cmd_args['video']
   video = obj_video.obtem_objeto(id_video)
   if video == None:
-    erros.append(f"video {ìd_video} não existe")
+    erros.append(f"video {id_video} não existe")
   else:
     atrs_com['video'] = video
     
@@ -61,9 +61,9 @@ def converte_argumentos(cmd_args, usr_ses, erros):
     if 'pai' in cmd_args: del cmd_args['pai']
     pai = obj_comentario.obtem_objeto(id_pai)
     if pai == None:
-      erros.append(f"comentario {ìd_pai} não existe")
+      erros.append(f"comentario {id_pai} não existe")
     elif obj_comentario.obtem_atributo(pai, 'video') != video:
-      erros.append(f"comentario {ìd_pai} é de outro vídeo")
+      erros.append(f"comentario {id_pai} é de outro vídeo")
     else:
       atrs_com['pai'] = pai
   else:
@@ -74,7 +74,7 @@ def converte_argumentos(cmd_args, usr_ses, erros):
     if 'autor' in cmd_args: del cmd_args['autor']
     autor = obj_usuario.obtem_objeto(id_autor)
     if autor == None:
-      erros.append(f"usuario {ìd_autor} não existe")
+      erros.append(f"usuario {id_autor} não existe")
     elif autor != usr_ses:
       erros.append(f"usuario logado não é {id_autor}")
     else:
@@ -89,7 +89,7 @@ def converte_argumentos(cmd_args, usr_ses, erros):
     if 'texto' in cmd_args: del cmd_args['texto']
     atrs_com['texto'] = texto
   
-  if len(cmd_args) != 0:
+  if len(cmd_args) == 0:
     erros.append(f"Argumentos espurios: {str(cmd_args)}")
     
   return atrs_com

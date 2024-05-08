@@ -1,0 +1,39 @@
+Nome: Giovanna Magario Adamo    RA:235634
+
+Na tarefa do dia 03/05, o objetivo era encontrar problemas (bugs) de diversos tipos e relacionar com a sua causa raiz.
+Segue a lista de problemas encontrados e as possíveis causas:
+
+1. Buscar usuários: problema na busca por nome
+Quando eu tentei buscar um usuário somente pelo nome, o sistema apresenta o erro de "Connection was reset" e o 
+terminal apresenta o seguinte erro: AttributeError: module 'obj_raiz' has no attribute 'busca_por_semelhanca'.
+Tipo de problema: funcional
+Passo-a-passo para reproduzir o problema: 
+Clicar em "Buscar usuários"
+Digite o nome de um usuário existente no campo "Nome" (utilizei José Primeiro)
+Clique no botão "Buscar"
+Causa: A função chamada "busca_por_semelhanca" não existe no obj_raiz chamado e deve ser implementada para que se possa
+buscar um usuário somente pelo nome, já que as buscas por email e id (busca_por_email e obtem_objeto, respectivamente) estão implementadas e funcionam, assim, quando o campo
+"Nome" está preenchido e ou o email ou o id estão preenchidos a busca funciona normalmente pois cai em um dos outros dois casos.
+
+2. Buscar/Checar objeto: buscar uma sessão por seu id retorna status da sessão como sim ou não ao invés aberta ou fechada
+Percebi que, ao buscar uma sessão com um ID que aparece em "Minhas sessões", os dados dela aparecem corretamente, porém, o 
+status da sessão aparece como "Sim" se ela estiver aberta ou "Não" se ela estiver fechada. Acredito que, para manter a coerência
+com os dados de "Minhas sessões" deveríamos mostrar o status da sessão como "Aberta" ou "Fechada".
+Tipo de problema: estético
+Passo-a-passo da reprodução do problema: 
+Digitar o id da sessão a buscar (utilizei o id S-00000001 para testar a sessão aberta e S-00000007 para testar a sessão fechada)
+Clicar em Checar objeto
+Causa: o módulo html_bloco_dados_de_sessao_IMP gera a tabela de campos dessa forma, a solução seria só mudar onde está escrito
+"Sim" e "Não" para "Aberta" e "Fechada" respectivamente
+
+3. Buscar vídeos: busca por identificador não funciona
+Quando eu tentei buscar um vídeo somente pelo identificador, o sistema apresenta o erro de "Connection was reset" e o 
+terminal apresenta o seguinte erro: TypeError: gera() missing 1 required positional argument: 'mostra_autor'.
+Tipo de problema: funcional
+Passo-a-passo para reproduzir o problema: 
+Clicar em "Buscar vídeos"
+Digite o ID de um vídeo existente em "Meus vídeos" (utilizei V-00000001)
+Clique no botão "Buscar
+Causa: a função html_bloco_lista_de_videos.gera requer dois parâmetros e está sendo enviado apenas um, faltando o parâmetro
+mostra_autor que é um valor booleano que diz se deve mostrar a coluna do autor ou não. Passar o parâmetro mostra_autor como 
+True ou False resolve o problema.
