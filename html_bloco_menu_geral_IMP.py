@@ -145,7 +145,7 @@ def gera_botoes_linha_principal_logado(usr):
   usr_nome = obj_usuario.obtem_atributo(usr, 'nome')
   usr_num_ses = len(obj_sessao.busca_por_usuario(usr, soh_abertas = True)) # Para botão "Minhas Sessões".
 
-  cor_bt_meus = "#eeffee"
+  cor_bt_meus = "#c8fac8"
   cor_bt_sair = "#ffcc88"
 
   hts_botoes = [].copy()
@@ -163,7 +163,7 @@ def gera_botoes_linha_principal_logado(usr):
   ht_bt_com = html_elem_button_simples.gera("Meus Comentários", 'buscar_comentarios_de_usuario', None, cor_bt_meus)
   hts_botoes.append(ht_bt_com)
   
-  ht_bt_upload = html_elem_button_simples.gera("Subir Video", 'solicitar_pag_upload_video', None, cor_bt_meus)
+  ht_bt_upload = html_elem_button_simples.gera("Subir Video", 'solicitar_pag_upload_video', None, "#88eeff")
   hts_botoes.append(ht_bt_upload)
   
   ht_bt_sair = html_elem_button_simples.gera("Sair", 'fazer_logout', None, cor_bt_sair)

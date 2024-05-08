@@ -47,7 +47,8 @@ def processa(ses, cmd_args):
         ht_titulo = html_bloco_titulo.gera(f"Sessões do usuário {id_usr}")
       bt_ver = True
       bt_fechar = True
-      ht_tabela = html_bloco_lista_de_sessoes.gera(lista_ids_ses, bt_ver, bt_fechar)
+      mostrar_usr = False # Não mostrar a coluna Usuário para o comando buscar sessões de usuário.
+      ht_tabela = html_bloco_lista_de_sessoes.gera(lista_ids_ses, bt_ver, bt_fechar, mostrar_usr)
       ht_bloco = \
         ht_titulo + "<br/>\n" + \
         ht_tabela

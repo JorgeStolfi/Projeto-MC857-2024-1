@@ -1,0 +1,5 @@
+A tarefa de hoje foi a mais difícil que eu fiz kkkkk demandou um 
+conhecimento maior sobre a estrutura do projeto.
+
+No final deu tudo certo e os botões foram colocados além de que o 
+comando_ver_conversa foi corrigido

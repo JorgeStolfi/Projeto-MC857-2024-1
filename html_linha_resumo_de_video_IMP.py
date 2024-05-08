@@ -4,6 +4,7 @@ import html_elem_item_de_resumo
 import html_elem_span
 import html_elem_button_simples
 import html_estilo_texto
+import html_elem_link_img
 
 def gera(vid, mostra_autor):
 
@@ -11,7 +12,7 @@ def gera(vid, mostra_autor):
 
   itens_resumo = []
 
-  colunas = [ 'video', 'autor', 'data', 'duracao', 'largura', 'altura', 'titulo' ]
+  colunas = [ 'thumb','video', 'autor', 'data', 'duracao', 'largura', 'altura', 'titulo' ]
   
   destaque = False
   for chave in colunas:
@@ -48,6 +49,9 @@ def gera(vid, mostra_autor):
         texto = "😍"
       elif nota == -1: # Nota default
         texto = "🤔"
+    elif chave == 'thumb':
+      mostra=True
+      texto = html_elem_link_img.gera(atrs[chave],None,40,None)
     else:
       mostra = True
       texto = atrs[chave] if vid != None else chave.capitalize()
@@ -61,7 +65,7 @@ def gera(vid, mostra_autor):
 
   if vid != None:
     bt_args = { 'video': obj_video.obtem_identificador(vid) }
-    bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_args, "#ffcc88")
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_args, '#eeee55')
     itens_resumo.append("<td>" + bt_ver + "</td>")
 
   return itens_resumo

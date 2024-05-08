@@ -1,3 +1,4 @@
+import sys
 import obj_comentario
 import obj_sessao
 import html_bloco_lista_de_comentarios
@@ -10,8 +11,8 @@ def processa(ses, cmd_args):
   # Estas condições deveriam valer para comandos emitidos pelas páginas do site:
   assert ses == None or obj_sessao.aberta(ses), "Sessão inválida"
 
-  erros = [].copy()
-  resultados = [].copy()
+  erros = []
+  resultados = []
 
   # Obtém os valores dos campos para busca, ou {None} se não fornecidos:
   id_com = cmd_args.get("comentario", None)
@@ -22,8 +23,8 @@ def processa(ses, cmd_args):
   data = cmd_args.get("data", None)
 
   if id_com is not None:
-    if id_vid != None or id_aut != None or id_pai != None or texto != None or data != None:
-      erros.append(f"Busca por ID de comentário não permite outros critérios")
+    if id_vid is not None or id_aut is not None or id_pai is not None or texto is not None or data is not None:
+      erros.append("Busca por ID de comentário não permite outros critérios")
     else:
       com = obj_comentario.obtem_objeto(id_com)
       if com is None:
@@ -31,35 +32,31 @@ def processa(ses, cmd_args):
       else:
         resultados.append(id_com)
   else:
-    # !!! Condição de busca deveria ser "E" não "OU" !!!
-    if id_aut is not None:
-      resultados += obj_comentario.busca_por_autor(id_aut)
+    campos_definidos = []
 
-    if id_vid is not None:
-      resultados += obj_comentario.busca_por_video(id_vid)
+    for chave, val in  [
+      ("autor", id_aut),
+      ("video", id_vid), 
+      ("pai", id_pai), 
+      ("texto", texto), 
+      ("data", data)
+      ]:
+      if val is not None:
+        campos_definidos.append((chave, val))
 
-    if id_pai is not None:
-      resultados += obj_comentario.busca_por_pai(id_pai)
+    dict_de_busca = dict(campos_definidos)
+    lista_ids = obj_comentario.busca_por_campos(dict_de_busca)
 
-    if texto is not None:
-      # !!! Implementar {obj_comentario.busca_por_campo} !!!
-      # !!! resultados += obj_comentario.busca_por_campo('texto', texto) !!!
-      pass
-
-    if data is not None:
-      # !!! Implementar {obj_comentario.busca_por_campo} !!!
-      # !!! resultados += obj_comentario.busca_por_campo('data', data) !!!
-      pass
-
-    if len(resultados) == 0:
+    resultados += lista_ids if lista_ids is not None else []
+    
+    if len(resultados) == 0 or lista_ids is None:
       erros.append("Nenhum comentário encontrado.")
 
   if len(erros) != 0:
     pag = html_pag_buscar_comentarios.gera(ses, cmd_args, erros)
   else:
     # Elimina repetições e ordena:
-    resultados = list(set(resultados))
-    resultados.sort()
+    resultados = sorted(list(set(resultados)))
     # Converte a lista de identificadores para tabela de atributos:
     ht_bloco = html_bloco_lista_de_comentarios.gera(resultados, True, True, True)
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
