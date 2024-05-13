@@ -1,29 +1,24 @@
-import html_elem_label
-import html_elem_input
-import html_elem_table
 import html_elem_button_submit
 import html_elem_form
+import html_bloco_tabela_de_campos
 
 def gera():
-  linhas = [].copy()
+
+  dados_linhas = []
   
-  ht_rot_campo = html_elem_label.gera("E-mail", ": ")
-  ht_campo = html_elem_input.gera("text", "email", None, None, None, True, "nome@provedor", None, False)
-  linhas.append((ht_rot_campo, ht_campo,))
-  
-  ht_rot_campo = html_elem_label.gera("Senha", ": ")
-  ht_campo = html_elem_input.gera("password", "senha", None, None, None, True, None, None, False)
-  linhas.append(("<td>" + ht_rot_campo + "</td>", "<td>" + ht_campo + "</td>",))
+  dados_linhas.append( ( "E-mail", "email",    'email', True, "xxx@yyy.zzz" ) )
+  dados_linhas.append( ( "Senha",  "password", 'senha', True, None ) )
 
   # Monta a tabela com os fragmentos HTML:
-  ht_table = html_elem_table.gera(linhas)
+  ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, {})
 
   ht_bt_login = html_elem_button_submit.gera("Entrar", 'fazer_login', None, '#55ee55')
 
-  ht_campos = \
-    ht_table + \
+  ht_conteudo = \
+    ht_tabela + "\n" + \
     ht_bt_login
 
-  ht = html_elem_form.gera(ht_campos, False)
-  return ht
+  ht_form = html_elem_form.gera(ht_conteudo, False)
+
+  return ht_form
   

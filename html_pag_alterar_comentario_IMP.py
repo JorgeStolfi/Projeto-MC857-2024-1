@@ -1,28 +1,35 @@
+import html_bloco_titulo
+import html_elem_button_simples
+import html_form_postar_alterar_comentario
+import html_pag_generica
 import obj_comentario
 import obj_sessao
+import obj_usuario
+import obj_video
 
-import html_form_alterar_comentario
-import html_pag_generica
-import html_elem_button_simples
+def gera(ses, com, atrs_mod, erros):
 
-def gera(ses, id_com, atrs, erros):
-
-  # Páginas geradas pelo sistema deveriam satisfazer estas condições:
-  assert ses != None and obj_sessao.aberta(ses), "Sessão inválida"
-  assert type(id_com) is str, "Identificador inválido"
-  assert atrs == None or type(atrs) is dict
-  assert erros == None or type(erros) is tuple or type(erros) is list
+  # Validação de tipos (paranóia):
+  assert ses != None and isinstance(ses, obj_sessao.Classe)
+  assert com != None and isinstance(com, obj_comentario.Classe)
+  assert atrs_mod != None and isinstance(atrs_mod, dict)
+  assert erros == None or isinstance(erros, list) or isinstance(erros, tuple)
   
-  # Obtem o comentário a ver:
-  com = obj_comentario.obtem_objeto(id_com) 
-  assert com != None, f"Comentário {id_com} não existe"
+  if atrs_mod == None: atrs_mod = {}
   
-  # Cria o formulário básico:
-  ses_admin = obj_sessao.de_administrador(ses)
-  ht_form = html_form_alterar_comentario.gera(id_com, atrs, ses_admin)
-    
-  ht_conteudo = ht_form
+  com_id = obj_comentario.obtem_identificador(com) 
+  com_atrs = obj_comentario.obtem_atributos(com) 
+  
+  ht_pag_tit = html_bloco_titulo.gera(f"Editando o comentário {com_id}")
+  
+  texto_bt = "Salvar alterações"
+  cmd_bt = "alterar_comentario"
+  ht_form = html_form_postar_alterar_comentario.gera(com_id, atrs_mod)
 
-  pag = html_pag_generica.gera(ses, ht_conteudo, erros)
+  ht_pag_conteudo = \
+    ht_pag_tit + \
+    ht_form
+  
+  pag = html_pag_generica.gera(ses, ht_pag_conteudo, erros)
 
   return pag

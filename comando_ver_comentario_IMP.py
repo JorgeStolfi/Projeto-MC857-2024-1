@@ -9,17 +9,17 @@ def processa(ses, cmd_args):
   assert ses == None or obj_sessao.aberta(ses), "Sessão inválida"
   assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
   
-  erros = [].copy()
+  erros = []
 
   # Obtém o comentário {com}:
-  id_com = cmd_args['comentario'] if 'comentario' in cmd_args else None
+  com_id = cmd_args['comentario'] if 'comentario' in cmd_args else None
   if 'comentario' == None:
     erros.append("O identificador do comentário não foi especificado")
     com = None
   else:
-    com = obj_comentario.obtem_objeto(id_com)
+    com = obj_comentario.obtem_objeto(com_id)
     if com == None:
-      erros.append(f"O comentário {id_com} não existe")
+      erros.append(f"O comentário {com_id} não existe")
   
   if com == None:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)

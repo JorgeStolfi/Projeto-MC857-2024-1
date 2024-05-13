@@ -1,14 +1,14 @@
 import html_pag_alterar_video_IMP
 
-def gera(ses, id_vid, atrs, erros):
+def gera(ses, vid_id, atrs, erros):
   """
   Retorna uma página com formulário para alterar os dados
-  do vídeo cujo identificador é {id_vid}. 
+  do vídeo cujo identificador é {vid_id}. 
   
   O parâmetro {ses} deve ser um objeto {obj_sessao.Classe} 
   de uma sessão aberta, diferente de {None}.
   
-  O parâmetro {id_vid} deve ser um identificador "V-{NNNNNNNN}" de um
+  O parâmetro {vid_id} deve ser um identificador "V-{NNNNNNNN}" de um
   vídeo existente {vid}.  Se a sessão {ses} não for de administrador,
   o autor deste vídeo deve ser o dono da sessão {ses}.
  
@@ -25,14 +25,9 @@ def gera(ses, id_vid, atrs, erros):
   a incluir na página.
 
   O formulário em si será gerado por {html_form_alterar_video.gera}.
-  Ele conterá um botão "Confirmar alterações" ou similar (de tipo 'submit').
-  Quando o vídeo clicar nesse botão, será emitido um comando POST com ação
-  "alterar_video".  Os argumentos desse POST são todos os atributos da classe
-  {obj_video.Classe}, com os valores de {atrs} a menos de alterações feitas pelo
-  usuário.
 
   A página terá botôes que permitem buscar os comentários do vídeo {vid}
   e examinar os dados do autor. A página também terá um botão simples 'Cancelar',
   que, quando clicado, emite o comando 'pag_principal'.
   """
-  return html_pag_alterar_video_IMP.gera(ses, id_vid, atrs, erros)
+  return html_pag_alterar_video_IMP.gera(ses, vid_id, atrs, erros)

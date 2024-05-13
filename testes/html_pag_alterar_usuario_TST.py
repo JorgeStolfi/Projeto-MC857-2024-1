@@ -27,7 +27,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = False  # Resultado é só um fragmento de página?
   pretty = True # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -45,15 +45,15 @@ assert sesC1 != None
 assert obj_sessao.aberta(sesC1)
 assert not obj_sessao.de_administrador(sesC1)
 
-ses_dic = { 'A': sesA1, 'C': sesC1, }
+ses_dic = { 'A': sesA1_id, 'C': sesC1_id, }
 
 # Usuário admnistrador dono de {sesA1}:
-usrA1 = obj_sessao.obtem_usuario(sesA1)
+usrA1 = obj_sessao.obtem_dono(sesA1)
 usrA1_id = obj_usuario.obtem_identificador(usrA1)
 assert usrA1_id == "U-00000008"
 
 # Usuário comum dono de {sesC1}:
-usrC1 = obj_sessao.obtem_usuario(sesC1)
+usrC1 = obj_sessao.obtem_dono(sesC1)
 usrC1_id = obj_usuario.obtem_identificador(usrC1)
 assert usrC1_id == "U-00000002"
 
@@ -63,7 +63,7 @@ usrC2 = obj_usuario.obtem_objeto(usrC2_id)
 assert usrC2 != None
 assert not obj_usuario.obtem_atributo(usrC2,'administrador')
 
-usr_dic = { 'N': None, 'C1': usrC1_id, 'C2': usrC2_id, 'A': usrA1_id, }
+usr_dic = { 'C1': usrC1_id, 'C2': usrC2_id, 'A': usrA1_id, }
 
 erros_vaz = []
 erros_tri = ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",]
@@ -71,20 +71,22 @@ erros_tri = ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",]
 erros_dic = { 'N': None, 'V': erros_vaz, 'E': erros_tri, }
 
 for et, erros in erros_dic.items():
-  for st, ses in ses_dic.items():
-    for ut, id_usr in usr_dic.items():
-      if id_usr == None or id_ses == sesA1_id or (id_ses == sesC1_id and id_usr == usrC1_id):
-        id_ses = obj_sessao.obtem_identificador(ses)
-        usr = obj_usuario.obtem_objeto(id_usr)
+  for st, ses_id in ses_dic.items():
+    for ut, usr_id in usr_dic.items():
+      if usr_id == None or ses_id == sesA1_id or (ses_id == sesC1_id and usr_id == usrC1_id):
+        usr = obj_usuario.obtem_objeto(usr_id)
         atrs_tot = obj_usuario.obtem_atributos(usr) if usr != None else {}
         atrs_som = { 'nome': "Alteradus", }
         atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
         for at, atrs in atrs_dic.items():
           na = len(atrs.keys())
-          rot_teste = f"ses{st}-usr{ut}-atrs{at}-erros{et}"
-          testa_gera(rot_teste,  str, ses, id_usr, atrs, erros)
+          ses = obj_sessao.obtem_objeto(ses_id)
+          assert ses != None
+          rot_teste = "AU" + f"_ses{st}_usr{ut}_atrs{at}_erros{et}"
+          # html_pag_alterar_usuario.gera
+          testa_gera(rot_teste,  str, ses, usr_id, atrs, erros)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

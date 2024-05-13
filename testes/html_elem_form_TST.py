@@ -26,15 +26,15 @@ def testa_gera(rot_teste, res_esp, *args):
   
   frag = True # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
 def cria_form_de_teste(multipart):
   """Cria um formulário com vários campos"""
 
-  atrs = {}.copy()
-  linhas = [].copy()
+  atrs = {}
+  linhas = []
   
   # Cria formulário:
   
@@ -92,4 +92,4 @@ for multipart in False, True:
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

@@ -6,8 +6,11 @@ import obj_video
 import db_obj_tabela
 import db_tabelas_do_sistema
 import db_conversao_sql
+
 import util_identificador
-import util_valida_campo
+import util_data
+import util_texto_de_comentario
+
 import time
 
 from util_erros import ErroAtrib, erro_prog, mostra
@@ -87,6 +90,12 @@ def obtem_identificador(com):
   assert com != None and isinstance(com, obj_comentario.Classe)
   return obj_raiz.obtem_identificador(com)
 
+def obtem_objeto(com_id):
+  global tabela
+  com = obj_raiz.obtem_objeto(com_id, tabela, def_obj_mem)
+  assert com == None or type(com) is obj_comentario.Classe
+  return com
+
 def obtem_atributos(com):
   global tabela
   assert com != None and isinstance(com, obj_comentario.Classe)
@@ -96,23 +105,21 @@ def obtem_atributo(com, chave):
   global tabela
   return obj_raiz.obtem_atributo(com, chave)
 
-def obtem_objeto(id_com):
+def obtem_autor(com):
   global tabela
-  com = obj_raiz.obtem_objeto(id_com, tabela, def_obj_mem)
-  assert com == None or type(com) is obj_comentario.Classe
-  return com
+  return obj_raiz.obtem_atributo(com, 'autor')
 
-def busca_por_video(id_vid, sem_pai):
+def busca_por_video(vid_id, sem_pai):
   global tabela
   unico = False
-  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_video}: {id_vid} = " + f"{id_vid}\n");
-  assert type(id_vid) is str
+  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_video}: {vid_id} = " + f"{vid_id}\n");
+  assert type(vid_id) is str
   unico = False
   if sem_pai:
-    atrs = { 'video': id_vid, 'pai': None }
+    atrs = { 'video': vid_id, 'pai': None }
     lista_ids = obj_raiz.busca_por_campos(atrs, unico, tabela)
   else:
-    lista_ids = obj_raiz.busca_por_campo('video', id_vid, unico, tabela)
+    lista_ids = obj_raiz.busca_por_campo('video', vid_id, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > ids encontrados = {lista_ids}\n");
   return lista_ids
 
@@ -123,44 +130,41 @@ def busca_por_campos(args):
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
   return lista_ids
 
-def busca_por_autor(id_usr):
+def busca_por_autor(usr_id):
   global tabela
-  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_nome}: {id_usr} = " + f"{id_usr}\n");
-  assert type(id_usr) is str
+  if tabela.debug: sys.stderr.write("  > obj_comentario_IMP.busca_por_autor(" + f"{usr_id}" + ")\n");
+  assert type(usr_id) is str
   unico = False
-  lista_ids = obj_raiz.busca_por_campo('autor', id_usr, unico, tabela)
+  lista_ids = obj_raiz.busca_por_campo('autor', usr_id, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
   return lista_ids
 
-def busca_por_pai(id_pai):
+def busca_por_pai(pai_id):
   global tabela
-  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_pai}: {id_pai} = " + f"{id_pai}\n");
-  assert type(id_pai) is str
+  if tabela.debug: sys.stderr.write("  > obj_comentario_IMP.busca_por_pai(" + f"{pai_id}" + ")\n");
+  assert type(pai_id) is str
   unico = False
-  lista_ids = obj_raiz.busca_por_campo('pai', id_pai, unico, tabela)
+  lista_ids = obj_raiz.busca_por_campo('pai', pai_id, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
   return lista_ids
 
 def busca_por_texto(texto):
   global tabela
-  if tabela.debug: sys.stderr.write("  > {obj_comentario_IMP.busca_por_texto}: {texto} = " + f"{texto}\n")
+  if tabela.debug: sys.stderr.write("  > obj_comentario_IMP.busca_por_texto(" + f"{texto}" + ")\n")
   assert type(texto) is str
-  unico = False
   texto += "%" + texto + "%"
+  unico = False
   lista_ids = obj_raiz.busca_por_campos({'texto':texto}, unico, tabela)
-  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
+  if tabela.debug: sys.stderr.write(f"    > ids encontrados = {str(lista_ids)}\n");
   return lista_ids
 
-def busca_por_data(data_ini, data_ter):
+def busca_por_data(data_ini, data_fin):
   global tabela
+  if tabela.debug: sys.stderr.write("  > obj_comentario_IMP.busca_por_data(" + f"{data_ini}, {data_fin}" + ")\n");
+  args_busca = { 'data': ( data_ini, data_fin, ) }
   unico = False
-  if tabela.debug: sys.stderr.write(f"  > {obj_comentario_IMP.busca_por_data}: data_ini = {data_ini}, data_ter = {data_ter}\n");
-  data_ini = int(str(data_ini)[0:4]); data_ter = int(str(data_ter)[0:4]);
-  assert data_ini > 1999 and data_ini < 2099 and data_ter > 1999 and data_ter < 2099
-  lista_ids = [].copy();
-  for data in range(data_ini, data_ter+1):
-    lista_ids += obj_raiz.busca_por_campos({'%data%': "{data}-"}, unico, tabela)
-  if tabela.debug: sys.stderr.write(f"    > id encontrado = {id_com}\n");
+  lista_ids = obj_raiz.busca_por_campos(args_busca, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > ids encontrados = {str(lista_ids)}\n");
   return lista_ids
   
 def ultimo_identificador():
@@ -180,31 +184,31 @@ def cria_testes(verb):
       ( "C-00000006", "V-00000003", "U-00000004", None,         "Supercílio! " + "k"*60, ),
       ( "C-00000007", "V-00000001", "U-00000004", "C-00000002", "Batata!", ),
       ( "C-00000008", "V-00000001", "U-00000002", None,         "Inefável!", ),
-      ( "C-00000009", "V-00000001", "U-00000001", "C-00000005", "Larga mão dessa!\nCoisa feia!\nRespeite os mais bodosos...", ),
-      ( "C-00000010", "V-00000001", "U-00000004", "C-00000002", "Legalzinho, vai...", ),
+      ( "C-00000009", "V-00000001", "U-00000001", "C-00000005", "Larga mão dessa!\nCoisa feia!\nRespeite os mais bodosos. Se não tem coisa melhor a fazer, vá ver se estou na esquina...", ),
+      ( "C-00000010", "V-00000001", "U-00000004", "C-00000002", "Interessante...\nPorém, na Bessarábia os elefantes dos sátrapas eram tatuados com hieróglifos, não com emojis.\nÉ fake!", ),
       ( "C-00000011", "V-00000001", "U-00000002", "C-00000005", "Levante deste camastralho!!!", ),
-      ( "C-00000012", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
-      ( "C-00000013", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
-      ( "C-00000014", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
-      ( "C-00000015", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
-      ( "C-00000016", "V-00000001", "U-00000005", "C-00000005", "OS MEUS BODES NO PERFIL #SPAM", ),
+      ( "C-00000012", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
+      ( "C-00000013", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
+      ( "C-00000014", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
+      ( "C-00000015", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
+      ( "C-00000016", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
     ]
-  for id_com, id_vid, id_autor, id_pai, texto in lista_atrs:
-    vid = obj_video.obtem_objeto(id_vid)
-    autor = obj_usuario.obtem_objeto(id_autor)
-    pai = obj_comentario.obtem_objeto(id_pai)
+  for com_id, vid_id, autor_id, pai_id, texto in lista_atrs:
+    vid = obj_video.obtem_objeto(vid_id)
+    autor = obj_usuario.obtem_objeto(autor_id)
+    pai = obj_comentario.obtem_objeto(pai_id)
     atrs = { 'video': vid, 'autor': autor, 'pai': pai, 'texto': texto }
     com = cria(atrs)
     assert com != None and type(com) is obj_comentario.Classe
-    id_com_atu = obj_comentario.obtem_identificador(com)
+    com_id_atu = obj_comentario.obtem_identificador(com)
     texto_atu = obj_comentario.obtem_atributo(com,'texto')
-    if verb: sys.stderr.write("  comentário %s = \"%s\" criado\n" % (id_com_atu, texto_atu))
-    assert id_com_atu == id_com # Identificador é o esperado.
+    if verb: sys.stderr.write("  comentário %s = \"%s\" criado\n" % (com_id_atu, texto_atu))
+    assert com_id_atu == com_id # Identificador é o esperado.
     assert texto_atu == texto   # O texto foi guardado corretamente.
   return
 
-def verifica_criacao(com, id_com, atrs):
-  return obj_raiz.verifica_criacao(com, obj_comentario.Classe, id_com, atrs, None, tabela, def_obj_mem)
+def verifica_criacao(com, com_id, atrs):
+  return obj_raiz.verifica_criacao(com, obj_comentario.Classe, com_id, atrs, None, tabela, def_obj_mem)
 
 def liga_diagnosticos(val):
   global tabela
@@ -223,7 +227,7 @@ def valida_atributos(com, atrs):
   comentário. """
   global tabela
   
-  erros = [].copy();
+  erros = [];
   
   # Validade dos campos fornecidos:
   if 'video' in atrs:
@@ -242,7 +246,7 @@ def valida_atributos(com, atrs):
 
   if 'data' in atrs:
     data_fin = atrs['data']
-    erros += util_valida_campo.data('data', data_fin, False)
+    erros += util_data.valida('data', data_fin, False)
   else:
     data_fin = obj_comentario.obtem_atributo(com, 'data')
   
@@ -272,9 +276,9 @@ def valida_atributos(com, atrs):
 
   return erros
 
-def def_obj_mem(com, id_com, atrs_SQL):
+def def_obj_mem(com, com_id, atrs_SQL):
   """Se {com} for {None}, cria um novo objeto da classe {obj_comentario.Classe} com
-  identificador {id_com} e atributos {atrs_SQL}, tais como extraidos
+  identificador {com_id} e atributos {atrs_SQL}, tais como extraidos
   da tabela de sessoes. O objeto *NÃO* é inserido na base de dados.
 
   Se {com} não é {None}, deve ser um objeto da classe {obj_comentario.Classe}; nesse
@@ -284,18 +288,18 @@ def def_obj_mem(com, id_com, atrs_SQL):
   Em qualquer caso, os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
   global tabela
-  if tabela.debug: mostra(0,"obj_comentario_IMP.def_obj_mem(" + str(com) + ", " + id_com + ", " + str(atrs_SQL) + ") ...")
+  if tabela.debug: mostra(0,"obj_comentario_IMP.def_obj_mem(" + str(com) + ", " + com_id + ", " + str(atrs_SQL) + ") ...")
   if com == None:
-    com = cria_obj_mem(id_com, atrs_SQL)
+    com = cria_obj_mem(com_id, atrs_SQL)
   else:
-    assert com.id == id_com
+    assert com.id == com_id
     modifica_obj_mem(com, atrs_SQL)
   if tabela.debug: mostra(2,"com = " + str(com))
   return com
     
-def cria_obj_mem(id_com, atrs_SQL):
+def cria_obj_mem(com_id, atrs_SQL):
   """Cria um novo objeto da classe {obj_comentario.Classe} com
-  identificador {id_com} e atributos {atrs_SQL}, tais como extraidos
+  identificador {com_id} e atributos {atrs_SQL}, tais como extraidos
   da tabela de sessoes. O objeto *NÃO* é inserido na base de dados.
   
   Os valores em {atr_SQL} são convertidos para valores
@@ -310,7 +314,7 @@ def cria_obj_mem(id_com, atrs_SQL):
   if len(atrs) != len(tabela.colunas):
     erro_prog("numero de atributos = " + str(len(atrs)) + " devia ser " + str(len(tabela.colunas)))
 
-  com = obj_comentario.Classe(id_com, atrs)
+  com = obj_comentario.Classe(com_id, atrs)
   return com
   
 def modifica_obj_mem(com, atrs_mod_SQL):
@@ -347,17 +351,17 @@ def obtem_conversa(raizes, max_coms, max_nivel):
   global tabela
   if raizes == None: raizes = [] # Simplify.
   assert isinstance(raizes, list) or isinstance(raizes, tuple)
-  conversa = [].copy()
+  conversa = []
 
   coms_faltando = max_coms
   
-  for id_com in raizes:
+  for com_id in raizes:
     if coms_faltando <= 0:
-      conversa.append([id_com])
+      conversa.append([com_id])
       # Para de procurar mais comentarios, mas adiciona o resto das raizes caso existam
       continue
-    com = obj_comentario.obtem_objeto(id_com)
-    if com == None: erro_prog(f"comentario {id_com} não existe")
+    com = obj_comentario.obtem_objeto(com_id)
+    if com == None: erro_prog(f"comentario {com_id} não existe")
     arv, resto = obtem_arvore(com, coms_faltando, max_nivel - 1)
     coms_faltando = resto
     conversa.append(arv)
@@ -371,16 +375,16 @@ def obtem_conversa_com_resto(raizes, max_coms, max_nivel):
   global tabela
   if raizes == None: raizes = [] # Simplify.
   assert isinstance(raizes, list) or isinstance(raizes, tuple)
-  conversa = [].copy()
+  conversa = []
 
   coms_faltando = max_coms
   
-  for id_com in raizes:
+  for com_id in raizes:
     if coms_faltando <= 0: 
-      conversa.append([id_com])
+      conversa.append([com_id])
       break
-    com = obj_comentario.obtem_objeto(id_com)
-    if com == None: erro_prog(f"comentario {id_com} não existe")
+    com = obj_comentario.obtem_objeto(com_id)
+    if com == None: erro_prog(f"comentario {com_id} não existe")
     arv, resto = obtem_arvore(com, coms_faltando, max_nivel - 1)
     coms_faltando = resto
     conversa.append(arv)
@@ -391,14 +395,14 @@ def obtem_arvore(com, max_coms, max_nivel):
   global tabela
   assert com == None or isinstance(com, obj_comentario.Classe)
   if com == None: return None
-  id_com = obj_comentario.obtem_identificador(com)
+  com_id = obj_comentario.obtem_identificador(com)
   
-  arv = [ id_com ]
+  arv = [ com_id ]
 
   if max_nivel < 0:
     return arv, max_coms
   
-  lista_ids_filhos = busca_por_pai(id_com)
+  lista_ids_filhos = busca_por_pai(com_id)
 
   coms_faltando = max_coms
 

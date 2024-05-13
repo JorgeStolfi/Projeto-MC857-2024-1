@@ -14,21 +14,22 @@ def gera(ses, usr, erros):
   assert usr != None and isinstance(usr, obj_usuario.Classe), "Usuário inválido"
   assert erros == None or type(erros) is tuple or type(erros) is list
   
-  erros = [].copy()
+  erros = []
   
   # Obtem o usuário da sessão:
-  usr_ses = obj_sessao.obtem_usuario(ses) if ses != None else None
+  usr_ses = obj_sessao.obtem_dono(ses) if ses != None else None
 
   try:
     # Determina privilégios do usuário da sessão:
-    admin = obj_sessao.de_administrador(ses) if ses != None else False
+    para_admin = obj_sessao.de_administrador(ses) if ses != None else False
     
     # Obtem o identificador e atributos do usuário:
-    id_usr = obj_usuario.obtem_identificador(usr)
+    usr_id = obj_usuario.obtem_identificador(usr)
     atrs_usr = obj_usuario.obtem_atributos(usr)
     
-    auto = (usr == usr_ses)
-    ht_bloco = html_bloco_dados_de_usuario.gera(id_usr, atrs_usr, admin, auto, True)
+    editavel = False
+    para_proprio = (usr == usr_ses)
+    ht_bloco = html_bloco_dados_de_usuario.gera(usr_id, atrs_usr, para_admin, para_proprio, True)
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
   except ErroAtrib as ex:
     erros += ex.args[0]

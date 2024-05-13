@@ -21,7 +21,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = cria_tabela
   frag = True  # Resultado é só um fragmento de página?
   pretty = False  # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -31,7 +31,7 @@ def cria_tabela():
   val[1] = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
   val[2] = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
 
-  linhas = [].copy()
+  linhas = []
   ht_lab_cab = "<th style=\"background:green; padding: 10px 20px 30px 40px;\">" + "Coluna 1" + "</th>" 
   ht_val_cab = "<th>" + "Coluna 2" + "</th>" 
   cabecalhos = ( ht_lab_cab, ht_val_cab )
@@ -50,4 +50,4 @@ testa_gera("Teste", str)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.");
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

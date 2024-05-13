@@ -8,16 +8,16 @@ import html_bloco_titulo
 
 import sys
 
-def gera(lista_ids_ses, bt_ver, bt_fechar, mostrar_usr):
+def gera(ses_ids, bt_ver, bt_fechar, mostrar_usr):
 
-  linhas = [].copy()
+  linhas = []
   
   cabecalhos = html_linha_resumo_de_sessao.gera(None, False, False, mostrar_usr)
   linhas.append(cabecalhos)
   
-  for id_ses in lista_ids_ses:
+  for ses_id in ses_ids:
     # busca por identificador da sessao no banco
-    ses = obj_sessao.obtem_objeto(id_ses)
+    ses = obj_sessao.obtem_objeto(ses_id)
 
     # Gera uma lista de fragmentos HTML com as informacoes dessa sessao
     res_campos = html_linha_resumo_de_sessao.gera(ses, bt_ver, bt_fechar, mostrar_usr)

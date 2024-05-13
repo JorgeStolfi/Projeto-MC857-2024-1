@@ -2,27 +2,30 @@ import html_pag_cadastrar_usuario_IMP
 
 def gera(ses, atrs, erros):
   """
-  Retorna uma página com o formulário de cadastramento de
-  novo usuario.
+  Retorna uma página com o formulário para cadastrar um novo usuario.
+  O formuláro contém campos editáveis para os atributos do novo usuário,
+  que o usuário que pediu a página deve preencher no seu browser.
 
-  O formuláro contém campos editáveis para as informações que o usuário
-  deve preencher.  Se {atrs} não for {None}, deve ser um dicionário
-  que define os valores iniciais desses campos.
-
-  O parâmetro {ses} é a sessão de login que pediu esta página. Se {ses}
-  não for {None} e o dono da mesma for um administrador, o formulário
-  terá a opão de cadastrar o novo usuário como administrador também.
-  Vide detalhes em {html_bloco_dados_de_usuario.gera}.
+  O parâmetro {ses} é a sessão de login que pediu esta página.
+  Pode ser {None} (se quem pediu não está logado) ou 
+  um objeto de tipo {obj_sessao.Classe}, atualmente aberta.
+  
+  Se {atrs} não for {None}, deve ser um dicionário que define valores
+  iniciais (default) para alguns ou todos os atributos do novo usuário.
   
   O parâmetro {erros} deve ser {None} ou uma lista de mensagens de erro
   a mostrar na página. 
   
-  O formulário conterá um botão 'Cadastrar' (de tipo 'submit'). Quando o
+  Se {ses} não for {None} e o dono da mesma for um administrador, o formulário
+  terá a opão de cadastrar o novo usuário como administrador também.
+  Caso contrário o novo usuário não será admnistrador.
+  Vide detalhes em {html_bloco_dados_de_usuario.gera}. 
+  
+  A página terá um botão 'Cadastrar' (de tipo 'submit'). Quando o
   usuário clicar nesse botão, será emitido um comando POST com ação
   {cadastrar_usuario}. Os argumentos desse POST são todos os atributos
-  da classe {obj_usuario.Classe}, com os valores de {atrs} que o usuário
-  deve ter preenchido. Um argumento adicional 'conf_senha' conterá a
-  confirmação de senha.
+  da classe {obj_usuario.Classe} que estão no formulário. 
+  Um argumento adicional 'conf_senha' conterá a confirmação de senha.
 
   O formulário também terá um botão simples 'Cancelar', que, quando
   clicado, emite o comando 'pag_principal'.

@@ -5,15 +5,15 @@ import html_elem_div
 import html_elem_span
 import sys
 
-def gera(lista_ids_usr):
-  linhas = [].copy()
+def gera(usr_ids):
+  linhas = []
   
   cabecalhos = html_linha_resumo_de_usuario.gera(None)
   linhas.append(cabecalhos)
 
-  for id_usr in lista_ids_usr:
+  for usr_id in usr_ids:
     # busca por identificador da usuario no banco
-    usr = obj_usuario.obtem_objeto(id_usr)
+    usr = obj_usuario.obtem_objeto(usr_id)
 
     # Gera uma lista de fragmentos HTML com as informacoes dessa usuario
     res_campos = html_linha_resumo_de_usuario.gera(usr)

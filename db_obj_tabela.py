@@ -34,7 +34,7 @@ class Classe(db_obj_tabela_IMP.Classe_IMP):
   armazenados ou recueperados da base em disco.  Por exemplo, um atributo
   que tem tipo {bool} na memória é gravado na base como um valor de tipo SQL
   'INTEGER', que é 0 se {False}, 1 se {True}.  Se o valor de um atributo na
-  memória é um objeto {obj} (por exemplo, o atributo 'usr' de uma sessão, que é
+  memória é um objeto {obj} (por exemplo, o atributo 'dono' de uma sessão, que é
   um {obj_usuario.Classe}), a coluna correspondente na base de dados terá tipo 
   SQL 'INTEGER', e o valor será o índice do objeto {obj} na sua 
   respectiva tabela.
@@ -191,47 +191,35 @@ def busca_por_indice(tab, def_obj, ind):
 def busca_por_campo(tab, chave, valor, res_cols):
   """
   Procura na tabela {tab} objetos que tem o valor {val}
-  na coluna de nome {chave}.  A {chave} deve ser o nome de uma
-  coluna da tabela, como definido em {colunas}.
-  
-  Se {res_cols} não for {None}, deve ser uma lista ou tupla de nomes de
-  atributos, por exemplp {[ 'nome', 'email' ]}. Nesse caso, o resultado
-  será uma lista de tuplas, uma para cada linha que satisfaz o critério
-  de busca; onde cada tupla terá os valores dessas colunas.
-  
-  Se {res_cols} for {None}, devolve uma lista com os 
-  *identificadores* dos objetos encontrados (não os objetos em si). 
-  
-  Em qualquer caso, se nenhuma linha satisfizer o critério da busca, 
-  devolve uma lista vazia.
+  na coluna de nome {chave}.  Equivalente a 
+  {busca_por_campos(tab, { chave: valor }, res_cols)}.
   """
   return db_obj_tabela_IMP.busca_por_campo(tab, chave, valor, res_cols)
 
 def busca_por_campos(tab, args, res_cols):
   """
-  Semelhante a {busca_por_campo}, mas procura linhas com certos valores 
+  Procura na tabela {tab} linhas com certos valores 
   em certas colunas, especificados pelo dicionário {args}.  
   
   Basicamente, para cada par {ch,val} em {args}, exige que a coluna {ch} da tabela
-  tenha valor {val}.  
+  tenha valor {val}.  O valor {val} pode ser {str}, {int}, ou {float}. 
   
-  Entretanto, se {val} começa e termina com '%', exige apenas que o valor na
-  coluna {ch} seja apenas similar ao valor especificado em {val} (menos
-  esses caracteres '%'), como no operador 'LIKE' do SQL Especificamente,
-  o valor A é semelhante ao valor B se o valor A contém o valor B, sem
-  distinção de letras maiúsculas e minúsculas. O valor 'João da Silva' é
-  semelhante aos valores 'João', 'joão', 'da', e 'Silva', por
-  exemplo.
+  Entretanto, se {val} é um string que começa e termina com '%', exige
+  apenas que o valor na coluna {ch} contenha o string {val} (menos esses
+  caracteres '%'), ignorando a distinção de letras maiúsculas e
+  minúsculas. Por exemplo, a busca com {val} "%siLVa%", casaria com
+  entradas na tabela cujo valor for "João da Silva" ou "Donasilvana".
+  
+  Mais ainda, se {val} for uma lista ou tupla de dois elementos
+  {( val_min, val_max )}, exige que o valor na coluna {ch} da tabela
+  esteja entre {val_min} e {val_max}. Os dois valores podem ser {str},
+  {int}, ou {float}.
+  
+  Finalmente, se {val} for um objeto derivado de {obj_raiz.Classe},
+  como {obj_usuario.Classe} ou {obj_video.Classe}, exige que 
+  o campo na coluna {ch} da tabela seja o identificador desse obejto.
   """
   return db_obj_tabela_IMP.busca_por_campos(tab, args, res_cols)
-
-def busca_por_intervalo(tab, chave, val_min, val_max):
-  """
-  Procura na tabela {tab} objetos que têm um valor pentencente a {val_min} e 
-  {val_max}, na coluna de nome {chave}. A {chave} deve ser o nome de uma
-  coluna da tabela, como definido em {colunas}.  
-  """
-  return db_obj_tabela_IMP.busca_por_intervalo(tab, chave, val_min, val_max)
 
 def muda_diagnosticos(tab, val):
   """Liga (se {val} é {True}) ou desliga (se {val} é {False}) os 

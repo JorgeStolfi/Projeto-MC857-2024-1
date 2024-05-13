@@ -10,17 +10,17 @@ def gera(ses, bt_ver, bt_fechar, mostrar_usr):
   ses_id = obj_sessao.obtem_identificador(ses) if ses != None else None
   atrs = obj_sessao.obtem_atributos(ses) if ses != None else None
   
-  ht_campos = [].copy()
+  ht_campos = []
   
-  colunas = [ 'sessao', 'aberta', 'usr', 'criacao', 'cookie' ]
+  colunas = [ 'sessao', 'aberta', 'dono', 'criacao', 'cookie' ]
   
   for chave in colunas:
     if chave == 'sessao':
       mostra = True
       texto = ses_id if ses != None else "Sessão"
-    elif chave == 'usr':
+    elif chave == 'dono':
       mostra = mostrar_usr
-      texto = obj_usuario.obtem_identificador(atrs['usr']) if ses != None else "Usuário"
+      texto = obj_usuario.obtem_identificador(atrs['dono']) if ses != None else "Dono"
     elif chave == 'aberta':
       mostra = True
       texto = ("Aberta" if atrs['aberta'] else "Fechada") if ses != None else "Estado"

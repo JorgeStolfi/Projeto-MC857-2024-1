@@ -6,7 +6,7 @@ def processa(ses, cmd_args):
   Esta função é chamada quando alguém aperta o botão "Confirmar
   alterações" (ou equivalente) em um formulário para alterar os dados de
   um usuário {usr}, após ter preenchido os campos do mesmo. Veja
-  {html_form_criar_alterar_usuario.gera}. Os dados do usuário com as
+  {html_form_alterar_usuario.gera}. Os dados do usuário com as
   alterações devem estar definidos no dicionário {cmd_args}.
   
   O parâmetro {ses} não pode ser {None} e deve ser um objeto de tipo

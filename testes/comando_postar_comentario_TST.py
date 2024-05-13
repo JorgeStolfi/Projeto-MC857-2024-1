@@ -20,8 +20,8 @@ db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-id_ses = "S-00000001"
-ses1 = obj_sessao.obtem_objeto(id_ses)
+ses1_id = "S-00000001"
+ses1 = obj_sessao.obtem_objeto(ses1_id)
 
 def testa_processa(ses, cmd_args, deveria_postar):
   """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado

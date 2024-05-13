@@ -10,7 +10,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
   com_id = obj_comentario.obtem_identificador(com) if com != None else None
   atrs = obj_comentario.obtem_atributos(com) if com != None else None
 
-  itens_resumo = [].copy()
+  itens_resumo = []
   
   colunas = [ 'comentario', 'video', 'autor',  'pai', 'data',  'texto' ]
   for chave in colunas:

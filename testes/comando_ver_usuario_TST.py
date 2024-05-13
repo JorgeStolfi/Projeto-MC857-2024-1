@@ -28,7 +28,7 @@ def testa_processa(rot_teste, res_esp, *args):
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -37,13 +37,13 @@ def testa_processa(rot_teste, res_esp, *args):
 sesA_id = "S-00000001"
 sesA = obj_sessao.obtem_objeto(sesA_id)
 assert sesA != None and obj_sessao.de_administrador(sesA)
-usrA = obj_sessao.obtem_usuario(sesA)
+usrA = obj_sessao.obtem_dono(sesA)
 
 # Obtem uma sessao de um usuario comum:
 sesC_id = "S-00000003"
 sesC = obj_sessao.obtem_objeto(sesC_id)
 assert sesC != None and not obj_sessao.de_administrador(sesC)
-usrC = obj_sessao.obtem_usuario(sesC)
+usrC = obj_sessao.obtem_dono(sesC)
 
 # Obtem um usuário que não é nenhum dos dois:
 usrD_id = "U-00000004"
@@ -56,10 +56,10 @@ usrI = obj_usuario.obtem_objeto(usrI_id)
 assert usrI == None 
 
 for xses, ses in ("N", None), ("A", sesA), ("C", sesC):
-  ses_usr = obj_sessao.obtem_usuario(ses) if ses != None else None
-  ses_usr_id = obj_usuario.obtem_identificador(ses_usr) if ses_usr != None else None
+  usr_ses = obj_sessao.obtem_dono(ses) if ses != None else None
+  usr_ses_id = obj_usuario.obtem_identificador(usr_ses) if usr_ses != None else None
   # Usuário a ver é: implícito, o dono da sessão (explícito), terceiro, ou inexistente:
-  for xusr, usr_id in ("N", None), ("P", ses_usr_id), ("T", usrD_id), ("I", usrI_id):
+  for xusr, usr_id in ("N", None), ("P", usr_ses_id), ("T", usrD_id), ("I", usrI_id):
     # Caso {ses==None,xusr=="P"} é igual a {ses==None,xusr=="N"}:
     if not (ses == None and xusr == "P"):
       rot_teste = f"ses{xses}_usr{xusr}"

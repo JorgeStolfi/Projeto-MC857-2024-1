@@ -1,4 +1,3 @@
-
 import sys
 import re
 import inspect
@@ -91,6 +90,35 @@ def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
   sys.stderr.write(f"  {'-'*70}\n")
   return ok
 
+def testa_funcao_validadora(rot_teste, valido, modulo, funcao, *args):
+  html = False   # Resultados string jã são HTML?
+  frag = False   # Resultados string são só fragmentos de página?
+  pretty = False # Deve formatar o HTML para facilitar view source?
+  res_esp = [] if valido else list
+  ok = testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args)
+  return ok
+
+def testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val):
+  ok = True
+  for nulo_ok in ( False, True ):
+    for padrao_ok in ( False, True ):
+      for parcial in ( False, True ):
+        if val != None or not ( parcial or padrao_ok):
+          if val == None:
+             valm = None
+             valido = nulo_ok
+          elif parcial:
+            valm = "*" + val + "*"
+            valido = valido_pt and padrao_ok
+          else:
+            valm = val
+            valido = valido_ex
+          rot_teste = xrot + "_pad" + str(parcial)[0] + "_padok" + str(padrao_ok)[0] + "_nulok" + str(nulo_ok)[0] + ("_GUD" if valido else "_BAD")
+          res_esp = [] if valido else list
+          ok_caso = testa_funcao_validadora(rot_teste, valido, modulo, funcao, chave, valm, nulo_ok, padrao_ok)
+          ok = ok and ok_caso
+  return ok
+
 def check_result_recursive(r, r_esp):
   ok = True
   if r_esp == "*ANY*":
@@ -107,7 +135,7 @@ def check_result_recursive(r, r_esp):
       return False
     else:
       for el, el_esp in zip(r, r_esp):
-        if not check_recursive(el, el_esp): return False
+        if not check_result_recursive(el, el_esp): return False
       return True
   elif isinstance(r_esp, dict):
     if not isinstance(r, dict) or len(r) != len(r_esp):
@@ -115,12 +143,12 @@ def check_result_recursive(r, r_esp):
     else:
       for chave in r_esp.keys():
         if not chave in r: return False
-        if not check_recursive(r[chave], r_esp[chave]): return False
+        if not check_result_recursive(r[chave], r_esp[chave]): return False
       return True
   else:
     return (r == r_esp)
 
-def testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args):
+def testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args):
   html = True
   ok = testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args)
   return ok
@@ -215,12 +243,12 @@ def trunca_tamanho(dado, max_len):
         arg_trunc = arg[:pre_len] + ins_str + arg[-pos_len:]
         arg = arg_trunc
     elif isinstance(arg, dict):
-      res = {}.copy()
+      res = {}
       for chave, val in arg.items():
         res[chave] = recurse(val)
       arg = res
     elif isinstance(arg, list) or isinstance(arg, tuple):
-      res = [].copy()
+      res = []
       if len(arg) > max_els:
         arg_trunc = list(arg[:pre_els]) + [ ins_list, ] + list(arg[-pos_els:])
       else:

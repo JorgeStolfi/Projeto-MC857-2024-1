@@ -10,6 +10,6 @@ def gera(conteudo, multipart):
   ht_form = f"<form{enctype}{metodo}>" + conteudo + "</form>"
   
   # Botão de conversa
-  ht_bt_conversa = html_elem_button_simples.gera("Ver conversa", 'html_pag_ver_conversa', None, '#808080')
+  ht_bt_conversa = html_elem_button_simples.gera("Ver conversa", 'ver_conversa', None, '#808080')
 
   return ht_form + ht_bt_conversa

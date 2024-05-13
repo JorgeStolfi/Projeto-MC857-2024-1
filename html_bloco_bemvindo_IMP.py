@@ -40,7 +40,7 @@ def gera(usr):
     ht_imagem = html_elem_link_img.gera(avatar_arq, avatar_descr, avatar_tam, None)
 
     # Determina o número de sessões abertas {nsa}
-    nsa = len(obj_sessao.busca_por_usuario(usr, True)) if usr != None else 0
+    nsa = len(obj_sessao.busca_por_dono(usr, True)) if usr != None else 0
     if nsa > 1:
       if nsa == 2:
         texto_nsa = "Você tem outra sessao aberta."

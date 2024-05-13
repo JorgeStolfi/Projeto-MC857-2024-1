@@ -33,7 +33,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -43,7 +43,7 @@ sesA1 = obj_sessao.obtem_objeto(sesA1_id)
 assert sesA1 != None
 assert obj_sessao.aberta(sesA1)
 assert obj_sessao.de_administrador(sesA1)
-usrA1 = obj_sessao.obtem_usuario(sesA1)
+usrA1 = obj_sessao.obtem_dono(sesA1)
 usrA1_id = obj_usuario.obtem_identificador(usrA1)
 assert usrA1_id == "U-00000008"
 
@@ -53,7 +53,7 @@ sesC1 = obj_sessao.obtem_objeto(sesC1_id)
 assert sesC1 != None
 assert obj_sessao.aberta(sesC1)
 assert not obj_sessao.de_administrador(sesC1)
-usrC1 = obj_sessao.obtem_usuario(sesC1)
+usrC1 = obj_sessao.obtem_dono(sesC1)
 usrC1_id = obj_usuario.obtem_identificador(usrC1)
 assert usrC1_id == "U-00000002"
 
@@ -63,27 +63,35 @@ usrC2 = obj_usuario.obtem_objeto(usrC2_id)
 assert usrC2 != None
 assert not obj_usuario.obtem_atributo(usrC2,'administrador')
 
-for id_ses in None, sesA1_id, sesC1_id:
-  for id_usr in None, usrC1_id, usrC2_id, usrA1_id:
-    ses = obj_sessao.obtem_objeto(id_ses) if id_ses != None else None
-    ses_admin = obj_sessao.de_administrador(ses) if ses != None else False
-    usr = obj_usuario.obtem_objeto(id_usr) if id_usr != None else None
-    ses_usr = obj_sessao.obtem_usuario(ses) if ses != None else None
-    ses_usr_id = obj_usuario.obtem_identificador(ses_usr) if ses_usr != None else None
-    ses_proprio = (id_usr != None and id_usr == ses_usr_id)
-    atrs_set = ( {}, obj_usuario.obtem_atributos(usr), ) if usr != None else ( {}, )
-    for xatrs in atrs_set:
-      atrs = xatrs.copy()
-      if id_usr != None and not ses_admin and not ses_proprio:
-        atrs.update({ 'nome': "Seracomeço Nãoquerubim" })
-      if not ses_admin:
-        usr_admin = obj_usuario.obtem_atributo(usr, 'administrador') if usr != None else False
-        atrs.update({ 'administrador': usr_admin })
-      na = len(atrs.keys())
-      rot_teste = "ses" + str(id_ses) + "-usr" + str(id_usr) + "-na" + str(na)
-      testa_gera(rot_teste, str, id_usr, atrs, ses_admin, ses_proprio)
+for ses_id in None, sesA1_id, sesC1_id:
+  for usr_a_ver_id in None, usrC1_id, usrC2_id, usrA1_id:
+    ses = obj_sessao.obtem_objeto(ses_id) if ses_id != None else None
+    para_admin = obj_sessao.de_administrador(ses) if ses != None else False
+    usr_a_ver = obj_usuario.obtem_objeto(usr_a_ver_id) if usr_a_ver_id != None else None
+    usr_ses = obj_sessao.obtem_dono(ses) if ses != None else None
+    usr_ses_id = obj_usuario.obtem_identificador(usr_ses) if usr_ses != None else None
+    para_proprio = ( usr_a_ver_id != None and usr_a_ver_id == usr_ses_id )
+    atrs_pairs = ( ( 'N', {}, ), ('U', obj_usuario.obtem_atributos(usr_a_ver), ), ) if usr_a_ver != None else ( ('N', {}, ), )
+    for editavel in False, True:
+      if (editavel or usr_a_ver_id != None) and (not editavel or ( para_admin or para_proprio )):
+        for atrs_tag, atrs_basic in atrs_pairs:
+          atrs = atrs_basic.copy()
+          xatrs = "_atrs" + atrs_tag
+          if usr_a_ver_id != None and editavel:
+            # Tenta apresentar outro 'nome':
+            atrs.update({ 'nome': "Seracomeço Nãoquerubim" })
+            xatrs += "_nomeDif"
+            if para_admin:
+              # Tenta apresentar outro atributo 'administrador':
+              usr_a_ver_admin = obj_usuario.eh_administrador(usr_a_ver)
+              atrs.update({ 'administrador': not usr_a_ver_admin })
+              xatrs += "_adminMod"
+          xses = f"_S{ses_id[-3:]}" if ses_id != None else "_SNone"
+          xusr = f"_U{usr_a_ver_id[-3:]}" if usr_a_ver_id != None else "_UNone"
+          rot_teste = "D" + xatrs + xses + xusr
+          testa_gera(rot_teste, str, usr_a_ver_id, atrs, editavel, para_admin, para_proprio)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

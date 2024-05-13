@@ -15,7 +15,7 @@ def processa(ses, cmd_args):
   assert ses == None or obj_sessao.aberta(ses), f"Sessão inválida"
   assert cmd_args != None and type(cmd_args) is dict
 
-  erros = [].copy()
+  erros = []
 
   # Valida os valores dos atributos da busca, e elimina campos {None}:
   cmd_args_cp = cmd_args.copy() # Por via das dúvidas.
@@ -25,46 +25,46 @@ def processa(ses, cmd_args):
       del cmd_args_cp[chave]
     # Verifica validade de {val}: 
     if chave == 'video':
-      erros += util_valida_campo.identificador(chave, val, "V", False)
+      erros += util_identificador.valida(chave, val, "V", False)
     elif chave == 'titulo':
       # !!! Devia aceitar título parcial ou RE !!!
-      erros += util_valida_campo.titulo_de_video(chave, val, False)
+      erros += util_titulo_de_video.valida(chave, val, False)
     elif chave == 'autor':
-      erros += util_valida_campo.identificador(chave, val, "U", False)
+      erros += util_identificador.valida(chave, val, "U", False)
     elif chave == 'data':
       # !!! Devia aceitar data parcial e intervalo de datas !!!
-      erros += util_valida_campo.data(chave, val, "U", False)
+      erros += util_data.valida(chave, val, "U", False)
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Campo '{chave}' inválido"
   cmd_args = cmd_args_cp
   
-  lista_ids_vid = [].copy()
+  vid_ids = []
   if len(erros) == 0:
     try:
       if 'video' in cmd_args:
         # Busca por vídeo determinado:
-        id_vid = cmd_args['video']
-        vid = obj_video.obtem_objeto(id_vid)
+        vid_id = cmd_args['video']
+        vid = obj_video.obtem_objeto(vid_id)
         if vid == None:
-          erros.append(f"Vídeo '{id_vid}' não existe")
+          erros.append(f"Vídeo '{vid_id}' não existe")
         else:
-          lista_ids_vid = [ id_vid ]
+          vid_ids = [ vid_id ]
       else:
         # Busca por campos aproximados:
-        lista_ids_vid = obj_video.busca_por_semelhanca(cmd_args, False)
+        vid_ids = obj_video.busca_por_semelhanca(cmd_args, False)
 
-      if len(lista_ids_vid) == 0:
+      if len(vid_ids) == 0:
         # Não encontrou nenhum usuário:
         erros.append(f"Não foi encontrado nenhum vídeo com os dados fornecidos")
 
     except ErroAtrib as ex:
       erros += ex.args[0]
 
-  if len(lista_ids_vid) != 0:
+  if len(vid_ids) != 0:
     # Encontrou pelo menos um vídeo.  Mostra em forma de tabela:
     ht_titulo = html_bloco_titulo.gera("Vídeos encontrados")
-    ht_tabela = html_bloco_lista_de_videos.gera(lista_ids_vid)
+    ht_tabela = html_bloco_lista_de_videos.gera(vid_ids)
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela

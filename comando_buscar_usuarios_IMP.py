@@ -10,73 +10,74 @@ import util_valida_campo
 from util_erros import ErroAtrib
 
 def processa(ses, cmd_args):
+
   # Comando emitido por página do site deveria satisfazer isto:
   assert ses == None or obj_sessao.aberta(ses), f"Sessão inválida"
   assert cmd_args != None and type(cmd_args) is dict
   
-  erros = [].copy()
+  para_admin = ses != None and obj_sessao.eh_administrador(ses)
+  
+  erros = []
 
   # Valida os valores dos atributos da busca, e elimina campos {None}:
-  cmd_args_cp = cmd_args.copy()
-  for chave, val in cmd_args.items():
+  atrs_bus = cmd_args.copy()
+  nulo_ok = False
+  for chave, val in atrs_bus.items():
     if val == None:
-      del cmd_args_cp[chave]
-    # Verifica validade de {val}:
+      
+      del atrs_bus[chave]
     elif chave == 'usuario':
-      erros += util_valida_campo.identificador(chave, val, "U", False)
+      erros += util_identificador.valida(chave, val, "U", nulo_ok)
     elif chave == 'email':
-      # !!! Deveria aceitar email parcial, como "@unicamp.br" ou RE. !!!
-      erros += obj_usuario.valida_email(chave, val, False)
+      erros += obj_usuario.valida_email(chave, val, nulo_ok)
     elif chave == 'nome':
-      # !!! Devia aceitar nome parcial ou RE !!!
-      nulo_ok = False
       parcial = True
       erros += obj_usuario.valida_nome(chave, val, nulo_ok, parcial)
-    elif chave == 'administrador' or chave == 'senha':
+    elif chave == 'administrador':
+      erros += util_booleano.valida(chave, val, nulo_ok)
+    elif chave == 'senha':
       erros.append(f"Busca por '{chave}' não é permitida")
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Campo '{chave}' inválido"
-  cmd_args = cmd_args_cp
-  
-  lista_ids_usr = [].copy()
+
+  usr_res_ids = []
   if len(erros) == 0:
   # Faz a busca dentro de um {try:} caso ela levante {ErroAtrib}:
     try:
-      if 'usuario' in cmd_args:
+      if 'usuario' in atrs_bus:
         # Deve haver um único usuário com esse identificador:
-        id_usr = cmd_args['usuario']
-        obj_usr = obj_usuario.obtem_objeto(id_usr) if id_usr != None else None
+        usr_bus_id = atrs_bus['usuario']
+        obj_usr = obj_usuario.obtem_objeto(usr_bus_id) if usr_bus_id != None else None
         if obj_usr == None:
-          erros.append(f"Usuário '{id_usr}' não existe")
+          erros.append(f"Usuário \"{usr_bus_id}\" não existe")
         else:
-          lista_ids_usr = [ id_usr ]
-      elif 'email' in cmd_args:
+          usr_res_ids = [ usr_bus_id ]
+      elif 'email' in atrs_bus:
         # Deve haver um único usuário com esse email
-        admin = obj_sessao.de_administrador(ses)
-        if not admin:
+        if not para_admin:
           erros.append("Busca por email só é permitida para administradores")
         else:
-          email = cmd_args['email']
-          id_usr = obj_usuario.busca_por_email(email)
-          if id_usr == None:
-            erros.append(f"Não existe usuário com email '{email}'")
+          email_bus = atrs_bus['email']
+          usr_res_id = obj_usuario.busca_por_email(email_bus)
+          if usr_res_id == None:
+            erros.append(f"Não existe usuário com email = \"{email_bus}\"")
           else:
-            lista_ids_usr = [ id_usr ]
+            usr_res_ids = [ usr_res_id ]
       else:
         # Busca por campos aproximados:
-        lista_ids_usr = obj_usuario.busca_por_semelhanca(cmd_args, False)
+        usr_res_ids = obj_usuario.busca_por_semelhanca(atrs_bus, False)
 
-      if len(lista_ids_usr) == 0:
+      if len(usr_res_ids) == 0:
         # Não encontrou nenhum usuário:
         erros.append("Não foi encontrado nenhum usuário com os dados fornecidos")
     except ErroAtrib as ex:
       erros += ex.args[0]
 
-  if len(lista_ids_usr) != 0:
+  if len(usr_res_ids) != 0:
     # Encontrou pelo menos um usuário.  Mostra em forma de tabela:
     ht_titulo = ht_titulo = html_bloco_titulo.gera("Usuários encontrados")
-    ht_tabela = html_bloco_lista_de_usuarios.gera(lista_ids_usr)
+    ht_tabela = html_bloco_lista_de_usuarios.gera(usr_res_ids)
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela
@@ -84,8 +85,7 @@ def processa(ses, cmd_args):
   else:
     # Não encontrou nenhum usuário.
     # Repete a página de busca, com eventuais mensagens de erro:
-    admin = obj_sessao.de_administrador(ses)
-    pag = html_pag_buscar_usuarios.gera(ses, cmd_args, erros)
+    pag = html_pag_buscar_usuarios.gera(ses, atrs_bus, erros)
 
   return pag
 

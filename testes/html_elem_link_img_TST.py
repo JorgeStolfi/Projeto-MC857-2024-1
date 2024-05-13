@@ -15,7 +15,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, modulo.gera, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
  
@@ -31,4 +31,4 @@ for arquivo in None, "imagens/wikimedia_dog.png":
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.");
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

@@ -28,7 +28,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = False  # Resultado é só um fragmento de página?
   pretty = True # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -38,7 +38,7 @@ sesA1 = obj_sessao.obtem_objeto(sesA1_id)
 assert sesA1 != None
 assert obj_sessao.aberta(sesA1)
 assert obj_sessao.de_administrador(sesA1)
-usrA1 = obj_sessao.obtem_usuario(sesA1)
+usrA1 = obj_sessao.obtem_dono(sesA1)
 usrA1_id = obj_usuario.obtem_identificador(usrA1)
 assert usrA1_id == "U-00000008"
 
@@ -48,7 +48,7 @@ sesC1 = obj_sessao.obtem_objeto(sesC1_id)
 assert sesC1 != None
 assert obj_sessao.aberta(sesC1)
 assert not obj_sessao.de_administrador(sesC1)
-usrC1 = obj_sessao.obtem_usuario(sesC1)
+usrC1 = obj_sessao.obtem_dono(sesC1)
 usrC1_id = obj_usuario.obtem_identificador(usrC1)
 assert usrC1_id == "U-00000002"
 
@@ -74,19 +74,23 @@ erros_tri = ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",]
 
 erros_dic = { 'N': None, 'V': erros_vaz, 'E': erros_tri, }
 
-for st, ses in ses_dic.items():
-  for vt, id_vid in com_dic.items():
-    for et, erros in erros_dic.items():
-      if ses == sesA1 or (ses == sesC1 and id_vid == comC1_id):
-        com = obj_comentario.obtem_objeto(id_vid)
-        atrs_tot = obj_comentario.obtem_atributos(com)
-        atrs_som = { 'texto': "Alteradus", }
-        atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
-        for at, atrs in atrs_dic.items():
-          rot_teste = f"ses{st}-com{vt}-atrs{at}-erros{et}"
-          testa_gera(rot_teste,  str, ses, id_vid, atrs, erros)
+for ses_tag, ses in ses_dic.items():
+  xses = f"_ses{ses_tag}"
+  for com_tag, com_id in com_dic.items():
+    xcom = f"_com{com_tag}"
+    for err_tag, erros in erros_dic.items():
+      xerr = f"_err{err_tag}"
+      if ses == sesA1 or (ses == sesC1 and com_id == comC1_id):
+        com = obj_comentario.obtem_objeto(com_id)
+        atrs_com = obj_comentario.obtem_atributos(com)
+        atrs_mod_txt = { 'texto': "Alteradus", }
+        atrs_dic = { 'N': {}, 'A': atrs_com, 'T': atrs_mod_txt, }
+        for atr_tag, atrs_mod in atrs_dic.items():
+          xatr = f"_atr{atr_tag}"
+          rot_teste = "AC" + xses + xcom + xatr + xerr
+          testa_gera(rot_teste,  str, ses, com, atrs_mod, erros)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

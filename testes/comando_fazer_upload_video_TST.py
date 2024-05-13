@@ -33,9 +33,10 @@ def testa_processa(rot_teste, valido, ses, *args):
   
   ok = True
 
-  id_ses = obj_sessao.obtem_identificador(ses) if ses != None else None
+  ses_id = obj_sessao.obtem_identificador(ses) if ses != None else None
   sys.stderr.write("-"*70 + "\n")
-  sys.stderr.write(f"testando {funcao} rot_teste = {rot_teste} ses = {str(id_ses)} cmd_args = {str(*args)}\n")
+  xargs = util_erros.trunca_tamanho(str(*args), 100)
+  sys.stderr.write(f"testando {funcao} rot_teste = {rot_teste} ses = {str(ses_id)} cmd_args = {xargs}\n")
 
   ult_id_antes = obj_video.ultimo_identificador()
   pag = funcao(ses, *args)
@@ -50,14 +51,14 @@ def testa_processa(rot_teste, valido, ses, *args):
     else:
       sys.stderr.write(f"  como esperado\n")
   else:
-    id_vid = ult_id_depois
-    sys.stderr.write(f"  comando criou novo video, id = {id_vid}\n")
+    vid_id = ult_id_depois
+    sys.stderr.write(f"  comando criou novo video, id = {vid_id}\n")
     if not valido:
       sys.stderr.write(f"  ** deveria ter falhado!\n")
       ok = False
 
     # Verifica os atributos do vídeo criado:
-    vid_criado = obj_video.obtem_objeto(id_vid)
+    vid_criado = obj_video.obtem_objeto(vid_id)
     assert vid_criado != None
     atrs_criado = obj_video.obtem_atributos(vid_criado)
     sys.stderr.write(f"  atributos criados = {str(atrs_criado)}\n")
@@ -79,21 +80,21 @@ def testa_processa(rot_teste, valido, ses, *args):
 
 # ----------------------------------------------------------------------
 # Algumas sessões para teste:
-ses_admin1 = obj_sessao.obtem_objeto("S-00000001") # Do administrador.
-ses_comum1 = obj_sessao.obtem_objeto("S-00000003") # De um plebeu.
-ses_comum2 = obj_sessao.obtem_objeto("S-00000004") # De outro plebeu.
+ses_A1 = obj_sessao.obtem_objeto("S-00000001") # Do administrador.
+ses_C1 = obj_sessao.obtem_objeto("S-00000003") # De um plebeu.
+ses_C2 = obj_sessao.obtem_objeto("S-00000004") # De outro plebeu.
 
 # Obtém alguns usuários:
-usr_admin1 = obj_sessao.obtem_usuario(ses_admin1)
-assert obj_usuario.obtem_atributo(usr_admin1, 'administrador')
+usr_admin1 = obj_sessao.obtem_dono(ses_A1)
+assert obj_usuario.eh_administrador(usr_admin1)
 usr_admin1_id = obj_usuario.obtem_identificador(usr_admin1)
 
-usr_comum1 = obj_sessao.obtem_usuario(ses_comum1)
-assert not obj_usuario.obtem_atributo(usr_comum1, 'administrador')
+usr_comum1 = obj_sessao.obtem_dono(ses_C1)
+assert not obj_usuario.eh_administrador(usr_comum1)
 usr_comum1_id = obj_usuario.obtem_identificador(usr_comum1)
 
-usr_comum2 = obj_sessao.obtem_usuario(ses_comum2)
-assert not obj_usuario.obtem_atributo(usr_comum2, 'administrador')
+usr_comum2 = obj_sessao.obtem_dono(ses_C2)
+assert not obj_usuario.eh_administrador(usr_comum2)
 assert usr_comum2 != usr_comum1 
 usr_comum2_id = obj_usuario.obtem_identificador(usr_comum2)
 
@@ -105,7 +106,7 @@ dados_OK1 = { \
   'titulo': "Bananas cibernéticas",
   'conteudo': bytes1,
 }
-testa_processa("OK1", True, ses_comum1, dados_OK1)
+testa_processa("OK1", True, ses_C1, dados_OK1)
 
 # Outro teste OK
 dados_OK2 = { \
@@ -113,7 +114,7 @@ dados_OK2 = { \
   'titulo': "Bananas psicossomáticas",
   'conteudo': bytes1,
 }
-testa_processa("OK2", True, ses_comum2, dados_OK2)
+testa_processa("OK2", True, ses_C2, dados_OK2)
 
 # Testa com usuário de outra sessão:
 dados_Eses = { \
@@ -121,7 +122,7 @@ dados_Eses = { \
   'titulo': "Pitangas matemáticas",
   'conteudo': bytes1,
 }
-testa_processa("E str,  str, ses", False, ses_comum2, dados_Eses)
+testa_processa("E str,  str, ses", False, ses_C2, dados_Eses)
 
 # Testa com usuário não logado:
 dados_Elog = { \

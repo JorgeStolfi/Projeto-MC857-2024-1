@@ -26,3 +26,15 @@ def de_lista_de_indices(let, indices):
   Para conveniência, cada elemento da lista {indices} pode ser um inteiro, ou uma
   lista ou tupla de tamanho 1 cujo único elemento é um inteiro."""
   return util_identificador_IMP.de_lista_de_indices(let,indices)
+
+
+def valida(chave, val, letra, nulo_ok):
+  """Exige que o parâmetro {val} seja um string com aparência de
+  identificador, no formato "{L}-{NNNNNNNN} onde {L} é a {letra}
+  dada e {NNNNNNNN} são 8 dígitos decimais.  Se {letra} for {None},
+  aceita qualquer letra maiúscula.
+  
+  Caso {val} seja um identificador válido, a função devolve uma lista vazia. Senão
+  devolve uma lista de uma ou mais mensagens de erro (strings). O
+  parâmetro {chave} é usado para montar as mensagens de erro."""
+  return util_identificador_IMP.valida(chave, val, letra, nulo_ok) 

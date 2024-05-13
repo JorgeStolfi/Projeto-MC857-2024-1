@@ -27,7 +27,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = False # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -61,4 +61,4 @@ for st, ses in ses_dic.items():
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

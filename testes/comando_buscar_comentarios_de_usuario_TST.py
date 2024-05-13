@@ -30,7 +30,7 @@ def testa_processa(rot_teste, res_esp, *args):
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
   
@@ -39,9 +39,9 @@ ses_adm_id = "S-00000001"
 ses_adm = obj_sessao.obtem_objeto(ses_adm_id)
 
 # Teste passando um id do video
-id_usr1 = {'usuario': "U-00000002"}
+usr1_id = {'usuario': "U-00000002"}
 
-testa_processa("T1",         str, ses_adm, id_usr1)
+testa_processa("T1",         str, ses_adm, usr1_id)
 
 # Testa a visualização dos próprios comentários
 testa_processa("T2",         str, ses_adm, {})
@@ -49,4 +49,4 @@ testa_processa("T2",         str, ses_adm, {})
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

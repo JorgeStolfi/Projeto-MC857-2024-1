@@ -21,70 +21,68 @@ def processa(ses, cmd_args):
   # pelas páginas do sistema:
   assert ses != None and obj_sessao.aberta(ses), "Sessão inválida"
   assert isinstance(cmd_args, dict), "Argumentos do comando inválidos"
-  assert 'comentario' in cmd_args, "Comentario a editar não especificado"
 
-  erros = [].copy() # Mensagens de erro.
-  atrs_mod = {}.copy()  # Atributos a modificar.
   cmd_args = cmd_args.copy() # Para não alterar o original.
+  erros = [] # Mensagens de erro.
 
-  usr_ses = obj_sessao.obtem_usuario(ses)
+  # Obtem o dono da sessão corrente:
+  usr_ses = obj_sessao.obtem_dono(ses)
   assert usr_ses is not None
-  ses_admin = obj_usuario.obtem_atributos(usr_ses)['administrador']
-  usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
+  para_admin = obj_usuario.eh_administrador(usr_ses)
 
-  # Determina o comentário {com} a alterar:
-  id_com = cmd_args['comentario']
-  cmd_args.pop('comentario')
-  com = obj_comentario.obtem_objeto(id_com)
-  if com == None:
-    erros.append(f"comentario {id_com} não existe")
-  else:
-    # Atributos atuais do comentério:
-    atrs_atu = obj_comentario.obtem_atributos(com)
-
-    autor = atrs_atu['autor']
-    if not (ses_admin or autor == usr_ses):
-      erros.append(f"Você não tem permissão para alterar este comentário")
-    else:
-      # Conjunto de atributos que PODEM ser alterados:
-      atrs_mod_ok = { 'texto', }
-
-      for chave, val_atu in atrs_atu.items():
-        val_cmd = cmd_args[chave] if chave in cmd_args else None
-        if val_cmd != None:
-          # Converte identificador em {cmd_args} para objeto:
-          if chave == 'autor':
-            val_cmd = obj_usuario.obtem_objeto(val_cmd)
-          elif chave == 'video':
-            val_cmd = obj_video.obtem_objeto(val_cmd)
-          elif chave == 'pai':
-            val_cmd = obj_comentario.obtem_objeto(val_cmd)
-            
-          if val_cmd == val_atu:
-            # Atributo não está sendo modificado:
-            pass
-          elif chave in atrs_mod_ok:
-            # Atributo está sendo modificado e é modificável:
-            atrs_mod[chave] = val_cmd
-          else:
-            # Tentativa de modifcar atributo não modificável:
-            erros.append(f"Não é possível alterar o atributo {chave} do comentário")
+  # Obtém o comentário {com} a alterar, e elimina 'comentario' de {cmd_args}:
+  com_id = cmd_args.pop('comentario', None)
+  if com_id != None:
+    com = obj_comentario.obtem_objeto(com_id)
+    if com == None:
+      erros.append(f"Comentário {com_id} não existe")
+  else
+    erros.append("Comentário não foi especificado")
+    com = None
   
-  if len(erros) == 0:
-    # Tenta editar o comentario:
+  if com != None:
+    # Obtém atributos correntes do comentario {com}:
+    com_atrs = obj_comentario.obtem_atributos(com)
+
+    # Elimina campos de {cmd_args} cujo valor não vai mudar: 
+    util_dict.elimina_alteracoes_nulas(cmd_args, com_atrs)
+
+    # Confere se não há chaves espúrias em {cmd_args}
+    util_dict.verifica_chaves_espurias(cmd_args, com_atrs)
+
+    # Verifica se o usuário corrente {usr_ses} pode alterar este comentário:
+    autor = obj_comentario.obtem_atributo(com, 'autor')
+    if usr_ses != autor and not para_admin:
+      erros.append("Você não tem permissão para alterar dados deste comentário")
+
+    autor = com_atrs['autor']
+    if not (para_admin or autor == usr_ses):
+      erros.append(f"Você não tem permissão para alterar este comentário")
+
+    # Verifica campos inalteráveis:
+    alteraveis = { 'texto' }
+    for chave in cmd_args.keys():
+      if not chave in alteraveis:
+        erros.append(f"atributo {chave} não pode ser alterado")
+
+  pag = None
+  if (len(erros) == 0):
+    # Tenta modificar os atributos do vídeo:
+    atrs_mod = util_dict.para_objetos(cmd_args)
     if caco_debug: sys.stderr.write("    chamando {obj_comentario.muda_atributos}...\n")
     try:
       obj_comentario.muda_atributos(com, atrs_mod)
       if caco_debug: sys.stderr.write("    chamada retornou normalmente\n")
+      # Sucesso. Exibimos o vídeo com os dados alterados:
+      pag = html_pag_ver_comentario.gera(ses, com, erros)
     except ErroAtrib as ex:
+      sys.stderr.write(f"@#@ ex = {str(ex)}\n")
       erros += ex.args[0]
   else:
     if caco_debug: sys.stderr.write("    NÃO chamou {obj_comentario.muda_atributos}\n")
       
-  if len(erros) == 0:
-    # Mostra comentário com dados alterados:
-    pag = html_pag_ver_comentario.gera(ses, com, None)
-  else:
-    # Repete a página de alterar comentário com os mesmos argumentos e mens de erro:
-    pag = html_pag_alterar_comentario.gera(ses, id_com, cmd_args, erros)
+  if pag == None:
+    # Repete a página de alterar comentário com os mesmos argumentos, mais as mens de erro:
+    pag = html_pag_alterar_comentario.gera(ses, com_id, cmd_args, erros)
+
   return pag

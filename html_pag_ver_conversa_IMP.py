@@ -2,7 +2,6 @@ import html_bloco_conversa
 import html_bloco_titulo
 import html_pag_generica
 import html_elem_button_simples
-import html_bloco_dados_de_comentario
 import html_elem_form
 import obj_comentario
 

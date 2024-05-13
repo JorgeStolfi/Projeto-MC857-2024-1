@@ -7,7 +7,6 @@ import db_conversao_sql
 
 import util_identificador
 import util_testes
-import util_valida_campo
 from util_erros import erro_prog, aviso_prog, mostra
 
 import sys
@@ -74,7 +73,7 @@ def busca_por_campo(chave, val, unico, tabela):
 def busca_por_campos(args, unico, tabela):
   assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
   res = db_obj_tabela.busca_por_campos(tabela, args, None)
-  if res == None: res = [].copy() # Just in case.
+  if res == None: res = [] # Just in case.
   if type(res) is list or type(res) is tuple:
     return res
   elif type(res) is str:

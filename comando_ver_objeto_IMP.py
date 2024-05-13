@@ -8,7 +8,7 @@ from util_erros import ErroAtrib
 import sys
 
 def processa(ses, cmd_args):
-  erros = [].copy()
+  erros = []
   
   id_obj = None
   if not 'objeto' in cmd_args or cmd_args['objeto'] == None:

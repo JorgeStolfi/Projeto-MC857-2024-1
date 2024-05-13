@@ -63,14 +63,13 @@ def testa_processa(rot_teste, ses, cmd_args, deveria_cadastrar):
   res_esp = str
   frag = False
   pretty = True
-  ok = ok and util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, ses, cmd_args) 
+  ok = ok and util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, ses, cmd_args) 
 
   usr_new_id = obj_usuario.busca_por_email(cmd_args["email"])
   usr_new = obj_usuario.obtem_objeto(usr_new_id) if usr_new_id != None else None
   usr_new_atrs = obj_usuario.obtem_atributos(usr_new) if usr_new != None else None
   if usr_new_id != None:
     sys.stderr.write(f"  usuario criado = {usr_new_id} atrs = {usr_new_atrs}\n")
-    if not 
   
   if usr_old_id != None:
     if usr_new_id != usr_old_id:

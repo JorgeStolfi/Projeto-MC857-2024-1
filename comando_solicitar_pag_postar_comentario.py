@@ -8,13 +8,14 @@ def processa(ses, cmd_args):
   em alguma página que mostra um vídeo, ou "Responder" (ou similar) em
   alguma página que mostra um comentário anteriormente postado.
   
-  O argumento {ses} não pode ser {None} e deve ser um objeto de
-  tipo {obj_sessao.Classe} representando uma sessão atualmente aberta.
+  O argumento {ses} é a sessão de login que emitiu o comando. Não pode
+  ser {None} e deve ser um objeto de tipo {obj_sessao.Classe}
+  representando uma sessão atualmente aberta.
   
   O parâmetro {cmd_args} deve ser um dicionário contendo os argumentos
   do comando. Pode conter um único campo 'video' com o identificador do
   vídeo ao qual o novo comentário deve ser associado. O dono da sessão
-  {ses} não preoisa ser o autor do vídeo.
+  {ses} não precisa ser o autor do vídeo.
   
   Alternativamente, {cmd_args} pode conter um único campo 'pai' com o
   identificador do comentário do qual o novo comentário será uma
@@ -22,9 +23,11 @@ def processa(ses, cmd_args):
   pai nem do vídeo a que este está associado.
   
   A função retorna uma página HTML {pag} com o formulário onde o usuário
-  pode digitar o texto do comentário. Veja {html_pag_postar_comentario.gera}.
-  A página terá um botão de submissão "Enviar" ou
-  equivalente que emite um comando HTTP "postar_comentario".
+  pode digitar alguns atributos do novo comentário. (Por enquanto,
+  apenas o 'texto' do mesmo.) Alguns atributos do comentário (como
+  'autor' e 'pai') serão exibidos. Veja
+  {html_pag_postar_comentario.gera}. A página terá um botão de submissão
+  "Enviar" ou equivalente que emite um comando HTTP "postar_comentario".
   """
   return comando_solicitar_pag_postar_comentario_IMP.processa(ses, cmd_args)
 

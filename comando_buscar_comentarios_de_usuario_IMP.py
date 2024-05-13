@@ -15,29 +15,29 @@ def processa(ses, cmd_args):
   # Caso ses seja None, é necessário que seja passado um id de usuário de parâmetro
   assert not (ses == None and 'usuario' not in cmd_args), "Argumentos inválidos"
  
-  erros = [].copy()
+  erros = []
 
   # Caso ses != None, obtem o usuário {usr_ses} dono da sessão:
   usr_ses = None
   if ses != None:
-    usr_ses = obj_sessao.obtem_usuario(ses); assert usr_ses != None
-    id_usr_ses = obj_usuario.obtem_identificador(usr_ses)
+    usr_ses = obj_sessao.obtem_dono(ses); assert usr_ses != None
+    usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
   
-  # Obtém o usuário {autor} a listar e seu identificador {id_autor}:
+  # Obtém o usuário {autor} a listar e seu identificador {autor_id}:
   if 'usuario' in cmd_args:
     # Alguém quer ver comentários de usuário específico:
-    id_autor = cmd_args['usuario']
-    autor = obj_usuario.obtem_objeto(id_autor)
+    autor_id = cmd_args['usuario']
+    autor = obj_usuario.obtem_objeto(autor_id)
   else:
     autor = usr_ses
-    id_autor = id_usr_ses
+    autor_id = usr_ses_id
 
   if autor == None:
     erros.append(f"Usuário indeterminado")
     ht_bloco = None
   else:
-    lista_ids_com = obj_comentario.busca_por_autor(id_autor)
-    if len(lista_ids_com) == 0:
+    com_ids = obj_comentario.busca_por_autor(autor_id)
+    if len(com_ids) == 0:
       # Argumentos com erro ou não encontrou nada.
       erros.append("Usuário não tem nenhum comentário")
       ht_conteudo = None
@@ -46,11 +46,11 @@ def processa(ses, cmd_args):
       if autor == usr_ses:
         ht_titulo = html_bloco_titulo.gera("Meus comentários")
       else:
-        ht_titulo = html_bloco_titulo.gera(f"Comentários do usuário {id_autor}")
+        ht_titulo = html_bloco_titulo.gera(f"Comentários do usuário {autor_id}")
       ms_autor = False # Pois todos do mesmo autor.
       ms_video = True  # Podem ser de videos diferentes.
       ms_pai = True    # Podem ter pais diferentes.
-      ht_tabela = html_bloco_lista_de_comentarios.gera(lista_ids_com, ms_autor, ms_video, ms_pai)
+      ht_tabela = html_bloco_lista_de_comentarios.gera(com_ids, ms_autor, ms_video, ms_pai)
       ht_conteudo = \
         ht_titulo + "<br/>\n" + \
         ht_tabela

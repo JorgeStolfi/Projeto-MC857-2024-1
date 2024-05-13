@@ -11,7 +11,7 @@ db_conexao = None
   # Os métodos deste objeto permitem acessar a base no disco."""
   
 db_debug = False
-  # Quando {True}, mostra comandos e resultados em {stderr}.
+  # Quando {True}, mostra comandos SQL e resultados em {stderr}.
 
 # IMPLEMENTAÇÔES
 
@@ -178,13 +178,13 @@ def executa_comando_TABLE_EXISTS(nome_tb):
     return msg
 
 def codifica_valor(val):
-  # !!! (MAIS TARDE) Deveria proteger caracteres especiais em {val}, como ';'. !!!
   global db_conexao
   if val == None:
     return "NULL"
   elif type (val) is int:
     return str(val)
   elif type(val) is str:
+    # !!! Precisa proteger caracteres especiais em {val}, como [']. !!!
     return "'" + val + "'"
   elif type(val) is float:
     return ("%.2f" % val)

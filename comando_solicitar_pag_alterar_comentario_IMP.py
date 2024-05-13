@@ -1,43 +1,49 @@
 import html_pag_alterar_comentario
 import html_pag_mensagem_de_erro
 import obj_sessao
+import obj_usuario
 import obj_comentario
-from util_erros import erro_prog
-
-def _usuario_pode_acessar_comentario(ses, id_com):
-  usuario_eh_admin = obj_sessao.de_administrador(ses)
-  usuario_eh_autor_do_comentario = obj_sessao.obtem_identificador(ses) == obj_comentario.obtem_objeto(id_com)
-  return usuario_eh_admin or usuario_eh_autor_do_comentario
 
 def processa(ses, cmd_args):
-  erros = [ ].copy()
-  id_com = cmd_args['comentario'] if 'comentario' in cmd_args else None
   
-  # Valida a sessão do usuário
-  if (ses == None or not obj_sessao.aberta(ses)):
-    erros.append("Sessão inválida!")
+  # Validação de tipos (paranóia):
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert cmd_args != None and isinstance(cmd_args, dict)
+  
+  erros = []
+
+  # Obtem o comentário:
+  com_id = cmd_args.get('comentario', None)
+  if com_id == None:
+    erros.append("O comentário a editar não foi especificado!")
+    com = None
   else:
-    # Valida se o comentário é informado para acessar a página
-    if (id_com == None):
-      erros.append("Um comentário deve ser especificado!")
-    # Valida se o comentário existe
-    elif (obj_comentario.obtem_objeto(id_com) == None):
-      erros.append("O comentário não existe!")
-    # Valida se o usuário tem permissões para editar o comentário
-    elif (not _usuario_pode_acessar_comentario(ses, id_com)):
-      erros.append("O usuário não pode editar esse comentário!")
+    com = obj_comentario.obtem_objeto(com_id)
+    if com == None:
+      erros.append(f"O comentário {com_id} não existe")
+  
+  # Valida a sessão do usuário, obtem o dono, verifica permissão:
+  ses_dono = None
+  pode_alterar = False
+  if ses == None:
+    erros.append("Não pode editar comentários sem fazer login")
+  elif not obj_sessao.aberta(ses):
+    erros.append("Esta sessão de login já foi encerrada")
+  elif com != None:
+    ses_dono = obj_sessao.obtem_dono(ses)
+    ses_admin = obj_usuario.eh_administrador(ses_dono)
+    com_autor = obj_comentario.obtem_atributo(com, 'autor')
+    assert com_autor != None
+    pode_alterar = ses_admin or com_autor == ses_dono
+    if not pode_alterar:
+      erros.append("Você não tem permissão para editar este comentário")
   
   if len(erros) > 0:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
   else:
-    comentario_classe = obj_comentario.obtem_atributos(obj_comentario.obtem_objeto(id_com))
-    dados_comentario_atual = {
-      'video': comentario_classe['video'],
-      'autor': comentario_classe['autor'],
-      'data': comentario_classe['data'],
-      'texto': comentario_classe['texto'],
-      'pai': comentario_classe['pai'],
-    }
-    pag = html_pag_alterar_comentario.gera(ses, id_com, dados_comentario_atual, None)
+    # Obtem os atributos atuais do comemtário:
+    assert com != None
+    com_atrs = obj_comentario.obtem_atributos(com)
+    pag = html_pag_alterar_comentario.gera(ses, com, com_atrs, None)
   return pag
     

@@ -88,4 +88,4 @@ testa_unico_elemento("u4_muitos", idents5u, "ErroAtrib")
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

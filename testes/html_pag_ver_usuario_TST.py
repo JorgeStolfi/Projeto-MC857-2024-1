@@ -28,7 +28,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = False  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -38,7 +38,7 @@ sesA1 = obj_sessao.obtem_objeto(sesA1_id)
 assert sesA1 != None
 assert obj_sessao.aberta(sesA1)
 assert obj_sessao.de_administrador(sesA1)
-usrA1 = obj_sessao.obtem_usuario(sesA1)
+usrA1 = obj_sessao.obtem_dono(sesA1)
 usrA1_id = obj_usuario.obtem_identificador(usrA1)
 assert usrA1_id == "U-00000008"
 
@@ -48,7 +48,7 @@ sesC1 = obj_sessao.obtem_objeto(sesC1_id)
 assert sesC1 != None
 assert obj_sessao.aberta(sesC1)
 assert not obj_sessao.de_administrador(sesC1)
-usrC1 = obj_sessao.obtem_usuario(sesC1)
+usrC1 = obj_sessao.obtem_dono(sesC1)
 usrC1_id = obj_usuario.obtem_identificador(usrC1)
 assert usrC1_id == "U-00000002"
 
@@ -63,15 +63,15 @@ for tag, erros in (
     ("V", []),
     ("E", ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",])
   ):
-  for id_ses in None, sesA1_id, sesC1_id:
-    for id_usr in usrC1_id, usrC2_id, usrA1_id:
-      if id_ses != None or id_usr != None:
-        rot_teste = tag + "-ses" + str(id_ses) + "-usr" + str(id_usr)
-        ses = obj_sessao.obtem_objeto(id_ses) if id_ses != None else None
-        usr = obj_usuario.obtem_objeto(id_usr) if id_usr != None else None
+  for ses_id in None, sesA1_id, sesC1_id:
+    for usr_id in usrC1_id, usrC2_id, usrA1_id:
+      if ses_id != None or usr_id != None:
+        rot_teste = tag + "-ses" + str(ses_id) + "-usr" + str(usr_id)
+        ses = obj_sessao.obtem_objeto(ses_id) if ses_id != None else None
+        usr = obj_usuario.obtem_objeto(usr_id) if usr_id != None else None
         testa_gera(rot_teste,  str, ses, usr, erros)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

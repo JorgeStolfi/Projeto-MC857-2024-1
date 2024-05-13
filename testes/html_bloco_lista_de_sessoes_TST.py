@@ -24,7 +24,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True     # Resultado é só um fragmento de página?
   pretty = False  # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -32,11 +32,12 @@ sessoes = ["S-00000001", "S-00000002", "S-00000003"]
 
 for ver in (False, True):
   for fechar in (False, True):
-    tag = "ver" + str(ver)[0] + "-fechar" + str(fechar)[0] 
-    testa_gera("muitas-" + tag, str, sessoes, ver, fechar)
-    testa_gera("lhufas-" + tag, str, [],      ver, fechar)
+    for musr in False, True:
+      tag = "_ver" + str(ver)[0] + "_fechar" + str(fechar)[0] + "_musr" + str(musr)[0] 
+      testa_gera("muitas" + tag, str, sessoes, ver, fechar, musr)
+      testa_gera("lhufas" + tag, str, [],      ver, fechar, musr)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  aviso_erro("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam")

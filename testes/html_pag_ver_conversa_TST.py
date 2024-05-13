@@ -31,7 +31,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -48,7 +48,9 @@ com2 = obj_comentario.obtem_objeto(com2_id)
 titulo = html_bloco_titulo.gera("Fofocas")
 erros = [ "Cuidado com a cobra", "O silêncio é de ouro", ]
 raizes = [ com1_id, com2_id, ]
-conversa = obj_comentario.obtem_conversa(raizes)
+max_coms = 10
+max_nivel = 3
+conversa = obj_comentario.obtem_conversa(raizes, max_coms, max_nivel)
 
 testa_gera("C1", str, ses1, titulo, conversa, erros)
 

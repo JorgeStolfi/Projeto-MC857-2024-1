@@ -8,22 +8,27 @@ import html_pag_generica
 
 def gera(ses, atrs, erros):
 
-  # Estas condições deveriam ser garantidas para pedidos gerados pelo site:
-  assert ses != None and type(ses) is obj_sessao.Classe
-  assert obj_sessao.aberta(ses)
-  assert atrs == None or type(atrs) is dict
-  assert erros == None or type(erros) is list or type(erros) is tuple
-
-  # !!! Fazer funcionar !!!
+  # Validação de tipos (paranóia):
+  assert ses != None and isinstance(ses, obj_sessao.Classe), "Sessao inválida"
+  assert obj_sessao.aberta(ses), "Sessao já fechada"
+  assert atrs == None or isinstance(atrs, dict), "{atrs} inválido"
+  assert erros == None or isinstance(erros, list) or isinstance(erros, tuple), "{erros} inválido"
   
-  usr_ses = obj_sessao.obtem_usuario(ses)
+  # Obtém dono da sessão {ses}:
+  usr_ses = obj_sessao.obtem_dono(ses)
   assert usr_ses != None
   usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
+  para_admin = obj_usuario.eh_administrador(usr_ses)
   
-  autor_id = usr_ses_id
-  atrs_id = { }
+  atrs_pag = atrs.copy() if atrs != None else { }
   
-  ht_form = html_form_upload_video.gera(usr_ses_id, atrs_id)
+  # Garante atributos essenciais (paranóia):
+  if 'autor' in atrs_pag:
+    assert atrs_pag['autor'] == usr_ses_id
+  else:
+    atrs_pag['autor'] = usr_ses_id
+
+  ht_form = html_form_upload_video.gera(atrs_pag, para_admin)
   
   ht_conteudo = ht_form
 

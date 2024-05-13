@@ -15,12 +15,13 @@ def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio)
   if val_ini == None and obrigatorio and not editavel:
     erro_prog("rot_campo obrigatorio '%s' chave '%s': {val_ini} não pode ser {None} se o campo não é editável" % (rot_campo, chave))
   
-  if not editavel and val_ini != None:
-    # Gera um campo de texto simples seguido de um "hidden":
+  if tipo == "hidden" or editavel or val_ini == None:
+    # Gera apenas o "<input .../>":
+    ht_texto_simples = ""
+  else:
+    # Gera um campo de texto simples seguido de um "<input type='hidden'.../>":
     ht_texto_simples = str(val_ini)
     tipo = "hidden"
-  else:
-    ht_texto_simples = ""
   
   ht_tipo = " type =\"" + tipo + "\""
   ht_nome = " name=\"" + chave + "\""

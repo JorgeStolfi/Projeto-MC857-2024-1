@@ -102,4 +102,4 @@ do_various_tests("  > testes com tabela destruída")
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

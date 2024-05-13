@@ -27,7 +27,7 @@ def testa_processa(rot_teste, res_esp, *args):
   funcao = modulo.processa
   frag = False  
   pretty = True 
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -38,7 +38,7 @@ ses = obj_sessao.obtem_objeto(ses_id)
 # Obtém um usuário administrador
 #admin = obj_video.obtem_objeto("U-00000001")
 #assert obj_video.obtem_atributo(admin, 'administrador')
-#ses_admin = obj_sessao.cria(admin, "NOPQRSTUVWX")
+#ses_A = obj_sessao.cria(admin, "NOPQRSTUVWX")
 
 testa_processa("NL-e0",  str, None, None)
 #testa_processa("NA-e2",  str, ses_comum, ["banana", "abacate"])
@@ -50,5 +50,5 @@ testa_processa("OK-e0",  str, ses, None)
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  #aviso_erro("Alguns testes falharam")
+  #aviso_prog("Alguns testes falharam")
   erro_prog("Alguns testes falharam")

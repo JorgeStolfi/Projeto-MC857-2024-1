@@ -16,13 +16,13 @@ def processa(ses, cmd_args):
   arquivo carregado, com chave 'arquivo'.
   
   O autor deve ser o dono da sessão {ses}. O título deve ser um string
-  que satisfaz certas restrições; veja {util_valida_campo.titulo_de_video}. 
+  que satisfaz certas restrições; veja {util_titulo_de_video.valida}. 
   O arquivo deve ser uma sequência de bytes binários, supostamente um 
   vídeo codificado no formato MPEG-4.
   
   Se tudo correr bem, o identificador do vídeo será "V-{NNNNNNNN}" onde
   {NNNNNNNN} é o número de vídeos já inseridos, mais um. Esta função vai
-  gravar o conteúdo do vídeo no arquivo "videos/{id_vid}.mp4" e criar o
+  gravar o conteúdo do vídeo no arquivo "videos/{vid_id}.mp4" e criar o
   novo objeto de tipo {obv_video.Classse} correspondente, registrando o
   mesmo na tabela "videos" da base de dados. A data de upload (atributo
   'data') será a data corrente.

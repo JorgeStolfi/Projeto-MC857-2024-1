@@ -1,10 +1,14 @@
 #! /usr/bin/python3
 
-import sys
 import util_identificador
+import util_testes
 from util_erros import ErroAtrib, erro_prog, mostra
+import sys, re
 
 ok_global = True  # Vira {False} se houver erro.
+
+# ======================================================================
+# Testa funções de conversão simples:
 
 def testa_funcoes_de_para_indice(rot_teste, let, indice, ident):
   """Testa as funções {util_identificador.de_indice(let,indice)} e 
@@ -54,7 +58,8 @@ indice1 = 123456
 ident1 = "X-00123456"
 testa_funcoes_de_para_indice("id_A", let1, indice1, ident1)
 
-# ----------------------------------------------------------------------
+# ======================================================================
+# Testa funções de conversão de listas:
 
 def testa_funcao_de_lista_de_indices(rot_teste, let, indices, idents):
   """Testa a função {util_identificador.de_lista_de_indices} na lista de inteiros {indices},
@@ -104,6 +109,32 @@ let3L = "Q"
 indices3L = None
 idents3L = ()
 testa_funcao_de_lista_de_indices("id_3L", let3L, indices3L, idents3L)
+
+
+# ======================================================================
+# Testa função de validação:
+
+modulo = util_identificador
+funcao = modulo.valida
+chave = 'produto'
+for letra in "C", "ZZ":
+  for num in "-00000000", "-000000001", "-99999999", "-0123456", "0123456789", "-0123X567" "_01234567", " -01234567", "- 01234567":
+    for val in f"{letra}{num}", f"Z{num}", None, 418:
+      for nulo_ok in ( False, True ) if ( val == None or val == "C-00000000" ) else ( False, ):
+        if (val != None and val != 418) or (num == "-00000000" and letra == "C"):
+          rot_teste = "ident_val" + str(val) + "_" + letra + "_nuok" + str(nulo_ok)[0]
+          rot_teste = re.sub(r' ', "%20", rot_teste)
+          if val == None:
+            valido = nulo_ok
+          elif type(val) is not str:
+            valido = False
+          else:
+            valido = \
+              re.match(r"^[A-Z]$", letra) and \
+              re.match(r"^[A-Z][-][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$", val) and \
+              val[0] == letra
+          ok = util_testes.testa_funcao_validadora(rot_teste, valido, modulo, funcao, chave, val, letra, nulo_ok)
+          if not ok: ok_global = False
 
 # ----------------------------------------------------------------------
 # Veredito final:

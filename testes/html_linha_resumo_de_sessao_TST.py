@@ -33,22 +33,23 @@ def testa_gera(rot_teste, res_esp, *args):
   res = funcao(*args)
   assert type(res) is tuple or type(res) is list
   for campo in res:
-    assert type(campo) is str
+   assert type(campo) is str
 
   # Teste da função {gera} HTML
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
 # Testes
-testa_gera("F_F",  list, ses, False, False)
-testa_gera("F_T",  list, ses, False, True)
-testa_gera("T_F",  list, ses, True,  False)
-testa_gera("T_T",  list, ses, True,  True)
+for bt_ver in False, True:
+  for bt_fechar in False, True:
+    for mostrar_usr in False, True:
+      rot_teste = "R" + f"_brv{str(bt_ver)[0]}" + f"_btf{str(bt_fechar)[0]}" + f"_mus{str(mostrar_usr)[0]}"
+      testa_gera(rot_teste,  list, ses, bt_ver, bt_fechar, mostrar_usr)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

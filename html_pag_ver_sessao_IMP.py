@@ -4,15 +4,15 @@ import html_bloco_dados_de_sessao
 import html_elem_form
 import obj_sessao
 
-def gera(ses, ses_a_ver, erros):
-  # Não gera a página de sessão se algum erro for detectado:
-  if (erros != None and len(erros) != 0):
-    return html_pag_generica.gera(ses, '', erros)
+def gera(ses_login, ses_a_ver, erros):
 
-  ht_bloco_ses = html_bloco_dados_de_sessao.gera(ses_a_ver)
+  editavel = False
+  para_admin = obj_sessao.de_administrador(ses_login)
+  para_proprio = ( obj_sessao.obtem_dono(ses_login) ==  obj_sessao.obtem_dono(ses_a_ver) )
+  ht_bloco_ses = html_bloco_dados_de_sessao.gera(ses_a_ver, editavel, para_admin, para_proprio)
 
-  # Somente gera botão para fechar a sessão caso o usuário da sessao atual seja administrador e a sessão selecionada esteja aberta
-  if (obj_sessao.de_administrador(ses) and obj_sessao.aberta(ses_a_ver)):
+  if ((para_admin or para_proprio) and obj_sessao.aberta(ses_a_ver)):
+    # O usuário pode fechar a sessão:
     cmd_args = {}
     cmd_args['sessao'] = obj_sessao.obtem_identificador(ses_a_ver)
     fecha_btn = html_elem_button_simples.gera('Fechar sessão', 'fechar_sessao', cmd_args, '#FF7700')

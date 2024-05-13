@@ -7,19 +7,19 @@ import sys
 def reshape(image,size):
   pass
 
-def gera(lista_ids_vid, mostra_autor):
+def gera(vid_ids, mostra_autor):
   
   # Linhas da tabela:
-  linhas = [].copy()
+  linhas = []
   
   cabecalhos = html_linha_resumo_de_video.gera(None, mostra_autor)
   linhas.append(cabecalhos)
   
-  for id_vid in lista_ids_vid:
+  for vid_id in vid_ids:
     # busca por identificador do video no banco
-    vid = obj_video.obtem_objeto(id_vid)
+    vid = obj_video.obtem_objeto(vid_id)
 
-    thumb = f'/thumbs/{id_vid}.png'
+    thumb = f'/thumbs/{vid_id}.png'
 
     vid.atrs.update({'thumb':thumb})
    

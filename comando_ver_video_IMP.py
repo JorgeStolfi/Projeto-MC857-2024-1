@@ -10,17 +10,17 @@ def processa(ses, cmd_args):
   assert ses == None or obj_sessao.aberta(ses), "Sessão inválida"
   assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
   
-  erros = [].copy()
+  erros = []
 
   # Obtém o vídeo {vid}:
-  id_vid = cmd_args['video'] if 'video' in cmd_args else None
+  vid_id = cmd_args['video'] if 'video' in cmd_args else None
   if 'video' == None:
     erros.append("O identificador do vídeo não foi especificado")
     vid = None
   else:
-    vid = obj_video.obtem_objeto(id_vid)
+    vid = obj_video.obtem_objeto(vid_id)
     if vid == None:
-      erros.append(f"O vídeo {id_vid} não existe")
+      erros.append(f"O vídeo {vid_id} não existe")
   
   if vid == None:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)

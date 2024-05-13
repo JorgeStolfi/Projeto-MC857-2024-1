@@ -1,7 +1,7 @@
 # Implementação do módulo {util_identificador}.
 
-import sys
 from util_erros import erro_prog
+import sys, re
 
 def de_indice(let, indice):
   assert type(let) is str and len(let) == 1
@@ -18,7 +18,7 @@ def para_indice(let, id_obj):
   return indice
 
 def de_lista_de_indices(let, lista_indices):
-  lista_ids_obj = [].copy()
+  lista_ids_obj = []
   if lista_indices != None:
     assert type(lista_indices) is tuple or type(lista_indices) is list
     # Resultado deve ser uma lista de tuplas, cada uma contendo apenas um índice:
@@ -31,3 +31,17 @@ def de_lista_de_indices(let, lista_indices):
     return lista_ids_obj
   else:
     erro_prog("tipo de " + str(lista_indices) + " inválido")
+  
+def valida(chave, val, letra, nulo_ok):
+  erros = []
+  if val == None:
+    if not nulo_ok: erros.append(f"campo '{chave}' não pode ser omitido")
+  elif not isinstance(val, str):
+    erros.append(f"campo '{chave}' tem tipo inválido {type(val)}")
+  else:
+    n = len(val)
+    if n >= 1 and val[0] != letra:
+      erros.append(f"campo '{chave}' = \"{val}\" não é identificador válido: deve comecar com {letra}")
+    if not re.match(r'^-[0-9]{8}$', val[1:]):
+      erros.append(f"campo '{chave}' = \"{val}\" não é identificador válido: deve ser \"{letra}-\" e oito algarismos")
+  return erros

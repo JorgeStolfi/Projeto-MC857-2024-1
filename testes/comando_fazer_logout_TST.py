@@ -28,13 +28,13 @@ def testa_processa(rot_teste, res_esp, *args):
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
 # Testa logout com uma sessao nao ativa
 ses = None
-testa_processa("Erro", tuple, ses, {})
+testa_processa("Erro", ( str, obj_sessao.Classe, ), ses, {})
 assert ses == None
 
 # Testa logout com uma sessao ativa
@@ -42,11 +42,10 @@ ses = obj_sessao.obtem_objeto("S-00000001")
 assert ses != None
 assert obj_sessao.aberta(ses)
 
-testa_processa("Ok",  str, ses, {})
+testa_processa("Ok", ( str, obj_sessao.Classe, ), ses, {})
 assert not obj_sessao.aberta(ses)
-
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

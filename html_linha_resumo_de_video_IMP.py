@@ -50,8 +50,9 @@ def gera(vid, mostra_autor):
       elif nota == -1: # Nota default
         texto = "🤔"
     elif chave == 'thumb':
+      thumb_file = "thumbs/{vid_id}.png"
       mostra=True
-      texto = html_elem_link_img.gera(atrs[chave],None,40,None)
+      texto = html_elem_link_img.gera(thumb_file, None, 40, None)
     else:
       mostra = True
       texto = atrs[chave] if vid != None else chave.capitalize()

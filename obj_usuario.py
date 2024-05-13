@@ -87,6 +87,12 @@ def obtem_identificador(usr):
   Dá erro se {usr} é {None}."""
   return obj_usuario_IMP.obtem_identificador(usr)
 
+def obtem_objeto(usr_id):
+  """Localiza um usuario com identificador {usr_id} (uma string da forma
+  "U-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_usuario.Classe}.
+  Se {usr_id} é {None} ou tal usuário não existe, devolve {None}."""
+  return obj_usuario_IMP.obtem_objeto(usr_id)
+
 def obtem_atributos(usr):
   """Retorna um dicionário Python que é uma cópia dos atributos do usuário,
   exceto identificador. Dá erro se {usr} é {None}."""
@@ -97,11 +103,9 @@ def obtem_atributo(usr, chave):
   Equivale a {obtem_atributos(usr)[chave]}"""
   return obj_usuario_IMP.obtem_atributo(usr, chave)
 
-def obtem_objeto(id_usr):
-  """Localiza um usuario com identificador {id_usr} (uma string da forma
-  "U-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_usuario.Classe}.
-  Se {id_usr} é {None} ou tal usuário não existe, devolve {None}."""
-  return obj_usuario_IMP.obtem_objeto(id_usr)
+def eh_administrador(usr):
+  """Equivale a {obtem_atributo(usr,'administrador')}"""
+  return obj_usuario_IMP.eh_administrador(usr)
 
 def busca_por_email(em):
   """Localiza um usuário cujo endereço de email é {em} (um string da forma
@@ -144,104 +148,35 @@ def ultimo_identificador():
 # UTILIDADES
 
 def confere_e_elimina_conf_senha(args):
-  """Se o campo 'senha' está em {args}, exige o campo
-  'conf_senha' com mesmo valor.  Em caso de erro, 
-  levanta a exceção {ErroAtrib} com uma lista de mensagens
-  de erro.  Senão, remove o campo 'conf_senha' de {atrs}
-  e retorna sem resultado.
+  """
+  Se pelo menos um dos campos 'senha' e 'conf_senha' estão presentes
+  em {args} e seu valor não é {None}, exige que os dois
+  tenham o mesmo valor.
+  
+  Em caso de erro, a função retorna uma lista não vazia de mensagens de
+  erro. Senão retorna uma lista vazia.
+  
+  Em qualquer caso, esta função remove o campo 'conf_senha' de {atrs}.
   
   Esta função é útil para processar comandos de 
-  cadastrar novo usuário ou alterar dados de usuário."""
+  cadastrar novo usuário ou alterar dados de usuário.
+  """
   return obj_usuario_IMP.confere_e_elimina_conf_senha(args)
 
 # FUNÇÕES PARA DEPURAÇÃO
 
-def verifica_criacao(usr, id_usr, atrs):
+def verifica_criacao(usr, usr_id, atrs):
   """Faz testes de consistência básicos de um objeto {usr} de classe 
   {obj_usuario.Classe}.  Tipicamente usada para testar a função {cria}
   
   Especificamente, testa se {obtem_identificador(usr)} devolve
-  o identificador esperado {id_usr}, {obtem_atributos(usr)} devolve 
-  os atributos esperados {atrs}, e {obtem_objeto(id_usr)}
+  o identificador esperado {usr_id}, {obtem_atributos(usr)} devolve 
+  os atributos esperados {atrs}, e {obtem_objeto(usr_id)}
   devolve o próprio {usr}.
   
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
-  return obj_usuario_IMP.verifica_criacao(usr, id_usr, atrs)
-
-def valida_nome(chave, val, nulo_ok, parcial):
-  """
-  Verifica a validade de um string {val} que vai ser o atributo 'nome' 
-  de um usuário (se {parcial} for {False}) ou uma parte do nome 
-  que vai ser usada numa busca de usuários.
-  
-  O parâmetro {val} deve ter nomáximo 60 caracteres, e no mínimo 6 se
-  completo ou 3 se parcial. São permitidas apenas letras acentuadas do
-  conjunto ISO-Latin-1, brancos (ASCII octal 040), hífens (055), pontos
-  (056), e apóstrofes (047). Além disso as seguintes regras devem ser
-  obedecidas para a validação de um nome completo ({parcial == False}):
-  
-    * (C) O nome deve começar com letra maiúscula.
-    * (C) O nome deve terminar com letra maiúscula ou minúscula.
-    
-    * (T) Cada ponto deve seguir uma letra maiúscula ou minúscula.
-    * (T) Cada ponto deve ser seguido por um branco.
-    * (T) Cada apóstrofe deve seguir uma letra maiúscula ou minúscula.
-    * (T) Cada apóstrofe deve ser seguido por uma letra maiúscula.
-    * (T) Cada hífen deve seguir um ponto ou uma letra maiúscula ou minúscula.
-    * (T) Cada hífen deve ser seguido por uma letra maiúscula.
-    * (T) Cada branco deve ser seguido de uma letra maiúscula ou minúscula.
-    
-  Estas regras excluem nomes como "José M.'Souza", "Pedro L- Smith",
-  "João M.", "Maria Costa", etc. Em particular, elas implicam que
-  qualificadores finais como "Júnior", "Junior", "Neto", etc não podem
-  ser abreviados ("Jr.", "Nt.", etc.).
-  
-  Se {parcial} é {True}, {val} pode ser uma substring de um nome válido.
-  Assim, nesse caso as regras marcadas com (C) não são exigidas, e
-  as regras marcadas com (T) são consideradas satisfeitas se o caractere
-  anterior ou seguinte não existe.  Por exemplo, numa busca parcial 
-  {val} pode ser "-Gravas", "José P.", "'Hara", "fina " (com branco final),
-  etc.  
-  
-  Note a distinção entre maoúsculas e minúsculas é sempre relevante para
-  a verificação das regras acima, mesmo que na busca em si ela venha a 
-  ser ignorada.
-  """
-  return obj_usuario_IMP.valida_nome(chave, val, nulo_ok, parcial)
-  
-def valida_senha(chave, val, nulo_ok):
-  """O valor {val} deve ser uma cadeia de caracteres visíveis do conjunto ASCII,
-  no intervalo [!-~].  Não pode ter letras acentuadas ou outros caracters
-  Unicode, como "¿" ou "♫".  Deve ter no mínimo 8 e no máximo 14 caracters,
-  e conter pelo menos uma letra, um dígito, e um caracter que não é nem 
-  letra nem dígito."""
-  return obj_usuario_IMP.valida_senha(chave, val, nulo_ok)
-
-def valida_email(chave, val, nulo_ok):
-  """
-  O valor {val} deve ser um endereço de email válido segundo 
-  as especificações IETF RFC 5322 (seções 3.2.3 e 3.4.1) e RFC 5321,
-  com restrições adicionais. 
-  
-  Especificamente, {val} deve ter a forma "{usuario}@{dominio}".
-  
-  O {usuario} deve ter pelo menos 1 e no máximo 64 caracteres ASCII, que
-  podem ser [A-Za-z0-9.%'/-]. Não pode começar nem terminar com "." e
-  não pode ter dois ou mais pontos seguidos (ou seja, nem ".Alfa", nem
-  "Omega.", nem "Alfa..Omega" são {usuario}s válidos).
-  
-  O {dominio} deve ter comprimento total máximo 255, e deve consistir de
-  uma ou mais partes, separadas por pontos. Cada parte deve ter no
-  mínimo 1 e no máximo 63 caracteres, consistindo de letras, dígitos, ou
-  hífens [A-Za-z0-9-], e não pode nem começar nem terminar com hífen. A
-  última parte não pode ser só dígitos.
-  and segundo >= 0
-  A forma estendida "José Silva <jose@bat.com>" não é permitida.
-  """
-  return obj_usuario_IMP.valida_email(chave, val, nulo_ok)
-
-
+  return obj_usuario_IMP.verifica_criacao(usr, usr_id, atrs)
 
 def cria_testes(verb):
   """Limpa a tabela de usuários com {inicializa(True)}, e cria pelo menos três usuários

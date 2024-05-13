@@ -28,32 +28,71 @@ def testa_processa(rot_teste, res_esp, *args):
   funcao = modulo.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
-ses_admin = obj_sessao.obtem_objeto("S-00000001")
-ses_comum = obj_sessao.obtem_objeto("S-00000003")
+# Uma sessão de administrador, aberta:
+ses_A_id = "S-00000001"
+ses_A = obj_sessao.obtem_objeto(ses_A_id)
+assert ses_A != None
+assert obj_sessao.aberta(ses_A)
+usr_A = obj_sessao.obtem_dono(ses_A)  # U-00000001.
+assert obj_usuario.eh_administrador(usr_A)
 
-# Testa erro de sessão inválida
-testa_processa(" str, sessaoInvalida",  str, None, {})
+# Uma sessão de usuário comum, aberta:
+ses_C_id = "S-00000005"
+ses_C = obj_sessao.obtem_objeto(ses_C_id)
+assert ses_C != None
+assert obj_sessao.aberta(ses_C)
+usr_C = obj_sessao.obtem_dono(ses_C) # U-00000005.
+assert not obj_usuario.eh_administrador(usr_C)
+ 
+# Uma sessão já fechada:
+ses_F_id = "S-00000003"
+ses_F = obj_sessao.obtem_objeto(ses_F_id)
+assert ses_F != None
+obj_sessao.fecha(ses_F)
+assert not obj_sessao.aberta(ses_F)
 
-# Testa erro de comentário não especificado
-testa_processa("comentarioNaoEspecificado",  str, ses_admin, {})
+# Um comentário de {usr_C}:
+com_C_id = "C-00000012"
+com_C = obj_comentario.obtem_objeto(com_C_id)
+assert com_C != None
+com_C_autor = obj_comentario.obtem_atributo(com_C, 'autor')
+assert com_C_autor == usr_C
 
-# Testa erro de comentário não existente
-id_comentario_nao_existente = 'C-01010101'
-testa_processa("comentarioNaoExistente",  str, ses_admin, { 'comentario': id_comentario_nao_existente })
+# Um comentário de outro usuário:
+com_T_id = "C-00000010"
+com_T = obj_comentario.obtem_objeto(com_T_id)
+assert com_T != None
+com_T_autor = obj_comentario.obtem_atributo(com_T, 'autor')
+assert com_T_autor != usr_C
+assert com_T_autor != usr_A
 
-# Testa erro de permissão para alterar comentário
-id_comentario_outro_usuario = 'C-00000001'
-testa_processa("usuarioSemPermissao",  str, ses_comum, { 'comentario': id_comentario_outro_usuario })
+# Usuário não logado:
+testa_processa("BAD_sesNul",  str, None, { 'comentario': com_T_id })
 
-# Teste de gerar página para alterar um comentário
-id_comentario_existente = 'C-00000001'
-testa_processa("exibePaginaAlterarComentario",  str, ses_admin, { 'comentario': id_comentario_existente })
+# Sessão já fechada:
+testa_processa("BAD_sesOut",  str, ses_F, { 'comentario': com_T_id })
+
+# Comentário não especificado:
+testa_processa("BAD_comNul",  str, ses_A, {})
+
+# Comentario inexistente:
+com_X_id = "C-01010101"
+testa_processa("BAD_comInv",  str, ses_A, { 'comentario': com_X_id })
+
+# Usuário comum não é autor:
+testa_processa("BAD_DeOutro",  str, ses_C, { 'comentario': com_T_id })
+
+# Usuário comum é o autor:
+testa_processa("GUD_DoProprio",  str, ses_C, { 'comentario': com_C_id })
+
+# Administrador editando página de outro:
+testa_processa("GUD_peloAdm",  str, ses_A, { 'comentario': com_T_id })
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

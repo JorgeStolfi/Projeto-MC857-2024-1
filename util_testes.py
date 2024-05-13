@@ -43,7 +43,11 @@ def escreve_resultado_html(modulo, funcao, rot_teste, ht_res, frag, pretty):
 
 def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
   """
-  Chama a {funcao} com argumentos {(*args)}.
+  Este procedimento pode ser usada em programas {*_TST.py} para 
+  testar uma função {funcao} (por exemplo, {obj_usuario.obtem_objeto})
+  de um módulo {modulo} (no caso, {obj_usuario}).
+  
+  Mais precisamente, este procedimento chama a {funcao} com argumentos {(*args)}.
   Compara resultado com {res_esp}. Se bater, escreve "CONFERE!" em {stderr} e devolve
   {True}, senão escreve "** " seguido de mensagem de erro, e devolve {False}.
   
@@ -70,9 +74,47 @@ def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
   """
   return util_testes_IMP.testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args)
 
-def testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args):
+def testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args):
   """Equivale a {testa_funcao} com o parâmetro {html} fixo em {True}."""
-  return util_testes_IMP.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  return util_testes_IMP.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
+
+def testa_funcao_validadora(rot_teste, valido, modulo, funcao, *args):
+  """
+  Testa uma função {funcao} do {modulo} especificado
+  que supostamente verifica a validade de algum dado.
+  
+  Este procedimento, chama a {funcao} com argumentos {*args}, e verifica o resultado.
+  Se {valido} é {True}, espera que o resultado seja uma lista vazia; 
+  se {valido} é {False}, espera uma lista de uma ou mais strings. 
+  Também escreve o resultado, convertido para HTML, na pasta 
+  "saida", arquivo "{modulo}.{funcao}.{rot_teste}.html".
+  
+  Devolve {True} se o teste deu certo, {False} caso contrário.
+  """
+  return util_testes_IMP.testa_funcao_validadora(rot_teste, valido, modulo, funcao, *args)
+  
+def testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val):
+  """
+  Usa {testa_funcao_validadora(rot_teste,valido,modulo,funcao,...)} para testar
+  {funcao(chave,valm,nulo_ok,padrao_ok)} variando {nulo_ok} e
+  {padrao_ok} por {Flase,True} onde {valm} é {val} ou "*{val}*" (este
+  último só se {val != None}).
+  
+  Se {val} é {None}, a funcao deve dizer que é válido se e somente se 
+  {nulo_ok} for {True}, independente de {padrao_ok}
+
+  Se {val} não é {None} e {valido_ex} é {True}, a {funcao} deve aceitar 
+  {val} independentemente de {padro_ok}.
+  
+  Se {val} não é {None} e {valido_pt} é {True}, a funcao deve acitar "*{val}*"
+  deve ser válido se e somente se {padrao_ok} é {True}.
+
+  Monta o rótulo do teste a partir de {xrot} outros parametros.
+  
+  Devolve {True} se o teste deu certo, {False} caso contrário.
+  """
+  return util_testes_IMP.testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val)
+
 
 # FORMATAÇÃO DE DADOS PARA DEPURAÇÃO
 

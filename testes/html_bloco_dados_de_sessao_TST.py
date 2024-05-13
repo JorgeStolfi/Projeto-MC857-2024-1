@@ -29,16 +29,21 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
 # Testes do modulo:
-ses1 = obj_sessao.obtem_objeto("S-00000001")
+ses1_id = "S-00000001"
+ses1 = obj_sessao.obtem_objeto(ses1_id)
 assert ses1 != None
-testa_gera("S",  str, ses1)
+
+for para_admin in False, True:
+  for para_proprio in False, True:
+    rot_teste = "S" + f"_adm{str(para_admin)[0]}" + f"_pro{str(para_proprio)[0]}"
+    testa_gera(rot_teste,  str, ses1_id, para_admin, para_proprio)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

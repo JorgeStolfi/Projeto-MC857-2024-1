@@ -21,8 +21,8 @@ def processa(ses, cmd_args):
   dados do comentário {com}. Veja {html_pag_alterar_comentario.gera}.
   Alguns atributos do comentário (como o autor e data) serão exibidos
   mas não poderão ser ser alterados, nem mesmo pelo administrador. A
-  página terá um botão de submissão "Confirmar" ou equivalente que emite
-  um comando HTTP "alterar_comentario".
+  página terá um botão de submissão "Salvar", "Confirmar" ou equivalente
+  que emite um comando HTTP "alterar_comentario".
   """
   return comando_solicitar_pag_alterar_comentario_IMP.processa(ses, cmd_args)
 

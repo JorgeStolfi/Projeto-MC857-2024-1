@@ -24,11 +24,11 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True     # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
  
-ids_comentarios = [
+com_ids = [
   "C-00000001",
   "C-00000002",
   "C-00000003",
@@ -44,10 +44,10 @@ for ms_autor in False, True:
   for ms_video in False, True:
     for ms_pai in False, True:
       xargs = f"_aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}"
-      testa_gera("muitas" + xargs, str, ids_comentarios, ms_autor, ms_video, ms_pai)
+      testa_gera("muitas" + xargs, str, com_ids, ms_autor, ms_video, ms_pai)
       testa_gera("lhufas" + xargs, str, [],              ms_autor, ms_video, ms_pai)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  aviso_erro("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam")

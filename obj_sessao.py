@@ -14,7 +14,7 @@ class Classe(obj_sessao_IMP.Classe_IMP):
   Por enquanto, o dicionário de atributos de um objeto desta classe
   (vide {obtem_atributos} abaixo) contém os seguintes campos:
 
-    'usr'      {obj_usuario.Classe} O usuário cujo login criou a sessão.
+    'dono'     {obj_usuario.Classe} O usuário cujo login criou a sessão.
     'aberta'   {bool}               Estado da sessao.
     'cookie'   {str}                Cookie da sessao.
     'criacao'  {str}                Data da criação da sessão.
@@ -64,10 +64,10 @@ def inicializa_modulo(limpa):
   SQL, resetando o contador em 0."""
   obj_sessao_IMP.inicializa_modulo(limpa)
 
-def cria(usr, cookie):
+def cria(dono, cookie):
   """
   Cria um novo objeto da classe {obj_sessao.Classe}, associada ao
-  usuário {usr}, inicialmente aberta, com o cookie inicial {cookie}.
+  usuário {dono}, inicialmente aberta, com o cookie inicial {cookie}.
   Também acrescenta a sessão à base de dados.
   
   O campo 'criacao' do objeto será a data corrente no momento da chamada
@@ -77,7 +77,7 @@ def cria(usr, cookie):
   Em caso de sucesso, retorna o objeto. Caso contrário,
   levanta a exceção {ErroAtrib} com uma lista de mensagens de erro.
   """
-  return obj_sessao_IMP.cria(usr, cookie)
+  return obj_sessao_IMP.cria(dono, cookie)
 
 def muda_atributos(ses, atrs_mod):
   """Modifica alguns atributos do objeto {ses} da classe
@@ -110,11 +110,11 @@ def obtem_atributo(ses, chave):
   Dá erro se {ses} é {None}."""
   return obj_sessao_IMP.obtem_atributo(ses, chave)
 
-def obtem_usuario(ses):
+def obtem_dono(ses):
   """Retorna o objeto da classe {obj_usuario.Classe} correspondente ao usuario que
-  fez login na sessao {ses}.  Equivale a {obj_sessao.obtem_atributo(ses,'usr')}.
+  fez login na sessao {ses}.  Equivale a {obj_sessao.obtem_atributo(ses,'dono')}.
   Dá erro se {ses} é {None}."""
-  return obj_sessao_IMP.obtem_usuario(ses)
+  return obj_sessao_IMP.obtem_dono(ses)
 
 def aberta(ses):
   """Retorna o estado da sessão {ses}: {True} se a sessao ainda esta aberta,
@@ -140,23 +140,23 @@ def de_administrador(ses):
   devolve {False}."""
   return obj_sessao_IMP.de_administrador(ses)
 
-def obtem_objeto(id_ses):
-  """Localiza uma sessao com identificador {id_ses} (uma string da forma
+def obtem_objeto(ses_id):
+  """Localiza uma sessao com identificador {ses_id} (uma string da forma
   "S-{NNNNNNNN}"), e devolve a mesma na forma de um objeto da classe {obj_sessao.Classe}.
-  Se {id_ses} é {None} ou tal sessão não existe, devolve {None}."""
-  return obj_sessao_IMP.obtem_objeto(id_ses)
+  Se {ses_id} é {None} ou tal sessão não existe, devolve {None}."""
+  return obj_sessao_IMP.obtem_objeto(ses_id)
 
 def busca_por_campo(campo, val):
   """Localiza todas as sessões cujo atributo {campo} seja {valor}. Retorna a lista de ids
   dessas sessões."""
   return obj_sessao_IMP.busca_por_campo(campo, val)  
 
-def busca_por_usuario(usr, soh_abertas):
-  """Localiza todas as sessões do usuário com identificador {usr}.  
+def busca_por_dono(dono, soh_abertas):
+  """Localiza todas as sessões do usuário com identificador {dono}.  
   Se {soh_abertas} é {True}, considera apenas as sessões abertas.
   Retorna uma lista de identificadores dessas sessões.
-  Se {usr} é {None} ou não existem tais sessões, devolve uma lista vazia."""
-  return obj_sessao_IMP.busca_por_usuario(usr, soh_abertas)
+  Se {dono} é {None} ou não existem tais sessões, devolve uma lista vazia."""
+  return obj_sessao_IMP.busca_por_dono(dono, soh_abertas)
 
 def busca_por_semelhanca(args, unico):
   """Similar a {busca_por_campos}, mas aceita alguns valores na base de dados 
@@ -178,20 +178,20 @@ def ultimo_identificador():
 
 # DEPURAÇÂO
 
-def verifica_criacao(ses, id_ses, atrs):
+def verifica_criacao(ses, ses_id, atrs):
   """Faz testes de consistência básicos de um objeto {ses} de classe {obj_sessao.Classe}.
   Tipicamente usada para testar a função {cria}
   
   Especificamente, testa se {obtem_identificador(ses)} devolve
-  o identificador esperado {id_ses}, {obtem_atributos(ses)} devolve 
-  os atributos esperados {atrs}, e {obtem_objeto(id_ses)}
+  o identificador esperado {ses_id}, {obtem_atributos(ses)} devolve 
+  os atributos esperados {atrs}, e {obtem_objeto(ses_id)}
   devolve o próprio {ses}.
   
   Os atributos {atrs} NÃO devem incluir a data 'criacao'.
 
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
-  return obj_sessao_IMP.verifica_criacao(ses, id_ses, atrs)
+  return obj_sessao_IMP.verifica_criacao(ses, ses_id, atrs)
 
 def cria_testes(verb):
   """Limpa a tabela de sessoes com {inicializa(True)}, e cria três sessões

@@ -13,7 +13,7 @@ def gera(dados_linhas, atrs):
   if tbc_debug: sys.stderr.write("  > {html_bloco_tabela_de_campos_IMP.gera}: atrs = %s\n" %str(atrs))
 
   # Converte os dados brutos das linhas para fragmentos HTML:
-  linhas = [].copy()
+  linhas = []
   for rotulo, tipo, chave, editavel, dica in dados_linhas:
     val = (atrs[chave] if chave in atrs else None)
     ident = chave

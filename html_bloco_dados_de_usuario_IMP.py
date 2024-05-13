@@ -5,63 +5,78 @@ import obj_usuario
 import obj_sessao
 import html_elem_form
 
-def gera(id_usr, atrs, ses_admin, ses_proprio, readonly):
+def gera(usr_id, atrs, editavel, para_admin, para_proprio):
 
-  # Para simplificar
-  atrs = {}.copy() if atrs == None else atrs.copy()
+  # Validação de tipos (paranóia):
+  assert usr_id == None or isinstance(usr_id, str), "{usr_id} inválido"
+  assert atrs == None or isinstance(atrs, dict), "{atrs} inválido"
+  assert type(editavel) is bool, "{editavel} inválido"
+  assert type(para_admin) is bool, "{para_admin} inválido"
+  assert type(para_proprio) is bool, "{para_proprio} inválido"
   
-  # Acrescenta identificador do usuário:
-  atrs.update( { 'usuario': id_usr } )
+  if atrs == None: atrs = { }
+
+  # Obtem os atributos {atrs_tab} a mostrar:
+  if usr_id == None:
+    assert editavel, "Criacao tem que ser editável"
+    usr = None
+    atrs_tab = atrs.copy()
+  else:
+    if editavel: assert para_admin or para_proprio, "Não devia ser editavel"
+    usr = obj_usuario.obtem_objeto(usr_id)
+    assert usr != None, "Usuário não existe"
+    atrs_tab = obj_usuario.obtem_atributos(usr).copy()
+    atrs_tab.update(atrs)
   
   # Apaga a senha e contra-senha, se houverem:
   if 'senha' in atrs: atrs.pop('senha')
   if 'conf-senha' in atrs: atrs.pop('conf-senha')
-
-  edit = ses_admin or ses_proprio  # Atributos comuns devem ser editáveis.
-  edcri = id_usr == None or edit   # Mostre senha e email, editáveis
   
-  # Dados brutos para as linhas. Para cada linha, o rótulo, tipo do "<input>", nome do campo, e dica.
-  dados_linhas = [].copy()
+  # Linhas da tabela: 
+  dados_linhas = []
   
-  if id_usr != None:
+  if usr_id != None:
     # Mostra identificador do usuário como readonly:
+    atrs_tab['usuario'] =  usr_id
     dados_linhas.append( ( "Identificador", "text",  'usuario',  False, None, ) )
 
-  # Mostra sempre o nome:
-  dados_linhas.append( ( "Nome", "text", 'nome',  edcri and readonly, None, ) )
+  # Nome sempre aparece, possivelmente editável:
+  dados_linhas.append( ( "Nome", "text", 'nome',  editavel, None, ) )
 
-  if edcri:
-    # Mostra senha, conf-senha, e email, editáveis
-    dados_linhas.append( ( "E-mail",           "email",    'email',         readonly,      "xxx@xxx.xxx.xx", ) )
+  # Email aparece, possivelmente editável, só na criação ou para admin ou próprio:
+  if usr_id == None or para_admin or para_proprio:
+    dados_linhas.append( ( "E-mail", "email", 'email', editavel,  "xxx@xxx.xxx.xx", ) )
     
-  if ses_admin:
-    # Mostra atributo 'admnistrador', editável:
-    dados_linhas.append( ( "Administrador",    "checkbox", 'administrador', readonly, None ) )
+  # Senha, conf-senha sempre aparecem se usuário é editável:
+  if editavel:
+    dados_linhas.append( ( "Senha",            "password", 'senha',       True, None, ) )
+    dados_linhas.append( ( "Confirme senha",   "password", 'conf-senha',  True, None, ) )
+    
+  # Atributo 'administrador' sempre aparece, mas é editável só para administrador:
+  edt_admin = (editavel and para_admin)
+  dados_linhas.append( ( "Administrador", "checkbox", 'administrador', edt_admin, None ) )
 
-  ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
+  ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_tab)
 
-  # Acrescenta o botão "Ver sessões" se for o caso:
+  # Acrescenta botões para ver outras coisas do usuário, se for o caso:
+  ht_bt_alterar = None # A menos que tenha.
   ht_bt_sessoes = None # A menos que tenha.
   ht_bt_videos = None # A menos que tenha.
   ht_bt_comentarios = None # A menos que tenha.
-  ht_bt_alterar = None # A menos que tenha.
-  if id_usr != None:
-    # Somente admininstrador ou o próprio podem ver as sessões de {usr}:
-    if ses_admin or ses_proprio:
-      usr = obj_usuario.obtem_objeto(id_usr)
-      assert usr != None
-      if readonly:
-        ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_usuario", {'usuario': id_usr}, '#eeee55')
-      nab = len(obj_sessao.busca_por_usuario(usr, True))
-      if nab > 0 and not ses_proprio:
-        ht_bt_sessoes = html_elem_button_simples.gera(f"Ver sessões ({nab})", "buscar_sessoes_de_usuario", {'usuario': id_usr}, '#eeee55')
-
-    if not ses_proprio:
-      # Mas qualquer um pode ver os vídeos de {usr}
-      ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': id_usr}, '#eeee55')
-  
-      # Assim como qualquer um pode ver seus comentários
-      ht_bt_comentarios = html_elem_button_simples.gera(f"Ver comentarios", "buscar_comentarios_de_usuario", {'usuario': id_usr}, '#eeee55')
+  if usr_id != None:
+    cmd_args = {'usuario': usr_id}
+    if not editavel:
+      ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_usuario", cmd_args, '#eeee55')
+    if not para_proprio:
+      # Não tem estes botões no menu:
+      # Somente administrador ou o próprio podem ver as sessões de {usr}:
+      if para_admin:
+        nab = len(obj_sessao.busca_por_dono(usr, True))
+        if nab > 0 and not para_proprio:
+          ht_bt_sessoes = html_elem_button_simples.gera(f"Ver sessões ({nab})", "buscar_sessoes_de_usuario", cmd_args, '#eeee55')
+      # Mas qualquer um pode ver os vídeos e comentários de {usr}
+      ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': usr_id}, '#eeee55')
+      ht_bt_comentarios = html_elem_button_simples.gera(f"Ver comentarios", "buscar_comentarios_de_usuario", cmd_args, '#eeee55')
 
   ht_bloco = \
     ht_table + "<br/>" + \

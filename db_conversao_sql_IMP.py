@@ -75,7 +75,7 @@ def valor_SQL_para_valor_mem(nome, val_SQL, tipo_SQL, tipo_mem, nulo_ok, identif
 def dict_mem_para_dict_SQL(dic_mem, cols, falta_ok):
   if len(dic_mem) > len(cols):
     erro_prog("numero excessivo de atributos em " + str(dic_mem))
-  dic_SQL = {}.copy()
+  dic_SQL = {}
   for chave, tipo_mem, tipo_SQL, nulo_ok in cols:
     if chave in dic_mem:
       val_mem = dic_mem[chave]
@@ -93,7 +93,7 @@ def dict_mem_para_dict_SQL(dic_mem, cols, falta_ok):
 def dict_SQL_para_dict_mem(dic_SQL, cols, falta_ok, identificador_para_objeto):
   if len(dic_SQL) > len(cols):
     erro_prog("numero excessivo de atributos em " + str(dic_SQL))
-  dic_mem = {}.copy()
+  dic_mem = {}
   for chave, tipo_mem, tipo_SQL, nulo_ok in cols:
     if chave in dic_SQL: 
       val_SQL = dic_SQL[chave]

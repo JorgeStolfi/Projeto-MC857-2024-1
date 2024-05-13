@@ -35,7 +35,7 @@ def gera(ses, ht_conteudo, erros):
   ht_cabe = html_bloco_cabecalho.gera(titulo, True)
 
   # Menu geral no alto da página:
-  usr = obj_sessao.obtem_usuario(ses) if ses != None else None
+  usr = obj_sessao.obtem_dono(ses) if ses != None else None
   ht_menu = html_bloco_menu_geral.gera(usr)
 
   # Mensagens de erro, ou "":

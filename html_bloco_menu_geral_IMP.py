@@ -16,9 +16,9 @@ import sys
 bmu_debug = False
 
 def gera(usr):
-  usr_admin = obj_usuario.obtem_atributo(usr, 'administrador') if usr != None else False
+  usr_admin = obj_usuario.eh_administrador(usr) if usr != None else False
   
-  hts_linhas = [].copy()
+  hts_linhas = []
   
   # Mensagem de boas-vindas:
   hts_linhas.append(html_bloco_bemvindo.gera(usr))
@@ -58,9 +58,9 @@ def gera_botoes_de_busca(usr):
   if bmu_debug: sys.stderr.write("    > gera_botoes_de_busca\n")
 
   cor_bt_busca = "#eeccff"
-  usr_admin = obj_usuario.obtem_atributo(usr, 'administrador') if usr != None else False
+  usr_admin = obj_usuario.eh_administrador(usr) if usr != None else False
 
-  hts_botoes = [].copy()
+  hts_botoes = []
   
   # Botões da primeira linha que sempre aparecem:
   ht_bt_busc_usr = html_elem_button_simples.gera("Buscar usuários",    'solicitar_pag_buscar_usuarios',     None, cor_bt_busca)
@@ -93,7 +93,7 @@ def gera_botoes_linha_principal(usr):
 
   cor_bt_home = "#60a3bc"
 
-  hts_botoes = [].copy()
+  hts_botoes = []
 
   # Botões que sempre aparecem:
   ht_bt_principal = html_elem_button_simples.gera("Principal", 'pag_principal', None, cor_bt_home)
@@ -121,7 +121,7 @@ def gera_botoes_linha_principal_deslogado():
   cor_bt_login = "#55ff55"
   cor_bt_novo =  "#88eeff"
 
-  hts_botoes = [].copy()
+  hts_botoes = []
   
   ht_bt_entrar = html_elem_button_simples.gera("Entrar",     'solicitar_pag_login',             None, cor_bt_login)
   hts_botoes.append(ht_bt_entrar)
@@ -141,14 +141,14 @@ def gera_botoes_linha_principal_logado(usr):
 
   # Obtem atributos do usuário:
   assert usr != None
-  usr_admin = obj_usuario.obtem_atributo(usr, 'administrador')
+  usr_admin = obj_usuario.eh_administrador(usr)
   usr_nome = obj_usuario.obtem_atributo(usr, 'nome')
-  usr_num_ses = len(obj_sessao.busca_por_usuario(usr, soh_abertas = True)) # Para botão "Minhas Sessões".
+  usr_num_ses = len(obj_sessao.busca_por_dono(usr, soh_abertas = True)) # Para botão "Minhas Sessões".
 
   cor_bt_meus = "#c8fac8"
   cor_bt_sair = "#ffcc88"
 
-  hts_botoes = [].copy()
+  hts_botoes = []
  
   ht_bt_conta = html_elem_button_simples.gera("Minha Conta", 'ver_usuario', None, cor_bt_meus)
   hts_botoes.append(ht_bt_conta)

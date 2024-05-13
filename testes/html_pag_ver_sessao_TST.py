@@ -25,20 +25,41 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
-# sessao do admin
-ses = obj_sessao.obtem_objeto("S-00000001")
+# Sessao de um administrador:
+sesA_id = "S-00000001"
+sesA = obj_sessao.obtem_objeto(sesA_id)
+assert sesA != None
+assert obj_sessao.de_administrador(sesA)
+sesA_dono = obj_sessao.obtem_dono(sesA)
 
-# sessao de teste
-ses1 = obj_sessao.obtem_objeto("S-00000001")
+# Sessao de usuário comum:
+sesC_id = "S-00000003"
+sesC = obj_sessao.obtem_objeto(sesC_id)
+assert sesC != None
+assert not obj_sessao.de_administrador(sesC)
+sesC_dono = obj_sessao.obtem_dono(sesC)
 
-testa_gera("S-E0",  str, ses, ses1, None)
-testa_gera("S-E2",  str, ses, ses1, ["Veja a mensagem abaixo", "Veja a mensagem acima"])
+# Sessao a ver, de usuário diferente dos dois:
+sesT_id = "S-00000005"
+sesT = obj_sessao.obtem_objeto(sesT_id)
+assert sesT != None
+sesT_dono = obj_sessao.obtem_dono(sesT)
+assert sesT_dono != sesA_dono and sesT_dono != sesC_dono
+
+for ses_login_tag, ses_login in ( "A", sesA, ), ( "C", sesC, ):
+  xlog = f"_seslog{ses_login_tag}"
+  for ses_a_ver_tag, ses_a_ver in ( ses_login_tag, ses_login, ), ("T", sesT, ):
+    xver = f"_sesver{ses_a_ver_tag}"
+    for erros_tag, erros in ( "E0", None, ), ( "E2", ["Veja a mensagem abaixo", "Veja a mensagem acima"], ):
+      xerr = f"_erros{erros_tag}"
+      rot_teste = "S" + xlog + xver + xerr
+      testa_gera(rot_teste,  str, ses_login, ses_a_ver, erros)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

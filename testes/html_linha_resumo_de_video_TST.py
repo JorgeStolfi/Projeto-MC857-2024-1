@@ -28,22 +28,22 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
-ids_videos = [
+vid_ids = [
   "V-00000001",
   "V-00000002",
 ]
 
-for vid_id in ids_videos:
+for vid_id in vid_ids:
   for mostra_autor in False, True:
     vid = obj_video.obtem_objeto(vid_id)
-    rot_teste = f"{vid_id[2:]}_autor{str(mostra_autor)[0]}"
-    testa_gera(rot_teste, list, vid, mostra_autor)
+    tag = f"_{vid_id}" + f"_autor{str(mostra_autor)[0]}"
+    testa_gera("res" + tag, list, vid, mostra_autor)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

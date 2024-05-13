@@ -3,6 +3,7 @@
 import db_base_sql
 import util_identificador
 import db_obj_tabela
+import obj_raiz
 from util_erros import erro_prog
 import sys
 
@@ -17,7 +18,7 @@ class Classe_IMP:
     self.letra = letra
     self.colunas = colunas
     self.classe = classe
-    self.cache = {}.copy()
+    self.cache = {}
     self.debug = False
 
 def cria_tabela(nome, letra, classe, colunas, limpa):
@@ -126,57 +127,49 @@ def obtem_objeto_e_indice(tab, def_obj, ident, ind):
 def busca_por_campo(tab, chave, valor, res_cols):
   # Converte {valor} para string na linguagem SQL:
   if tab.debug: sys.stderr.write(f"  > db_obj_tabela.busca_por_campo_IMP: chave = {chave} valor = {str(valor)}\n");
-  valor = db_base_sql.codifica_valor(valor)
-
-  # Supõe que o cache é um subconjuto da base em disco, então procura só na última:
-  cond = chave + " = " + valor
-  if res_cols == None:
-    colunas = [ 'indice' ]
-  else:
-    colunas = res_cols
-  res = db_base_sql.executa_comando_SELECT(tab.nome, cond, colunas)
-  if res == None:
-    res = [].copy()
-  elif type(res) is str:
-    erro_prog("SELECT falhou " + str(res))
-  else:
-    if res_cols == None:
-      # Converte lista de índices para lista de identificadores:
-      res = util_identificador.de_lista_de_indices(tab.letra, res)
-  return res
+  
+  args = { chave: valor, }
+  return busca_por_campos(tab, args, res_cols)
 
 def busca_por_campos(tab, args, res_cols):
   # Supõe que o cache é um subconjuto da base em disco, então procura só na última.
-  # Converte {args} para condição na linguagem SQL:
+
   # !!! Verificar a lógica de {res_cols} etc. !!!
   # !!! Melhorar comportamento em caso de erro. !!!
 
   # Converte {args} para uma condição {cond} na liguagem SQL:
   cond = ""
   sep = ""
-  for ch, val in args.items():
-    # !!! Deveria validar o campo {ch,val} contra colunas da tabela {tab} !!!
+  for chave, val in args.items():
+    # !!! Deveria validar o campo {chave,val} contra colunas da tabela {tab} !!!
     if val == None:
-      # Exige que este campo seja nulo:
-      ch_sql = ch
-      compador = " IS " 
-      val_sql = "NULL"
-    elif type(val) is str and val[0] == "%" and val[-1] == "%":
-      # Busca aproximada:
-      if len(val) < 3: erro_prog("busca aproximada por string vazio")
-      ch_sql = "LOWER(" + ch + ")"
-      compador = "LIKE"
-      val_sql = "'" + val.lower() + "'"
-    else:      
-      if type(val) is str and len(val) == 0: 
-        erro_prog("busca por string vazio")
-      if type(val) is not str and type(val) is not int and type(val) is not float: 
-        erro_prog(f"busca por tipo de valor inválido = {type(val)}")
-      ch_sql = ch
-      compador = " = "
-      val_sql = db_base_sql.codifica_valor(val)
+      termo = busca_por_campos_termo_nulo(chave)
+    else:
+      # Se {val} for um objeto, converte para identificador:
+      if isinstance(val, obj_raiz.Classe):
+        val = obj_raiz.obtem_identificador(val)
+        assert val != None and isinstance(val, str)
+ 
+      # Descobre tipo da busca:
+      if type(val) is str and len(val) >= 2 and val[0] == "%" and val[-1] == "%":
+        # Busca aproximada.
+        val = val[1:-1]  # Remove os '%'.
+        termo = busca_por_campos_termo_semelhanca(chave, val)
+      elif (isinstance(val, list) or isinstance(val, tuple)) and len(val) == 2: 
+        # Busca por intervalo.
+        val_min = val[0]
+        val_max = val[1]
+        for val_end in val_min, val_max:
+          if not (isinstance(val_end, str) or isinstance(val_end, int) or isinstance(val_end, float)):
+            erro_prog(f"valor extremo {str(val_end)} tem tipo inválido")
+        termo = busca_por_campos_termo_intervalo(chave, val_min, val_max)
+      elif isinstance(val, str) or isinstance(val, int) or isinstance(val, float): 
+        # Busca por valor exato:
+        if isinstance(val, str) and len(val) == 0:
+          erro_prog(f"busca por cadeia vazia")
+        termo = busca_por_campos_termo_identidade(chave, val)
 
-    cond += (sep + ch_sql + compador + val_sql)
+    cond += (sep + termo)
     sep = " AND "
 
   if res_cols == None:
@@ -191,8 +184,8 @@ def busca_por_campos(tab, args, res_cols):
   # Finaliza o resultado:
   if res == None:
     # Não achou nada:
-    res = [].copy()
-  elif type(res) is str:
+    res = []
+  elif isinstance(res, str):
     # {res} deve ser uma mensagem de erro:
     erro_prog("SELECT falhou " + str(res))
   else:
@@ -201,27 +194,6 @@ def busca_por_campos(tab, args, res_cols):
       # Converte lista de índices para lista de identificadores:
       res = util_identificador.de_lista_de_indices(tab.letra, res)
   return res
-
-def busca_por_intervalo(tab, chave, val_min, val_max):
-  valor_minimo_convertido = db_base_sql.codifica_valor(val_min)
-  valor_maximo_convertido = db_base_sql.codifica_valor(val_max)
-
-  condicao = f"WHERE {chave} BETWEEN {valor_minimo_convertido} AND {valor_maximo_convertido}"
-
-  # Executa a busca:
-  resultado_busca = db_base_sql.executa_comando_SELECT(tab.nome, condicao, chave)
-  
-  # Finaliza o resultado:
-  if resultado_busca == None:
-    # Não achou nada:
-    resultado_busca = [].copy()
-  elif type(resultado_busca) is str:
-    # {res} deve ser uma mensagem de erro:
-    erro_prog(f"SELECT falhou {resultado_busca}")
-  else:
-    erro_prog("SELECT falhou com erro desconhecido")
-
-  return resultado_busca
 
 def num_entradas(tab): 
   num_ents = db_base_sql.num_entradas(tab.nome, 'indice')
@@ -272,7 +244,7 @@ def extrai_nomes_de_cols_SQL(colunas):
   """Extrai a lista dos nomes das colunas de uma tabela, 
   dada a lista de propriedades {colunas} como fornecida
   a {cria_tabela_SQL}.  Omite colunas com tipo SQL {None}."""
-  nomes = [].copy()
+  nomes = []
   for cp in colunas:
     chave = cp[0]
     tipo_SQL = cp[2]
@@ -281,3 +253,56 @@ def extrai_nomes_de_cols_SQL(colunas):
       nomes.append(chave)
   return nomes
  
+def busca_por_campos_termo_nulo(chave):
+  """Devolve o termo de uma condição SQL que exige que o campo da coluna
+  {chave} da tabela seja nulo; isto é, "{chave} IS NULL". """
+  termo = f"{chave} IS NULL"
+  return termo
+
+def busca_por_campos_termo_identidade(chave, val):
+  """Devolve o termo de uma condição SQL que exige que o campo da coluna
+  {chave} da tabela seja exatamente {val}; isto é, "{chave} = {val-san}"
+  onde {val_san} é {val}
+  oportunamente sanitizado e convertido."""
+  val_sql = db_base_sql.codifica_valor(val)
+  termo = chave + " = " + val_sql
+  return termo
+
+def busca_por_campos_termo_semelhanca(chave, val):
+  """Devolve o termo de uma condição SQL que exige que o campo da coluna
+  {chave} da tabela contenha a cadeia {val}, ignorando maiúsculas/minúsculas. 
+  Ou seja, "{chave} LIKE '%{val_san}%' onde {val_san} é {val}
+  oportunamente sanitizado e convertido."""
+  
+  assert isinstance(val, str), "valor de tipo inválido"
+  min_compr = 3 # Comprimento mínimo para busca parcial.
+  if len(val) < min_compr:
+    erro_prog(f"cadeia '{val}' muito curta para busca parcial (minimo {min_compr} caracteres)")
+  chave_sql = chave + ")"
+  val_sql = db_base_sql.codifica_valor(val.lower())
+  assert len(val_sql) >= 2 and val_sql[0] == "'" and val_sql[-1] == "'"
+  val_sql = "'%" + val_sql[1:-1] + "%'"
+  termo = "LOWER(" + chave + ") LIKE " + val_sql
+  return termo
+
+def busca_por_campos_termo_intervalo(chave, val_min, val_max):
+  """Devolve o termo de uma condição SQL que exige que o campo da coluna
+  {chave} da tabela esteja entre {val_min} e {val_max}, ambos inclusive. 
+  Ou seja, " {chave} BETWEEN {val_min_sql} AND {val_max_sql}
+  onde {va_min_sql} e {val_max_sql} são {val_min} e {val_max} 
+  oportunamente sanitizados e convertido."""
+  
+  if isinstance(val_min, str) and isinstance(val_max, str):
+    # Both strings.
+    pass
+  elif (isinstance(val_min, int) or isinstance(val_min, float)) and  (isinstance(val_max, int) or isinstance(val_max, float)):
+    # Both numeric.
+    pass
+  else:
+    erro_prog(f"limites {str(val_min)} e {str(val_max)} de tipos inválidos ou incompatíveis")
+  
+  val_min_sql = db_base_sql.codifica_valor(val_min)
+  val_max_sql = db_base_sql.codifica_valor(val_max)
+
+  termo = f"( {chave} BETWEEN {val_min_sql} AND {val_max_sql} )"
+  return termo

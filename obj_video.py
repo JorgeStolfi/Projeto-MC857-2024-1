@@ -39,7 +39,7 @@ class Classe(obj_video_IMP.Classe_IMP):
   REPRESENTAÇÃO NA BASE DE DADOS
 
   Cada vídeo está representado no sistema por (a) um arquivo na pasta
-  "videos", com nome "{id_video}.mp4"; e (b) por uma linha na tabela "videos"
+  "videos", com nome "{video_id}.mp4"; e (b) por uma linha na tabela "videos"
   da base SQL em disco. Apenas algumas dessas linhas estarão
   representadas também na memória por objetos da classe
   {obj_video.Classe}.
@@ -73,7 +73,7 @@ def cria(atrs):
   
   O conteúdo do vídeo deve estar no atributo {atrs} com chave
   'conteudo'. Esse conteúdo será gravado no arquivo
-  "videos/{id_vid}.mp4", onde {id_vid} é o identificador do objeto video
+  "videos/{vid_id}.mp4", onde {vid_id} é o identificador do objeto video
   a ser criado. Se a chave 'conteúdo' não existir em {atrs}, supõe que o
   arquivo já está gravado com esse nome.
   
@@ -109,6 +109,12 @@ def obtem_identificador(vid):
   Dá erro se {vid} é {None}."""
   return obj_video_IMP.obtem_identificador(vid)
 
+def obtem_objeto(vid_id):
+  """Localiza um video com identificador {vid_id} (uma string da forma
+  "V-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_video.Classe}.
+  Se {vid_id} é {None} ou tal vídeo não existe, devolve {None}."""
+  return obj_video_IMP.obtem_objeto(vid_id)
+
 def obtem_atributos(vid):
   """Retorna um dicionário Python que é uma cópia dos atributos do
   vídeo {vid}, exceto identificador. Dá erro se {vid} é {None}."""
@@ -132,12 +138,6 @@ def obtem_data_de_upload(vid):
   Dá erro se {vid} é {None}."""
   return obj_video_IMP.obtem_data_de_upload(vid)
 
-def obtem_objeto(id_vid):
-  """Localiza um video com identificador {id_vid} (uma string da forma
-  "V-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_video.Classe}.
-  Se {id_vid} é {None} ou tal vídeo não existe, devolve {None}."""
-  return obj_video_IMP.obtem_objeto(id_vid)
-
 def busca_por_campo(campo, val):
   """Localiza todos os vídeos cujo {campo} seja {valor}. Retorna a lista de ids
   desses vídeos."""
@@ -157,18 +157,11 @@ def busca_por_campos(args, unico):
   se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
   return obj_video_IMP.busca_por_campos(args, unico)
 
-def busca_por_semelhanca(args, unico):
-  """Similar a {busca_por_campos}, mas aceita alguns valores na base de dados 
-  que são semelhantes aos valores em {args}, em vez de iguais a eles.  Vide
-  {db_tabela_generica.busca_por_semelhanca}."""
-  # !!! Deveria ter especificação exato/aproximado para cada campo. !!!
-  return obj_video_IMP.busca_por_semelhanca(args, unico)
-
-def busca_por_autor(id_autor):
-  """Localiza todos os vídeos do usuário com identificador {id_autor} (uma string da forma
+def busca_por_autor(autor_id):
+  """Localiza todos os vídeos do usuário com identificador {autor_id} (uma string da forma
   "U-{NNNNNNNN}").  Retorna uma lista de identificadores desses vídeos.
-  Se {id_autor} é {None} ou o usuário não tem nenhum vídeo, devolve uma lista vazia."""
-  return obj_video_IMP.busca_por_autor(id_autor)
+  Se {autor_id} é {None} ou o usuário não tem nenhum vídeo, devolve uma lista vazia."""
+  return obj_video_IMP.busca_por_autor(autor_id)
 
 def ultimo_identificador():
   """Devolve o identificador do último vídeo inserido na tabela.
@@ -177,32 +170,18 @@ def ultimo_identificador():
 
 # DEPURAÇÂO
 
-def verifica_criacao(vid, id_vid, atrs):
+def verifica_criacao(vid, vid_id, atrs):
   """Faz testes de consistência básicos de um objeto {vid} de classe
   {obj_video.Classe}.  Tipicamente usada para testar a função {cria}
   
   Especificamente, testa se {obtem_identificador(vid)} devolve
-  o identificador esperado {id_vid}, {obtem_atributos(vid)} devolve 
-  os atributos esperados {atrs}, e {obtem_objeto(id_vid)}
+  o identificador esperado {vid_id}, {obtem_atributos(vid)} devolve 
+  os atributos esperados {atrs}, e {obtem_objeto(vid_id)}
   devolve o próprio {vid}.
 
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
-  return obj_video_IMP.verifica_criacao(vid, id_vid, atrs)
- 
-def valida_titulo(chave, val, nulo_ok, parcial):
-  """O título de um string {val} que vai ser o atributo 'titulo' 
-  de um vídeo (se {parcial} for {False}) ou uma parte do título 
-  que vai ser usada numa busca de vídeos.
-  
-  O parâmetro {val} deve ter nomáximo 60 caracteres, e no mínimo 10 se
-  completo ou 3 se parcial.
-  
-  Por enquanto, são permitidos apenas caracters visíveis ASCII [!-~], brancos, e as 
-  letras acentuadas do conjunto ISO-Latin-1. O título deve começar com uma letra
-  maiúscula, não pode terminar com brancos, e não pode ter dois ou mais brancos
-  seguidos."""
-  return obj_video_IMP.valida_titulo(chave, val, nulo_ok, parcial)
+  return obj_video_IMP.verifica_criacao(vid, vid_id, atrs)
  
 def cria_testes(verb):
   """Limpa a tabela de vídeos com {inicializa(True)}, e cria alguns vídeos

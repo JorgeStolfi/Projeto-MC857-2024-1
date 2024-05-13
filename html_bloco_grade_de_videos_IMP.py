@@ -1,22 +1,41 @@
 import random
-from videos import gerar_grade_de_videos
+import html_elem_table
 
-def comando_ver_grade_de_videos(total_videos=12, colunas=4):
-    """
-    Escolhe um conjunto aleatório de vídeos e exibe como uma grade de thumbs.
+def gera(vid_ids, ncols):
 
-    Parâmetros:
-    total_videos (int): O número total de vídeos para escolher aleatoriamente.
-    colunas (int): O número de colunas na grade de vídeos.
+  # Estas condições deveriam ser sempre satisfeitas para chamadas do sistema:
+  assert isinstance(vid_ids, list) or isinstance(vid_ids, tuple), "lista de vídeos inválida"
+  assert isinstance(ncols, int) and ncols > 0, "número de colunas inválido"
+      
+  erros = []
 
-    Retorna:
-    str: Uma string HTML representando a grade de vídeos aleatórios.
-    """
-    # Supondo que você tenha uma lista de todos os vídeos disponíveis
-    lista_de_videos = [f"{str(i).zfill(8)}" for i in range(1, 1001)]  # Exemplo de lista de vídeos
+  ht_linhas = []  # Linhas da grade, cada qual uma lista de elementos.
+  ht_elems_linha = []   # Elementos da linha corrente, cada qual um string "<td>...</td>".
+  
+  for vid_id in vid_ids:
+    assert isisnstance(vid_id, str)
+    vid = onj_video.obtem_objeto(vid_id)
+    if vid == None:
+      erros.append(f"vídeo {vid_id} não existe")
+    else:
+      arquivo = f"thumbs/{vid_id}.png"
+      atrs_vid = obj_video.obtem_atributos(vid)
+      descr = atrs_vid['titulo']
+      alt_px = 80
+      url = arquivo
+      ht_elem = "<td>" + html_elem_link_img.gera(arquivo, descr, alt_px, url) + "</td>"
+      ht_elems_linha.append(ht_elem)
+      if len(ht_elems_linha) == ncols:
+        # Completou mais uma linha:
+        ht_linhas.append(ht_elems_linha)
+        ht_elems_linha = []
+  
+  if len(ht_elems_linha) > 0:
+    # Fecha última linha incompleta:
+    while len(ht_elems_minha) < ncols:
+      ht_elem = "<td> </td>"
+      ht_elems_linha.append(ht_elem)
+    ht_linhas.append(ht_elems_linha)
     
-    # Selecionar aleatoriamente um conjunto de vídeos
-    videos_aleatorios = random.sample(lista_de_videos, total_videos)
-    
-    # Gerar a grade de vídeos com os vídeos selecionados aleatoriamente
-    return gerar_grade_de_videos(videos_aleatorios)
+  ht_tabela = html_elem_table.gera(ht_linhas)
+  return ht_tabela

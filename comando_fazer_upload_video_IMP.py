@@ -16,15 +16,15 @@ def processa(ses, cmd_args):
   assert ses != None and obj_sessao.aberta(ses), "Sessao inválida"
   assert type(cmd_args) is dict, "Argumentos inválidos"
   
-  erros = [].copy()
+  erros = []
   
   # O autor do vídeo será sempre o dono da sessão:
-  autor = obj_sessao.obtem_usuario(ses)
-  id_autor = obj_usuario.obtem_identificador(autor)
+  autor = obj_sessao.obtem_dono(ses)
+  autor_id = obj_usuario.obtem_identificador(autor)
 
   # Estas condições também deveriam valer para comandos gerados pelo site:
-  if 'usuario' in cmd_args: assert cmd_args['usuario'] == id_autor
-  if 'autor' in cmd_args: assert cmd_args['autor'] == id_autor
+  if 'usuario' in cmd_args: assert cmd_args['usuario'] == autor_id
+  if 'autor' in cmd_args: assert cmd_args['autor'] == autor_id
 
   if 'titulo' in cmd_args:
     titulo = cmd_args['titulo']

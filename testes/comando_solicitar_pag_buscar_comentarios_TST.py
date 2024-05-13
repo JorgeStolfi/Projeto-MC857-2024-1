@@ -25,7 +25,7 @@ def testa_processa(rot_teste, res_esp, *args):
   funcao = modulo.processa
   frag = False  
   pretty = True 
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -34,4 +34,4 @@ aviso_prog("!!! programa de teste de {comando_solicitar_pag_buscar_comentarios} 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente")
 else:
-  aviso_erro("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam")

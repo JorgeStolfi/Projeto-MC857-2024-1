@@ -100,43 +100,49 @@ usr2 = obj_usuario.obtem_objeto("U-00000002")
 usr3 = obj_usuario.obtem_objeto("U-00000003")
 
 # ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.cria} sem pai:\n")
-vid_cr0 = obj_video.obtem_objeto("V-00000003")
-usr_cr0 = obj_usuario.obtem_objeto("U-00000005")
-pai_cr0 = None
-atrs_cr0 = { 'video': vid_cr0, 'autor': usr_cr0, 'pai': pai_cr0, 'texto': "Que coisa!" }
-cmt_cr0 = obj_comentario.cria(atrs_cr0)
-indice_cr0 = 7 # Depende de {obj_comentario.cria_testes}.
-ident_cr0 = f"C-{indice_cr0:08d}"
-verifica_comentario("cr0", cmt_cr0, ident_cr0, atrs_cr0)
+cr0_vid = obj_video.obtem_objeto("V-00000003")
+cr0_usr = obj_usuario.obtem_objeto("U-00000005")
+cr0_pai = None
+cr0_atrs = { 'video': cr0_vid, 'autor': cr0_usr, 'pai': cr0_pai, 'texto': "Que coisa!" }
+cr0_indice = int(obj_comentario.ultimo_identificador()[2:]) + 1 # Índice esperado.
+cr0_id = f"C-{cr0_indice:08d}"
+cr0_cmt = obj_comentario.cria(cr0_atrs)
+verifica_comentario("cr0", cr0_cmt, cr0_id, cr0_atrs)
 
 # ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.cria} com pai:\n")
-vid_cr1 = vid_cr0
-usr_cr1 = obj_usuario.obtem_objeto("U-00000002")
-pai_cr1 = cmt_cr0
-atrs_cr1 = { 'video': vid_cr1, 'autor': usr_cr1, 'pai': pai_cr1, 'texto': "Não diga!" }
-cmt_cr1 = obj_comentario.cria(atrs_cr1)
-indice_cr1 = indice_cr0 + 1
-ident_cr1 = f"C-{indice_cr1:08d}"
-verifica_comentario("cr1", cmt_cr1, ident_cr1, atrs_cr1)
+cr1_vid = cr0_vid
+cr1_usr = obj_usuario.obtem_objeto("U-00000002")
+cr1_pai = cr0_cmt
+cr1_atrs = { 'video': cr1_vid, 'autor': cr1_usr, 'pai': cr1_pai, 'texto': "Não diga!" }
+cr1_indice = cr0_indice + 1 # Índice esperado.
+cr1_id = f"C-{cr1_indice:08d}"
+cr1_cmt = obj_comentario.cria(cr1_atrs)
+verifica_comentario("cr1", cr1_cmt, cr1_id, cr1_atrs)
 
 # ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.busca_por_video()}:\n")
 
 def testa_busca_simples(rot_teste, chave, val, idents_esp):
   """Testes de consistência das funções de busca que devolvem listas de identificadores, dados
   a chave de busca {chave}, o valor de busca {val}, e a lista de identificadores {idents_esp} esperados."""
-  sys.stderr.write("  testando {obj_comentario.busca_por_%s(\"%s\")}:\n" % (chave, val))
+  sys.stderr.write("  %s: testando {obj_comentario.busca_por_%s(\"%s\")}:\n" % (rot_teste, chave, val))
 
   ok = True
   if chave == 'video':
-    idents_fun = obj_comentario.busca_por_video(val)
+    sem_pai = False
+    # !!! Devia testar também com {sem_pai=True} !!!
+    idents_fun = obj_comentario.busca_por_video(val, sem_pai)
   elif chave == 'autor':
     idents_fun = obj_comentario.busca_por_autor(val)
   elif chave == 'data':
-    data = int(str(val)[0:4]);
-    idents_fun = obj_comentario.busca_por_data(data-1, data+1)
+    data_ini = val[0];
+    data_fin = val[1];
+    idents_fun = obj_comentario.busca_por_data(data_ini, data_fin)
   else:
     assert False, "** função inexistente"
 
@@ -152,28 +158,168 @@ def testa_busca_simples(rot_teste, chave, val, idents_esp):
   return
 
 # Depende de {obj_comentario.cria_testes}.
-id_vid_bv1 = "V-00000001"
-testa_busca_simples("bv1", 'video', id_vid_bv1, ( "C-00000001", "C-00000002", "C-00000005", ))
+bv1_vid_id = "V-00000001"
+bv1_vid_res_esp = (
+    "C-00000001", "C-00000002", "C-00000005", "C-00000007", "C-00000008", "C-00000009",
+    "C-00000010", "C-00000011", "C-00000012", "C-00000013", "C-00000014", "C-00000015",
+    "C-00000016", 
+  )  
+testa_busca_simples("bv1", 'video', bv1_vid_id, bv1_vid_res_esp)
 
-id_vid_bv2 = "V-00000003"
-testa_busca_simples("bv2", 'video', id_vid_bv2, ( "C-00000004", "C-00000006", ident_cr0, ident_cr1, ))
+bv2_vid_id = "V-00000003"
+bv2_vid_res_esp = ( "C-00000004", "C-00000006", cr0_id, cr1_id, )
+testa_busca_simples("bv2", 'video', bv2_vid_id, bv2_vid_res_esp)
 
-id_vid_bv3 = "V-00000004"
-testa_busca_simples("bv3", 'video', id_vid_bv3, ())
+bv3_vid_id = "V-00000004"
+bv3_vid_res_esp = ()
+testa_busca_simples("bv3", 'video', bv3_vid_id, bv3_vid_res_esp)
 
 # ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.busca_por_autor()}:\n")
 
-id_usr_bu1 = "U-00000003"
-testa_busca_simples("bu1", 'autor', id_usr_bu1, ( "C-00000004", "C-00000005", "C-00000006", ))
+bu1_usr_id = "U-00000003"
+bu1_usr_res_esp = ( "C-00000004", "C-00000005", )
+testa_busca_simples("bu1", 'autor', bu1_usr_id, bu1_usr_res_esp)
 
-id_usr_bu2 = "U-00000005"
-testa_busca_simples("bu2", 'autor', id_usr_bu2, ( ident_cr0, ))
+bu2_usr_id = "U-00000005"
+bu2_usr_res_esp =  ( 
+    "C-00000012", "C-00000013", "C-00000014", "C-00000015", 
+    "C-00000016", cr0_id,
+  )
+testa_busca_simples("bu2", 'autor', bu2_usr_id, bu2_usr_res_esp)
 
-id_usr_bu3 = "U-00000004"
-testa_busca_simples("bu3", 'autor', id_usr_bu3, ( ))
+bu3_usr_id = "U-00000006"
+bu3_usr_res_esp =  ( )
+testa_busca_simples("bu3", 'autor', bu3_usr_id, bu3_usr_res_esp)
 
 # ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
+sys.stderr.write("  testando {obj_comentario.busca_por_data()}:\n")
+
+# Todos os comentários de teste na base:
+coms_todos = ( \
+    "C-00000001", "C-00000002", "C-00000003",
+    "C-00000004", "C-00000005", "C-00000006",
+    "C-00000007", "C-00000008", "C-00000009",
+    "C-00000010", "C-00000011", "C-00000012",
+    "C-00000013", "C-00000014", "C-00000015",
+    "C-00000016", cr0_id,       cr1_id,
+  )
+
+bd1_data_ini = "2024-04-05 08:00:00 UTC"
+bd1_data_fin = "2024-09-30 24:00:00 UTC"
+# Interprete o resultado tendo em vista que busca por data é somente em função de intervalo de anos
+testa_busca_simples("bd1", 'data', ( bd1_data_ini, bd1_data_fin), coms_todos)
+
+# ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
+sys.stderr.write("  testando {obj_comentario.busca_por_campos()}:\n")
+
+def testa_busca_por_campos(rot_teste, args_bus, idents_esp):
+  """Testes de consistência da função {busca_por_campos} dado o dicionário {args_bus}
+  com as chaves e valores dos campos de busca {chave}, o valor de busca {val},
+  e a lista de identificadores {idents_esp} esperados."""
+  sys.stderr.write(f"  {rot_teste}: testando obj_comentario.busca_por_campos({str(args_bus)}):\n")
+  ok = True
+  
+  idents_fun = obj_comentario.busca_por_campos(args_bus)
+  if idents_fun == None: idents_fun = ( )
+  
+  if sorted(idents_fun) != sorted(idents_esp):
+    sys.stderr.write(f"  retornou {str(idents_fun)}, deveria ter retornado {str(idents_esp)}\n")
+    ok = False
+
+  if not ok:
+    sys.stderr.write("  ** teste falhou\n")
+    ok_global = False
+
+  sys.stderr.write("  %s\n" % ("-" * 70))
+  return
+
+# Video existente:
+bcs03_args_bus = { 'video': "V-00000003" }
+bcs03_res_esp = ( "C-00000004", "C-00000006", cr0_id, cr1_id, )
+testa_busca_por_campos("vid3", bcs03_args_bus, bcs03_res_esp)
+
+# Video inexistente:
+bcs05_args_bus = { 'video': "V-23000001" }
+bcs05_res_esp = ( )
+testa_busca_por_campos("vidN", bcs05_args_bus, bcs05_res_esp)
+
+# Autor existente:
+bcs06_args_bus = { 'autor': "U-00000001" }
+bcs06_res_esp = (  "C-00000001", "C-00000009", )
+testa_busca_por_campos("autE", bcs06_args_bus, bcs06_res_esp)
+
+# Autor inexistente:
+bcs07_args_bus = { 'autor': "U-23000001" }
+bcs07_res_esp = ( )
+testa_busca_por_campos("autN", bcs07_args_bus, bcs07_res_esp)
+
+# Comentario pai existente:
+bcs08_args_bus = { 'pai': "C-00000001" }
+bcs08_res_esp = (  "C-00000002", )
+testa_busca_por_campos("paiE", bcs08_args_bus, bcs08_res_esp)
+
+# Comentario existente mas sem filhos:
+bcs09_args_bus = { 'pai': "C-00000003" }
+bcs09_res_esp = ( )
+testa_busca_por_campos("paiS", bcs09_args_bus, bcs09_res_esp)
+
+# Comentario pai inexistente:
+bcs10_args_bus = { 'pai': "C-23000001" }
+bcs10_res_esp = ( )
+testa_busca_por_campos("paiX", bcs10_args_bus, bcs10_res_esp)
+
+# Intervalo de datas com todos os comentários:
+bcs11_data_ini = "2024-01-01 08:00:00 UTC"
+bcs11_data_fin = "2024-09-30 08:00:00 UTC"
+bcs11_args_bus = { 'data': (bcs11_data_ini, bcs11_data_fin) }
+bcs11_res_esp = coms_todos
+testa_busca_por_campos("datP", bcs11_args_bus, bcs11_res_esp)
+
+# Intervalo de datas sem comentários
+bcs12_data_ini = "2025-01-01 08:00:00 UTC"
+bcs12_data_fin = "2025-09-30 08:00:00 UTC"
+bcs12_args_bus = { 'data': (bcs12_data_ini, bcs12_data_fin) }
+bcs12_res_esp = ( )
+ 
+testa_busca_por_campos("datP", bcs12_args_bus, bcs12_res_esp)
+
+# # Data parcial:
+# bcs13_data_pat = "*05-17*"
+# bcs13_args_bus = { 'data': bcs13_data_pat }
+# bcs13_res_esp = coms_todos
+# testa_busca_por_campos("mesP", bcs13_args_bus, bcs13_res_esp)
+
+# Texto parcial que existe
+bcs15_args_bus = { 'texto': "*sobe*" }
+bcs15_res_esp = (  "C-00000004" , )
+testa_busca_por_campos("texE", bcs15_args_bus, bcs15_res_esp)
+
+# Texto parcial que não ocorre em nenhum comentário:
+bcs16_args_bus = { 'texto': "*Superhomem*" }
+bcs16_res_esp = ( )
+testa_busca_por_campos("texN", bcs16_args_bus, bcs16_res_esp)
+
+# Múltiplos parâmetros com resposta única (supõe lógica "E"):
+bcs17_args_bus = { 'texto': "talvez", 'pai': "C-00000001", 'autor': "U-00000002" }
+bcs17_res_esp = (  "C-00000002", )
+testa_busca_por_campos("mulU", bcs17_args_bus, bcs17_res_esp)
+
+# Múltiplos parâmetros com múltiplas respostas (supõe lógica "E"):
+bcs18_args_bus = { 'autor': "U-00000002", 'video': "V-00000001" }
+bcs18_res_esp = (  "C-00000002", "C-00000008", )
+testa_busca_por_campos("mulM", bcs18_args_bus, bcs18_res_esp)
+
+# Múltiplos parâmetros sem resposta (supõe lógica "E"):
+bcs19_args_bus = { 'autor': "U-00000002", 'video': "V-00000004" }
+bcs19_res_esp = ( )
+testa_busca_por_campos("mulV", bcs19_args_bus, bcs19_res_esp) 
+
+# ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.obtem_conversa()}:\n")
 
 def testa_obtem_conversa(raizes, max_coms=10, max_nivel=10):
@@ -191,29 +337,17 @@ testa_obtem_conversa([com1.id, com8.id], 4, 10)
 testa_obtem_conversa([com1.id, com8.id], 10, 1)
 testa_obtem_conversa([com1.id, com8.id], 10, 2)
 testa_obtem_conversa([com1.id, com8.id], 7, 3)
-=======
-sys.stderr.write("  testando {obj_comentario.busca_por_data()}:\n")
-
-# Todos os comentários de teste na base:
-coms_todos = [ \
-    "C-00000001", "C-00000002", "C-00000003",
-    "C-00000004", "C-00000005", "C-00000006",
-    "C-00000007", "C-00000008", "C-00000009",
-  ]
-
-data_bd1 = "2024-04-05 08:00:00 UTC"
-# Interprete o resultado tendo em vista que busca por data é somente em função de intervalo de anos
-testa_busca_simples("bd1", 'data', data_bd1, coms_todos)
 
 # ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.obtem_arvore()}:\n")
 
-def testa_obtem_arvore(vid, com):
+def testa_obtem_arvore(rot_teste, vid, com):
   """"Testa o metodo obtem arvores, que dado um comentario retorna a arvore de comentarios
   relacionados"""
   vid_id = obj_video.obtem_identificador(vid) if vid != None else None
   com_id = obj_comentario.obtem_identificador(com) if com != None else None
-  sys.stderr.write("  testando {obj_comentario.obtem_arvore}: {vid} = %s {com} = %s\n" % (vid_id, com_id))
+  sys.stderr.write("  %s: testando {obj_comentario.obtem_arvore}: {vid} = %s {com} = %s\n" % (rot_teste, vid_id, com_id))
   obj_comentario.liga_diagnosticos(True)
 
   arvore = obj_comentario.obtem_arvore(vid, com, 10)
@@ -246,139 +380,23 @@ def imprime_arvore_tuplas(arv, ind):
 
 # Chamadas comentadas pois o metodo obtem_arvore não é mais público em obj_comentario
 
-# testa_obtem_arvore(vid_cr0, None)
-# testa_obtem_arvore(vid_cr0, cmt_cr0)
+# testa_obtem_arvore("CR0_V", cr0_vid, None)
+# testa_obtem_arvore("CR0_VP", cr0_vid, cr0_cmt)
 
-# testa_obtem_arvore(vid_cr1, None)
-# testa_obtem_arvore(vid_cr1, cmt_cr1)
+# testa_obtem_arvore("CR1_V", cr1_vid, None)
+# testa_obtem_arvore("CR1_VP", cr1_vid, cr1_cmt)
 
 # for vid in vid1, vid2, vid3:
-#   testa_obtem_arvore(vid, None)
+#   vid_id = obj_video.obtem_identificador(vid)
+#   rot_teste = f"CR_{vid_id}"
+#   testa_obtem_arvore(rot_teste, vid, None)
 
 # for com in com1, com2, com3, com4, com5, com6:
+#   com_id = obj_comentario.obtem_identificador(com)
 #   vid = obj_comentario.obtem_atributo(com, 'video')
+#   vid_id = obj_video.obtem_identificador(vid)
+#   rot_teste = f"CR_{vid_id}_{com_id}"
 #   testa_obtem_arvore(vid, com)
-
-# ----------------------------------------------------------------------
-sys.stderr.write("  testando {obj_comentario.busca_por_campos()}:\n")
-
-def testa_busca_por_campos(rot_teste, args_bus, idents_esp):
-  """Testes de consistência da função {busca_por_campos} dado o dicionário {args_bus}
-  com as chaves e valores dos campos de busca {chave}, o valor de busca {val},
-  e a lista de identificadores {idents_esp} esperados."""
-  sys.stderr.write(f"  testando {'{'}obj_comentario.busca_por_campos({str(args_bus)}){'}'}:\n")
-  ok = True
-  
-  idents_fun = obj_comentario.busca_por_campos(args_bus)
-
-  if sorted(idents_fun) != sorted(idents_esp):
-    sys.stderr.write(f"  retornou {str(idents_fun)}, deveria ter retornado {str(idents_esp)}\n")
-    ok = False
-
-  if not ok:
-    sys.stderr.write("  ** teste falhou\n")
-    ok_global = False
-
-  sys.stderr.write("  %s\n" % ("-" * 70))
-  return
-
-# Teste passando um id de comentario existente:
-args_bus_01 = {"comentario": "C-00000001"}
-res_esp_01 = [ "C-00000001", ]
-testa_busca_por_campos("comE", res_esp_01, ses, args_bus_01)
-
-# Teste passando um id de comentario inexistente:
-args_bus_02 = {"comentario": "C-23000001"}
-res_esp_02 = [ ]
-testa_busca_por_campos("comN", res_esp_02, ses, args_bus_02)
-
-# Teste sem estar logado:
-args_bus_03 = {"video": "V-00000003"}
-res_esp_03 = ["C-00000004", "C-00000006", ]
-testa_busca_por_campos("logF-vid3", res_esp_03, None, args_bus_03)
-
-# Teste passando um id de video existente:
-args_bus_04 = {"video": "V-00000003"}
-res_esp_04 = ["C-00000004", "C-00000006", ]
-testa_busca_por_campos("vidE", res_esp_04, ses, args_bus_04)
-
-# Teste passando um id de video inexistente:
-args_bus_05 = {"video": "V-23000001"}
-res_esp_05 = []
-testa_busca_por_campos("vidN", res_esp_05, ses, args_bus_05)
-
-# Teste passando um id de autor existente:
-args_bus_06 = {"autor": "U-00000001"}
-res_esp_06 = [ "C-00000001", "C-00000009", ]
-testa_busca_por_campos("autE", res_esp_06, ses, args_bus_06)
-
-# Teste passando um id de autor inexistente:
-args_bus_07 = {"autor": "U-23000001"}
-res_esp_07 = [ ]
-testa_busca_por_campos("autN", res_esp_07, ses, args_bus_07)
-
-# Teste passando um id de comentario pai existente:
-args_bus_08 = {"pai": "C-00000001"}
-res_esp_08 = [ "C-00000002", ]
-testa_busca_por_campos("paiE", res_esp_08, ses, args_bus_08)
-
-# Teste passando um id de comentario existente mas sem filhos:
-args_bus_09 = {"pai": "C-00000003"}
-res_esp_09 = [ ]
-testa_busca_por_campos("paiS", res_esp_09, ses, args_bus_09)
-
-# Teste passando um id de comentario pai inexistente:
-args_bus_10 = {"pai": "C-23000001"}
-res_esp_10 = [ ]
-testa_busca_por_campos("Teste comentario pai inexistente", res_esp_10, ses, args_bus_10)
-
-# Teste passando uma data exata que existe:
-com3 = obj_comentario.obtem_objeto("C-00000003");
-dat3 = obj_comentario.obtem_atributo(com3, 'data')
-args_bus_11 = {"data": dat3}
-res_esp_11 = list
-testa_busca_por_campos("datP", res_esp_11, ses, args_bus_11)
-
-# Teste passando uma data exata que não existe:
-args_bus_12 = {"data": "2024-01-01 08:00:00 UTC"},
-res_esp_12 = [ ]
-testa_busca_por_campos("datP", res_esp_12, ses, args_bus_12)
-
-# Teste passando data corrente ano+mes:
-mes3 = dat3[0:7] # Ano e mes.
-args_bus_13 = {"data": mes3}
-res_esp_13 = coms_todos
-testa_busca_por_campos("mesP", res_esp_13, ses, args_bus_13)
-
-# Teste passando o ano corrente:
-args_bus_14 = {"data": "2024"}
-res_esp_14 = coms_todos
-testa_busca_por_campos("anoP", res_esp_14, ses, args_bus_14)
-
-# Teste passando um texto parcial que existe
-args_bus_15 = {"texto": "sobe"}
-res_esp_15 = [ "C-00000004" ]
-testa_busca_por_campos("texE", res_esp_15, ses, args_bus_15)
-
-# Teste passando um texto que não aparece em nenhum comentário:
-args_bus_16 = {"texto": "Superhomem"}
-res_esp_16 = [ ]
-testa_busca_por_campos("texN", res_esp_16, ses, args_bus_16)
-
-# Teste passando vários parâmetros com resposta única (supõe lógica "E"):
-args_bus_17 = {"texto": "talvez", "pai": "C-00000001", "autor": "U-00000002"}
-res_esp_17 = [ "C-00000002", ]
-testa_busca_por_campos("mulU", res_esp_17, ses, args_bus_17)
-
-# Teste passando vários parâmetros com múltiplas respostas (supõe lógica "E"):
-args_bus_18 = {"autor": "U-00000002", "video": "V-00000001"}
-res_esp_18 = [ "C-00000002", "C-00000008", ]
-testa_busca_por_campos("mulM", res_esp_18, ses, args_bus_18)
-
-# Teste passando vários parâmetros sem resposta (supõe lógica "E"):
-args_bus_19 = {"autor": "U-00000002", "video": "V-00000004"}
-res_esp_19 = [ ]
-testa_busca_por_campos("mulV", res_esp_19, ses, args_bus_19)
 
 
 # ----------------------------------------------------------------------

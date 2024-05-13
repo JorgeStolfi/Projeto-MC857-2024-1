@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-import html_form_alterar_comentario
+import html_form_postar_alterar_comentario
 import obj_comentario
 import obj_sessao
 import util_identificador
@@ -26,29 +26,34 @@ def testa_gera(rot_teste, res_esp, *args):
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   global ok_global
-  modulo = html_form_alterar_comentario
+  modulo = html_form_postar_alterar_comentario
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
 # Comentario:
-comC1_id = "C-00000004"
+comC1_id = "C-00000009"
 comC1 = obj_comentario.obtem_objeto(comC1_id)
 assert comC1 != None
+comC1_atrs = obj_comentario.obtem_atributos(comC1)
 
-for ses_admin in False, True:
-  st = str(ses_admin)[0]
-  atrs_tot = obj_comentario.obtem_atributos(comC1)
-  atrs_som = { 'texto': "Alteradus", }
-  atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
-  for at, atrs in atrs_dic.items():
-    rot_teste = f"admin{st}-atrs{at}"
-    testa_gera(rot_teste, str, comC1_id, atrs, ses_admin)
+# Form para criação:
+rot_teste = "CR"
+testa_gera(rot_teste, str, None, comC1_atrs)
+
+# Form para alteração:
+atrs_tot = obj_comentario.obtem_atributos(comC1)
+atrs_som = { 'texto': "Alteradus", }
+atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
+for atrs_tag, atrs in atrs_dic.items():
+  xatr = f"_atr{atrs_tag}"
+  rot_teste = "AL" + xatr
+  testa_gera(rot_teste, str, comC1_id, atrs)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

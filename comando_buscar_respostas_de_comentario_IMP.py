@@ -10,27 +10,27 @@ def processa(ses, cmd_args):
   assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
   assert 'comentario' in cmd_args, "Comentário não especificado"
 
-  erros = [].copy()
+  erros = []
   
-  # Obtém o comentário {com_pai} em questão e seu identificador {id_com_pai}:
-  id_com_pai = cmd_args['comentario']
-  com_pai = obj_comentario.obtem_objeto(id_com_pai) if id_com_pai != None else None
+  # Obtém o comentário {com_pai} em questão e seu identificador {com_pai_id}:
+  com_pai_id = cmd_args['comentario']
+  com_pai = obj_comentario.obtem_objeto(com_pai_id) if com_pai_id != None else None
   
   if com_pai == None:
-    erros.append(f"Comentário {id_com_pai} não existe")
+    erros.append(f"Comentário {com_pai_id} não existe")
     ht_bloco = None
   else:
-    lista_ids_com = obj_comentario.busca_por_pai(id_com_pai)
-    if len(lista_ids_com) == 0:
+    com_ids = obj_comentario.busca_por_pai(com_pai_id)
+    if len(com_ids) == 0:
       # Não tem respostas:
-      erros.append(f"Comentário {id_com_pai} não tem nenhuma resposta")
+      erros.append(f"Comentário {com_pai_id} não tem nenhuma resposta")
       ht_bloco = None
     else:
-      ht_titulo = html_bloco_titulo.gera(f"Respostas ao comentario {id_com_pai}", False)
+      ht_titulo = html_bloco_titulo.gera(f"Respostas ao comentario {com_pai_id}", False)
       mostra_autor = True  # Autores das respostas variam.
       Mostra_video = False # Todas as respostas são do mesmo video.
       mostra_pai = False   # Todas as respostas tem o mesmo pai.
-      ht_tabela = html_bloco_lista_de_comentarios.gera(lista_ids_com, mostra_autor, mostra_video, mostra_pai)
+      ht_tabela = html_bloco_lista_de_comentarios.gera(com_ids, mostra_autor, mostra_video, mostra_pai)
       ht_bloco = \
         ht_titulo + "<br/>\n" + \
         ht_tabela

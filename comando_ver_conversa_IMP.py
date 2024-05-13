@@ -9,32 +9,32 @@ def processa(ses, cmd_args):
   assert ses == None or obj_sessao.aberta(ses), "Sessão inválida"
   assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
   
-  erros = [].copy()
+  erros = []
   quantidade_de_erros = erros.len()
 
   # Obtém o identificador do vídeo ou comentário a ver:
-  id_vid = cmd_args['video'] if 'video' in cmd_args else None
-  id_com = cmd_args['comentario'] if 'comentario' in cmd_args else None
+  vid_id = cmd_args['video'] if 'video' in cmd_args else None
+  com_id = cmd_args['comentario'] if 'comentario' in cmd_args else None
   
-  if id_vid == None and id_com == None:
+  if vid_id == None and com_id == None:
     erros.append("O identificador do video ou comentário raiz não foi especificado")
-  elif id_vid != None and id_com != None:
+  elif vid_id != None and com_id != None:
     erros.append("Apenas uma raiz deve ser especificada 'video' ou 'comentario'")
   
   if quantidade_de_erros == 0:
-    if id_vid != None:
-      vid = obj_video.obtem_objeto(id_vid)
+    if vid_id != None:
+      vid = obj_video.obtem_objeto(vid_id)
       if vid == None:
-        erros.append(f"O vídeo {id_vid} não existe")
+        erros.append(f"O vídeo {vid_id} não existe")
       else:
-        titulo = f"Comentários do vídeo {id_vid}"
+        titulo = f"Comentários do vídeo {vid_id}"
         raizes = obj_video.busca_por_campos({'video': vid, 'pai': None })
-    elif id_com != None:
-      com = obj_comentario.obtem_objeto(id_com)
+    elif com_id != None:
+      com = obj_comentario.obtem_objeto(com_id)
       if com == None:
-        erros.append(f"O comentario {id_com} não existe")
+        erros.append(f"O comentario {com_id} não existe")
       else:
-        titulo = f"Respostas ao comentário {id_com}"
+        titulo = f"Respostas ao comentário {com_id}"
         raizes = obj_comentario.busca_por_campo('pai', com)
     else:
       # Não deveria passar aqui:

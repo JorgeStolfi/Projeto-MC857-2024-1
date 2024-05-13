@@ -20,22 +20,22 @@ obj_sessao.inicializa_modulo(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_sessao(rot_teste, ses, ident, usr, aberta, cookie):
+def verifica_sessao(rot_teste, ses, ident, dono, aberta, cookie):
   """Testes básicos de consistência do objeto {ses} da classe {obj_sessao.Classe}, dados
   {ident} e {atrs} esperados."""
   global ok_global
 
   sys.stderr.write("  %s\n" % ("-" * 70))
   sys.stderr.write("  verificando sessão %s\n" % rot_teste)
-  atrs = { 'usr': usr, 'aberta': aberta, 'cookie': cookie }
+  atrs = { 'dono': dono, 'aberta': aberta, 'cookie': cookie }
   ok = obj_sessao.verifica_criacao(ses, ident, atrs)
   
   if ses != None and type(ses) is obj_sessao.Classe:
     
-    sys.stderr.write("  testando {obj_sessao.obtem_usuario()}:\n")
-    usr1 = obj_sessao.obtem_usuario(ses)
-    if usr1 != usr:
-      aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(usr),True)
+    sys.stderr.write("  testando {obj_sessao.obtem_dono()}:\n")
+    usr1 = obj_sessao.obtem_dono(ses)
+    if usr1 != dono:
+      aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(dono),True)
       ok = False
       
     sys.stderr.write("  testando {obj_sessao.aberta()}:\n")
@@ -62,7 +62,7 @@ sys.stderr.write("  Obtendo dois usuários para teste:\n")
 
 usr1 = obj_usuario.obtem_objeto("U-00000001")
 usr2 = obj_usuario.obtem_objeto("U-00000002")
-ses1 = obj_sessao.busca_por_usuario("U-00000001", False)
+ses1 = obj_sessao.busca_por_dono(usr1, False)
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_sessao.cria}:\n")

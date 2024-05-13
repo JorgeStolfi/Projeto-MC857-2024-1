@@ -115,16 +115,21 @@ def obtem_atributo(com, chave):
   Equivale a {obtem_atributos(com)[chave]}. Dá erro se {com} é {None}."""
   return obj_comentario_IMP.obtem_atributo(com, chave)
 
-def obtem_objeto(id_com):
-  """Localiza um comentario com identificador {id_com} (uma string da forma
-  "C-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_comentario.Classe}.
-  Se {id_com} é {None} ou tal comentário não existe, devolve {None}."""
-  return obj_comentario_IMP.obtem_objeto(id_com)
+def obtem_autor(com):
+  """Retorna o atributo 'autor' do comentário {com}. 
+  Equivale a {obtem_atributos(com)['autor']}. Dá erro se {com} é {None}."""
+  return obj_comentario_IMP.obtem_autor(com)
 
-def busca_por_video(id_vid, sem_pai):
+def obtem_objeto(com_id):
+  """Localiza um comentario com identificador {com_id} (uma string da forma
+  "C-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_comentario.Classe}.
+  Se {com_id} é {None} ou tal comentário não existe, devolve {None}."""
+  return obj_comentario_IMP.obtem_objeto(com_id)
+
+def busca_por_video(vid_id, sem_pai):
   """
   Se {sem_pai} é {False}, localiza todos os comentários associados ao
-  video com identificador {id_vid} e devolve o uma lista com os
+  video com identificador {vid_id} e devolve o uma lista com os
   identificadores desses comentários (não os objetos).
   
   Se o booleano {sem_pai} for {True}, retorna apenas os identificadores
@@ -133,19 +138,19 @@ def busca_por_video(id_vid, sem_pai):
   
   O resultado será {None} se não há comentários com essas condições.
   """
-  return obj_comentario_IMP.busca_por_video(id_vid, sem_pai)
+  return obj_comentario_IMP.busca_por_video(vid_id, sem_pai)
 
-def busca_por_pai(id_pai):
-  """Localiza comentários que são respostas ao comentário com identificador {id_pai}
+def busca_por_pai(pai_id):
+  """Localiza comentários que são respostas ao comentário com identificador {pai_id}
   e devolve o uma lista com os identificadores desses comentários (não os objetos);
   ou {None} se o comentário não tem respostas."""
-  return obj_comentario_IMP.busca_por_pai(id_pai)
+  return obj_comentario_IMP.busca_por_pai(pai_id)
 
-def busca_por_autor(id_usr):
-  """Localiza comentários postados pelo usuário com identifiador {id_usr}
+def busca_por_autor(usr_id):
+  """Localiza comentários postados pelo usuário com identifiador {usr_id}
   e devolve o uma lista com os identificadores desses comentários (não os objetos);
   ou {None} se o usuário não postou nenhum comentário."""
-  return obj_comentario_IMP.busca_por_autor(id_usr)
+  return obj_comentario_IMP.busca_por_autor(usr_id)
 
 def busca_por_texto(texto):
   """Localiza comentários que contém a string {texto} no campo de texto
@@ -158,6 +163,13 @@ def busca_por_data(data_ini, data_ter):
   e devolve o uma lista com os identificadores desses comentários (não os objetos);
   ou {None} se nenhum comentário foi postado no intervalo de data."""
   return obj_comentario_IMP.busca_por_data(data_ini, data_ter)
+
+def busca_por_campos(args):
+  """
+  Permite buscar por múltiplos campos de um comentário, onde o argumento {args}
+  representa um dicionário no formato {chave, valor}
+  """
+  return obj_comentario_IMP.busca_por_campos(args)
 
 def obtem_conversa(raizes, max_coms, max_nivel):
   """
@@ -186,18 +198,18 @@ def ultimo_identificador():
 
 # FUNÇÕES PARA DEPURAÇÃO
 
-def verifica_criacao(com, id_com, atrs):
+def verifica_criacao(com, com_id, atrs):
   """Faz testes de consistência básicos de um objeto {com} de classe 
   {obj_comentario.Classe}.  Tipicamente usada para testar a função {cria}
   
   Especificamente, testa se {obtem_identificador(com)} devolve
-  o identificador esperado {id_com}, {obtem_atributos(com)} devolve 
-  os atributos esperados {atrs}, e {obtem_objeto(id_com)}
+  o identificador esperado {com_id}, {obtem_atributos(com)} devolve 
+  os atributos esperados {atrs}, e {obtem_objeto(com_id)}
   devolve o próprio {com}.
   
   Devolve {True} se os testes deram certo, {False} caso contrário. Também
   imprme diagnósticos em {sys.stderr}."""
-  return obj_comentario_IMP.verifica_criacao(com, id_com, atrs)
+  return obj_comentario_IMP.verifica_criacao(com, com_id, atrs)
 
 def cria_testes(verb):
   """Limpa a tabela de comentários com {inicializa(True)}, e cria pelo menos três comentários
@@ -215,10 +227,3 @@ def liga_diagnosticos(val):
   impressão em {sys.stderr} de mensagens de diagnóstico pelas 
   funções deste módulo."""
   obj_comentario_IMP.liga_diagnosticos(val)
-
-def busca_por_campos(args):
-  """
-  Permite buscar por múltiplos campos de um comentário, onde o argumento {args}
-  representa um dicionário no formato {chave, valor}
-  """
-  obj_comentario_IMP.busca_por_campos(args)

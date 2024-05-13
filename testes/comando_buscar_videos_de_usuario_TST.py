@@ -26,12 +26,12 @@ def testa_processa(rot_teste, res_esp, *args):
   funcao = modulo.processa
   frag = False  # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = True  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
  
-id_ses = "S-00000001"
-ses1 = obj_sessao.obtem_objeto(id_ses)
+ses1_id = "S-00000001"
+ses1 = obj_sessao.obtem_objeto(ses1_id)
 
 # Sessão de usuário comum:
 testa_processa("teste1",  str, ses1, {'usuario': 'U-00000001'})  
@@ -39,5 +39,5 @@ testa_processa("teste1",  str, ses1, {'usuario': 'U-00000001'})
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)
  

@@ -15,10 +15,10 @@ def processa(ses, cmd_args):
   assert ses != None and obj_sessao.aberta(ses), "Sessão inválida"
   assert type(cmd_args) == dict
 
-  erros = [].copy()
+  erros = []
   
   # Obtém o usuário da sessão:
-  usr_ses = obj_sessao.obtem_usuario(ses)
+  usr_ses = obj_sessao.obtem_dono(ses)
   assert usr_ses != None
   
   atrs_com = converte_argumentos(cmd_args, usr_ses, erros)
@@ -45,38 +45,38 @@ def converte_argumentos(cmd_args, usr_ses, erros):
   {erros}."""
   
   cmd_args = cmd_args.copy() # Para não estragar o original.
-  atrs_com = {}.copy()
+  atrs_com = {}
   
   assert 'video' in cmd_args and cmd_args['video'] != None, "Campo 'video' não especificado"
-  id_video = cmd_args['video']
+  video_id = cmd_args['video']
   if 'video' in cmd_args: del cmd_args['video']
-  video = obj_video.obtem_objeto(id_video)
+  video = obj_video.obtem_objeto(video_id)
   if video == None:
-    erros.append(f"video {id_video} não existe")
+    erros.append(f"video {video_id} não existe")
   else:
     atrs_com['video'] = video
     
   if 'pai' in cmd_args and cmd_args['pai'] != None:
-    id_pai = cmd_args['pai']
+    pai_id = cmd_args['pai']
     if 'pai' in cmd_args: del cmd_args['pai']
-    pai = obj_comentario.obtem_objeto(id_pai)
+    pai = obj_comentario.obtem_objeto(pai_id)
     if pai == None:
-      erros.append(f"comentario {id_pai} não existe")
+      erros.append(f"comentario {pai_id} não existe")
     elif obj_comentario.obtem_atributo(pai, 'video') != video:
-      erros.append(f"comentario {id_pai} é de outro vídeo")
+      erros.append(f"comentario {pai_id} é de outro vídeo")
     else:
       atrs_com['pai'] = pai
   else:
     atrs_com['pai'] = None
   
   if 'autor' in cmd_args and cmd_args['autor'] != None:
-    id_autor = cmd_args['autor']
+    autor_id = cmd_args['autor']
     if 'autor' in cmd_args: del cmd_args['autor']
-    autor = obj_usuario.obtem_objeto(id_autor)
+    autor = obj_usuario.obtem_objeto(autor_id)
     if autor == None:
-      erros.append(f"usuario {id_autor} não existe")
+      erros.append(f"usuario {autor_id} não existe")
     elif autor != usr_ses:
-      erros.append(f"usuario logado não é {id_autor}")
+      erros.append(f"usuario logado não é {autor_id}")
     else:
       atrs_com['autor'] = autor
   else:

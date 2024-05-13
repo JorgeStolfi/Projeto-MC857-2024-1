@@ -29,6 +29,7 @@ import comando_alterar_video
 import comando_solicitar_pag_buscar_videos
 import comando_buscar_videos
 import comando_buscar_videos_de_usuario
+import comando_ver_grade_de_videos
 
 import comando_ver_comentario
 import comando_solicitar_pag_postar_comentario
@@ -41,6 +42,7 @@ import comando_buscar_comentarios
 import comando_buscar_comentarios_de_video
 import comando_buscar_comentarios_de_usuario
 import comando_buscar_respostas_de_comentario
+import comando_ver_conversa
 
 import comando_ver_objeto
 
@@ -165,7 +167,7 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
 
     assert(self.command == tipo)
 
-    dados = {}.copy() # Novo dicionário.
+    dados = {} # Novo dicionário.
 
     # Campos originais do {BaseHTTPRequestHandler}
     dados['command'] = self.command
@@ -198,7 +200,7 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
   def extrai_cabecalhos_http(self):
     """Converte o campo {self.headers} em um dicionario Python, limpando
     brancos supérfluos."""
-    hds = {}.copy() # Novo dicionario.
+    hds = {} # Novo dicionario.
     for name, value in self.headers.items():
       hds[name] = value.rstrip()
     return hds
@@ -212,7 +214,7 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
     {chave2}={valor2}; {...}'. Os campos de valor não podem conter ';'
     ou '='. Se algum valor estiver envolvido em aspas, remove as aspas.
     Os campos de {cook_str} cujo valor é a cadeia 'None' ou vazia são omitidos."""
-    cookies = {}.copy()
+    cookies = {}
     if 'Cookie' in dados:
       cook_str = dados['Cookie']
       cook_els = re.split(r'[ ;]+', cook_str)
@@ -230,7 +232,7 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
   def extrai_dados_de_formulario(self):
     """Se o comando é 'POST', extrai os dados do formulário, dos
     campos {self.rfile} e {self, headers}, na forma de um dicionário Python."""
-    ffs = {}.copy() # Novo dicionário.
+    ffs = {} # Novo dicionário.
     if self.command == 'POST':
       # sys.stderr.write(f"@#@ extrai_dados_de_formulario: self.command = {str(self.command)}\n")
       formulario = cgi.FieldStorage(
@@ -262,8 +264,8 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
       return None
     cookies = dados['cookies']
     if 'sessao' in cookies:
-      id_ses = cookies['sessao']
-      ses = obj_sessao.obtem_objeto(id_ses)
+      ses_id = cookies['sessao']
+      ses = obj_sessao.obtem_objeto(ses_id)
     else:
       ses = None
     return ses
@@ -316,17 +318,17 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
 
     # Manda cookies que identificam usuário e sessão:
     if ses != None:
-      id_ses = obj_sessao.obtem_identificador(ses)
+      ses_id = obj_sessao.obtem_identificador(ses)
       cookie = obj_sessao.obtem_cookie(ses)
-      usr = obj_sessao.obtem_usuario(ses)
-      id_usr = obj_usuario.obtem_identificador(usr)
+      usr_ses = obj_sessao.obtem_dono(ses)
+      usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
     else:
-      id_ses = ""
+      ses_id = ""
       cookie = ""
-      usr = None
-      id_usr = ""
-    self.send_header('Set-Cookie', 'usuario=' + id_usr)
-    self.send_header('Set-Cookie', 'sessao=' + id_ses)
+      usr_ses = None
+      usr_ses_id = ""
+    self.send_header('Set-Cookie', 'usuario=' + usr_ses_id)
+    self.send_header('Set-Cookie', 'sessao=' + ses_id)
     self.send_header('Set-Cookie', 'cookie_sessao=' + cookie)
 
     self.end_headers()
@@ -399,8 +401,8 @@ def processa_comando(tipo, ses, dados):
     # Despacha o comando:
     # !!! Completar a lista abaixo com todos os módulos {comando_*.py} que existem. !!!
 
-    id_ses = obj_sessao.obtem_identificador(ses) if ses != None else "None"
-    sys.stderr.write("  !! {processa_comando_hhtp.processa_comando}: " + f"ses = {id_ses} cmd = {str(cmd)}\n")
+    ses_id = obj_sessao.obtem_identificador(ses) if ses != None else "None"
+    sys.stderr.write("  !! {processa_comando_hhtp.processa_comando}: " + f"ses = {ses_id} cmd = {str(cmd)}\n")
 
     # --- comandos gerais ------------------------------------------------
 
@@ -511,6 +513,10 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/buscar_videos_de_usuario':
       # Quer lista dos vídeos de algum usuário:
       pag = comando_buscar_videos_de_usuario.processa(ses, cmd_args)
+      
+    elif cmd == '/ver_grade_de_videos':
+      # Quer lista dos vídeos de algum usuário:
+      pag = comando_ver_grade_de_videos.processa(ses, cmd_args)
 
     # --- comandos referentes a {obj_comentario.Classe} -----------------------
       
@@ -553,6 +559,10 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/buscar_respostas_de_comentario':
       # Quer lista de comentários que são respostas de algum comentário:
       pag = comando_buscar_respostas_de_comentario.processa(ses, cmd_args)
+      
+    elif cmd == '/ver_conversa':
+      # Quer lista de comentários que são respostas de algum comentário:
+      pag = comando_ver_conversa.processa(ses, cmd_args)
 
     # --- outros comandos -----------------------
 
@@ -563,11 +573,11 @@ def processa_comando(tipo, ses, dados):
   elif tipo == 'HEAD':
     # Comando emitido por proxy server:
     # !!! (MAIS TARDE) Tratar este caso !!!
-    cmd_args = {}.copy()
+    cmd_args = {}
     pag =  html_pag_mensagem_de_erro.gera(ses, ("** comando HEAD \"%s\" não implementado" % cmd))
   else:
     # Tipo de comando inválido:
-    cmd_args = {}.copy()
+    cmd_args = {}
     pag =  html_pag_mensagem_de_erro.gera(ses, ("** comando \"%s\" não implementado" % tipo))
 
   if pag == None:
@@ -645,10 +655,13 @@ def descasca_argumentos(cmd_args):
   """Dado um dicionário de argumentos extraídos de um comando GET ou POST,
   devolve uma cópia do mesmo onde cada valor que é uma tupla (ou lista) de 
   comprimento 1 é substituído por seu único elemento."""
-  args_new = {}.copy()
+  args_new = {}
   for ch, val in cmd_args.items():
     if val != None and (type(val) is list or type(val) is tuple):
       if len(val) == 1:
         val = val[0]
     args_new[ch] = val
   return args_new
+
+
+# !!! Comandos que tratam dados vindos de formularios devem liminar brancos e newlines inciais e finais de valores de campos antes de validar e usar. !!!

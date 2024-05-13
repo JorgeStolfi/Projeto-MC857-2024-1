@@ -30,32 +30,33 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
-# fixtures
+# Dados para teste:
 
-# Testes com video existente:
+# Video existente:
 vid1_id = "V-00000001"
 vid1 = obj_video.obtem_objeto(vid1_id)
 assert vid1 != None
 vid1_atrs = obj_video.obtem_atributos(vid1)
 
-for edita_titulo in False, True:
-  tag = f"V'-exist-etit{str(edita_titulo)[0]}"
-  testa_gera(tag, str, vid1_id, vid1_atrs, edita_titulo)
-
-# Teste com video a carregar:
+# Video a carregar:
 vid2_autor = obj_usuario.obtem_objeto("U-00000003")
 vid2_atrs_nul = { 'autor': vid2_autor, }
 vid2_atrs_tit = { 'autor': vid2_autor, 'titulo': "Panacéia patética", }
 
-tag = f"V2-novo"
-testa_gera(tag + "-aN",  str, None, vid2_atrs_nul, True)
-testa_gera(tag + "-aT",  str, None, vid2_atrs_tit, True)
+for editavel in False, True:
+  for para_admin in False, True:
+    for para_proprio in False, True:
+      tag = f"_edit{str(editavel)[0]}" + f"_admin{str(para_admin)[0]}" + f"_prop{str(para_proprio)[0]}"
+      testa_gera("exist" + tag,       str, vid1_id, vid1_atrs,     editavel, para_admin, para_proprio)
+      if editavel:
+        testa_gera("novo_atrsN" + tag,  str, None,    vid2_atrs_nul, editavel, para_admin, para_proprio)
+        testa_gera("novo_atrsT" + tag,  str, None,    vid2_atrs_tit, editavel, para_admin, para_proprio)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)

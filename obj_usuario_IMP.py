@@ -1,10 +1,14 @@
 import obj_raiz
 import obj_usuario
 
+import util_nome_de_usuario
+import util_senha
+import util_email
+import util_booleano
+
 import db_obj_tabela
 import db_tabelas_do_sistema
 import db_conversao_sql
-import util_valida_campo
 
 from util_erros import ErroAtrib, erro_prog, mostra
 
@@ -86,9 +90,13 @@ def obtem_atributo(usr, chave):
   global tabela
   return obj_raiz.obtem_atributo(usr,chave)
 
-def obtem_objeto(id_usr):
+def eh_administrador(usr):
   global tabela
-  usr = obj_raiz.obtem_objeto(id_usr, tabela, def_obj_mem)
+  return obj_raiz.obtem_atributo(usr, 'administrador')
+
+def obtem_objeto(usr_id):
+  global tabela
+  usr = obj_raiz.obtem_objeto(usr_id, tabela, def_obj_mem)
   assert usr == None or type(usr) is obj_usuario.Classe
   return usr
 
@@ -96,9 +104,9 @@ def busca_por_email(em):
   global tabela
   unico = True
   if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_email}: email = {em}\n");
-  id_usr = obj_raiz.busca_por_campo('email', em, unico, tabela)
-  if tabela.debug: sys.stderr.write(f"    > id encontrado = {id_usr}\n");
-  return id_usr
+  usr_id = obj_raiz.busca_por_campo('email', em, unico, tabela)
+  if tabela.debug: sys.stderr.write(f"    > id encontrado = {usr_id}\n");
+  return usr_id
 
 def busca_por_nome(nome):
   global tabela
@@ -182,131 +190,38 @@ def cria_testes(verb):
       },
     ]
   for atrs in lista_atrs:
-    id_usr_esp = atrs['id']; del atrs['id']
+    usr_id_esp = atrs['id']; del atrs['id']
     usr = cria(atrs)
     assert usr != None and type(usr) is obj_usuario.Classe
-    id_usr = obj_usuario.obtem_identificador(usr)
+    usr_id = obj_usuario.obtem_identificador(usr)
     nome = obj_usuario.obtem_atributo(usr,'nome')
-    if verb: sys.stderr.write("  usuário %s = \"%s\" criado\n" % (id_usr, nome))
-    assert id_usr == id_usr_esp, "identificador não confere"
+    if verb: sys.stderr.write("  usuário %s = \"%s\" criado\n" % (usr_id, nome))
+    assert usr_id == usr_id_esp, "identificador não confere"
   return
 
 def confere_e_elimina_conf_senha(args):
 
-  senha = (args['senha'] if 'senha' in args else None)
-  if senha != None and senha != '':
-    # Senha está sendo alterada/definida.  Precisa confirmar senha:
-    if 'conf_senha' not in args:
-      raise ErroAtrib([ "campo 'Confirmar Senha' 'e obrigatório", ])
-    else:
-      if senha != args['conf_senha']:
-        raise ErroAtrib([ "senhas não batem", ])
-   
-  # Remove o campo 'conf_senha', não mais necessários
-  if 'conf_senha' in args: del args['conf_senha']
-  return
+  erros = []
 
-def verifica_criacao(usr, id_usr, atrs):
-  return obj_raiz.verifica_criacao(usr, obj_usuario.Classe, id_usr, atrs, None, tabela, def_obj_mem)
-
-def valida_nome(chave, val, nulo_ok, parcial):
-  erros = [].copy()
-  epref = f"campo '{chave}' = \"{val}\" não é nome válido: "
-  if val == None:
-    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
-  elif type(val) is not str:
-    erros += [ epref + f"deve ser string" ]
-  else:
-    nmin = 3 if parcial else 10
-    nmax = 60
-    n = len(val)
-    if n < nmin:
-      erros += [ epref + f"é muito curto ({n} caracteres, mínimo {nmin})" ]
-    elif n > nmax:
-      erros += [ epref + f"é muito longo ({n} caracteres, máximo {nmax})" ]
-
-    re_car_validos = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s.'-]+$"
-    if not re.match(re_car_validos, val):
-      erros += [ epref + f"tem caracteres não permitidos" ]
-
-    if not parcial and (val[0].isspace() or val[-1].isspace()):
-      erros += [ epref + f"branco antes ou depois do nome" ]
-
-    if '  ' in val:
-      erros += [ epref + f"tem dois ou mais espaços seguidos" ]
-
-    if not parcial and not val[0].isupper():
-      erros += [ epref + f"primeiro caractere '{val[0]}' não é letra maiúscula" ]
-
-    if not parcial and not val[-1].isalpha():
-      erros += [ epref + f"o último caractere '{val[-1]}' não é uma letra" ]
-    
-    re_pto_prev = r"[^a-zA-ZÀ-ÖØ-öø-ÿ][.]" if parcial else r"(^|[^a-zA-ZÀ-ÖØ-öø-ÿ])[.]"
-    if re.match(re_pto_prev, val):
-      erros += [ epref + f"um ponto deve seguir uma letra" ]
-      
-    re_pto_prox = r"[.][^-\s]" if parcial else r"[.]([^-\s]|$)"
-    if re.match(re_pto_prox, val):
-      erros += [ epref + f"um ponto deve ser seguido por hífen ou um espaço em branco" ]
-    
-    re_apo_prev = r"[^a-zA-ZÀ-ÖØ-öø-ÿ][']" if parcial else r"(^|[^a-zA-ZÀ-ÖØ-öø-ÿ])[']"
-    if re.match(re_apo_prev, val):
-      erros += [ epref + f"um apóstrofe deve seguir uma letra" ]
-      
-    re_apo_prox = r"['][^A-ZÀ-ÖØ-Þ]" if parcial else r"[']([^A-ZÀ-ÖØ-Þ]|$)"
-    if re.match(re_apo_prox, val):
-      erros += [ epref + f"um apóstrofe deve ser seguido por uma letra maiúscula" ]
-    
-    re_hif_prev = r"[^a-zA-ZÀ-ÖØ-öø-ÿ.][-]" if parcial else r"(^|[^a-zA-ZÀ-ÖØ-öø-ÿ.])[-]"
-    if re.match(re_hif_prev, val):
-      erros += [ epref + f"um hífen deve seguir uma letra ou um ponto" ]
-      
-    re_hif_prox = r"[-][^A-ZÀ-ÖØ-Þ]" if parcial else r"[-]([^A-ZÀ-ÖØ-Þ]|$)"
-    if re.match(re_hif_prox, val):
-      erros += [ epref + f"um hífen deve ser seguido por uma letra maiúscula" ]
-
+  # Confere os campos 'senha' e 'conf_senha', elimina este último:
+  if 'senha' in args or 'conf_senha' in args:
+    senha = args.get('senha')
+    conf_senha = args.get('conf_senha')
+    if senha == '': senha = None
+    if conf_senha == '': conf_senha = None
+    if senha != None or conf_senha != None:
+      # As duas tem que estar presentes e coincidir:
+      if senha == None: 
+        erros.append("Nova senha não foi especificada")
+      elif conf_senha == None: 
+        erros.append("Senha não foi confirmada")
+      elif senha != conf_senha:
+        erros.append("Senhas não batem")
+  args.pop('conf_senha')
   return erros
 
-def valida_senha(chave, val, nulo_ok):
-  # O padrão {re} para caracter ASCII visível é [!-~], e para
-  # letra ou dígito é [A-Za-z0-9].
-  erros = [].copy()
-  if val == None:
-    if not nulo_ok:# !!! Implementar conforme documentação na interface !!!
-      erros += [ f"campo '{chave}' não pode ser omitido" ]
-  elif type(val) is not str:
-    erros += [ f"campo '{chave}' = \"{str(val)}\" não é senha válida: deve ser string" ]
-  else:
-    if not re.search(r'^[!-~]*$', val):
-      erros += [ f"campo '{chave}' não é senha válida: pode conter apenas caracters visíveis ASCII ([!-~])" ]
-    nmin = 8  # Comprimento mínimo.
-    nmax = 14 # Comprimento máximo.
-    n = len(val)
-    if n < nmin:
-      erros += [ f"campo '{chave}' não é senha válida: muito curto ({n} caracteres, mínimo {nmin})"]
-    elif n > nmax:
-      erros += [ f"campo '{chave}' não é senha válida: muito longo ({n} caracteres, máximo {nmax})"]
-    if not re.search(r'[A-Za-z]', val):
-      erros += [ f"campo '{chave}' não é senha válida: deve conter no mínimo uma letra" ]
-    if not re.search(r'[0-9]', val):
-      erros += [ f"campo '{chave}' não é senha válida: deve conter no mínimo um dígito" ]
-    if re.search(r'^[a-zA-Z0-9]*$', val):
-      erros += [ f"campo '{chave}' não é senha válida: não pode ser apenas letras e dígitos" ]
-  return erros
-
-def valida_email(chave, val, nulo_ok):
-  erros = [].copy()
-  if val == None:
-    if not nulo_ok: erros += [ f"campo '{chave}' não pode ser omitido" ]
-  elif type(val) is not str:
-    erros += [ f"campo '{chave}' = \"{str(val)}\" não é um email válido: deve ser string" ]
-  else:
-    padrao_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    padrao_email_aux=r'@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    if not re.match(padrao_email, val) and not re.match(padrao_email_aux, val):
-      erros += [ f"campo '{chave}' = '%s' não é um email válido" % ( str(val))]
-
-  return erros
+def verifica_criacao(usr, usr_id, atrs):
+  return obj_raiz.verifica_criacao(usr, obj_usuario.Classe, usr_id, atrs, None, tabela, def_obj_mem)
 
 def liga_diagnosticos(val):
   global tabela
@@ -328,18 +243,17 @@ def valida_atributos(usr, atrs):
   com mesmo email."""
   global tabela
   
-  erros = [].copy();
+  erros = [];
   
   # Validade dos campos fornecidos:
+  nulo_ok = False
+  padrao_ok = False
   if 'nome' in atrs:
-    nome_nulo_ok = False
-    nome_parcial = False
-    erros += valida_nome('nome', atrs['nome'], nome_nulo_ok, nome_parcial)
+    erros += util_nome_de_usuario.valida('nome', atrs['nome'], nulo_ok, padrao_ok)
   if 'email' in atrs:
-    email_nulo_ok = False
-    erros += valida_email('Email', atrs['email'], email_nulo_ok)
+    erros += util_email.valida('Email', atrs['email'], nulo_ok, padrao_ok)
   if 'administrador' in atrs:
-    erros += util_valida_campo.booleano('Administrador', atrs['administrador'], False)
+    erros += util_booleano.valida('Administrador', atrs['administrador'], nulo_ok)
      
   # Pega a senha, se tiver:
   if 'senha' in atrs:
@@ -350,7 +264,7 @@ def valida_atributos(usr, atrs):
   
   # Valida a senha:
   senha_nula_ok = (usr != None) # Pode ser nula na criação? !!!
-  erros += valida_senha('Senha', senha, senha_nula_ok)
+  erros += util_senha.valida('Senha', senha, senha_nula_ok)
 
   # Acrescenta 'administrador' se não está presente, converte para booleano se está:
   if 'administrador' not in atrs:
@@ -384,22 +298,22 @@ def verifica_email_em_uso(em, usr_dado):
   
   Em caso de erro devolve uma mensagem informando a 
   repetição. Senão, retorna {None}."""
-  id_usr_dado = usr_dado.id if usr_dado != None else None
-  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.verifica_email_em_uso}: email = '{em}' id_usr_dado = '{str(id_usr_dado)}'\n")
-  id_usr_atual = busca_por_email(em)
-  if tabela.debug: sys.stderr.write(f"    > id_usr_atual = '{str(id_usr_atual)}'\n")
-  if id_usr_dado == None and id_usr_atual != None:
-    erro = "usuário com 'email' = '" + em + "' já existe: " + id_usr_atual
-  elif id_usr_dado != None and id_usr_atual != None and id_usr_atual != id_usr_dado:
-    erro = "usuário com 'email' = '" + em + "' não encontrado, devia ser " + id_usr_dado
+  usr_id_dado = usr_dado.id if usr_dado != None else None
+  if tabela.debug: sys.stderr.write(f"  > {obj_usuario.verifica_email_em_uso}: email = '{em}' usr_id_dado = '{str(usr_id_dado)}'\n")
+  usr_id_atual = busca_por_email(em)
+  if tabela.debug: sys.stderr.write(f"    > usr_id_atual = '{str(usr_id_atual)}'\n")
+  if usr_id_dado == None and usr_id_atual != None:
+    erro = "usuário com 'email' = '" + em + "' já existe: " + usr_id_atual
+  elif usr_id_dado != None and usr_id_atual != None and usr_id_atual != usr_id_dado:
+    erro = "usuário com 'email' = '" + em + "' não encontrado, devia ser " + usr_id_dado
   else:
     erro = None
   if tabela.debug: sys.stderr.write(f"    > resultado = '{erro}'\n")
   return erro
 
-def def_obj_mem(usr, id_usr, atrs_SQL):
+def def_obj_mem(usr, usr_id, atrs_SQL):
   """Se {usr} for {None}, cria um novo objeto da classe {obj_usuario.Classe} com
-  identificador {id_usr} e atributos {atrs_SQL}, tais como extraidos
+  identificador {usr_id} e atributos {atrs_SQL}, tais como extraidos
   da tabela de sessoes. O objeto *NÃO* é inserido na base de dados.
 
   Se {usr} não é {None}, deve ser um objeto da classe {obj_usuario.Classe}; nesse
@@ -409,18 +323,18 @@ def def_obj_mem(usr, id_usr, atrs_SQL):
   Em qualquer caso, os valores em {atr_SQL} são convertidos para valores
   equivalentes na memória."""
   global tabela
-  if tabela.debug: mostra(0,"obj_usuario.def_obj_mem(" + str(usr) + ", " + id_usr + ", " + str(atrs_SQL) + ") ...")
+  if tabela.debug: mostra(0,"obj_usuario.def_obj_mem(" + str(usr) + ", " + usr_id + ", " + str(atrs_SQL) + ") ...")
   if usr == None:
-    usr = cria_obj_mem(id_usr, atrs_SQL)
+    usr = cria_obj_mem(usr_id, atrs_SQL)
   else:
-    assert usr.id == id_usr
+    assert usr.id == usr_id
     modifica_obj_mem(usr, atrs_SQL)
   if tabela.debug: mostra(2,"usr = " + str(usr))
   return usr
     
-def cria_obj_mem(id_usr, atrs_SQL):
+def cria_obj_mem(usr_id, atrs_SQL):
   """Cria um novo objeto da classe {obj_usuario.Classe} com
-  identificador {id_usr} e atributos {atrs_SQL}, tais como extraidos
+  identificador {usr_id} e atributos {atrs_SQL}, tais como extraidos
   da tabela de sessoes. O objeto *NÃO* é inserido na base de dados.
   
   Os valores em {atr_SQL} são convertidos para valores
@@ -439,7 +353,7 @@ def cria_obj_mem(id_usr, atrs_SQL):
   erro_email_dup = verifica_email_em_uso(atrs_mem['email'], None) if 'email' in atrs_mem else None
   if erro_email_dup != None: erro_prog(erro_email_dup)
 
-  usr = obj_usuario.Classe(id_usr, atrs_mem)
+  usr = obj_usuario.Classe(usr_id, atrs_mem)
   return usr
   
 def modifica_obj_mem(usr, atrs_mod_SQL):

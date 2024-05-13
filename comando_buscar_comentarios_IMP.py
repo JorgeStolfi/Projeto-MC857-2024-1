@@ -15,29 +15,29 @@ def processa(ses, cmd_args):
   resultados = []
 
   # Obtém os valores dos campos para busca, ou {None} se não fornecidos:
-  id_com = cmd_args.get("comentario", None)
+  com_id = cmd_args.get("comentario", None)
   id_aut = cmd_args.get("autor", None) 
-  id_vid = cmd_args.get("video", None)
-  id_pai = cmd_args.get("pai", None)
+  vid_id = cmd_args.get("video", None)
+  pai_id = cmd_args.get("pai", None)
   texto = cmd_args.get("texto", None)
   data = cmd_args.get("data", None)
 
-  if id_com is not None:
-    if id_vid is not None or id_aut is not None or id_pai is not None or texto is not None or data is not None:
+  if com_id is not None:
+    if vid_id is not None or id_aut is not None or pai_id is not None or texto is not None or data is not None:
       erros.append("Busca por ID de comentário não permite outros critérios")
     else:
-      com = obj_comentario.obtem_objeto(id_com)
+      com = obj_comentario.obtem_objeto(com_id)
       if com is None:
-        erros.append(f"Comentário {id_com} não existe")
+        erros.append(f"Comentário {com_id} não existe")
       else:
-        resultados.append(id_com)
+        resultados.append(com_id)
   else:
     campos_definidos = []
 
     for chave, val in  [
       ("autor", id_aut),
-      ("video", id_vid), 
-      ("pai", id_pai), 
+      ("video", vid_id), 
+      ("pai", pai_id), 
       ("texto", texto), 
       ("data", data)
       ]:

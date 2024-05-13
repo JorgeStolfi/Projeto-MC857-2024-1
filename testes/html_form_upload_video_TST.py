@@ -1,8 +1,5 @@
 #! /usr/bin/python3
 
-# Este programa pode ser usado para testar funções que
-# escrevem formulários HTML5.
-
 import html_form_upload_video
 import obj_usuario
 import util_identificador
@@ -32,7 +29,7 @@ def testa_gera(rot_teste, res_esp, *args):
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(modulo, funcao, rot_teste, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
@@ -40,12 +37,16 @@ def testa_gera(rot_teste, res_esp, *args):
 usr1_id = "U-00000003"
 usr1 = obj_usuario.obtem_objeto(usr1_id)
 
-atrs1 = { 'arq': "banana.mp4", 'titulo': "Bananas comendo macacos", }
+atrs0 = { 'autor': usr1_id, }
+atrs1 = { 'autor': usr1_id, 'titulo': "Bananas comendo macacos", }
 
-testa_gera("SemAtrs_ok", str, usr1_id, {})
-testa_gera("ComAtrs_ok", str, usr1_id, atrs1)
+for para_admin in False, True:
+  xpadm = f"_padm{str(para_admin)[0]}"
+  tag = xpadm
+  testa_gera("SemAtrs" + tag, str, atrs0, para_admin)
+  testa_gera("ComAtrs" + tag, str, atrs1, para_admin)
 
 if ok_global:
   sys.stderr.write("Testes terminados normalmente.\n")
 else:
-  aviso_erro("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam", True)
