@@ -9,6 +9,9 @@ def gera(vid_id, atrs_mod, ed_nota):
   vídeo que existe. O formulário vai mostrar {vid_id} como um campo
   "readonly".
   
+  O parâmetro booleano {ed_nota} diz se o atributo {nota} deve ser
+  editável.
+  
   O formulário terá campos editáveis com os atributos mutáveis do vídeo. O
   parâmetro {atrs_mod} deve ser um dicionário com um subconjuto
   (possivelmente vazio) das chaves desses atributos. Os valores

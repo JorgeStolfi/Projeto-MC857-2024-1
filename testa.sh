@@ -21,14 +21,14 @@ if [[ ! ( -s ${modulo}.py ) ]]; then echo "** modulo ${modulo} nao existe" 1>&2;
 # Cria folder para saídas:
 mkdir -p testes/saida
 
-# Cria links para folders que o programa de testes pode querer ler:
-( cd testes && if [[ ! ( -r imagens ) ]]; then ln -s ../imagens; fi )
-( cd testes && if [[ ! ( -r videos ) ]]; then ln -s ../videos; fi )
-( cd testes && if [[ ! ( -r DB ) ]]; then ln -s ../DB; fi )
+# Cria links para folders que o programa de testes e as páginas HTML podem querer ler:
+for tdir in testes testes/saida; do 
+  for idir in imagens videos avatares thumbs DB; do
+    ( cd ${tdir} && if [[ ! ( -r ${idir} ) ]]; then ln -s ../${idir}; fi )
+  done
+done
 
-# Cria links para folders que as páginas HTML podem querer ler:
-( cd testes/saida && if [[ ! ( -r imagens ) ]]; then ln -s ../imagens; fi )
-( cd testes/saida && if [[ ! ( -r videos ) ]]; then ln -s ../videos; fi )
+lista_funcoes_nao_testadas.sh ${modulo}
 
 # Limpa arquivos de rodadas anteriores:
 rm -fv ${otext} ${opage} ${opref}.*.html 

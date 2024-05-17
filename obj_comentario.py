@@ -18,22 +18,41 @@ class Classe(obj_comentario_IMP.Classe_IMP):
 
     'video'          {obj_video.Classe}      Vídeo ao qual o comentário se refere.
     'autor'          {obj_usuario.Classe}    Usuário que postou o comentário.
-    'data'           {str}                   Data de postagem.
     'pai'            {obj_comentario.Classe} Comentário do qual este é resposta.
+    'data'           {str}                   Data de postagem.
     'texto'          {str}                   Texto do comentário.
+    'voto'           {int}                   Voto para pai ou vídeo (0 a 4).
+    'nota'           {float}                 Nota média do comentário (0 a 4).
+    'bloqueado'      {bool}                  Bloquado pelo administrador.
 
-  Outros atributos (como censura, escore, histórico de edições, etc.)
-  poderão ser acrescentados no futuro.
+  Outros atributos (como histórico de edições, etc.) poderão ser
+  acrescentados no futuro.
   
   A data de postagem deve estar no formato ISO, "yyyy-mm-dd HH:MM:SS UTC".
   Por enquanto todas as datas são referentes ao fuso universal "UTC".
    
   Nenhum destes atributos pode ser {None}, exceto 'pai'.
   
-  Se o campo 'pai' não é {None}, o comentário em questão é uma
+  Se o campo 'pai' é {None}, o comentário se refere diretamente ao vídeo 
+  indicado. Se 'pai' não é {None}, o comentário em questão é uma
   resposta ao comentário cujo identificador é o valor de 'pai'.
-  O campo 'data' deve serr estritamente maior (posterior) à data
+  
+  O campo 'voto' é um número inteiro especificado pelo autor do comentário e
+  indica sua opinião sobre o comentário pai, ou sobre o vídeo se 'pai' é
+  {None}. Seu valor pode ser 0 ("discordo fortemente", "detestei"), 1
+  ("discordo", "não gostei"), 2 ("indiferente", "sem opinião") 3
+  ("concordo", "gostei") ou 4 ("apoio totalmente", "adorei").
+   
+  O campo 'nota' é um número que pode ser editado pelos
+  administradores ou calculado a partir dos votos e notas das respostas
+  ao comentário.  Seu valor varia de 0 a 4, com a mesma escala do 'voto'
+  mas fracionário.
+ 
+  O campo 'data' deve ser estritamente maior (posterior) à data
   do 'pai', e os dois devem se referir ao mesmo vídeo. 
+  
+  O campo 'bloqueado' é {True} se e somente se o comentário foi
+  bloqueado pelo administrador.
   
   Cada comentário tem um unico autor (usuário), um único vídeo,
   e um único comentário-pai; mas cada um destes objetos 
@@ -89,12 +108,13 @@ def muda_atributos(com, atrs_mod):
   {obj_comentario.Classe}, registrando as alterações na base de dados.
   Dá erro se {com} é {None}.
 
-
   O parâmetro {atrs_mod} deve ser um dicionário cujas chaves são um
   subconjunto das chaves dos atributos do comentário (excluindo o identificador).
   Os valores atuais desses atributos são substituídos pelos valores
   correspondentes em {atrs_mod}.  Os valores devem estar no formato de
   atributos na memória.
+  
+  Os campos 'video', 'autor', 'pai' e 'data' não podem ser alterados.
   
   Em caso de sucesso, não devolve nenhum resultado. Caso contrário,
   levanta a exceção {ErroAtrib} com uma lista de mensagens de erro.
@@ -104,6 +124,12 @@ def muda_atributos(com, atrs_mod):
 def obtem_identificador(com):
   """Devolve o identificador 'C-{NNNNNNNN}' do comentario. Dá erro se {com} é {None}."""
   return obj_comentario_IMP.obtem_identificador(com)
+
+def obtem_objeto(com_id):
+  """Localiza um comentario com identificador {com_id} (uma string da forma
+  "C-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_comentario.Classe}.
+  Se {com_id} é {None} ou tal comentário não existe, devolve {None}."""
+  return obj_comentario_IMP.obtem_objeto(com_id)
 
 def obtem_atributos(com):
   """Retorna um dicionário Python que é uma cópia dos atributos do comentário,
@@ -119,12 +145,6 @@ def obtem_autor(com):
   """Retorna o atributo 'autor' do comentário {com}. 
   Equivale a {obtem_atributos(com)['autor']}. Dá erro se {com} é {None}."""
   return obj_comentario_IMP.obtem_autor(com)
-
-def obtem_objeto(com_id):
-  """Localiza um comentario com identificador {com_id} (uma string da forma
-  "C-{NNNNNNNN}"), e devolve o mesmo na forma de um objeto da classe {obj_comentario.Classe}.
-  Se {com_id} é {None} ou tal comentário não existe, devolve {None}."""
-  return obj_comentario_IMP.obtem_objeto(com_id)
 
 def busca_por_video(vid_id, sem_pai):
   """
@@ -174,6 +194,11 @@ def busca_por_data(data_ini, data_ter):
   ou {None} se nenhum comentário foi postado no intervalo de data."""
   return obj_comentario_IMP.busca_por_data(data_ini, data_ter)
 
+def busca_por_campo(chave, val):
+  """Localiza todos os comentários cujo campo {chave} seja {valor}. Retorna a lista de ids
+  desses comentários. Equivale a {busca_por_campos({ chave: val }, unico=False)}"""
+  return obj_comentario_IMP.busca_por_campo(chave, val)  
+
 def busca_por_campos(args, unico):
   """
   Busca comentários que satisfazem uma combinação de valores
@@ -210,6 +235,13 @@ def obtem_conversa(raizes, max_coms, max_nivel):
   cujos identificadores estão na lista {raizes}.
   """
   return obj_comentario_IMP.obtem_conversa(raizes, max_coms, max_nivel)
+
+def recalcula_nota(com):
+  """Calcula uma nova nota para o comentário {com},
+  baseada nas notas e votos das respostas imediatas
+  (comentários com 'pai' = {com}). Se {com}
+  não tem nenhuma resposta, devolve 2.0."""
+  return obj_comentario_IMP.recalcula_nota(com)
 
 def ultimo_identificador():
   """Devolve o identificador do último comentário inserido na tabela.

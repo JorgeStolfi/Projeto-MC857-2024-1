@@ -34,7 +34,9 @@ def processa(ses, cmd_args):
   
   # Converte {cmd_args} na lista de atributos {atrs_com} para postagem:
   cmd_args = util_dict.para_identificadores(cmd_args)
+  sys.stderr.write(f"@1@  erros = {erros}\n")
   atrs_com = converte_argumentos(cmd_args, ses_dono_id, erros)
+  sys.stderr.write(f"@2@  erros = {erros}\n")
 
   # Tenta criar o comentário:
   com = None
@@ -44,12 +46,13 @@ def processa(ses, cmd_args):
     except ErroAtrib as ex:
       erros += ex.args[0]
       
-  if com != None:
+  if len(erros) == 0:
+    assert com != None
     pag = html_pag_ver_comentario.gera(ses, com, erros)
   else:
     # Repete a página de postar comentarios com os mesmos argumentos e mens de erro:
     assert len(erros) > 0
-    pag = html_pag_postar_comentario.gera(ses, atrs_com, erros)
+    pag = html_pag_postar_comentario.gera(ses, cmd_args, erros)
   return pag
 
 def converte_argumentos(cmd_args, ses_dono_id, erros):
@@ -111,7 +114,7 @@ def converte_argumentos(cmd_args, ses_dono_id, erros):
   if 'data' in cmd_args: del cmd_args['data']
   
   texto = cmd_args.pop('texto', None)
-  if texto != None:
+  if texto != None and texto != "":
     erros_item = util_texto_de_comentario.valida('texto', texto, False)
     if len(erros_item) == 0:
       atrs_com['texto'] = texto
@@ -119,6 +122,31 @@ def converte_argumentos(cmd_args, ses_dono_id, erros):
       erros += erros_item
   else:
     erros.append("O texto do comentário não foi especificado")
+  
+  voto = cmd_args.pop('voto', None)
+  if voto != None and voto != "":
+    erros_item = util_inteiro.valida('voto', voto, 0, 4, False)
+    if len(erros_item) == 0:
+      atrs_com['voto'] = int(voto)
+    else:
+      erros += erros_item
+  else:
+    # Providencia um voto default:
+    atrs_com['voto'] = 2
+  
+  # A nota inicial é sempre 2.0:
+  atrs_com['nota'] = 2.0 
+  
+  bloqueado = cmd_args.pop('bloqueado', None)
+  if bloqueado != None and bloqueado != "":
+    erros_item = util_booleano.valida('bloqueado', bloqueado, False)
+    if len(erros_item) == 0:
+      atrs_com['bloqueado'] = util_booleano.converte(bloqueado)
+    else:
+      erros += erros_item
+  else:
+    # Providencia um default
+    atrs_com['bloqueado'] = False
   
   assert len(cmd_args) == 0, f"Argumentos espurios: \"{str(cmd_args)}\""
     

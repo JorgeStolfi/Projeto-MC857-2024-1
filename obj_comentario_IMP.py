@@ -9,6 +9,8 @@ import db_conversao_sql
 
 import util_identificador
 import util_data
+import util_inteiro
+import util_booleano
 import util_texto_de_comentario
 
 import time
@@ -43,11 +45,14 @@ def inicializa_modulo(limpa):
   # Descrição das colunas da tabela na base de dados: 
   # Vide parâmetro {cols} de {db_obj_tabela.cria_tabela}.
   colunas = \
-    ( ( 'video',  obj_video.Classe,      'TEXT', False ), # Video ao qual está associado.
-      ( 'autor',  obj_usuario.Classe,    'TEXT', False ), # Usuário que postou o comentário.
-      ( 'data',   type("foo"),           'TEXT', False ), # Data e hora da postagem.
-      ( 'pai',    obj_comentario.Classe, 'TEXT', True  ), # Comentário pai, ou {None}.
-      ( 'texto',  type("foo"),           'TEXT', False ), # Texto do comentário.
+    ( ( 'video',     obj_video.Classe,      'TEXT',    False ), # Video ao qual está associado.
+      ( 'autor',     obj_usuario.Classe,    'TEXT',    False ), # Usuário que postou o comentário.
+      ( 'pai',       obj_comentario.Classe, 'TEXT',    True  ), # Comentário pai, ou {None}.
+      ( 'texto',     type("foo"),           'TEXT',    False ), # Texto do comentário.
+      ( 'voto',      type(418),             'INTEGER', False ), # Opinião sobre víedo ou pai.
+      ( 'nota',      type(3.14),            'FLOAT',   False ), # Opinião sobre víedo ou pai.
+      ( 'bloqueado', type(False),           'INTEGER', False ), # O comentário foi bloqueado.
+      ( 'data',      type("foo"),           'TEXT',    False ), # Data e hora da postagem.
     )
 
   tabela = db_obj_tabela.cria_tabela(nome_tb, letra_tb, classe, colunas, limpa)
@@ -58,7 +63,7 @@ def cria(atrs):
   if tabela.debug: mostra(0, f"  > obj_comentario.cria({str(atrs)}) ...")
 
   # Data de postagem:
-  if not 'data' in atrs:
+  if not 'data' in atrs or atrs['data'] == None:
     data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
     atrs['data'] = data
 
@@ -123,6 +128,11 @@ def busca_por_video(vid_id, sem_pai):
   if tabela.debug: sys.stderr.write(f"    > ids encontrados = {lista_ids}\n");
   return lista_ids
 
+def busca_por_campo(chave, val):
+  global tabela
+  lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
+  return lista_ids
+
 def busca_por_campos(args, unico):
   global tabela
   res = obj_raiz.busca_por_campos(args, unico, tabela)
@@ -165,6 +175,11 @@ def busca_por_data(data_ini, data_fin):
   if tabela.debug: sys.stderr.write(f"    > ids encontrados = {str(lista_ids)}\n");
   return lista_ids
   
+def recalcula_nota(com):
+  sys.stderr.write("!!! função {obj_comentario.recalcula_nota} ainda não foi implementada !!!\n")
+  nota = 2.0
+  return nota
+
 def ultimo_identificador():
   global tabela
   return obj_raiz.ultimo_identificador(tabela)
@@ -197,12 +212,18 @@ def cria_testes(verb):
     pai = obj_comentario.obtem_objeto(pai_id)
     dia = com_id_esp[-2:]
     data = "2024-01-" + dia + " 08:33:25 UTC"
+    bloqueado = False
+    voto = ((7 + int(vid_id[-3:]))**2//11) % 5
+    nota = (((7 + int(vid_id[-3:]))**2//11) % 401) / 100.0
     atrs = { 
         'video': vid, 
         'autor': autor, 
         'pai': pai, 
-        'texto': texto, 
         'data': data,
+        'texto': texto,
+        'voto': voto,
+        'nota': nota,
+        'bloqueado': bloqueado,
       }
     com = cria(atrs)
     assert com != None and type(com) is obj_comentario.Classe
@@ -239,35 +260,59 @@ def valida_atributos(com, atrs):
   if 'video' in atrs:
     vid_fin = atrs['video']
     if type(vid_fin) is not obj_video.Classe:
-      erros += [ "campo 'video' = \"%s\" deve ser um {obj_video}" % str(vid_fin) ]
-  else:
+      erros += [ f"O campo 'video' = \"{vid_fin}\" deve ser um objeto vídeo" ]
+  elif com != None:
     vid_fin = obj_comentario.obtem_atributo(com, 'video')
 
   if 'autor' in atrs:
     autor_fin = atrs['autor']
     if type(autor_fin) is not obj_usuario.Classe:
-      erros += [ "campo 'autor' = \"%s\" deve ser um objeto usuario" % str(autor_fin) ]
-  else:
+      erros += [ f"O campo 'autor' = \"{autor_fin}\" deve ser um objeto usuário" ]
+  elif com != None:
     autor_fin = obj_comentario.obtem_atributo(com, 'autor')
 
   if 'data' in atrs:
     data_fin = atrs['data']
     erros += util_data.valida('data', data_fin, False)
-  else:
+  elif com != None:
     data_fin = obj_comentario.obtem_atributo(com, 'data')
   
   if 'pai' in atrs:
     pai_fin = atrs['pai'];
     if pai_fin != None and type(pai_fin) is not obj_comentario.Classe:
-      erros += [ "campo 'pai' = \"%s\" deve ser {None} ou um {obj_comentario}" % str(pai_fin) ]
-  else:
+      erros.append( f"O campo 'pai' = \"{pai_fin}\" deve ser {None} ou um objeto comentario" )
+  elif com != None:
     pai_fin = obj_comentario.obtem_atributo(com, 'pai')
-    
+  
   if pai_fin != None:
     vid_pai = obj_comentario.obtem_atributo(pai_fin, 'video')
     if vid_pai != vid_fin: 
-      erros.append(f"videos diferentes pai = \"{str(vid_pai)}\" com = \"{str(vid_fin)}\"")
-      
+      erros.append(f"O video do pai = \"{vid_pai}\" não é o mesmo deste comentário = \"{vid_fin}\"")
+    
+  if 'voto' in atrs:
+    voto_fin = atrs['voto']
+    if not type(voto_fin) is int or voto_fin < 0 or voto_fin > 4:
+      erros.append(f"O campo 'voto' = \"{voto_fin}\" deve ser inteiro em {'{0..4}'}")
+  elif com != None:
+    voto_fin = obj_comentario.obtem_atributo(com, 'voto')
+    
+  if 'nota' in atrs:
+    nota_fin = atrs['nota']
+    nota_min = 0.0
+    nota_max = 4.0
+    if not isinstance(nota_fin, float):
+      erros.append(f"O atributo 'nota' = \"{nota_fin}\" não é um {'{float}'}")
+    elif nota_fin < nota_min or nota_fin > nota_max:
+      erros.append(f"O atributo 'nota' = \"{nota_fin}\" está fora da faixa [{nota_min:.0f} _ {nota_max:.0f}]")
+  elif com != None:
+    nota_fin = obj_comentario.obtem_atributo(com, 'nota')
+     
+  if 'bloqueado' in atrs:
+    bloqueado_fin = atrs['bloqueado']
+    erros += util_booleano.valida('bloqueado', bloqueado_fin, False)
+  elif com != None:
+    bloqueado_fin = obj_comentario.obtem_atributo(com, 'bloqueado')
+     
   # Verifica completude:
   nargs = 0 # Número de campos em {atrs} reconhecidos.
   for chave, tipo_mem, tipo_sql, nulo_ok in tabela.colunas:

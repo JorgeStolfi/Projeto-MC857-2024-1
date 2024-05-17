@@ -42,7 +42,7 @@ def processa(ses, cmd_args):
         atrs_busca['nome'] = f"~%{val}%"
     elif chave == 'administrador':
       item_erros = util_booleano.valida(chave, val, nulo_ok)
-      if len(item_erros) == 0: atrs_busca[chave] = val
+      if len(item_erros) == 0: atrs_busca[chave] = util_booleano.converte(val)
     elif chave == 'senha':
       item_erros = [ f"Busca por '{chave}' não é permitida" ]
     else:

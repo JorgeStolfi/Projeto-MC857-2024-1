@@ -498,7 +498,7 @@ def processa_comando(tipo, ses, dados):
 
     elif cmd == '/solicitar_pag_alterar_video':
       # Quer formulário para alterar atributos de um video:
-      pag = comando_solicitar_pag_alterar_video(ses, cmd_args)
+      pag = comando_solicitar_pag_alterar_video.processa(ses, cmd_args)
 
     elif cmd == '/alterar_video':
       # Preencheu formulário e quer efetuar as alterações:

@@ -27,7 +27,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
   global ok_global
   modulo = html_form_postar_alterar_comentario
-  funcao = modulo.gera
+  funcao = html_form_postar_alterar_comentario.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
@@ -41,8 +41,10 @@ assert comC1 != None
 comC1_atrs = obj_comentario.obtem_atributos(comC1)
 
 # Form para criação:
-rot_teste = "CR"
-testa_gera(rot_teste, str, None, comC1_atrs)
+for ed_nota in False, True:
+  xedn = "_ednota{str(ed_nota)[0]}"
+  rot_teste = "CR" + xedn
+  testa_gera(rot_teste, str, None, comC1_atrs, ed_nota)
 
 # Form para alteração:
 atrs_tot = obj_comentario.obtem_atributos(comC1)
@@ -50,8 +52,10 @@ atrs_som = { 'texto': "Alteradus", }
 atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
 for atrs_tag, atrs in atrs_dic.items():
   xatr = f"_atr{atrs_tag}"
-  rot_teste = "AL" + xatr
-  testa_gera(rot_teste, str, comC1_id, atrs)
+  for ed_nota in False, True:
+    xedn = "_ednota{str(ed_nota)[0]}"
+    rot_teste = "AL" + xatr + xedn
+    testa_gera(rot_teste, str, comC1_id, atrs, ed_nota)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

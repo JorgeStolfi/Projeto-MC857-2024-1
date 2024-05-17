@@ -1,7 +1,0 @@
-Problemas encontrados:
-
-Icone de virus no cabeçalho redireciona para a foto. Deveria ser um link de volta para a pagina principal. ()
-Campos de senha, no formulario de cadastro, não permitem copiar mas permitem colar, nao deveria permitir
-Nao existe opcao para mostrar o conteudo da senha (ver senha). Implementar trocando o type do input entre text e password
-Input de upload de arquivo permite escolher qualquer arquivo, restringir as extensões para apenas as de formato de video desejadas (mp4, etc). Se coloca arquivos de outros formatos, volta erro
-Aba "Meus comentarios" estoura um erro ao entrar com usuario que ainda nao possui comentario

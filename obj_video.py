@@ -14,13 +14,14 @@ class Classe(obj_video_IMP.Classe_IMP):
   Por enquanto, o dicionário de atributos de um objeto desta classe
   (vide {obtem_atributos} abaixo) contém os seguintes campos:
 
-    'autor'    {obj_usuario.Classe} O usuário que fez upload do vídeo.
-    'titulo'   {str}   Título do vídeo (max 60 caracteres).
-    'data'     {str}   Data de upload, no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
-    'duracao'  {int}   Duração do vídeo em millissegundos.
-    'largura'  {int}   Largura de cada frame, em pixels.
-    'altura'   {int}   Atura de cada frame, em pixels.
-    'nota'     {float} Nota média do vídeo (0 a 4).
+    'autor'     {obj_usuario.Classe} O usuário que fez upload do vídeo.
+    'titulo'    {str}   Título do vídeo (max 60 caracteres).
+    'data'      {str}   Data de upload, no formato ISO (aaaa-mm-dd hh:mm:ss fuso).
+    'duracao'   {int}   Duração do vídeo em millissegundos.
+    'largura'   {int}   Largura de cada frame, em pixels.
+    'altura'    {int}   Atura de cada frame, em pixels.
+    'nota'      {float} Nota média do vídeo (0 a 4).
+    'bloqueado' {bool}  Bloqueado pelos admnistradores.
 
   Outros atributos (categoria, legendas, etc) poderão ser acrescentados
   no futuro.
@@ -32,6 +33,11 @@ class Classe(obj_video_IMP.Classe_IMP):
 
   Cada vídeo pertence a um unico usuário (autor), mas cada usuário
   pode ter vários vídeos.
+   
+  O campo 'nota' é um número fracionário que pode ser editado pelos
+  administradores ou calculado a partir dos votos e notas dos comentários
+  associados ao vídeo.  Seu valor varia de 0 ("muito ruim", "detestado")
+  a 4 ("muito bom", "adorado").
   
   Em todas as funções abaixo, o parâmetro {vid} deve ser {None}
   ou um objeto desta classe.
@@ -173,6 +179,13 @@ def obtem_amostra(n):
   
   Falha com erro se houver menos de {n} vídeos no sistema."""
   return obj_video_IMP.obtem_amostra(n)
+
+def recalcula_nota(vid):
+  """Calcula uma nova nota para o vídeo {vid},
+  baseada nas notas e votos dos comentários imediatos
+  (comentários com 'vídeo' = {vid} e 'pai' = {None}). Se {vid}
+  não tem nenhum comentário imediato, devolve 2.0."""
+  return obj_video_IMP.recalcula_nota(vid)
 
 def ultimo_identificador():
   """Devolve o identificador do último vídeo inserido na tabela.

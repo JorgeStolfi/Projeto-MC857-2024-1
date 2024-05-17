@@ -211,6 +211,10 @@ def busca_por_campos(tab, args, res_cols):
   caracteres arbitrários. Além diso, a distinção de letras maiúsculas e
   minúsculas será ignorada. Por exemplo, a busca com {val} "~%siLVa%" casaria com
   entradas na tabela cujo valor for "João da Silva" ou "Donasilvana".
+  O padrão {val} "~jo__ %" casaria com "José da Silva",
+  "João Nabuco", mas não com "Maria José Costa".  O padrão {val} "~%jo%e%"
+  casaria com "João Jorge Silva", "Josefina Costa",
+  "Juca Feijoeiro", e "Josias Abreu".
   
   Por outro lado, se {val} for uma lista ou tupla de dois elementos
   {( val_min, val_max )}, exige que o valor na coluna {ch} da tabela

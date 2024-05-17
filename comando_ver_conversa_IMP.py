@@ -27,7 +27,7 @@ def processa(ses, cmd_args):
         erros.append(f"O vídeo \"{vid_id}\" não existe")
       else:
         titulo = f"Comentários do vídeo {vid_id}"
-        raizes = obj_video.busca_por_campos({'video': vid, 'pai': None }, unico = False)
+        raizes = obj_video.busca_por_campos({ 'video': vid, 'pai': None }, unico = False)
     elif com_id != None:
       com = obj_comentario.obtem_objeto(com_id)
       if com == None:

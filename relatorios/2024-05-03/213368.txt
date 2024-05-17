@@ -1,4 +1,0 @@
-Objetivo:Acrescentar uma coluna que é a imagem thumbnail do video.
-
-
-A coluna foi adicionada, mas não foi possível acrescentar imagem.

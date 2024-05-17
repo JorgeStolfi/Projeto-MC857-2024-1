@@ -6,7 +6,7 @@ def gera(vid_id, atrs, largura, mostra_id, mostra_data):
   vídeo {vid} cujo identificador é {vid_id}: especificamente, identificador,
   data de upload, e autor. Este cabecalho serve para
   inserir o alto dos blocos {html_bloco_comentario} e
-  {html_form_alterar_comentario}
+  {html_form_postar_alterar_comentario}
  
   O parâmetro {vid_id} deve ser {None} ou um identificador de comentário
   (um string da forma "C-{NNNNNNNN}")

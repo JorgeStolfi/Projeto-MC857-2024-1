@@ -3,12 +3,16 @@
 import obj_comentario
 
 import db_base_sql 
+import obj_raiz
 import obj_usuario
 import obj_video
 import util_testes
 from util_erros import erro_prog, mostra, aviso_prog
 
 import sys
+
+sys.stderr.write("  !!! Deveria testar {obj_comentario.muda_atributos()} !!!\n")
+sys.stderr.write("  !!! Deveria testar {obj_comentario.cria()} com dados inválidos e faltando !!!\n")
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -25,47 +29,82 @@ obj_comentario.cria_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_comentario(rot_teste, com, ident, atrs_esp):
+def verifica_comentario(rot_teste, com, com_id_esp, atrs_esp):
   """Testes básicos de consistência do objeto {com} da classe {obj_comentario.Classe}, dados
-  {ident} e os atributos {atrs_esp} esperados."""
+  {com_id_esp} e os atributos {atrs_esp} esperados."""
   global ok_global
 
   sys.stderr.write("  %s\n" % ("-" * 70))
-  sys.stderr.write("  teste %s, comentário %s\n" % (rot_teste, ident))
-  ok = obj_comentario.verifica_criacao(com, ident, atrs_esp)
+  sys.stderr.write("  teste %s, comentário %s\n" % (rot_teste, com_id_esp))
+  atrs_esp_str = str(util_testes.trunca_tamanho(atrs_esp, 2000))
+  sys.stderr.write(f" atrs_esp = {atrs_esp_str}\n")
+  ok = obj_comentario.verifica_criacao(com, com_id_esp, atrs_esp)
   
   if com == None:
-    sys.stderr.write("  ** objeto é {None}, devia ser {%s}\n" % ident)
-  else:
-    if type(com) is not obj_comentario.Classe:
+    sys.stderr.write("  ** objeto é {None}\n" % com_id_esp)
+    ok = False
+  elif not isinstance(com, obj_comentario.Classe):
       sys.stderr.write("  ** objeto não é {obj_comentario.Classe}\n")
-
+      ok = False
+  else:
     sys.stderr.write("  testando {obj_comentario.obtem_identificador(com)}:\n")
-    ident_fun = obj_comentario.obtem_identificador(com)
-    if ident_fun != ident:
-      sys.stderr.write(f"  ** retornou {str(ident_fun)}, deveria ter retornado {str(ident)}\n")
+    com_id_fun = obj_comentario.obtem_identificador(com)
+    if com_id_fun != com_id_esp:
+      sys.stderr.write(f"  ** retornou {str(com_id_fun)}, deveria ter retornado {str(com_id_esp)}\n")
+      ok = False
+
+    sys.stderr.write("  testando {obj_comentario.obtem_objeto(com_id)}:\n")
+    com_fun = obj_comentario.obtem_objeto(com_id_esp)
+    if com_fun != com:
+      sys.stderr.write(f"  ** retornou {str(com_fun)}, deveria ter retornado {str(com)}\n")
       ok = False
 
     sys.stderr.write("  testando {obj_comentario.obtem_atributos(com)}:\n")
     atrs_fun = obj_comentario.obtem_atributos(com)
-    if atrs_fun != atrs_esp:
-      sys.stderr.write(f"  ** retornou {str(atrs_fun)}, deveria ter retornado {str(atrs_esp)}\n")
+    for chave in atrs_fun.keys():
+      val_fun = atrs_fun[chave]
+      if chave in atrs_esp:
+        val_esp = atrs_esp[chave]
+        if val_fun!= val_esp:
+          sys.stderr.write(f"  ** retornou '{chave}':\"{val_fun}\", deveria ter retornado \"{val_esp}\"\n")
+          ok = False
+
+    for chave in atrs_fun.keys():
+      if chave in atrs_esp:
+        val_esp = atrs_esp[chave]
+        
+        sys.stderr.write("  testando {obj_comentario.obtem_atributo(com,%s)}, esperado \"%s\":\n" % (chave, str(val_esp)))
+        val_fun = atrs_fun[chave]
+        val_esp = atrs_esp[chave] if chave in atrs_esp else "NECAS"
+        if val_fun != val_esp:
+          sys.stderr.write(f"  ** retornou {str(val_fun)}, deveria ter retornado {str(val_esp)}\n")
+          ok = False
+          
+        if chave == 'autor':
+          sys.stderr.write("  testando {obtem_autor()}:\n")
+          val_fun = obj_comentario.obtem_autor(com)
+        else:
+          val_fun = "NECAS"
+        if val_fun != "NECAS" and val_fun != val_esp:
+          sys.stderr.write(f"  ** retornou {str(val_fun)}, deveria ter retornado {str(val_esp)}\n")
+          ok = False
+ 
+    sys.stderr.write("  testando {obj_comentario.recalcula_nota(com)}:\n")
+    nota_calc = obj_comentario.recalcula_nota(com)
+    if not isinstance(nota_calc, float) or nota_calc < 0.0 or nota_calc > 4.0:
+      sys.stderr.write(f"  ** retornou nota inválida {str(nota_calc)}\n")
+      # !!! Deveria passar parâmetro {nota_esp} e comparar se não é {None} !!!
       ok = False
-
-    for chave in 'video', 'autor', 'data', 'pai', 'texto':
-      sys.stderr.write("  testando {obj_comentario.obtem_atributo(com,%s)}:\n" % chave)
-      val_fun = obj_comentario.obtem_atributo(com, chave)
-      val_esp = atrs_fun[chave]
-      if val_fun != val_esp:
-        sys.stderr.write(f"  ** retornou {str(val_fun)}, deveria ter retornado {str(val_esp)}\n")
+   
+    for chave, val in atrs_esp.items():
+      # Buscas por objeto (como autor) devem usar o ID:
+      if isinstance(val, obj_raiz.Classe):
+        val = obj_raiz.obtem_identificador(val)
+      sys.stderr.write(f"  testando {'{'}busca_por_campo('{chave}', {val}){'}'}:\n")
+      id_list_vid1 = obj_comentario.busca_por_campo(chave, val)
+      if not com_id_esp in id_list_vid1:
+        aviso_prog("retornou " + str(id_list_vid1) + ", devia ter " + str(com_id_esp),True)
         ok = False
-
-  sys.stderr.write("  testando {obj_comentario.busca_por_identificador(%s)}:\n" % ident)
-  com_esp = com
-  com_fun = obj_comentario.obtem_objeto(ident)
-  if com_fun != com_esp:
-    sys.stderr.write(f"  ** retornou {str(com_fun)}, deveria ter retornado {str(com_esp)}\n")
-    ok = False
 
   if ok:
     sys.stderr.write("  CONFERE!\n")
@@ -107,7 +146,7 @@ sys.stderr.write("  testando {obj_comentario.cria} sem pai:\n")
 cr0_vid = obj_video.obtem_objeto("V-00000003")
 cr0_usr = obj_usuario.obtem_objeto("U-00000005")
 cr0_pai = None
-cr0_atrs = { 'video': cr0_vid, 'autor': cr0_usr, 'pai': cr0_pai, 'texto': "Que coisa!" }
+cr0_atrs = { 'video': cr0_vid, 'autor': cr0_usr, 'pai': cr0_pai, 'texto': "Que coisa!", 'voto': 3, 'nota': 1.5, 'bloqueado': False }
 cr0_indice = int(obj_comentario.ultimo_identificador()[2:]) + 1 # Índice esperado.
 cr0_id = f"C-{cr0_indice:08d}"
 cr0_cmt = obj_comentario.cria(cr0_atrs)
@@ -119,12 +158,12 @@ sys.stderr.write("  testando {obj_comentario.cria} com pai:\n")
 cr1_vid = cr0_vid
 cr1_usr = obj_usuario.obtem_objeto("U-00000002")
 cr1_pai = cr0_cmt
-cr1_atrs = { 'video': cr1_vid, 'autor': cr1_usr, 'pai': cr1_pai, 'texto': "Não diga!" }
+cr1_atrs = { 'video': cr1_vid, 'autor': cr1_usr, 'pai': cr1_pai, 'texto': "Não diga!", 'voto': 1, 'nota': 2.5, 'bloqueado': True }
 cr1_indice = cr0_indice + 1 # Índice esperado.
 cr1_id = f"C-{cr1_indice:08d}"
 cr1_cmt = obj_comentario.cria(cr1_atrs)
 verifica_comentario("cr1", cr1_cmt, cr1_id, cr1_atrs)
-
+ 
 # ----------------------------------------------------------------------
 sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.busca_por_video()}:\n")
@@ -318,13 +357,18 @@ testa_busca_por_campos("datP2", bcs12_args_bus, bcs12_res_esp)
 # bcs13_res_esp = coms_todos
 # testa_busca_por_campos("mesP", bcs13_args_bus, bcs13_res_esp)
 
-# Frase que existe no início:
+# Frase que existe no início (sem "~"):
+bcs14_args_bus = { 'texto': "sup" }
+bcs14_res_esp = (  "C-00000001", "C-00000006", )
+testa_busca_por_campos("texES", bcs14_args_bus, bcs14_res_esp)
+
+# Frase que existe no início (com "~":
 bcs15_args_bus = { 'texto': "~sup%" }
 bcs15_res_esp = (  "C-00000001", "C-00000006", )
-testa_busca_por_campos("texE", bcs15_args_bus, bcs15_res_esp)
+testa_busca_por_campos("texEC", bcs15_args_bus, bcs15_res_esp)
 
 # Frase que não ocorre em nenhum comentário:
-bcs16_args_bus = { 'texto': "~Superhomem" }
+bcs16_args_bus = { 'texto': "Superhomem" }
 bcs16_res_esp = ( )
 testa_busca_por_campos("texN", bcs16_args_bus, bcs16_res_esp)
 

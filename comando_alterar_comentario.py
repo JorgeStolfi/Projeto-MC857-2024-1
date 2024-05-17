@@ -3,7 +3,7 @@ import comando_alterar_comentario_IMP
 def processa(ses, cmd_args):
   """Esta função é chamada quando o usuário aperta o botão "Confirmar alterações"
   (ou equivalente) em um formulário para editar dados de um comentário {com}, 
-  após ter preenchido os campos do mesmo.  Veja {html_form_alterar_comentario.gera}.
+  após ter preenchido os campos do mesmo.  Veja {html_pag_alterar_comentario.gera}.
   
   O parâmetro {ses} não pode ser {None} e deve ser um objeto de tipo
   {obj_sessao.Class}. A sessão deve estar aberta.  

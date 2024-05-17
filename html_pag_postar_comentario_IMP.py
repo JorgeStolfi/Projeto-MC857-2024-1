@@ -18,7 +18,7 @@ def gera(ses, atrs, erros):
   
   ht_pag_tit = html_bloco_titulo.gera(f"Novo comentário")
   
-  ht_form = html_form_postar_alterar_comentario.gera(None, atrs)
+  ht_form = html_form_postar_alterar_comentario.gera(None, atrs, False)
 
   ht_pag_conteudo = \
     ht_pag_tit + \

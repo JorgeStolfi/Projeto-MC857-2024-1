@@ -122,13 +122,13 @@ def busca_por_campos(args, unico, tabela):
   Basicamente, para cada par {ch,val} em {args}, exige que a coluna {ch} da tabela
   tenha valor {val}.  
   
-  Entretanto, se {val} começa e termina com '*', exige apenas que o
-  valor na coluna {ch} seja apenas similar ao valor especificado em
-  {val} (menos esses caracteres '*'). Especificamente, o valor A é
-  semelhante ao valor B se o valor A contém o valor B, sem distinção de
-  letras maiúsculas e minúsculas. O valor 'João da Silva' é semelhante
-  aos valores 'João', 'joão', 'da', e 'Silva', por exemplo.
-  
+  Entretanto, se {val} começa com '~', exige apenas que o valor na
+  coluna {ch} seja apenas similar ao valor especificado em {val} (menos
+  o caracter '~'), segundo as regras do operador SQL "LIKE". Se {val}
+  for uma lista de dois elementos {(vmin, vmax)}, exige que o valor na coluna
+  {ch} esteja entre {vmin} e {vmax}, inclusive. Veja as regras em
+  {db_obj_tabela.busca_por_campos}.
+ 
   Se {unico} for {False}, devolve uma lista, possivelmente vazia,
   com os identificadores dos objetos encontrados (NÃO os objetos).
   

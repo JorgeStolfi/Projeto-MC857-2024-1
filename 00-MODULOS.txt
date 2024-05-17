@@ -1,11 +1,12 @@
 # Módulos em ordem de teste:
-# Last edited on 2024-05-16 11:48:21 by stolfi
+# Last edited on 2024-05-17 11:43:00 by stolfi
 
 + util_erros
 + util_testes
 - util_dict
 
 + util_booleano
++ util_inteiro
 + util_identificador
 + util_data
 + util_email
@@ -157,6 +158,8 @@
 + comando_buscar_comentarios_de_usuario
 + comando_buscar_respostas_de_comentario
 - comando_ver_conversa
+
++ comando_recalcular_nota
 
 + comando_ver_objeto
 

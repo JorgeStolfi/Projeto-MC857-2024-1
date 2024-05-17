@@ -42,7 +42,7 @@ def gera(vid_id, atrs_mod, ed_nota):
 
   # Nota opcionalmente editável:
   if ed_nota:
-    dados_linhas.append( ( "Nota",  "number",  'nota', True,  "0.00 a 5.00", ) )
+    dados_linhas.append( ( "Nota",  "number",  'nota', True,  "0.00 a 4.00", ) )
  
   ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_mod)
 

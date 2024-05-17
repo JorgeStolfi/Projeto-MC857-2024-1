@@ -55,7 +55,7 @@ def processa(ses, cmd_args):
       erros.append("Você não tem permissão para alterar dados deste vídeo")
   
     # Verifica campos inalteráveis:
-    alteraveis = { 'nota', 'titulo' }
+    alteraveis = { 'titulo', 'nota', }
     for chave in cmd_args.keys():
       if not chave in alteraveis:
         erros.append(f"O atributo '{chave}' não pode ser alterado")

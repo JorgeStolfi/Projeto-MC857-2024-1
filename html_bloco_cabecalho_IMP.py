@@ -20,7 +20,7 @@ def gera(titulo, grande):
   margens = None
   estilo_tit = html_estilo_texto.gera(f"{tam_fonte}px", "bold", cor_texto, cor_fundo, margens)
   margin_tit = f"padding: {tam_fonte//6}px 0px 0px 0px;"
-  ht_tit = html_elem_div.gera(estilo_tit + margin_tit , ht_img + " " + titulo)
+  ht_tit = html_elem_div.gera(estilo_tit + margin_tit, ht_img + " " + titulo)
 
   ht_cab = "<nav>" +  ht_tit + "</nav>"
 

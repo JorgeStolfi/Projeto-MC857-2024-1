@@ -17,6 +17,11 @@ def gera(ses, com, atrs_mod, erros):
   
   if atrs_mod == None: atrs_mod = {}
   
+  if ses != None and obj_sessao.aberta(ses):
+    para_admin = obj_sessao.de_administrador(ses)
+  else:
+    para_admin = False
+  
   com_id = obj_comentario.obtem_identificador(com) 
   com_atrs = obj_comentario.obtem_atributos(com) 
   
@@ -24,7 +29,8 @@ def gera(ses, com, atrs_mod, erros):
   
   texto_bt = "Salvar alterações"
   cmd_bt = "alterar_comentario"
-  ht_form = html_form_postar_alterar_comentario.gera(com_id, atrs_mod)
+  ed_nota = para_admin
+  ht_form = html_form_postar_alterar_comentario.gera(com_id, atrs_mod, ed_nota)
 
   ht_pag_conteudo = \
     ht_pag_tit + \

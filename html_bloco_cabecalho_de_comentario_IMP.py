@@ -83,10 +83,8 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
       pai_id = obj_comentario.obtem_identificador(pai)
     else:
       pai_id = atrs['pai']
-      pai = obj_comentario.obtem_objeto(pai_id)
-    assert pai != None
     assert pai_id != None
-    ht_pai = html_elem_span.gera(estilo_atr, "Em resposta a: " + pai_id)
+    ht_pai = html_elem_span.gera(estilo_atr, f"Em resposta a: {pai_id}")
     if ht_linha_3 != "": ht_linha_3 += " "
     ht_linha_3 += ht_pai
   

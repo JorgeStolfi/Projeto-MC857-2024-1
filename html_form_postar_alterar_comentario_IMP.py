@@ -1,10 +1,12 @@
 import html_bloco_cabecalho_de_comentario
 import html_elem_textarea
 import html_elem_form
+import html_elem_label
+import html_elem_input
 import html_elem_button_simples
 import html_elem_button_submit
 
-def gera(com_id, atrs):
+def gera(com_id, atrs, ed_nota):
 
   # Validação de argumentos (paranóia):
   assert com_id == None or isinstance(com_id, str)
@@ -30,6 +32,15 @@ def gera(com_id, atrs):
       altura = 5, largura = 60
     )
 
+  # Nota opcionalmente editável:
+  if ed_nota:
+    com_nota = atrs.get('nota', 2.0)
+    ht_nota = "<br/>" + \
+      html_elem_label.gera("Nota:", " ") + \
+      html_elem_input.gera("number", 'nota', 'nota', com_nota, 0.0, True, None, None, True )
+  else:
+    ht_nota = ""
+ 
   # Botões 'Confirmar' e 'Cancelar':
   if com_id == None:
     ht_submit = html_elem_button_submit.gera("Postar comentário", "postar_comentario", None, '#55ee55')
@@ -40,7 +51,8 @@ def gera(com_id, atrs):
   
   ht_form_conteudo = \
     ht_cabeca + \
-    ht_texto + "<br/>" + \
+    ht_texto + \
+    ht_nota + "<br/>" + \
     ht_submit + \
     ht_cancel
 

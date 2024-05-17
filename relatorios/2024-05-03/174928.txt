@@ -1,8 +1,0 @@
-174928 {comando_ver_usuario}:   vários dos campos atualmente são editáveis, inclusive senha, embora não tenha botão para efetuar as alterações.
-                                Tirar os campos de senha e conf-senha e deixar os demais campos readonly.
-                                Acrescentar um botão "Alterar" que emite o comando "solicitar_pag_alterar_usuario".
-                                Cuidado que {html_bloco_dados_de_usuario} é usada por outros comandos, para os quais os dados devem ser editáveis.
-
-Dentro de {html_bloco_dados_de_usuario} foram removidos os campos de senha e conf-senha.
-Para definir se os demais campos seriam readonly ou não e se deveria haver o botão "Alterar", foi adicionado um novo parâmetro booleano {readonly}.
-Por fim, foram alteradas as chamadas do método "html_bloco_dados_de_usuario.gera()", adicionando-se o argumento referente ao novo parâmetro.

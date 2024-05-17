@@ -8,6 +8,7 @@ import db_conversao_sql
 
 import util_identificador
 import util_data
+import util_booleano
 import util_titulo_de_video
 
 import cv2
@@ -51,13 +52,14 @@ def inicializa_modulo(limpa):
   # Vide parâmetro {cols} de {db_obj_tabela.cria_tabela}.
   colunas = \
     (
-      ( 'autor',   obj_usuario.Classe,  'TEXT',    False ), # Objeto/id do usuário que fez upload.
-      ( 'titulo',  type("foo"),         'TEXT',    False ), # Título do video.
-      ( 'data',    type("foo"),         'TEXT',    False ), # Momento do upload do video.
-      ( 'nota',    type(418.1),         'FLOAT',   False ), # Nota média do video (0 a 4).
-      ( 'duracao', type(418),           'INTEGER', False ), # Duração do video em milissegundos.
-      ( 'largura', type(418),           'INTEGER', False ), # Largura de cada frame, em pixels.
-      ( 'altura',  type(418),           'INTEGER', False ), # Altura de cada frame, em pixels.
+      ( 'autor',     obj_usuario.Classe,  'TEXT',    False ), # Objeto/id do usuário que fez upload.
+      ( 'titulo',    type("foo"),         'TEXT',    False ), # Título do video.
+      ( 'nota',      type(418.1),         'FLOAT',   False ), # Nota média do video (0 a 4).
+      ( 'bloqueado', type(False),         'INTEGER', False ), # O vídeo foi bloqueado.
+      ( 'data',      type("foo"),         'TEXT',    False ), # Data e hora do upload do video.
+      ( 'duracao',   type(418),           'INTEGER', False ), # Duração do video em milissegundos.
+      ( 'largura',   type(418),           'INTEGER', False ), # Largura de cada frame, em pixels.
+      ( 'altura',    type(418),           'INTEGER', False ), # Altura de cada frame, em pixels.
     )
 
   tabela = db_obj_tabela.cria_tabela(nome_tb, letra_tb, classe, colunas, limpa)
@@ -67,6 +69,8 @@ def cria(atrs):
   global tabela
   if tabela.debug: mostra(0, f"  > obj_comentario.cria({str(atrs)}) ...")
 
+  erros = []
+  
   atrs = atrs.copy() # Para alterar só localmente.
 
   # Data de upload:
@@ -112,7 +116,7 @@ def cria(atrs):
   nome_thumb = f"{thumb_dir}/{vid_id}.png"
   cv2.imwrite(nome_thumb, capa)
 
-  erros = valida_atributos(None, atrs)
+  erros += valida_atributos(None, atrs)
   if len(erros) != 0: raise ErroAtrib(erros)
 
   vid = obj_raiz.cria(atrs, tabela, def_obj_mem)
@@ -178,9 +182,9 @@ def busca_por_autor(autor_id):
   return vid_ids
 
 def busca_por_campo(chave, val):
-    global tabela
-    lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
-    return lista_ids
+  global tabela
+  lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
+  return lista_ids
 
 def busca_por_campos(args, unico):
   global tabela
@@ -198,6 +202,11 @@ def obtem_amostra(n):
   assert len(res_ids) == n
   
   return res_ids
+  
+def recalcula_nota(vid):
+  sys.stderr.write("!!! função {obj_video.recalcula_nota} ainda não foi implementada !!!\n")
+  nota = 2.0
+  return nota
 
 def ultimo_identificador():
   global tabela
@@ -224,17 +233,28 @@ def cria_testes(verb):
       ( "V-00000013", "U-00000001", "Batata-doce-roxa",            2.1, ),
       ( "V-00000014", "U-00000006", "Moendo isopor",               2.7, ),
       ( "V-00000015", "U-00000006", "Isopor moído",                2.8, ),
+      ( "V-00000016", "U-00000006", "Octopus vulgaris",            2.8, ),
+      ( "V-00000017", "U-00000006", "Engenho engenhoso",           2.8, ),
+      ( "V-00000018", "U-00000006", "Teino de sumo",               2.8, ),
+      ( "V-00000019", "U-00000006", "Beroe abyssicola",            2.8, ),
+      ( "V-00000020", "U-00000006", "Stentor muelleri",            2.8, ),
+      ( "V-00000021", "U-00000006", "Huygens descendo em Titã",    2.8, ),
+      ( "V-00000022", "U-00000006", "Nadando com orcas",           2.8, ),
+      ( "V-00000023", "U-00000006", "Erupção do Taal",             2.8, ),
+      ( "V-00000024", "U-00000006", "Formiga vermelha",            2.8, ),
     ] 
   for vid_id_esp, autor_id, titulo, nota in lista_ats:
     autor = obj_usuario.obtem_objeto(autor_id)
     assert autor != None and type(autor) is obj_usuario.Classe
     dia = vid_id_esp[-2:]
     data = "2024-01-" + dia + " 08:33:25 UTC"
+    bloqueado = False
     atrs_cria = {
         'autor': autor,
         'titulo': titulo,
         'nota': nota,
         'data': data,
+        'bloqueado': bloqueado,
       }
     vid = cria(atrs_cria)
     assert vid != None and type(vid) is obj_video.Classe
@@ -309,17 +329,21 @@ def valida_atributos(vid, atrs_mem):
       nulo_ok = False
       mais_erros = util_data.valida(chave, val, nulo_ok)
       erros += mais_erros
+    elif chave == 'bloqueado':
+      nulo_ok = False
+      mais_erros = util_booleano.valida(chave, val, nulo_ok)
+      erros += mais_erros
     elif chave == 'titulo':
       nulo_ok = False
       mais_erros = util_titulo_de_video.valida(chave, val, nulo_ok)
       erros += mais_erros
     elif chave == 'nota':
-      nota_min = 0
-      nota_max = 4
+      nota_min = 0.0
+      nota_max = 4.0
       if not isinstance(val, float):
         erros.append(f"O atributo 'nota'{vid_id_msg} não é um float")
       elif val < nota_min or val > nota_max:
-        erros.append(f"O atributo 'nota'{vid_id_msg} = {val} fora da faixa [{nota_min} _ {nota_max}]")
+        erros.append(f"O atributo 'nota'{vid_id_msg} = {val} fora da faixa [{nota_min:.0f} _ {nota_max:.0f}]")
     elif chave == 'duracao' or chave == 'altura' or chave == 'largura':
       if not isinstance(val, int):
         erros.append(f"O atributo '{chave}'{vid_id_msg} não é um inteiro")
@@ -328,7 +352,8 @@ def valida_atributos(vid, atrs_mem):
 
     if vid != None and len(erros) == 0:
       # Tentativa de alterar o campo {chave} para {val}.
-      if not chave in { 'nota', 'titulo', }: 
+      campos_alteraveis = { 'nota', 'titulo', 'bloqueado', }
+      if not chave in campos_alteraveis: 
         # O atributo é imutável:
         assert vid_atrs != None and chave in vid_atrs
         if val != vid_atrs[chave]:
@@ -364,7 +389,7 @@ def valida_dimensoes(duracao, altura, largura):
   
   erros = []
   
-  for chave in 'duracao', 'altura', 'largura':
+  for chave in atrs_val.keys():
     val = atrs_val[chave]
     if val == None:
       erros.append(f"O atributo '{chave}' não está definido")
@@ -424,7 +449,7 @@ def def_obj_mem(obj, vid_id, atrs_SQL):
       val_velho = obj.atrs[chave]
       if not type(val_velho) is type(val):
         erro_prog(f"Tipo do campo '{chave}' incorreto")
-      campos_alteraveis = { 'nota', 'titulo', } # No futuro pode haver mais campos alteraveis.
+      campos_alteraveis = { 'nota', 'titulo', 'bloqueado', }
       if not chave in campos_alteraveis and val != val_velho:
         erro_prog(f"Campo '{chave}' não pode ser alterado - val = {str(val)} val_velho = {str(val_velho)}")
       obj.atrs[chave] = val

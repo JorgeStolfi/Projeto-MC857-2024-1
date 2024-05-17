@@ -1,5 +1,0 @@
-Nessa semana eu implementei o método busca_por_texto da classe obj_comentario, para fazer essa implementação foi necessário
-chamar o método busca_por_campos da classe db_obj_tabela passando os parâmetros unico, o parâmetro atrs que possui um 
-dicionário que representa um conjunto campo-valor da tabela(nesse caso o valor passado como parâmetro pra função e o campo 
-texto) e o parâmetro tabela que pega o valor global da tabela que foi criada nessa classe. Além disso, eu também adicionei 
-as  escritas de debug, mantendo o mesmo padrão dos outros métodos implementados.

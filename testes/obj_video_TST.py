@@ -6,6 +6,7 @@ import db_base_sql
 import obj_raiz
 import obj_usuario
 import util_testes
+
 from util_erros import ErroAtrib, erro_prog, mostra, aviso_prog
 
 import sys
@@ -27,70 +28,85 @@ obj_video.cria_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_video(rot_teste, vid, vid_id, atrs_esp):
-    """Testes básicos de consistência do objeto {vid} da classe {obj_video.Classe}, dados
-    {vid_id} e atributos esperados {atrs_esp}.  Retorna {True} se não detectou erros."""
-    
-    ok = True
+def verifica_video(rot_teste, vid, vid_id_esp, atrs_esp):
+  """Testes básicos de consistência do objeto {vid} da classe {obj_video.Classe}, dados
+  {vid_id_esp} e atributos esperados {atrs_esp}.  Retorna {True} se não detectou erros."""
+  
+  ok = True
+  
+  sys.stderr.write("  %s\n" % ("-" * 70))
+  sys.stderr.write(f"  teste {rot_teste}, vídeo {vid_id_esp}")
+  atrs_esp_str = str(util_testes.trunca_tamanho(atrs_esp, 2000))
+  sys.stderr.write(f" atrs_esp = {atrs_esp_str}\n")
+  ok = obj_video.verifica_criacao(vid, vid_id_esp, atrs_esp)
+  
+  if vid == None:
+    sys.stderr.write("  ** objeto é {None}\n")
+    ok = False
+  elif not isinstance(vid, obj_video.Classe):
+      sys.stderr.write("  ** objeto não é {obj_video.Classe}\n")
+      ok = False
+  else:   
+    sys.stderr.write("  testando {obj_video.obtem_identificador(vid)}:\n")
+    vid_id_fun = obj_video.obtem_identificador(vid)
+    if vid_id_fun != vid_id_esp:
+      sys.stderr.write(f"  ** retornou {str(vid_id_fun)}, deveria ter retornado {str(vid_id_esp)}\n")
+      ok = False
 
-    sys.stderr.write(f"  {rot_teste}: verificando video {vid_id}")
-    st_atrs = str(util_testes.trunca_tamanho(atrs_esp, 2000))
-    sys.stderr.write(f" atrs_esp = {st_atrs}\n")
-    
-    if vid != None and type(vid) is obj_video.Classe:
-        
-        sys.stderr.write("  testando {obtem_autor()}:\n")
-        usr1 = obj_video.obtem_autor(vid)
-        if 'autor' in atrs_esp:
-            if usr1 != atrs_esp['autor']:
-                aviso_prog("retornou " + str(usr1) + ", deveria ter retornado " + str(atrs_esp['autor']),True)
-                ok = False
-        
-        sys.stderr.write("  testando {obtem_data_de_upload()}:\n")
-        data1 = obj_video.obtem_data_de_upload(vid)
-        if data1 == None or not isinstance(data1, str):
-            aviso_prog("retornou " + str(data1),True)
-            ok = False
-        
-        for chave, val in atrs_esp.items():
-            if chave != 'conteudo':
-                # Buscas por objeto (como autor) devem usar o ID:
-                if isinstance(val, obj_raiz.Classe):
-                    val = obj_raiz.obtem_identificador(val)
-                sys.stderr.write(f"  testando {'{'}busca_por_campo('{chave}', {val}){'}'}:\n")
-                id_list_vid1 = obj_video.busca_por_campo(chave, val)
-                if not vid_id in id_list_vid1:
-                    aviso_prog("retornou " + str(id_list_vid1) + ", devia ter " + str(vid_id),True)
-                    ok = False
-        
-        # Teste de duração
-        sys.stderr.write("  testando {obtem_atributo(duracao)}:\n")
-        duracao1 = obj_video.obtem_atributo(vid, 'duracao')
-        if 'duracao' in atrs_esp:
-            if duracao1 != atrs_esp['duracao']:
-                aviso_prog("retornou " + str(duracao1) + ", deveria ter retornado " + str(atrs_esp['duracao']),True)
-                ok = False
-        sys.stderr.write(f"    duracao = {duracao1}\n")  # Imprimindo a duração
-        
-        # Teste de altura
-        sys.stderr.write("  testando {obtem_atributo(altura)}:\n")
-        altura1 = obj_video.obtem_atributo(vid, 'altura')
-        if 'altura' in atrs_esp:
-            if altura1 != atrs_esp['altura']:
-                aviso_prog("retornou " + str(altura1) + ", deveria ter retornado " + str(atrs_esp['altura']),True)
-                ok = False
-        sys.stderr.write(f"    altura = {altura1}\n")  # Imprimindo a altura
-        
-        # Teste de largura
-        sys.stderr.write("  testando {obtem_atributo(largura)}:\n")
-        largura1 = obj_video.obtem_atributo(vid, 'largura')
-        if 'largura' in atrs_esp:
-            if largura1 != atrs_esp['largura']:
-                aviso_prog("retornou " + str(largura1) + ", deveria ter retornado " + str(atrs_esp['largura']),True)
-                ok = False
-        sys.stderr.write(f"    largura = {largura1}\n")  # Imprimindo a largura
+    sys.stderr.write("  testando {obj_video.obtem_objeto(vid_id)}:\n")
+    vid_fun = obj_video.obtem_objeto(vid_id_esp)
+    if vid_fun != vid:
+      sys.stderr.write(f"  ** retornou {str(vid_fun)}, deveria ter retornado {str(vid)}\n")
+      ok = False
 
-    return ok
+    sys.stderr.write("  testando {obj_video.obtem_atributos(vid)}:\n")
+    atrs_fun = obj_video.obtem_atributos(vid)
+    for chave in atrs_fun.keys():
+      val_fun = atrs_fun[chave]
+      if chave in atrs_esp:
+        val_esp = atrs_esp[chave]
+        if val_fun!= val_esp:
+          sys.stderr.write(f"  ** retornou '{chave}':\"{val_fun}\", deveria ter retornado \"{val_esp}\"\n")
+          ok = False
+
+    for chave in atrs_fun.keys():
+      if chave != 'conteudo' and chave in atrs_esp:
+        val_esp = atrs_esp[chave]
+
+        sys.stderr.write("  testando {obj_video.obtem_atributo(vid,%s)}, esperado \"%s\":\n" % (chave, str(val_esp)))
+        val_fun = atrs_fun[chave]
+        if val_fun != val_esp:
+          sys.stderr.write(f"  ** retornou {str(val_fun)}, deveria ter retornado {str(val_esp)}\n")
+          ok = False
+
+        if chave == 'autor':
+          sys.stderr.write("  testando {obtem_autor(vid)}:\n")
+          val_fun = obj_video.obtem_autor(vid)
+        else:
+          val_fun = "NECAS"
+        if val_fun != "NECAS" and val_fun != val_esp:
+          sys.stderr.write(f"  ** retornou {str(val_fun)}, deveria ter retornado {str(val_esp)}\n")
+          ok = False
+   
+    sys.stderr.write("  testando {obj_video.recalcula_nota(vid)}:\n")
+    nota_calc = obj_video.recalcula_nota(vid)
+    if not isinstance(nota_calc, float) or nota_calc < 0.0 or nota_calc > 4.0:
+      sys.stderr.write(f"  ** retornou nota inválida {str(nota_calc)}\n")
+      # !!! Deveria passar parâmetro {nota_esp} e comparar se não é {None} !!!
+      ok = False
+ 
+    for chave, val in atrs_fun.items():
+      if chave != 'conteudo':
+        # Buscas por objeto (como autor) devem usar o ID:
+        if isinstance(val, obj_raiz.Classe):
+          val = obj_raiz.obtem_identificador(val)
+        sys.stderr.write(f"  testando {'{'}busca_por_campo('{chave}', {val}){'}'}:\n")
+        id_list_vid1 = obj_video.busca_por_campo(chave, val)
+        if not vid_id_esp in id_list_vid1:
+          aviso_prog("retornou " + str(id_list_vid1) + ", devia ter " + str(vid_id_esp),True)
+          ok = False
+
+  return ok
 
 # ----------------------------------------------------------------------
 def testa_obj_video_cria_muda(rot_teste, valido, modif, vid_id, atrs):
@@ -114,14 +130,14 @@ def testa_obj_video_cria_muda(rot_teste, valido, modif, vid_id, atrs):
   
   try:
 
-    st_atrs = str(util_testes.trunca_tamanho(atrs, 2000))
+    atrs_esp_str = str(util_testes.trunca_tamanho(atrs, 2000))
     if modif:
-      sys.stderr.write(f"  testando obj_video.muda_atributos id = {vid_id} atrs = {st_atrs}\n")
+      sys.stderr.write(f"  testando obj_video.muda_atributos id = {vid_id} atrs = {atrs_esp_str}\n")
       vid = obj_video.obtem_objeto(vid_id)
       assert vid != None, f"video {vid_id} não existe"
       obj_video.muda_atributos(vid, atrs)
     else:
-      sys.stderr.write(f"  testando obj_video.cria atrs = {st_atrs}\n")
+      sys.stderr.write(f"  testando obj_video.cria atrs = {atrs_esp_str}\n")
       vid = obj_video.cria(atrs)
       vid_id = obj_video.obtem_identificador(vid)
       ok = obj_video.verifica_criacao(vid, vid_id, atrs)
@@ -178,6 +194,7 @@ cr1_atrs = {
   'titulo': "Video Uno e Unico",
   'nota': 2.0,
   'conteudo': cr1_bytes,
+  'bloqueado': False,
 }
 testa_obj_video_cria_muda("cr1_ok", True, False, None, cr1_atrs)
 
@@ -190,6 +207,7 @@ cr2_atrs = {
   'titulo': "Video Due e Duplo",
   'nota': 2.0,
   'conteudo': cr2_bytes,
+  'bloqueado': False,
 }
 testa_obj_video_cria_muda("cr2_ok", True, False, None, cr2_atrs)
 
@@ -202,7 +220,7 @@ md0_vid = obj_video.obtem_objeto(md0_vid_id)
 assert md0_vid != None
 md0_tit = "Não gostei do título!"
 md0_atrs = {
-  'titulo': md0_tit
+  'titulo': md0_tit,
 }
 testa_obj_video_cria_muda("md0_tit", True, True, md0_vid_id, md0_atrs)
 assert obj_video.obtem_atributo(md0_vid, 'titulo') == md0_tit
@@ -251,6 +269,17 @@ md4_atrs = {
 }
 testa_obj_video_cria_muda("md4_nota", True, True, md4_vid_id, md4_atrs)
 assert obj_video.obtem_atributo(md4_vid, 'nota') == md4_nota
+
+# Teste OK - alteração de 'bloqueado':
+md5_vid_id = cr2_id
+md5_vid = obj_video.obtem_objeto(md5_vid_id)
+assert md5_vid != None
+md5_bloqueado = True
+md5_atrs = {
+  'bloqueado': md5_bloqueado
+}
+testa_obj_video_cria_muda("md5_bloqueado", True, True, md5_vid_id, md5_atrs)
+assert obj_video.obtem_atributo(md5_vid, 'bloqueado') == md5_bloqueado
 
 # ----------------------------------------------------------------------
 # Outros testes:

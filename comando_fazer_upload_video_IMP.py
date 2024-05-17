@@ -56,14 +56,21 @@ def processa(ses, cmd_args):
   # A nota inicial é sempre 2.0:
   nota = 2.0 
   
+  # Videos começam desbloqueados:
+  bloqueado = False
+  
   if len(cmd_args) != 0:
     lixo = ",".join(map(lambda x: f"'{x}'", cmd_args.keys()))
     erros.append(f"Atributos espúrios especifcados: {lixo}")
 
   if len(erros) == 0:
-    atrs_cria = { 'autor': autor, 'titulo': titulo, }
+    atrs_cria = { 
+      'autor': autor, 
+      'titulo': titulo, 
+      'nota': nota,
+      'bloqueado': bloqueado,
+    }
     if conteudo != None: atrs_cria['conteudo'] = conteudo
-    atrs_cria['nota'] = nota
     
     # Salva o arquivo, cria o objeto, e registra na tabela de vídeos:
     try:

@@ -213,9 +213,7 @@ def cria_tabela_SQL(nome, colunas):
   cols_SQL = converte_colunas_para_cols_SQL(colunas)
   res = db_base_sql.executa_comando_CREATE_TABLE(nome, cols_SQL);
   if res != None:
-    sys.stderr.write("  CREATE TABLE = \"%s\"\n" % str(res))
-    assert type(res) is str
-    erro_prog("CREATE_TABLE falhou " + str(res))
+    erro_prog(f"CREATE_TABLE falhou: {res}")
   return
 
 def limpa_tabela_SQL(nome):
