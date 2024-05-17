@@ -8,11 +8,12 @@ import html_elem_link_img
 
 def gera(vid, mostra_autor):
 
+  vid_id = obj_video.obtem_identificador(vid) if vid != None else None
   atrs = obj_video.obtem_atributos(vid) if vid != None else None
 
   itens_resumo = []
 
-  colunas = [ 'thumb','video', 'autor', 'data', 'duracao', 'largura', 'altura', 'titulo' ]
+  colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'largura', 'altura', 'titulo' ]
   
   destaque = False
   for chave in colunas:
@@ -30,29 +31,26 @@ def gera(vid, mostra_autor):
       texto = f"{str(atrs[chave])} px" if vid != None else chave.capitalize()
     elif chave == 'nota':
       mostra = True
-      nota = atrs[chave] if vid != None else 0
-      # Formata a nota de forma condicional com emojis, 
-      # 0 - muito ruim, 1 - ruim, 2 - indiferente, 3 - bom, 4 - muito bom.
-      # -1 - default, sem nota.
-      # A nota é armazenada como float, então é necessário arredondar para int.
-      nota = round(nota)
-      texto = ""
-      if nota == 0:
-        texto = "😠"
-      elif nota == 1:
-        texto = "😞"
-      elif nota == 2:
-        texto = "😐"
-      elif nota == 3:
-        texto = "😊"
-      elif nota == 4:
-        texto = "😍"
-      elif nota == -1: # Nota default
-        texto = "🤔"
+      if vid == None:
+        texto = "Nota"
+      else:
+        nota = float(atrs[chave])
+        assert nota >= 0.0 and nota <= 4.0, f"Nota {nota} inválida"
+        texto = f"{nota:.2f} "
+        # Formata a nota de forma condicional com emojis, 
+        # 0 - muito ruim, 1 - ruim, 2 - indiferente, 3 - bom, 4 - muito bom.
+        # -1 - default, sem nota.
+        # A nota é armazenada como float, então é necessário arredondar para int.
+        emoji = [ "🤮", "😞", "😐", "😊", "😍", ]
+        rnota = round(nota)
+        texto += emoji[rnota]
     elif chave == 'thumb':
-      thumb_file = "thumbs/{vid_id}.png"
       mostra=True
-      texto = html_elem_link_img.gera(thumb_file, None, 40, None)
+      if vid == None:
+        texto = "Thumb"
+      else:
+        thumb_file = f"thumbs/{vid_id}.png"
+        texto = html_elem_link_img.gera(thumb_file, None, 40, None)
     else:
       mostra = True
       texto = atrs[chave] if vid != None else chave.capitalize()

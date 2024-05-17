@@ -25,29 +25,31 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-def cria_tabela():
+def cria_tabela(estilo):
   val = [None]*3
   val[0] = html_elem_input.gera("text", 'veiculo', "ident0", None, None, True, "Me edite!", None, False)
   val[1] = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
   val[2] = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
 
   linhas = []
-  ht_lab_cab = "<th style=\"background:green; padding: 10px 20px 30px 40px;\">" + "Coluna 1" + "</th>" 
+  ht_lab_cab = "<th style=\"background:pink; padding: 10px 20px 30px 40px;\">" + "Coluna 1" + "</th>" 
   ht_val_cab = "<th>" + "Coluna 2" + "</th>" 
   cabecalhos = ( ht_lab_cab, ht_val_cab )
   linhas.append(cabecalhos)
 
   for i in range(3):
-    ht_lab = "<td style=\"background:green;\">" + html_elem_label.gera(f"Teste {i:03d}", ":") + "</td>"
-    ht_val = "<td style=\"font-size: 20px;\">" + val[i] + "</td>"
+    ht_lab = "<td style=\"background:yellow;\">" + html_elem_label.gera(f"Teste {i:03d}", ":") + "</td>"
+    ht_val = "<td style=\"font-size: 20px; border: 2px solid blue; padding:5px;\">" + val[i] + "</td>"
     linhas.append((ht_lab, ht_val))
 
-  ht_tab = html_elem_table.gera(linhas)
+  ht_tab = html_elem_table.gera(linhas, estilo)
   return ht_tab
 
-testa_gera("Teste", str)
+estilo = "border:1px solid black; border-spacing:20px;"
+testa_gera("Teste_estiloN", str, None)
+testa_gera("Teste_estiloX", str, estilo)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

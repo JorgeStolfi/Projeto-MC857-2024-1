@@ -31,6 +31,6 @@ testa_gera("SemValores", str, {})
 testa_gera("ComValores", str, atrs1)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

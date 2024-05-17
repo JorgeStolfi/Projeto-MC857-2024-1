@@ -7,37 +7,50 @@ import html_bloco_titulo
 import html_pag_generica
 import html_pag_buscar_videos
 import html_bloco_titulo
-import util_valida_campo
+import util_identificador
+import util_data
+import util_dict
 from util_erros import ErroAtrib
 
 def processa(ses, cmd_args):
   # Comando emitido por página do site deveria satisfazer isto:
-  assert ses == None or obj_sessao.aberta(ses), f"Sessão inválida"
-  assert cmd_args != None and type(cmd_args) is dict
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert isinstance(cmd_args, dict)
 
   erros = []
 
-  # Valida os valores dos atributos da busca, e elimina campos {None}:
-  cmd_args_cp = cmd_args.copy() # Por via das dúvidas.
+  # Valida os valores dos atributos da busca, excluindo campos {None}:
+  atrs_busca = {}
   for chave, val in cmd_args.items():
     # Elimina campos {None}:
-    if val == None:
-      del cmd_args_cp[chave]
-    # Verifica validade de {val}: 
-    if chave == 'video':
-      erros += util_identificador.valida(chave, val, "V", False)
-    elif chave == 'titulo':
-      # !!! Devia aceitar título parcial ou RE !!!
-      erros += util_titulo_de_video.valida(chave, val, False)
+    item_erros = [ ]
+    if val == None or val == "":
+      pass
+    elif chave == 'video':
+      item_erros = util_identificador.valida(chave, val, "V", nulo_ok = False)
+      if len(item_erros) == 0: atrs_busca[chave] = val
     elif chave == 'autor':
-      erros += util_identificador.valida(chave, val, "U", False)
-    elif chave == 'data':
-      # !!! Devia aceitar data parcial e intervalo de datas !!!
-      erros += util_data.valida(chave, val, "U", False)
+      item_erros = util_identificador.valida(chave, val, "U", nulo_ok = False)
+      if len(item_erros) == 0: atrs_busca[chave] = val
+    elif chave == 'titulo':
+      # Busca por semelhança, não deve validar
+      if val[0] == "~":
+        # Já é padrão:
+        atrs_busca[chave] = val
+      else:
+        # Transforma em padrão para {busca_por_campos}:
+        atrs_busca['titulo'] = f"~%{val}%"
+    elif chave == 'data' or chave == 'data_min' or chave == 'data_max':
+      item_erros = util_data.valida(chave, val, nulo_ok = False)
+      if len(item_erros) == 0: atrs_busca[chave] = val
     else:
       # Comando emitido por página do site não deveria ter outros campos:
-      assert False, f"Campo '{chave}' inválido"
-  cmd_args = cmd_args_cp
+      assert False, f"Chave inválida '{chave}'"
+
+    erros += item_erros
+  
+  # Converte 'data_min', 'data_max' para 'data' intervalar:
+  erros += util_dict.normaliza_busca_por_data(atrs_busca)
   
   vid_ids = []
   if len(erros) == 0:
@@ -47,12 +60,12 @@ def processa(ses, cmd_args):
         vid_id = cmd_args['video']
         vid = obj_video.obtem_objeto(vid_id)
         if vid == None:
-          erros.append(f"Vídeo '{vid_id}' não existe")
+          erros.append(f"Vídeo \"{vid_id}\" não existe")
         else:
           vid_ids = [ vid_id ]
       else:
         # Busca por campos aproximados:
-        vid_ids = obj_video.busca_por_semelhanca(cmd_args, False)
+        vid_ids = obj_video.busca_por_campos(cmd_args, unico = False)
 
       if len(vid_ids) == 0:
         # Não encontrou nenhum usuário:
@@ -64,7 +77,7 @@ def processa(ses, cmd_args):
   if len(vid_ids) != 0:
     # Encontrou pelo menos um vídeo.  Mostra em forma de tabela:
     ht_titulo = html_bloco_titulo.gera("Vídeos encontrados")
-    ht_tabela = html_bloco_lista_de_videos.gera(vid_ids)
+    ht_tabela = html_bloco_lista_de_videos.gera(vid_ids, mostra_autor = True)
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela

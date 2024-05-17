@@ -204,13 +204,15 @@ def busca_por_campos(tab, args, res_cols):
   Basicamente, para cada par {ch,val} em {args}, exige que a coluna {ch} da tabela
   tenha valor {val}.  O valor {val} pode ser {str}, {int}, ou {float}. 
   
-  Entretanto, se {val} é um string que começa e termina com '%', exige
-  apenas que o valor na coluna {ch} contenha o string {val} (menos esses
-  caracteres '%'), ignorando a distinção de letras maiúsculas e
-  minúsculas. Por exemplo, a busca com {val} "%siLVa%", casaria com
+  Entretanto, se {val} é um string que começa com o caracter "~",
+  supõe que o restante de {val} é um padrão SQL para uso com o operador "LIKE".
+  Nesse caso, cada caractere '_' em {val} casa um caractere arbitrário 
+  no dado da tabela, e cada caractere '%' casa 0 ou mais
+  caracteres arbitrários. Além diso, a distinção de letras maiúsculas e
+  minúsculas será ignorada. Por exemplo, a busca com {val} "~%siLVa%" casaria com
   entradas na tabela cujo valor for "João da Silva" ou "Donasilvana".
   
-  Mais ainda, se {val} for uma lista ou tupla de dois elementos
+  Por outro lado, se {val} for uma lista ou tupla de dois elementos
   {( val_min, val_max )}, exige que o valor na coluna {ch} da tabela
   esteja entre {val_min} e {val_max}. Os dois valores podem ser {str},
   {int}, ou {float}.

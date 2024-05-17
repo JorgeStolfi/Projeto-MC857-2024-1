@@ -68,8 +68,11 @@ def cria(atrs):
   usuário {autor}, com os atributos {atrs}. Também acrescenta o vídeo à
   base de dados.
   
-  O dicionário {atrs} deve ter apenas os campos 'autor' e
-  'titulo' como especificados na {Classe} acima.
+  O dicionário {atrs} deve ter os campos 'autor',
+  'titulo', e 'nota' como especificados na {Classe} acima.
+
+  Se o campo 'data' não estiver especificado, será
+  usada a data corrente no momento da chamada desta função.
   
   O conteúdo do vídeo deve estar no atributo {atrs} com chave
   'conteudo'. Esse conteúdo será gravado no arquivo
@@ -77,9 +80,8 @@ def cria(atrs):
   a ser criado. Se a chave 'conteúdo' não existir em {atrs}, supõe que o
   arquivo já está gravado com esse nome.
   
-  Os campos 'duracao', 'largura' e 'altura' do objeto serão extraídos desse arquivo. 
-  O campo 'data' será a data corrente no momento da chamada desta função.
-  O campo 'nota' será inicializado com -1.
+  Os campos 'duracao', 'largura' e 'altura' do objeto não devem estar
+  presentes em {atrs}; eles serão extraídos do arquivo. 
   O identificador do novo objeto será derivado do seu índice na tabela.
   
   Em caso de sucesso, retorna o objeto criado. Caso contrário,
@@ -138,16 +140,24 @@ def obtem_data_de_upload(vid):
   Dá erro se {vid} é {None}."""
   return obj_video_IMP.obtem_data_de_upload(vid)
 
-def busca_por_campo(campo, val):
-  """Localiza todos os vídeos cujo {campo} seja {valor}. Retorna a lista de ids
-  desses vídeos."""
-  return obj_video_IMP.busca_por_campo(campo, val)  
+def busca_por_autor(autor_id):
+  """Localiza todos os vídeos do usuário com identificador {autor_id} (uma string da forma
+  "U-{NNNNNNNN}").  Retorna uma lista de identificadores desses vídeos.
+  Se {autor_id} é {None} ou o usuário não tem nenhum vídeo, devolve uma lista vazia."""
+  return obj_video_IMP.busca_por_autor(autor_id)
 
-def busca_por_campos(args, unico):
-  """Procura vídeos com atributos {args}, na memória ou na base de dados.
-  
-  Especificamente, para todo par {ch: val} em {args}, exige que o valor
-  do atributo {ch} do objeto seja {val}. 
+def busca_por_campo(chave, val):
+  """Localiza todos os vídeos cujo campo {chave} seja {valor}. Retorna a lista de ids
+  desses vídeos. Equivale a {busca_por_campos({ chave: val }, unico=False)}"""
+  return obj_video_IMP.busca_por_campo(chave, val)  
+
+def busca_por_campos(atrs, unico):
+  """
+  Busca vídeos que satisfazem uma combinação de valores em vários
+  campos, definidos pelo dicionário {atrs}. Especificamente, para todo
+  par {ch: val} em {atrs}, exige que o valor do atributo {ch} do objeto
+  case com {val}. Cada valor {val} pode ser um padrão SQL ou um
+  intervalo; veja {obj_raiz.busca_por_campos} para maiores detalhes.
   
   Se {unico} for {False}, devolve uma lista, possivelmente vazia,
   com os identificadores dos objetos encontrados (NÃO os objetos).
@@ -155,13 +165,14 @@ def busca_por_campos(args, unico):
   Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
   ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
   se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
-  return obj_video_IMP.busca_por_campos(args, unico)
+  return obj_video_IMP.busca_por_campos(atrs, unico)
 
-def busca_por_autor(autor_id):
-  """Localiza todos os vídeos do usuário com identificador {autor_id} (uma string da forma
-  "U-{NNNNNNNN}").  Retorna uma lista de identificadores desses vídeos.
-  Se {autor_id} é {None} ou o usuário não tem nenhum vídeo, devolve uma lista vazia."""
-  return obj_video_IMP.busca_por_autor(autor_id)
+def obtem_amostra(n):
+  """Devolve uma lista com os identificadores de {n} vídeos armazenados
+  no sistema, escolhidos aleatoriamente.
+  
+  Falha com erro se houver menos de {n} vídeos no sistema."""
+  return obj_video_IMP.obtem_amostra(n)
 
 def ultimo_identificador():
   """Devolve o identificador do último vídeo inserido na tabela.

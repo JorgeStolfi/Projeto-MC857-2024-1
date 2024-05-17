@@ -53,6 +53,6 @@ ses = obj_sessao.obtem_objeto("S-00000001")
 testa_gera("T2-success", str, ses, dados, None)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

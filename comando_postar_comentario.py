@@ -1,4 +1,3 @@
-
 import comando_postar_comentario_IMP
 
 def processa(ses, cmd_args):

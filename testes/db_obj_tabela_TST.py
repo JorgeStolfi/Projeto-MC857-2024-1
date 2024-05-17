@@ -153,7 +153,7 @@ id_bob4 = f"X-{ind_bob4:08d}"
 bob4 = db_obj_tabela.acrescenta_objeto(tab_bob, def_bob, atrs_bob4)
 mostra_bob("bob4", bob4, id_bob4, atrs_bob4)
 
-nome_bob5 = "Jonas Quinto de Souza"
+nome_bob5 = "Jonas José Quinto de Souza"
 email_bob5 = "quinto@gmail.com"
 atrs_bob5 = {
   "nome": nome_bob5, 
@@ -186,7 +186,7 @@ assert type(bob2_a) is BoboClasse
 verifica_resultado("BIND_ind" + str(ind_bob2), bob2_a, bob2 )
 
 # ----------------------------------------------------------------------
-sys.stderr.write("  testando {db_obj_tabela.busca_por_campo} e{db_obj_tabela.busca_por_campos}:\n")
+sys.stderr.write("  testando {db_obj_tabela.busca_por_campo} e {db_obj_tabela.busca_por_campos}:\n")
 
 email_a = email_bob2
 
@@ -208,14 +208,21 @@ assert type(res_c) is list or type(res_c) is tuple
 res_c = list(res_c)
 verifica_resultado("BCS_c_carro_pernas", res_c, [ (nome_bob1, carro1), ])
 
+# Campo aproximado:
+nome_m = "~José%"
+res_m = db_obj_tabela.busca_por_campo(tab_bob, 'nome', nome_m, None)
+assert type(res_m) is list or type(res_m) is tuple
+res_m = list(res_m)
+verifica_resultado("BCS_m_nomeParc", res_m, [ id_bob1, id_bob2, id_bob3, id_bob4, ])
+
 # Campos aproximados:
-atrs_d = { 'nome': "%José%", 'carro': carro1 }
+atrs_d = { 'nome': "~%José%", 'carro': carro1 }
 res_d = db_obj_tabela.busca_por_campos(tab_bob, atrs_d, None)
 assert type(res_d) is list or type(res_d) is tuple
 res_d = list(res_d)
-verifica_resultado("BCS_d_nomeParc_carro", res_d, [ id_bob1, id_bob4, ])
+verifica_resultado("BCS_d_nomeParc_carro", res_d, [ id_bob1, id_bob4, id_bob5, ])
 
-atrs_e = { 'nome': "%Quarto%", 'carro': carro1 }
+atrs_e = { 'nome': "~%Quarto%", 'carro': carro1 }
 res_e = db_obj_tabela.busca_por_campos(tab_bob, atrs_e, None) 
 assert type(res_e) is list or type(res_e) is tuple
 res_e = list(res_e)
@@ -231,17 +238,29 @@ res_g = db_obj_tabela.busca_por_campos(tab_bob, atrs_g, None)
 assert type(res_g) is list or type(res_g) is tuple
 verifica_resultado("BCS_g_pernas_intv", res_g, [ id_bob2, id_bob4, id_bob5, ])
 
-atrs_h = { 'nome': "%to %", }
+atrs_h = { 'nome': "~%to %", }
 res_h = db_obj_tabela.busca_por_campos(tab_bob, atrs_h, None) 
 assert type(res_h) is list or type(res_h) is tuple
 res_h = list(res_h)
 verifica_resultado("BCS_h_nomeParc_bco", res_h, [ id_bob4, id_bob5, ])
 
-atrs_i = { 'email': "%@gmail%", }
+atrs_i = { 'email': "~%@gmail%", }
 res_i = db_obj_tabela.busca_por_campos(tab_bob, atrs_i, None) 
 assert type(res_i) is list or type(res_i) is tuple
 res_i = list(res_i)
 verifica_resultado("BCS_i_emailParc", res_i, [ id_bob1, id_bob5, ])
+
+atrs_j = { 'nome': "~%Qu%to%", }
+res_j = db_obj_tabela.busca_por_campos(tab_bob, atrs_j, None) 
+assert type(res_j) is list or type(res_j) is tuple
+res_j = list(res_j)
+verifica_resultado("BCS_j_emailParc", res_j, [ id_bob4, id_bob5, ])
+
+atrs_k = { 'nome': "~% d_ S___a%", }
+res_k = db_obj_tabela.busca_por_campos(tab_bob, atrs_k, None) 
+assert type(res_k) is list or type(res_k) is tuple
+res_k = list(res_k)
+verifica_resultado("BCS_i_emailParc", res_k, [ id_bob1, id_bob2, id_bob3, id_bob4, id_bob5, ])
 
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {db_obj_tabela.atualiza_objeto}:\n")
@@ -266,15 +285,15 @@ assert type(res) == int
 assert res == num_elementos
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)
 

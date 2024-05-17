@@ -5,15 +5,28 @@ import obj_sessao
 import obj_usuario
 
 def processa(ses, cmd_args):
-  # Estas condições deveriam valer para comandos gerados
-  # pelas páginas do site:
-  assert ses == None or obj_sessao.aberta(ses), "Sessao inválida"
-  assert type(cmd_args) is dict, "Argumentos inválidos"
-  assert cmd_args == {}, "Argumentos espúrios"
 
-  admin = obj_sessao.de_administrador(ses) if ses != None else False
-  if not admin:
-    pag = html_pag_mensagem_de_erro.gera(ses, "Precisa ser administrador para usar este comando.")
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert isinstance(cmd_args, dict)
+  
+  erros = []
+  
+  assert len(cmd_args) == 0, "Argumentos espúrios {cmd_args}"
+
+  # Verifica permissão:
+  para_admin = False
+  if ses == None:
+    erros.append("É preciso estar logado para executar esta ação.")
+  elif not obj_sessao.aberta(ses):
+    erros.append("Esta sessão de login foi fechada. É preciso estar logado para executar esta ação.")
+  else:
+    para_admin = ses != None and obj_sessao.de_administrador(ses)
+    if not para_admin:
+      erros.append("Você não tem permissão para usar este comando.")
+   
+  if len(erros) > 0:
+    pag = html_pag_mensagem_de_erro.gera(ses, erros)
   else:
     pag = html_pag_buscar_sessoes.gera(ses, {}, None)
+
   return pag

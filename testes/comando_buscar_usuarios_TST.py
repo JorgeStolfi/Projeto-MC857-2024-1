@@ -87,6 +87,6 @@ for ses in None, sesA, sesC:
   testa_processa(rad + "nome_parcial",  str, ses, args_nome_parcial)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

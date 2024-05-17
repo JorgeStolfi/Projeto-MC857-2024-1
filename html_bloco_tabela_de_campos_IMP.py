@@ -4,7 +4,7 @@ import html_elem_input
 import html_elem_table
 import html_elem_textarea
 import obj_raiz
-from util_erros import erro_prog
+from util_erros import erro_prog, aviso_prog
 import sys
 
 tbc_debug = False;
@@ -27,7 +27,7 @@ def gera(dados_linhas, atrs):
       linhas.append(("<td>" + ht_rotulo + "</td>", "<td>" + ht_input + "</td>",))
 
   # Monta a tabela com os fragmentos HTML:
-  ht_table = html_elem_table.gera(linhas)
+  ht_table = html_elem_table.gera(linhas, None)
   return ht_table
 
 def gera_input_ou_textarea(tipo, chave, ident, val, val_min, dica, editavel):

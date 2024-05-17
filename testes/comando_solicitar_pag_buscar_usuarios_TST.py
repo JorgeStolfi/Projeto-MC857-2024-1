@@ -64,6 +64,6 @@ except AssertionError as error:
   sys.stderr.write('Retornou o seguinte erro, pois argumentos espúrios: {}'.format(error))
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

@@ -17,7 +17,7 @@ def gera(ses, usr, erros):
   erros = []
   
   # Obtem o usuário da sessão:
-  usr_ses = obj_sessao.obtem_dono(ses) if ses != None else None
+  ses_dono = obj_sessao.obtem_dono(ses) if ses != None else None
 
   try:
     # Determina privilégios do usuário da sessão:
@@ -28,7 +28,7 @@ def gera(ses, usr, erros):
     atrs_usr = obj_usuario.obtem_atributos(usr)
     
     editavel = False
-    para_proprio = (usr == usr_ses)
+    para_proprio = (usr == ses_dono)
     ht_bloco = html_bloco_dados_de_usuario.gera(usr_id, atrs_usr, para_admin, para_proprio, True)
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
   except ErroAtrib as ex:

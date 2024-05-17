@@ -70,6 +70,6 @@ for tag, atrs, erros in (
   testa_gera(rot_teste,  str, ses, atrs, erros)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

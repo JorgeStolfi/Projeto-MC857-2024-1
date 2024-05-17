@@ -63,4 +63,4 @@ sys.stderr.write("\n")
 if ok_global:
   sys.stderr.write("Testes terminadosnormalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

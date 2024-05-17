@@ -1,10 +1,12 @@
 import comando_solicitar_pag_buscar_comentarios
+import db_base_sql
 import db_tabelas_do_sistema
 import obj_sessao
-import obj_video
-import db_base_sql
-import util_testes
 import obj_usuario
+import obj_video
+import util_testes
+from util_erros import aviso_prog
+
 import sys
 
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -29,9 +31,10 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-aviso_prog("!!! programa de teste de {comando_solicitar_pag_buscar_comentarios} ainda não escrito !!!")
+aviso_prog("!!! programa de teste de {comando_solicitar_pag_buscar_comentarios} ainda não escrito !!!", False)
+ok_global = False
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.", False)

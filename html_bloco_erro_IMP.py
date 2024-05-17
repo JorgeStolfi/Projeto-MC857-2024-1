@@ -20,24 +20,17 @@ def gera(erros):
   if len(erros) == 0:
     ht_bloco_final = ""
   else:
-    ht_erros = "<br/>\n" + "<br/>\n".join(erros)
-
     # Cabeçalho espalhafatoso:
     estilo_cabecalho = html_estilo_titulo.gera("#b00000")
     ht_tit = html_elem_span.gera(estilo_cabecalho, "Não foi possível completar a operação")
 
-    if type(erros) is list or type(erros) is tuple:
-      erros = "\n".join(erros)
-
-    # Processa quebras de linha em {erros}:
-    erros = re.sub(r'\n', r'<br/>Erro: \n', erros)
-
-    # Formata a mensagem:
+    # Formata as mensagens:
     cor_texto = "#000000"
     cor_fundo = None
     margens = None
     estilo_erro = html_estilo_texto.gera("20px", "bold", cor_texto, cor_fundo, margens)
-    ht_erros = html_elem_span.gera(estilo_erro, erros)
+    ht_erros = "<br/>\n" + "<br/>\n".join(erros)
+    ht_erros = html_elem_span.gera(estilo_erro, ht_erros)
 
     # Junta as partes:
     ht_tudo = ht_tit + "<br/>" + ht_erros

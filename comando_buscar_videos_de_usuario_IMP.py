@@ -9,16 +9,23 @@ import obj_video
 def processa(ses, cmd_args):
   
   # Páginas do sistema deveriam garantir estas condições:
-  assert ses == None or obj_sessao.aberta(ses), "Sessão do comando inválida"
-  assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert cmd_args != None and type(cmd_args) is dict
  
   erros = []
   
   mostra_autor = False; # Deve mostar o autor de cada vídeo?
   
-  # Obtem o usuário {usr_ses} dono da sessão:
-  usr_ses = obj_sessao.obtem_dono(ses); assert usr_ses != None
-  usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
+  # Obtem o usuário {ses_dono} dono da sessão:
+  if ses != None and obj_sessao.aberta(ses):
+    ses_dono = obj_sessao.obtem_dono(ses); 
+    assert ses_dono != None
+    ses_dono_id = obj_usuario.obtem_identificador(ses_dono)
+    para_admin = obj_usuario.eh_administrador(ses_dono)
+  else:
+    ses_dono = None
+    ses_dono_id = None
+    para_admin = None
 
   # Obtém o usuário {autor} a listar e seu identificador {autor_id}:
   if 'usuario' in cmd_args:
@@ -28,21 +35,21 @@ def processa(ses, cmd_args):
     autor = obj_usuario.obtem_identificador(autor)
   else:
     # Usuário da sessão {ses} quer ver os próprios videos:
-    autor = usr_ses
-    autor_id = usr_ses_id
+    autor = ses_dono
+    autor_id = ses_dono_id
   
   if autor == None:
-    erros.append(f"Usuario indeterminado")
+    erros.append(f"O usuario não foi especificado")
     ht_bloco = None
   else:
     videos_ids = obj_video.busca_por_autor(autor_id)
     if len(videos_ids) == 0:
       # Argumentos com erro ou não encontrou nada.
-      erros.append("Usuário não tem nenhum vídeo")
+      erros.append(f"O usuário \"{autor_id}\"não tem nenhum vídeo")
       ht_bloco = None
     else:
       # Encontrou pelo menos um vídeo.  Mostra em forma de tabela:
-      if autor == usr_ses:
+      if autor == ses_dono:
         ht_titulo = html_bloco_titulo.gera("Meus vídeos")
       else:
         ht_titulo = html_bloco_titulo.gera(f"Vídeos de {autor_id}")

@@ -5,7 +5,7 @@ import html_elem_button_simples
 
 import sys
 
-def gera(ses, bt_ver, bt_fechar, mostrar_usr):
+def gera(ses, bt_ver, bt_fechar, mostra_dono):
 
   ses_id = obj_sessao.obtem_identificador(ses) if ses != None else None
   atrs = obj_sessao.obtem_atributos(ses) if ses != None else None
@@ -19,7 +19,7 @@ def gera(ses, bt_ver, bt_fechar, mostrar_usr):
       mostra = True
       texto = ses_id if ses != None else "Sessão"
     elif chave == 'dono':
-      mostra = mostrar_usr
+      mostra = mostra_dono
       texto = obj_usuario.obtem_identificador(atrs['dono']) if ses != None else "Dono"
     elif chave == 'aberta':
       mostra = True

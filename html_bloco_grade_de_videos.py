@@ -1,15 +1,10 @@
 import html_bloco_grade_de_videos_IMP
 
 def gera(vid_ids, ncols):
-  """ Gera uma grade de 
-
-  O parâmtro ???
-
-  Parâmetros:
-  videos (list): Uma lista de nomes de vídeos.
-
-  Retorna:
-  str: Uma string HTML representando a grade de vídeos.
+  """Retorna um fragmento HTML que é uma grade de thumbnails dos vídeos 
+  cujos identificadores estão na lista {vid_ids}.  
+  
+  A grade terá {ncols} colunas.
   """
   return html_bloco_grade_de_videos_IMP.gera(vid_ids, ncols)
     

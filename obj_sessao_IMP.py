@@ -47,11 +47,13 @@ def inicializa_modulo(limpa):
   tabela = db_obj_tabela.cria_tabela(nome_tb, letra_tb, classe, colunas, limpa)
   return
 
-def cria(dono, cookie):
+def cria(dono, cookie, criacao):
   global tabela
   if tabela.debug: sys.stderr.write(f"  > {obj_sessao.cria}({str(dono)},{str(cookie)})\n")
 
-  criacao = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+  if criacao == None:
+    criacao = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+
   atrs = {
     'dono': dono,
     'criacao': criacao,
@@ -134,13 +136,11 @@ def obtem_objeto(ses_id):
 def busca_por_dono(dono, soh_abertas):
   global tabela
   if dono == None: return []
-  usr_id = obj_usuario.obtem_identificador(dono)
-  sys.stderr.write(f"  @#@ dono = {str(dono)} usr_id = {str(usr_id)} tabela = {str(tabela)}\n")
-  ses_ids = obj_raiz.busca_por_campo('dono', usr_id, False, tabela) # IDs das sessões deste usuário.
+  dono_id = obj_usuario.obtem_identificador(dono)
+  atrs = { 'dono': dono_id }
   if soh_abertas:
-    lista_ses = list(map(lambda id: obtem_objeto(id), ses_ids)) # Pega objetos.
-    lista_ses_abertas = list(filter(lambda ses: aberta(ses), lista_ses))
-    ses_ids = list(map(lambda ses: obtem_identificador(ses), lista_ses_abertas))
+    atrs['aberta'] = True
+  ses_ids = obj_raiz.busca_por_campos(atrs, False, tabela) # IDs das sessões deste usuário.
   return ses_ids
 
 def busca_por_campo(chave, val):
@@ -148,9 +148,10 @@ def busca_por_campo(chave, val):
   lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
   return lista_ids
 
-def busca_por_semelhanca(args, unico):
+def busca_por_campos(atrs, unico):
   global tabela
-  return obj_raiz.busca_por_semelhanca(args, unico, tabela)
+  lista_ids = obj_raiz.busca_por_campos(atrs, unico, tabela)
+  return lista_ids
 
 def fecha(ses):
   global tabela
@@ -175,16 +176,18 @@ def cria_testes(verb):
       ( "S-00000005", "U-00000005", "EFGHIJKLMNO", False ),
       ( "S-00000006", "U-00000008", "FGHIJKLMNOP", True  ),
     ]
-  for ses_id_esp, usr_id, cookie, admin_esp in lista_ucs:
-    dono = obj_usuario.obtem_objeto(usr_id)
+  for ses_id_esp, dono_id, cookie, admin_esp in lista_ucs:
+    dono = obj_usuario.obtem_objeto(dono_id)
     assert dono != None and type(dono) is obj_usuario.Classe
-    ses = cria(dono, cookie)
+    dia = ses_id_esp[-2:]
+    data = "2024-01-" + dia + " 08:33:25 UTC"
+    ses = cria(dono, cookie, data)
     ses_id = obj_sessao.obtem_identificador(ses)
-    if verb: sys.stderr.write("  sessão %s de %s criada\n" % (ses_id, usr_id))
+    if verb: sys.stderr.write("  sessão %s de %s criada\n" % (ses_id, dono_id))
     # Paranóia:
     assert ses_id == ses_id_esp
-    usr_cri = obj_sessao.obtem_dono(ses)
-    assert usr_cri != None and usr_cri == dono
+    dono_cri = obj_sessao.obtem_dono(ses)
+    assert dono_cri != None and dono_cri == dono
     assert de_administrador(ses) == admin_esp
   return
 

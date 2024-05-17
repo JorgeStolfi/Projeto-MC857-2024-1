@@ -18,8 +18,8 @@ db_tabelas_do_sistema.cria_todos_os_testes(True)
 ok_global = True # Vira {False} se algum teste falha.
 
 def testa_processa(rot_teste, res_esp, *args):
-    """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
-    em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
+  """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
+  em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   global ok_global
   modulo = comando_buscar_videos_de_usuario
@@ -37,7 +37,7 @@ ses1 = obj_sessao.obtem_objeto(ses1_id)
 testa_processa("teste1",  str, ses1, {'usuario': 'U-00000001'})  
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)
  

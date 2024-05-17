@@ -1,13 +1,14 @@
 #! /usr/bin/python3
 
-import obj_comentario
-import db_tabelas_do_sistema
-import db_base_sql
-import obj_usuario
-import obj_sessao
-import obj_video
-from util_erros import erro_prog, aviso_prog, mostra
 import comando_postar_comentario
+import db_base_sql
+import db_tabelas_do_sistema
+import obj_comentario
+import obj_sessao
+import obj_usuario
+import obj_video
+import util_testes
+from util_erros import erro_prog, aviso_prog, mostra
 
 import sys
 
@@ -20,22 +21,23 @@ db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-ses1_id = "S-00000001"
-ses1 = obj_sessao.obtem_objeto(ses1_id)
-
-def testa_processa(ses, cmd_args, deveria_postar):
+def testa_processa(rot_teste, ses, cmd_args, res_esp, deveria_postar):
   """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
 
   global ok_global
-
-  sys.stderr.write(f"  ----------------------------------------------------------------------\n")
-  sys.stderr.write(f"  postando comentário {str(cmd_args)}\n")
+  
+  sys.stderr.write("  " + ("~"*70) + "\n")
 
   ult_id_old = obj_comentario.ultimo_identificador()
   sys.stderr.write(f"  ultimo comentário antes = {ult_id_old}\n")
 
-  comando_postar_comentario.processa(ses, cmd_args)
+  frag = False
+  pretty = False
+  modulo = comando_postar_comentario
+  funcao = comando_postar_comentario.processa
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, ses, cmd_args)
+  ok_global = ok_global and ok
 
   ult_id_new = obj_comentario.ultimo_identificador()
   sys.stderr.write(f"  ultimo comentário depois = {ult_id_new}\n")
@@ -45,68 +47,57 @@ def testa_processa(ses, cmd_args, deveria_postar):
     com_new_atrs = obj_comentario.obtem_atributos(com_new_obj) if com_new_obj != None else None
     sys.stderr.write(f"  comentario postado = {com_new_obj} atrs = {str(com_new_atrs)}\n")
     if deveria_postar:
-      sys.stderr.write("OK\n")
+      sys.stderr.write("  CONFERE!\n")
     else:
-      sys.stderr.write("** Postou comentario quando não deveria postar\n")
+      sys.stderr.write("  ** Postou comentario quando não deveria postar\n")
       ok_global = False
   else:
     sys.stderr.write(f"  comentario não postado\n")
     if deveria_postar:
-      sys.stderr.write("** Não comentario quando deveria postar\n")
+      sys.stderr.write("  ** Não postou comentario quando deveria postar\n")
       ok_global = False
     else:
-      sys.stderr.write("OK\n")
+      sys.stderr.write("  CONFERE!\n")
     
-  sys.stderr.write(f"  ----------------------------------------------------------------------\n")
-
-# Limpar as tabelas antes de executar os testes
-obj_comentario.inicializa_modulo(True)
+  sys.stderr.write("  " + ("~"*70) + "\n\n")
 
 # ----------------------------------------------------------------------
-# Testa chamada OK:
-dados1 = {
-    'nome': "Luiz Primeiro", 
-    'senha': "123456789", 
-    'conf_senha': "123456789",
-    'email': "luiz@primeiro.com",
-    'administrador': False,
-  }
-testa_processa(ses1, dados1, True)
+# Sessão para teste:
+ses1_id = "S-00000001"
+ses1 = obj_sessao.obtem_objeto(ses1_id)
+assert ses1 != None
+ses1_dono = obj_sessao.obtem_dono(ses1)
+assert ses1_dono != None
 
-# Testa senha não confere:
-dados2 = {
-    'nome': "Luiz Segundo", 
-    'senha': "123456789", 
-    'conf_senha': "987654321",
-    'email': "luiz@segundo.com",
-    'administrador': False,
-  }
-testa_processa(ses1, dados2, False)
+# ----------------------------------------------------------------------
+# Testa chamada OK sem pai:
+dados1 = { 'video': "V-00000001", 'pai': None, 'texto': "Repúdio ao pódio espúrio!", }
+testa_processa("GUD-SemPai", ses1, dados1, str, True)
 
-# Testa email repetido:
-dados3 = {
-    'nome': "Luiz Terceiro", 
-    'senha': "123456789", 
-    'conf_senha': "123456789",
-    'email': "luiz@primeiro.com",
-    'administrador': True,
-  }
-testa_processa(ses1, dados3, False)
+# Testa chamada OK com pai:
+dados2 = { 'video': "V-00000003", 'pai': "C-00000004", 'texto': "Concordo discordando.", }
+testa_processa("GUD-ComPai", ses1, dados2, str, True)
 
-# Testa se o teste anterior com senha-nao-confere entrou:
-dados4 = {
-    'nome': "Luiz Segundo Bis", 
-    'senha': "987654321", 
-    'conf_senha': "987654321",
-    'email': "luiz@segundo.com",
-    'administrador': True,
-  }
-testa_processa(ses1, dados4, True)
+# Testa chamada com pai inválido:
+dados3 = { 'video': "V-00000003", 'pai': "C-00001007", 'texto': "Discordo concordando.", }
+testa_processa("BAD-MauPai", ses1, dados3, str, False)
+
+# Testa chamada com pai mas sem texto:
+dados4 = { 'video': "V-00000003", 'pai': "C-00000004", }
+testa_processa("BAD-SemTexto", ses1, dados4, str, False)
+
+# Testa chamada com argumentos espúrios:
+dados5 = { 'video': "V-00000003", 'pai': "C-00000004", 'texto': "Celeuma cerúlea?", 'neto': "C-00000007", }
+testa_processa("BAD-Lixo", ses1, dados5, "AssertionError", False)
+
+# Testa chamada com pai de outro vídeo:
+dados6 = { 'video': "V-00000003", 'pai': "C-00000003", 'texto': "Fenômeno fenomenal!", }
+testa_processa("BAD-OutroVid", ses1, dados6, str, False)
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)

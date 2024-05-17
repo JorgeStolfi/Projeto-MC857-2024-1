@@ -47,6 +47,6 @@ for vid_id in (
   testa_processa(rot_teste, str, ses1, {'video': vid_id})
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  erro_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.", True)

@@ -29,8 +29,8 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
     atrs_tab.update(atrs)
   
   # Apaga a senha e contra-senha, se houverem:
-  if 'senha' in atrs: atrs.pop('senha')
-  if 'conf-senha' in atrs: atrs.pop('conf-senha')
+  atrs_tab.pop('senha', None)
+  atrs_tab.pop('conf_senha', None)
   
   # Linhas da tabela: 
   dados_linhas = []

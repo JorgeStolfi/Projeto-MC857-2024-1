@@ -72,10 +72,10 @@ def cria(atrs):
   à tabéla de comentários da base de dados. Atribui um identificador
   único ao comentário, derivado do seu índice na tabela.
   
-  O dicionário {atrs} deve ter os atributod da {Classe} especificados
-  acima, menos o campo 'data', que será a data corrente no momento da
-  chamada desta função. O identificador do novo objeto será derivado do
-  seu índice na tabela.
+  O dicionário {atrs} deve ter os atributos da {Classe} especificados
+  acima. Se o atributo 'data' estiver faltando, será usada a data
+  corrente no momento da chamada desta função. O identificador do novo
+  objeto será derivado do seu índice na tabela.
   
   Em caso de sucesso, retorna o objeto criado.  Caso contrário, 
   levanta a exceção {ErroAtrib} com uma lista de mensagens
@@ -152,11 +152,21 @@ def busca_por_autor(usr_id):
   ou {None} se o usuário não postou nenhum comentário."""
   return obj_comentario_IMP.busca_por_autor(usr_id)
 
-def busca_por_texto(texto):
-  """Localiza comentários que contém a string {texto} no campo de texto
-  e devolve o uma lista com os identificadores desses comentários (não os objetos);
-  ou {None} se nenhum comentário contém o texto."""
-  return obj_comentario_IMP.busca_por_texto(texto)
+def busca_por_texto(frase):
+  """
+  Localiza comentários cujo atributo 'texto' contem a cadeia {frase}.
+  Devolve o uma lista com os identificadores desses comentários (não os objetos);
+  ou {None} se nenhum comentário contém essa cadeia.
+  
+  A {frase} pode ocorrer em qualquer ponto do texto do comentário, e a
+  comparação ignora a distinção maiúsculas/minusculas. Por exemplo, se
+  {frase} for " peiXE", vai encontrar comentários cujo texto é "Temos
+  Peixes", "Nossa peixeira" mas não "Peixes à venda" nem "O Peixésimo".
+  
+  Esta função equivale a {busca_por_campos({ 'texto': "~%" + frase + "%" }, unico=False).
+  A {frase} pode conter caracteres '%' ou '_' adicionais, como no operador LIKE do SQL.
+  """
+  return obj_comentario_IMP.busca_por_texto(frase)
 
 def busca_por_data(data_ini, data_ter):
   """Localiza comentários postados em um intervalo entre os dois anos, inclusive 
@@ -164,12 +174,22 @@ def busca_por_data(data_ini, data_ter):
   ou {None} se nenhum comentário foi postado no intervalo de data."""
   return obj_comentario_IMP.busca_por_data(data_ini, data_ter)
 
-def busca_por_campos(args):
+def busca_por_campos(args, unico):
   """
-  Permite buscar por múltiplos campos de um comentário, onde o argumento {args}
-  representa um dicionário no formato {chave, valor}
+  Busca comentários que satisfazem uma combinação de valores
+  em vários campos, definidos pelo dicionário {args}. Especificamente, para todo
+  par {ch: val} em {args}, exige que o valor do atributo {ch} do objeto
+  case com {val}. Cada valor {val} pode ser um padrão SQL ou um
+  intervalo; veja {obj_raiz.busca_por_campos} para maiores detalhes. 
+  
+  Se {unico} for {False}, devolve uma lista, possivelmente vazia,
+  com os identificadores dos objetos encontrados (NÃO os objetos).
+  
+  Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
+  ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
+  se houver apenas um.  Em qualquer outro case, termina o programa com erro.
   """
-  return obj_comentario_IMP.busca_por_campos(args)
+  return obj_comentario_IMP.busca_por_campos(args, unico)
 
 def obtem_conversa(raizes, max_coms, max_nivel):
   """

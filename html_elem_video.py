@@ -1,7 +1,6 @@
 import html_elem_video_IMP
 
-def gera(nome, alt, tam):  
+def gera(vid_id, altura):  
   """Constrói o HTML para um elemento "<video ...>" 
-  que mostra o video "videos/{nome}" com altura {tam} 
-  e texto alternativo {alt}."""
-  return html_elem_video_IMP.gera(nome, alt, tam)
+  que mostra o video "videos/{vid_id}.mp4" com altura {altura} (pixels)."""
+  return html_elem_video_IMP.gera(vid_id, altura)

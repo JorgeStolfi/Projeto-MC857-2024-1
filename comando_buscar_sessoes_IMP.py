@@ -8,80 +8,101 @@ import html_pag_mensagem_de_erro
 from util_erros import ErroAtrib
 
 def processa(ses, cmd_args):
-  # Comando emitido por página do site deveria satisfazer isto:
-  assert ses == None or obj_sessao.aberta(ses), f"Sessão inválida"
-  assert cmd_args != None and type(cmd_args) is dict
+
+  # Chamadas de {processa_comando_http.preocessa} devem satisfazer isto:
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert isinstance(cmd_args, dict)
   
   erros = []
-  ht_bloco = None
-
-  # Valida os valores dos atributos da busca, e elimina campos {None}:
-  cmd_args_cp = cmd_args.copy()
-  for chave, val in cmd_args.items():
-    if val == None:
-      del cmd_args_cp[chave]
-    # Verifica validade de {val}:
-    if chave == 'usuario':
-      erros += util_identificador.valida(chave, val, "U", False)
-    elif chave == 'sessao':
-      erros += util_identificador.valida(chave, val, "S", False)
-    elif chave == 'aberta':
-      continue
-    else:
-      # Comando emitido por página do site não deveria ter outros campos:
-      assert False, f"Campo '{chave}' inválido"
-  cmd_args = cmd_args_cp
   
+  ses_dono = None
+  if ses == None:
+    erros.append("É preciso estar logado para efetuar esta ação")
+  elif not obj_sessao.aberta(ses):
+    erros.append("Esta sessão de login foi fechada. É preciso estar logado para efetuar esta ação")
+  else:
+    ses_dono = obj_sessao.obtem_dono(ses)
+
+  # Pega os valores dos atributos da busca, e elimina campos {None}:
+  atrs_busca = { }
+  for chave, val in cmd_args.items():
+    item_erros = [ ]
+    if val == None:
+      # Valor {None} signfica "qualquer valor":
+      pass
+    elif chave == 'dono':
+      item_erros = util_identificador.valida(chave, val, "U", False)
+      if len(item_erros) == 0: atrs_busca['usuario'] = val
+    elif chave == 'sessao':
+      item_erros = util_identificador.valida(chave, val, "S", False)
+      if len(item_erros) == 0: atrs_busca['sessao'] = val
+    elif chave == 'aberta':
+      # Valor 'on' significa "só abertas", 'off' significa "qualquer"
+      if val == 'on':
+        atrs_busca[chave] = True
+      elif val == 'off':
+        pass
+      else:
+        item_erros = [ f"O valor do atributo '{chave}' = \"{val}\" é inválido" ]
+    elif chave == 'data' or chave == 'data_min' or chave == 'data_max':
+      item_erros = util_data.valida(chave, val)
+      if len(item_erros) == 0: atrs_busca[chave] = val
+    elif chave == 'cookie':
+      atrs_busca[chave] = val
+    else:
+      item_erros = [ f"Sessões não tem o atributo '{chave}'" ]
+
+    erros += item_erros
+  
+  if len(args_busca) == 0:
+    erros.append(f"É preciso especificar pelo menos um parâmetro para a busca")
+  
+  # Converte 'data_min', 'data_max' para 'data' intervalar:
+  erros += util_dict.normaliza_busca_por_data(atrs_busca)
+      
+  # Busca por 'sessao' é categórica:
+  if 'sessao' in args_busca:
+    if len(args_busca) != 1:
+      erros.append("Busca por ID de sessão não deve ser combinada com outros critérios")
+  
+  # Faz a busca, resultado é a lista {ses_ids_res} de identificadores de sessões:
   ses_ids_res = []
   if len(erros) == 0:
-  # Faz a busca dentro de um {try:} caso ela levante {ErroAtrib}:
-    try:
-      soh_abertas = False
-      if 'aberta' in cmd_args:
-        if cmd_args['aberta'] == 'on':
-          soh_abertas = True
-      if 'usuario' in cmd_args:
-        # Deve haver um único usuário com esse identificador:
-        usr_id = cmd_args['usuario']
-        obj_usr = obj_usuario.obtem_objeto(usr_id) if usr_id != None else None
-        if obj_usr == None:
-          erros.append(f"Usuário '{usr_id}' não existe")
-        else:
-          obj_sect = obj_sessao.busca_por_dono(obj_usr, soh_abertas) if obj_usr != None else None
-          for item in obj_sect:
-            ses_ids_res.append(item)
-      elif 'sessao' in cmd_args:
-        # Deve haver uma única sessão com esse identificador:
-        sessao_id = cmd_args['sessao']
-        obj_sect = obj_sessao.obtem_objeto(sessao_id) if sessao_id != None else None
-        if obj_sect == None:
-          erros.append(f"Sessão '{sessao_id}' não existe")
-        else:
-          ses_ids_res = [ sessao_id ]
+    if 'sessao' in args_busca:
+      ses_id_res = args_busca['sessao']
+      ses_res = obj_sessao.obtem_objeto(ses_id_res)
+      if ses_res == None:
+        erros.append(f"A sessão \"{ses_id_res}\" não existe")
       else:
-        # Busca por campos:
-        ses_ids_res = obj_sessao.busca_por_campos(cmd_args, False)
+        ses_ids_res = [ ses_id_res, ]
+    else:
+      # Faz a busca dentro de um {try:} caso ela levante {ErroAtrib}:
+      try:
+        ses_ids_res = obj_sessao.busca_por_campos(args_busca, unico = False)
+        if len(ses_ids_res) == 0:
+          erros.append("Não foi encontrada nenhuma sessão com os dados fornecidos")
+      except ErroAtrib as ex:
+        erros += ex.args[0]
 
-      if len(ses_ids_res) == 0:
-        # Não encontrou nenhuma sessão:
-        erros.append("Não foi encontrada nenhuma sessão com os dados fornecidos")
-    except ErroAtrib as ex:
-      erros += ex.args[0]
-
-  if len(ses_ids_res) != 0:
-    # Encontrou pelo menos uma sessão.  Mostra em forma de tabela:
+  if len(erros) == 0:
+    # Mostra as sessãoes encontradas na forma de tabela:
+    assert len(ses_ids_res) > 0
+    ses_ids_res = sorted(list(ses_ids_res))
     ht_titulo = html_bloco_titulo.gera("Sessões encontradas")
-    bt_ver = True
-    bt_fechar = True
-    mostrar_usr = True # Mostrar a coluna Usuário para o comando buscar sessões.
-    ht_tabela = html_bloco_lista_de_sessoes.gera(ses_ids_res, bt_ver, bt_fechar, mostrar_usr)
+    ht_tabela = html_bloco_lista_de_sessoes.gera\
+      ( ses_ids_res, 
+        bt_ver = True, bt_fechar = para_admin, 
+        mostrar_usr = True,
+      )
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela
-
-  if ht_bloco == None:
-    pag = html_pag_mensagem_de_erro(ses, erros)
-  else:
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
+  elif ses_dono != None:
+    # Repete o formulário com os dados válidos:
+    pag = html_pag_buscar_sessoes.gera(ses, atrs_busca, erros)
+  else:
+    # Não vale a pena repetir of formulário:
+    pag = html_pag_mensagem_de_erro(ses, erros)
 
   return pag

@@ -86,6 +86,6 @@ idents5u = { 'coisa': "Z-00000222", }
 testa_unico_elemento("u4_muitos", idents5u, "ErroAtrib")
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

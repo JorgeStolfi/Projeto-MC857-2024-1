@@ -12,33 +12,36 @@ ok_global = True
 modulo = util_texto_de_comentario
 funcao = modulo.valida
 chave = "fofoca"
-for xrot, valido_ex, valido_pt, val in \
+for xrot, valido, val in \
     ( # Validos só se {nulo_ok}:
-      ( "Nulo",                      True,   True,  None,                               ),
-      # Valido como exato ou padrão:
-      ( "Valido1",                   True,   True,  "Eu sabia!\nNão dá pra confiar...", ),
-      ( "Valido3",                   True,   True,  "É mesmo?" + " Quá!"*198,           ),
-      ( "Valido4",                   True,   True,  "Gödel disse isso para Tupã",       ),
-      ( "Valido5",                   True,   True,  "!"                                 ),
-      # Valido só como padrão:          
-      ( "BrancoIni",                 False,  False, " ou home"                          ),
-      ( "BrancoFim",                 False,  False, "ando "                             ),
-      ( "NLIni",                     False,  False, "\nSabendo"                         ),
-      ( "NLFim",                     False,  False, "final.\n"                          ),
+      ( "Nulo",                      False,  None,                               ),
+      # Valido em qualquer caso:
+      ( "Valido1",                   True,   "Eu sabia!\nNão dá pra confiar...", ),
+      ( "Valido3",                   True,   "É mesmo?" + " Quá!"*198,           ),
+      ( "Valido4",                   True,   "Gödel disse isso para Tupã",       ),
+      ( "Valido5",                   True,   "!"                                 ),
       # Inválido em qualquer caso:         
-      ( "Vazio",                     False,  False, ""                                  ),
-      ( "MuitoLongo",                False,  False, "Quá!" + " Quá!"*200,               ),
-      ( "CaracsInvalidos1",          False,  False, "Título × Líluto"                   ),
-      ( "CaracsInvalidos2",          False,  False, "😁😊😄"                             ),
-      ( "CaracsInvalidos3",          False,  False, "X-φ ≥ ぁ"                          ),
+      ( "BrancoIni",                 False,  " ou home"                          ),
+      ( "BrancoFim",                 False,  "ando "                             ),
+      ( "NLIni",                     False,  "\nSabendo"                         ),
+      ( "NLFim",                     False,  "final.\n"                          ),
+      ( "Vazio",                     False,  ""                                  ),
+      ( "MuitoLongo",                False,  "Quá!" + " Quá!"*200,               ),
+      ( "CaracsInvalidos1",          False,  "Título × Líluto"                   ),
+      ( "CaracsInvalidos2",          False,  "😁😊😄"                             ),
+      ( "CaracsInvalidos3",          False,  "X-φ ≥ ぁ"                          ),
     ):
-  ok = util_testes.testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val)
+  rot_teste = xrot
+  ok = util_testes.testa_funcao_validadora(rot_teste, valido, modulo, funcao, chave, val, False)
   if not ok: ok_global = False
+  if val == None: 
+    ok = util_testes.testa_funcao_validadora(rot_teste + "_nuloOK", True, modulo, funcao, chave, val, True)
+    if not ok: ok_global = False
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)

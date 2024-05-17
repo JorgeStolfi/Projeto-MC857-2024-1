@@ -38,6 +38,6 @@ for tam_fonte in "32px", "12px":
         testa_gera(rot_teste, str, tam_fonte, peso_fonte, cor_fundo, margens)
  
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

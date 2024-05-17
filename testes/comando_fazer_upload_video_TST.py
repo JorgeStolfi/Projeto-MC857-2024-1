@@ -23,26 +23,22 @@ db_tabelas_do_sistema.cria_todos_os_testes(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-def testa_processa(rot_teste, valido, ses, *args):
+def testa_processa(rot_teste, valido, *args):
   """Testa {funcao(*args)}, verifica se o resultado é {res_esp}, grava resultado
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   global ok_global
 
-  modulo = comando_fazer_upload_video
-  funcao = modulo.processa
-  
-  ok = True
-
-  ses_id = obj_sessao.obtem_identificador(ses) if ses != None else None
-  sys.stderr.write("-"*70 + "\n")
-  xargs = util_erros.trunca_tamanho(str(*args), 100)
-  sys.stderr.write(f"testando {funcao} rot_teste = {rot_teste} ses = {str(ses_id)} cmd_args = {xargs}\n")
-
   ult_id_antes = obj_video.ultimo_identificador()
-  pag = funcao(ses, *args)
+  
+  modulo = comando_fazer_upload_video
+  funcao = comando_fazer_upload_video.processa
+  frag = False
+  pretty = False
+  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, str, frag, pretty, *args)
+  
   ult_id_depois = obj_video.ultimo_identificador()
   sys.stderr.write(f"  ultimo id antes = {ult_id_antes} depois = {ult_id_depois}\n")
-  
+
   if ult_id_depois == ult_id_antes:
     sys.stderr.write(f"  comando não criou novo video\n")
     if valido:
@@ -51,30 +47,50 @@ def testa_processa(rot_teste, valido, ses, *args):
     else:
       sys.stderr.write(f"  como esperado\n")
   else:
-    vid_id = ult_id_depois
-    sys.stderr.write(f"  comando criou novo video, id = {vid_id}\n")
-    if not valido:
+    sys.stderr.write(f"  comando criou novo video, id = {ult_id_depois}\n")
+    if valido:
+      sys.stderr.write(f"  como esperado\n")
+      ok = verifica_criacao(rot_teste, ult_id_depois, *args)
+    else:
       sys.stderr.write(f"  ** deveria ter falhado!\n")
       ok = False
+  
+  ok_global = ok_global and ok
+  return ok
+  
+def verifica_criacao(rot_teste, vid_id, ses, cmd_args):
+  """Confere atributos do vídeo {vid_id} criado com os dados
+  especificados {cmd_args}."""
+  global ok_global
 
-    # Verifica os atributos do vídeo criado:
-    vid_criado = obj_video.obtem_objeto(vid_id)
-    assert vid_criado != None
-    atrs_criado = obj_video.obtem_atributos(vid_criado)
-    sys.stderr.write(f"  atributos criados = {str(atrs_criado)}\n")
-    for chave in cmd_args.keys():
-      if chave == 'usuario': 
-        val_criado = obj_usuario.obtem_identificador(vid_args['autor'])
-      else:
-        val_criado = atrs_criado[chave] if vid_criado != None else None
-      val_dados = cmd_args[chave]
-      if val_criado != val_dados:
-        sys.stderr.write(f"  ** atributo '{chave}' não bate: {str(val_criado)}, {str(val_dados)}\n")
-        ok = False
-   
-  frag = False # Resultado é só um fragmento de página?
-  pretty = False # Deve formatar o HTML para facilitar view source?
-  util_testes.escreve_resultado_html(modulo, funcao, rot_teste, pag, frag, pretty)
+  ok = True
+
+  assert ses != None and obj_sessao.aberta(ses)
+  ses_id = obj_sessao.obtem_identificador(ses)
+  xargs = util_testes.trunca_tamanho(str(cmd_args), 100)
+  sys.stderr.write(f"rot_teste = {rot_teste} verificando vídeo {vid_id} ses = {str(ses_id)} cmd_args = {xargs}\n")
+  ses_dono = obj_sessao.obtem_dono(ses)
+  assert ses_dono != None
+
+  vid = obj_video.obtem_objeto(vid_id)
+  assert vid != None
+  vid_atrs = obj_video.obtem_atributos(vid)
+  sys.stderr.write(f"  atributos do vídeo criado = {str(vid_atrs)}\n")
+
+  cmd_autor = ses_dono
+  cmd_autor_id = obj_usuario.obtem_identificador(cmd_autor)
+  vid_autor_id = obj_usuario.obtem_identificador(vid_atrs['autor'])
+  if cmd_autor_id != vid_autor_id:
+    sys.stderr.write(f"  ** atributo 'autor' não bate: cmd = {cmd_autor_id} criado = {vid_autor_id}")
+    ok = False
+
+  assert 'titulo' in cmd_args; 
+  cmd_titulo = cmd_args['titulo']
+  vid_titulo = vid_atrs['titulo']
+  if cmd_titulo != vid_titulo:
+    sys.stderr.write(f"  ** atributo 'titulo' não bate: cmd = {cmd_titulo} criado = {vid_titulo}")
+    ok = False
+
   ok_global = ok_global and ok
   return ok
 
@@ -101,14 +117,14 @@ usr_comum2_id = obj_usuario.obtem_identificador(usr_comum2)
 bytes1 = open("videos/V-00000002.mp4", 'rb').read()
 
 # ----------------------------------------------------------------------
-# Testa com dados OK:
+# Testa com dados OK (sem 'autor'):
 dados_OK1 = { \
   'titulo': "Bananas cibernéticas",
   'conteudo': bytes1,
 }
 testa_processa("OK1", True, ses_C1, dados_OK1)
 
-# Outro teste OK
+# Outro teste OK (com 'autor' redundante):
 dados_OK2 = { \
   'autor': usr_comum2_id,
   'titulo': "Bananas psicossomáticas",
@@ -116,26 +132,35 @@ dados_OK2 = { \
 }
 testa_processa("OK2", True, ses_C2, dados_OK2)
 
-# Testa com usuário de outra sessão:
-dados_Eses = { \
+# Testa com 'autor' de outra sessão
+dados_EautBad = { \
   'autor': usr_comum1_id,
   'titulo': "Pitangas matemáticas",
   'conteudo': bytes1,
 }
-testa_processa("E str,  str, ses", False, ses_C2, dados_Eses)
+testa_processa("E_autBad", False, ses_C2, dados_EautBad)
 
 # Testa com usuário não logado:
-dados_Elog = { \
+dados_Enolog = { \
   'autor': usr_comum1_id,
   'titulo': "Goiabas organolépticas",
   'conteudo': bytes1,
 }
-testa_processa("E str,  str, ses", False, None, dados_Elog)
+testa_processa("E_sesNone", False, None, dados_Enolog)
+
+# Testa com atributos espúrios:
+dados_Elixo = { \
+  'duracao': 10,
+  'nota': 3.0,
+  'titulo': "Tomates catastróficos",
+  'conteudo': bytes1,
+}
+testa_processa("E_lixo", False, ses_C1, dados_Elixo)
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)

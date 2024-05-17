@@ -4,7 +4,7 @@ import db_base_sql
 import util_identificador
 import db_obj_tabela
 import obj_raiz
-from util_erros import erro_prog
+from util_erros import erro_prog, aviso_prog
 import sys
 
 # Definição interna da classe {db_obj_tabela.Classe}:
@@ -151,9 +151,9 @@ def busca_por_campos(tab, args, res_cols):
         assert val != None and isinstance(val, str)
  
       # Descobre tipo da busca:
-      if type(val) is str and len(val) >= 2 and val[0] == "%" and val[-1] == "%":
+      if type(val) is str and len(val) >= 2 and val[0] == "~":
         # Busca aproximada.
-        val = val[1:-1]  # Remove os '%'.
+        val = val[1:]  # Remove o '~'.
         termo = busca_por_campos_termo_semelhanca(chave, val)
       elif (isinstance(val, list) or isinstance(val, tuple)) and len(val) == 2: 
         # Busca por intervalo.
@@ -270,8 +270,8 @@ def busca_por_campos_termo_identidade(chave, val):
 
 def busca_por_campos_termo_semelhanca(chave, val):
   """Devolve o termo de uma condição SQL que exige que o campo da coluna
-  {chave} da tabela contenha a cadeia {val}, ignorando maiúsculas/minúsculas. 
-  Ou seja, "{chave} LIKE '%{val_san}%' onde {val_san} é {val}
+  {chave} da tabela case o padrão {val}, ignorando maiúsculas/minúsculas. 
+  Ou seja, "{chave} LIKE '{val_san}' onde {val_san} é {val}
   oportunamente sanitizado e convertido."""
   
   assert isinstance(val, str), "valor de tipo inválido"
@@ -281,7 +281,6 @@ def busca_por_campos_termo_semelhanca(chave, val):
   chave_sql = chave + ")"
   val_sql = db_base_sql.codifica_valor(val.lower())
   assert len(val_sql) >= 2 and val_sql[0] == "'" and val_sql[-1] == "'"
-  val_sql = "'%" + val_sql[1:-1] + "%'"
   termo = "LOWER(" + chave + ") LIKE " + val_sql
   return termo
 

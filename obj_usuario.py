@@ -110,35 +110,37 @@ def eh_administrador(usr):
 def busca_por_email(em):
   """Localiza um usuário cujo endereço de email é {em} (um string da forma
   "{nome}@{host}") e devolve o identificador do mesmo (não o objeto);
-  ou {None} se não existir tal usuário."""
+  ou {None} se não existir tal usuário. Equivale a 
+  {busca_por_campos({'email': em}, unico=True)}. Note que {em}
+  NÃO pode ser um padrão SQL."""
   return obj_usuario_IMP.busca_por_email(em)
 
 def busca_por_nome(nome):
-  """Localiza usuarios usuário cujo nome é {nome} e devolve o uma lista
-  com os identificadores dos mesmos (não os objetos);
-  ou {None} se não existir nenhum usuário."""
+  """Localiza usuarios usuário cujo nome é {nome} e devolve uma lista
+  (possivelmente vazia) com os identificadores dos mesmos (não os objetos).
+  
+  Equivale a {busca_por_campos({'nome': nome}, unico=False)}.
+  Portanto, se o {nome} começar com '~', considera o restante como um padrão 
+  para o operador LIKE do SQL. Veja {obj_raiz.busca_por_campos} para detalhes
+  deste caso."""
   return obj_usuario_IMP.busca_por_nome(nome)
 
-def busca_por_campos(args, unico):
-  """Procura usuarios com atributos {args}, na memória ou na base de dados.
-  
-  Especificamente, para todo par {ch: val} em {args}, exige que o valor
-  do atributo {ch} do objeto seja {val}. 
+def busca_por_campos(atrs, unico):
+  """
+  Busca usuários que satisfazem uma combinação de valores em vários
+  campos, definidos pelo dicionário {atrs}. Especificamente, para todo
+  par {ch: val} em {atrs}, exige que o valor do atributo {ch} do objeto
+  case com {val}. Cada valor {val} pode ser um padrão SQL ou um
+  intervalo; veja {obj_raiz.busca_por_campos} para maiores detalhes.
   
   Se {unico} for {False}, devolve uma lista, possivelmente vazia,
   com os identificadores dos objetos encontrados (NÃO os objetos).
   
   Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
   ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
-  se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
-  return obj_usuario_IMP.busca_por_campos(args, unico)
-
-def busca_por_semelhanca(args, unico):
-  """Similar a {busca_por_campos}, mas aceita valores na base de dados 
-  que são semelhantes aos valores em {args}, em vez de iguais a eles.  Vide
-  {db_tabela_generica.busca_por_semelhanca}."""
-  # !!! Deveria ter especificação exato/aproximado para cada campo. !!!
-  return obj_usuario_IMP.busca_por_semelhanca(args, unico)
+  se houver apenas um.  Em qualquer outro case, termina o programa com erro.
+  """
+  return obj_usuario_IMP.busca_por_campos(atrs, unico)
 
 def ultimo_identificador():
   """Devolve o identificador do último usuário inserido na tabela.

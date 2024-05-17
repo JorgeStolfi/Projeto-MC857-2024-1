@@ -48,6 +48,6 @@ testa_gera("text_obrig_T",          str,    "text",     "user",    "iduser",   "
 testa_gera("text_obrig_F",          str,    "text",     "user",    "iduser",   "U-12345678",       None,     True,     None,              "do_it",      False)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

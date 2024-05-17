@@ -1,21 +1,38 @@
-import html_bloco_dados_de_video
+import html_bloco_titulo
+import html_bloco_video
 import html_pag_generica
-import html_elem_button_simples
-import html_elem_form
+import obj_sessao
 import obj_video
 
 def gera(ses, vid, erros):
 
-  vid_id = obj_video.obtem_identificador(vid)
-  atrs_vid = obj_video.obtem_atributos(vid)
-  
-  ses_dono = obj_sessao.obtem_dono(ses)
-  vid_autor = obj_video.obtem_autor(vid)
-  
-  editavel = False
-  para_admin = obj_sessao.de_administrador(ses)
-  para_proprio = ( ses_dono == vid-autor )
-  ht_bloco_vid = html_bloco_dados_de_video.gera(vid_id, atrs_vid, editavel, para_admin, para_proprio)
+  # Validação de tipos (paranóia):
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert vid != None and isinstance(vid, obj_video.Classe)
+  assert erros == None or isinstance(erros, list) or isinstance(erros, tuple)
 
-  pag = html_pag_generica.gera(ses, ht_bloco_vid, erros)
+  vid_id = obj_video.obtem_identificador(vid)
+  vid_atrs = obj_video.obtem_atributos(vid)
+  
+  # Título da página:
+  tit = f"Vídeo {vid_id}: {vid_atrs['titulo']}"
+  ht_titulo = html_bloco_titulo.gera(tit)
+  
+  # Determina botões a mostar:
+  ses_dono = obj_sessao.obtem_dono(ses) if ses != None else None
+  vid_autor = obj_video.obtem_autor(vid)
+  assert vid_autor != None
+  para_admin = ses != None and obj_sessao.de_administrador(ses)
+  para_proprio = ses != None and ( ses_dono == vid_autor )
+  
+  bt_alterar = para_admin or para_proprio
+  bt_conversa = True
+  bt_comentar = ses != None
+  ht_bloco_vid = html_bloco_video.gera(vid, bt_alterar, bt_conversa, bt_comentar)
+  
+  ht_conteudo = \
+    ht_titulo + "\n" + \
+    ht_bloco_vid
+
+  pag = html_pag_generica.gera(ses, ht_conteudo, erros)
   return pag

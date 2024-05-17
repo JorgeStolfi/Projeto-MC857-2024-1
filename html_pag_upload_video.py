@@ -1,6 +1,6 @@
 import html_pag_upload_video_IMP
 
-def gera(ses, atrs, erros):
+def gera(ses, atrs_novo, erros):
   """
   Retorna uma página HTML contendo um formulário para fazer upload de
   um video. O formulário terá campos editáveis onde o usuário que pediu
@@ -11,7 +11,7 @@ def gera(ses, atrs, erros):
   Deve ser um objeto de tipo {obj_sessao.Classe}, atualmente aberta.
   Não pode ser {None}.
   
-  Se {atrs} não for {None}, deve ser um dicionário que define valores
+  Se {atrs_novo} não for {None}, deve ser um dicionário que define valores
   iniciais (default) para alguns ou todos os atributos do novo vídeo.
   Não deve incluir 'conteudo' nem atributos que são definidos
   internamente quando o vídeo é armazenado, como 'data', 'duracao',
@@ -20,15 +20,15 @@ def gera(ses, atrs, erros):
   O parâmetro {erros} deve ser {None} ou uma lista de mensagens de erro
   a mostrar na página.  
 
-  A página terá também um botão 'Enviar' (de tipo 'submit').Quando o
-  usuário clicar no botão 'Enviar', será emitido um comando POST com
+  A página terá também um botão "Enviar", "Submeter", "Subir" (de tipo 'submit').Quando o
+  usuário clicar nesse botão, será emitido um comando POST com
   ação {fazer_upload_video}. Os argumentos desse POST serão 'autor' (o
-  ID do usuário que vez o upload), 'titulo' (o título) e 'conteudo' (os
-  bytes do arquivo).
+  ID do usuário que vez o upload), 'titulo' e possivelmente 'nota' (como constam
+  do formulário) e 'conteudo' (os bytes do arquivo).
 
-  Os parâmetros {atrs} e {erros} são usados quando tentativa de fazer
+  Os parâmetros {atrs_novo} e {erros} são usados quando tentativa de fazer
   upload dá erro, e a pagina precisa ser exibida de novo com os valores
   dos campos que o usuário preencheu nessa tentativa. Neste caso, {erros}
   deve ser a lista das mensagens que explicam porque a tentativa falhou.
   """
-  return html_pag_upload_video_IMP.gera(ses, atrs, erros)
+  return html_pag_upload_video_IMP.gera(ses, atrs_novo, erros)

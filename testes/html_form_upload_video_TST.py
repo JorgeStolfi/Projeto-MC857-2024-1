@@ -40,13 +40,13 @@ usr1 = obj_usuario.obtem_objeto(usr1_id)
 atrs0 = { 'autor': usr1_id, }
 atrs1 = { 'autor': usr1_id, 'titulo': "Bananas comendo macacos", }
 
-for para_admin in False, True:
-  xpadm = f"_padm{str(para_admin)[0]}"
-  tag = xpadm
-  testa_gera("SemAtrs" + tag, str, atrs0, para_admin)
-  testa_gera("ComAtrs" + tag, str, atrs1, para_admin)
+for ed_nota in False, True:
+  xednt = f"_ednt{str(ed_nota)[0]}"
+  tag = xednt
+  testa_gera("SemAtrs" + tag, str, atrs0, ed_nota)
+  testa_gera("ComAtrs" + tag, str, atrs1, ed_nota)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

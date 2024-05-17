@@ -1,19 +1,25 @@
 import html_pag_grade_de_videos 
 import obj_sessao
-import 
+import obj_video
 
 def processa(ses, cmd_args):
     
-    # Estas condições devem ser satisfeitas por páginas geradas pelo sistema:
-    assert ses == None or isinstance(ses, obj_sessao.Classe), "sessão inválida"
-    if ses != None: assert obj_sessão.aberta(ses), "sessão já foi fechada"
-    assert isinstance(cmd_args, dict) and len(dict) == 0, "argumentos inválidos"
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert isinstance(cmd_args, dict)
+  
+  erros = []
 
+  assert len(cmd_args) == 0, f"Argumentos espúrios \"{cmd_args}\""
+
+  if len(erros) == 0:
     ncols = 4  # Colunas da grade.
-    nlins = 5  # Linhas da grade.
+    nlins = 3  # Linhas da grade.
     nvids = ncols*nlins  # Total de videos na grade.
-    
-    vid_ids = obj_video.amostra(nvids)
-    
+
+    vid_ids = obj_video.obtem_amostra(nvids)
+
     pag = html_pag_grade_de_videos.gera(ses, vid_ids, ncols, None)
-    return pag
+  else:
+    pag = html_pag_mensagem_de_erro.gera(ses, erros)
+  
+  return pag

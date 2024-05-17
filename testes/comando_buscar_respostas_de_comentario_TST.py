@@ -50,6 +50,6 @@ testa_processa(" str, sesA-semR",  str, ses_adm, {'comentario': com2_id })
 testa_processa(" str, sesN-semR",  str, None,    {'comentario': com2_id })
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

@@ -38,6 +38,6 @@ for ver in (False, True):
       testa_gera("lhufas" + tag, str, [],      ver, fechar, musr)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

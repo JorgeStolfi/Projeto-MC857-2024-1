@@ -22,6 +22,6 @@ def testa_gera(rot_teste, res_esp, *args):
 testa_gera("1", str, "Banana", " --> ")
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

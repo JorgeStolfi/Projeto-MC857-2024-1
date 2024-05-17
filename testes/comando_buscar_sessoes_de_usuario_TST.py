@@ -45,6 +45,6 @@ testa_processa("teste2-N",  str, ses2, {} )
 testa_processa("teste2-U",  str, ses2, {'usuario': usr2_id } )
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

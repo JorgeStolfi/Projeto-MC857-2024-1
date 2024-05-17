@@ -48,6 +48,6 @@ for ms_autor in False, True:
       testa_gera("lhufas" + xargs, str, [],              ms_autor, ms_video, ms_pai)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

@@ -44,6 +44,6 @@ testa_gera("muitos", str, ids_usuarios)
 testa_gera("lhufos", str, ids_usuarios)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

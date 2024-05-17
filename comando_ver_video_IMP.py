@@ -6,24 +6,27 @@ import obj_usuario
 import obj_video
 
 def processa(ses, cmd_args):
-  # Páginas geradas pelo sistema deveriam garantir estas condições:
-  assert ses == None or obj_sessao.aberta(ses), "Sessão inválida"
-  assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
+
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert isinstance(cmd_args, dict)
   
   erros = []
 
   # Obtém o vídeo {vid}:
-  vid_id = cmd_args['video'] if 'video' in cmd_args else None
-  if 'video' == None:
+  vid_id = cmd_args.pop('video', None)
+  if vid_id == None:
     erros.append("O identificador do vídeo não foi especificado")
     vid = None
   else:
     vid = obj_video.obtem_objeto(vid_id)
     if vid == None:
-      erros.append(f"O vídeo {vid_id} não existe")
+      erros.append(f"O vídeo \"{vid_id}\" não existe")
+      
+  assert len(cmd_args) == 0, f"Argumentos espúrios \"{cmd_args}\""
   
-  if vid == None:
-    pag = html_pag_mensagem_de_erro.gera(ses, erros)
-  else:
+  if len(erros) == 0:
+    assert vid !=None
     pag = html_pag_ver_video.gera(ses, vid, erros)
+  else:
+    pag = html_pag_mensagem_de_erro.gera(ses, erros)
   return pag

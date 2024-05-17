@@ -8,44 +8,52 @@ import sys, re
 ok_global = True
 
 modulo = util_nome_de_usuario
-funcao = modulo.valida
+funcao = util_nome_de_usuario.valida
 chave = "padrinho"
-for xrot, valido_ex, valido_pt, val in \
-    ( # Valido só se {nulo_ok}:
-      ( "nome_Nulo",               True,   True,  None, ),
-      # Valido como exato ou padrão:
-      ( "nome_Valido01",           True,   True,  "José da Silvã P. O'Hara Costa-Gravas",    ), 
-      ( "nome_Valido02",           True,   True,  "P.-Louis Sant'Ana",                       ),
-      ( "nome_Valido03",           True,   True,  "Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghij", ),
-      ( "nome_Valido04",           True,   True,  "Abcdefghij",                              ),
-      # Valido só como padrão:          
-      ( "nome_MuitoCurto9",        False,  True,  "José Josias",                             ),
-      ( "nome_BrancoInicial",      False,  True,  " José da Silva P. O'Hara Costa-Gravas",   ),
-      ( "nome_BrancoFinal",        False,  True,  "José da Silva P. O'Hara Costa-Gravas ",   ),
-      ( "nome_ApostInicial",       False,  True,  "'Hara Costa-Gravas",                      ),
-      ( "nome_ApostFinal",         False,  True,  "José da Silva O'",                        ),
-      ( "nome_Hifeninicial",       False,  True,  "-Gravas",                                 ),
-      ( "nome_HifenFinal",         False,  True,  "Costa-",                                  ),
-      ( "nome_PontoInicial",       False,  True,  ".-Louis",                                 ),
-      ( "nome_PontoFinal",         False,  True,  "José da S.",                              ),
-      # Inválido em qualquer caso:         
-      ( "nome_MuitoCurto2",        False,  False, "Jo",                                      ),
-      ( "nome_CaracsInvalidos",    False,  False, "Elon X-φ ≥ 17",                           ),
-      ( "nome_BrancoDuplo",        False,  False, "José da Silva P.  O'Hara Costa-Gravas",   ),
-      ( "nome_MuitoLongo",         False,  False, "José Josefino Josualdo Josismar Josias Josenildo Josafá Josênio", ),
-      ( "nome_ApostInvalido1",     False,  False, "José' da Silva P. O'Hara Costa-Gravas",   ),
-      ( "nome_ApostInvalido2",     False,  False, "José da Silva P'. O'Hara Costa-Gravas",   ),
-      ( "nome_HifenInvalido1",     False,  False, "José-da Silva P-. O'Hara Costa-Gravas",   ),
-      ( "nome_HifenInvalido2",     False,  False, "José-da Silva O'Hara Costa-Gravas",       ),
-      ( "nome_PontoInvalido2",     False,  False, "José da Silva P.O'Hara Costa-Gravas ",    ),
+
+nome_curto_gud = "José Josué"
+assert len(nome_curto_gud) == 10
+nome_curto_bad = nome_curto_gud[:-1]
+
+nome_longo_gud = "José Josênio Josualdo Josildo Josafá Josias Josimar Josefino"
+assert len(nome_longo_gud) == 60
+nome_longo_bad = nome_longo_gud + "s"
+
+for xrot, valido, val in \
+    ( # Válido:          
+      ( "nome_Nulo",               None, None                                         ),
+      ( "nome_Valido01",           True, "José da Silvã P. O'Hara Costa-Gravas",      ), 
+      ( "nome_Valido02",           True, "P.-Louis Sant'Ana",                         ),
+      ( "nome_Valido03",           True, nome_curto_gud,                              ),
+      ( "nome_Valido04",           True, nome_longo_gud,                              ),
+      # Inválido:         
+      ( "nome_MuitoCurto",         False,  nome_curto_bad,                            ),
+      ( "nome_MuitoLongo",         False,  nome_longo_bad,                            ),
+      ( "nome_BrancoInicial",      False,  " José da Silva P. O'Hara Costa-Gravas",   ),
+      ( "nome_BrancoFinal",        False,  "José da Silva P. O'Hara Costa-Gravas ",   ),
+      ( "nome_ApostInicial",       False,  "'Hara Costa-Gravas",                      ),
+      ( "nome_ApostFinal",         False,  "José da Silva O'",                        ),
+      ( "nome_Hifeninicial",       False,  "-Gravas",                                 ),
+      ( "nome_HifenFinal",         False,  "Costa-",                                  ),
+      ( "nome_PontoInicial",       False,  ".-Louis",                                 ),
+      ( "nome_PontoFinal",         False,  "José da S.",                              ),
+      ( "nome_CaracsInvalidos",    False,  "Elon X-φ ≥ 17",                           ),
+      ( "nome_BrancoDuplo",        False,  "José da Silva P.  O'Hara Costa-Gravas",   ),
+      ( "nome_ApostInvalido1",     False,  "José' da Silva P. O'Hara Costa-Gravas",   ),
+      ( "nome_ApostInvalido2",     False,  "José da Silva P'. O'Hara Costa-Gravas",   ),
+      ( "nome_HifenInvalido1",     False,  "José-da Silva P-. O'Hara Costa-Gravas",   ),
+      ( "nome_HifenInvalido2",     False,  "José-da Silva O'Hara Costa-Gravas",       ),
+      ( "nome_PontoInvalido2",     False,  "José da Silva P.O'Hara Costa-Gravas ",    ),
     ):
-  ok = util_testes.testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val)
-  if not ok: ok_global = False
+  nulo_oks = ( False, ) if val != None else ( False, True, )
+  for nulo_ok in nulo_oks:
+    ok = util_testes.testa_funcao_validadora(xrot, valido, modulo, funcao, chave, val, nulo_ok)
+    if not ok: ok_global = False
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)

@@ -6,25 +6,28 @@ import html_form_alterar_video
 import html_pag_generica
 import html_elem_button_simples
 
-def gera(ses, vid_id, atrs, erros):
+def gera(ses, vid_id, atrs_mod, erros):
 
   # Páginas geradas pelo sistema deveriam satisfazer estas condições:
-  assert ses != None and obj_sessao.aberta(ses), "Sessão inválida"
-  assert vid_id != None and type(vid_id) is str, "Identificador de vídeo inválido"
-  assert atrs == None or type(atrs) is dict
+  assert ses != None and obj_sessao.aberta(ses)
+  assert vid_id != None and type(vid_id) is str
+  assert atrs_mod == None or type(atrs_mod) is dict
   assert erros == None or type(erros) is tuple or type(erros) is list
+  
+  atrs_mod = atrs_mod.copy() if atrs_mod != None else { }
   
   # Obtem o vídeo a alterar. Nesta altura deve existir:
   vid = obj_video.obtem_objeto(vid_id) 
   assert vid != None, f"Vídeo {vid_id} não existe"
   
   # Obtem o usuário da sessão, para determinar que campos são editáveis:
-  usr_ses = obj_sessao.obtem_dono(ses)
-  assert usr_ses != None
-  para_admin = obj_usuario.eh_administrador(usr_ses)
+  ses_dono = obj_sessao.obtem_dono(ses)
+  assert ses_dono != None
+  para_admin = obj_usuario.eh_administrador(ses_dono)
   
   # Cria o formulário básico:
-  ht_form = html_form_alterar_video.gera(vid_id, atrs, para_admin)
+  ed_nota = para_admin
+  ht_form = html_form_alterar_video.gera(vid_id, atrs_mod, ed_nota)
     
   ht_conteudo = ht_form
 

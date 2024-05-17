@@ -28,6 +28,6 @@ for alt, lar in ((None,None), (40, 800), (900, 300)):
   testa_gera(f"text_obrFN" + dim,  str, None,      'fofoca', "idfofo", None,             True,  "[dica] Conta aí", "manda_brasa", True, alt, lar)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

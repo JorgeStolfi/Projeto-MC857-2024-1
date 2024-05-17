@@ -35,21 +35,21 @@ def verifica_comentario(rot_teste, com, ident, atrs_esp):
   ok = obj_comentario.verifica_criacao(com, ident, atrs_esp)
   
   if com == None:
-    aviso_prog("objeto é {None}, devia ser {%s}" % ident)
+    sys.stderr.write("  ** objeto é {None}, devia ser {%s}\n" % ident)
   else:
     if type(com) is not obj_comentario.Classe:
-      aviso_prog("objeto não é {obj_comentario.Classe}")
+      sys.stderr.write("  ** objeto não é {obj_comentario.Classe}\n")
 
     sys.stderr.write("  testando {obj_comentario.obtem_identificador(com)}:\n")
     ident_fun = obj_comentario.obtem_identificador(com)
     if ident_fun != ident:
-      aviso_prog("retornou " + str(ident_fun) + ", deveria ter retornado " + str(ident),True)
+      sys.stderr.write(f"  ** retornou {str(ident_fun)}, deveria ter retornado {str(ident)}\n")
       ok = False
 
     sys.stderr.write("  testando {obj_comentario.obtem_atributos(com)}:\n")
     atrs_fun = obj_comentario.obtem_atributos(com)
     if atrs_fun != atrs_esp:
-      aviso_prog("retornou " + str(atrs_fun) + ", deveria ter retornado " + str(atrs_esp),True)
+      sys.stderr.write(f"  ** retornou {str(atrs_fun)}, deveria ter retornado {str(atrs_esp)}\n")
       ok = False
 
     for chave in 'video', 'autor', 'data', 'pai', 'texto':
@@ -57,18 +57,20 @@ def verifica_comentario(rot_teste, com, ident, atrs_esp):
       val_fun = obj_comentario.obtem_atributo(com, chave)
       val_esp = atrs_fun[chave]
       if val_fun != val_esp:
-        aviso_prog("retornou " + str(val_fun) + ", deveria ter retornado " + str(val_esp),True)
+        sys.stderr.write(f"  ** retornou {str(val_fun)}, deveria ter retornado {str(val_esp)}\n")
         ok = False
 
-  sys.stderr.write("  testando {obj_comentario.busca_por_dentificador(%s)}:\n" % ident)
+  sys.stderr.write("  testando {obj_comentario.busca_por_identificador(%s)}:\n" % ident)
   com_esp = com
   com_fun = obj_comentario.obtem_objeto(ident)
   if com_fun != com_esp:
-    aviso_prog("retornou " + str(com_fun) + ", deveria ter retornado " + str(com_esp),True)
+    sys.stderr.write(f"  ** retornou {str(com_fun)}, deveria ter retornado {str(com_esp)}\n")
     ok = False
 
-  if not ok:
-    aviso_prog("teste falhou",True)
+  if ok:
+    sys.stderr.write("  CONFERE!\n")
+  else:
+    sys.stderr.write("  ** teste falhou\n")
     ok_global = False
 
   sys.stderr.write("  %s\n" % ("-" * 70))
@@ -139,6 +141,8 @@ def testa_busca_simples(rot_teste, chave, val, idents_esp):
     idents_fun = obj_comentario.busca_por_video(val, sem_pai)
   elif chave == 'autor':
     idents_fun = obj_comentario.busca_por_autor(val)
+  elif chave == 'texto':
+    idents_fun = obj_comentario.busca_por_texto(val)
   elif chave == 'data':
     data_ini = val[0];
     data_fin = val[1];
@@ -147,11 +151,13 @@ def testa_busca_simples(rot_teste, chave, val, idents_esp):
     assert False, "** função inexistente"
 
   if sorted(idents_fun) != sorted(idents_esp):
-    aviso_prog("retornou " + str(idents_fun) + ", deveria ter retornado " + str(idents_esp),True)
+    sys.stderr.write("  ** retornou " + str(idents_fun) + ", deveria ter retornado " + str(idents_esp) + "\n")
     ok = False
 
-  if not ok:
-    aviso_prog("teste falhou",True)
+  if ok:
+    sys.stderr.write("  CONFERE!\n")
+  else:
+    sys.stderr.write("  ** teste falhou\n")
     ok_global = False
 
   sys.stderr.write("  %s\n" % ("-" * 70))
@@ -159,39 +165,51 @@ def testa_busca_simples(rot_teste, chave, val, idents_esp):
 
 # Depende de {obj_comentario.cria_testes}.
 bv1_vid_id = "V-00000001"
-bv1_vid_res_esp = (
+bv1_res_esp = (
     "C-00000001", "C-00000002", "C-00000005", "C-00000007", "C-00000008", "C-00000009",
     "C-00000010", "C-00000011", "C-00000012", "C-00000013", "C-00000014", "C-00000015",
     "C-00000016", 
   )  
-testa_busca_simples("bv1", 'video', bv1_vid_id, bv1_vid_res_esp)
+testa_busca_simples("bv1", 'video', bv1_vid_id, bv1_res_esp)
 
 bv2_vid_id = "V-00000003"
-bv2_vid_res_esp = ( "C-00000004", "C-00000006", cr0_id, cr1_id, )
-testa_busca_simples("bv2", 'video', bv2_vid_id, bv2_vid_res_esp)
+bv2_res_esp = ( "C-00000004", "C-00000006", cr0_id, cr1_id, )
+testa_busca_simples("bv2", 'video', bv2_vid_id, bv2_res_esp)
 
 bv3_vid_id = "V-00000004"
-bv3_vid_res_esp = ()
-testa_busca_simples("bv3", 'video', bv3_vid_id, bv3_vid_res_esp)
+bv3_res_esp = ()
+testa_busca_simples("bv3", 'video', bv3_vid_id, bv3_res_esp)
 
 # ----------------------------------------------------------------------
 sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.busca_por_autor()}:\n")
 
 bu1_usr_id = "U-00000003"
-bu1_usr_res_esp = ( "C-00000004", "C-00000005", )
-testa_busca_simples("bu1", 'autor', bu1_usr_id, bu1_usr_res_esp)
+bu1_res_esp = ( "C-00000004", "C-00000005", )
+testa_busca_simples("bu1", 'autor', bu1_usr_id, bu1_res_esp)
 
 bu2_usr_id = "U-00000005"
-bu2_usr_res_esp =  ( 
+bu2_res_esp =  ( 
     "C-00000012", "C-00000013", "C-00000014", "C-00000015", 
     "C-00000016", cr0_id,
   )
-testa_busca_simples("bu2", 'autor', bu2_usr_id, bu2_usr_res_esp)
+testa_busca_simples("bu2", 'autor', bu2_usr_id, bu2_res_esp)
 
 bu3_usr_id = "U-00000006"
-bu3_usr_res_esp =  ( )
-testa_busca_simples("bu3", 'autor', bu3_usr_id, bu3_usr_res_esp)
+bu3_res_esp =  ( )
+testa_busca_simples("bu3", 'autor', bu3_usr_id, bu3_res_esp)
+
+# ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
+sys.stderr.write("  testando {obj_comentario.busca_por_texto()}:\n")
+
+bt1_txt = "não"
+bt1_res_esp =  (  "C-00000002", "C-00000009",  "C-00000010", cr1_id )
+testa_busca_simples("bt1", 'texto', bt1_txt, bt1_res_esp)
+
+bt2_txt = "_es%a"
+bt2_res_esp =  ( "C-00000009", "C-00000010", "C-00000011", )
+testa_busca_simples("bt2", 'texto', bt2_txt, bt2_res_esp)
 
 # ----------------------------------------------------------------------
 sys.stderr.write("%s\n" % ("=" * 70))
@@ -209,8 +227,13 @@ coms_todos = ( \
 
 bd1_data_ini = "2024-04-05 08:00:00 UTC"
 bd1_data_fin = "2024-09-30 24:00:00 UTC"
-# Interprete o resultado tendo em vista que busca por data é somente em função de intervalo de anos
-testa_busca_simples("bd1", 'data', ( bd1_data_ini, bd1_data_fin), coms_todos)
+bd1_res_esp = [ cr0_id, cr1_id, ]
+testa_busca_simples("bd1", 'data', ( bd1_data_ini, bd1_data_fin), bd1_res_esp )
+
+bd2_data_ini = "2024-01-05 01:00:00 UTC"
+bd2_data_fin = "2024-01-07 23:00:00 UTC"
+bd2_res_esp = [ "C-00000005", "C-00000006", "C-00000007", ]
+testa_busca_simples("bd2", 'data', ( bd2_data_ini, bd2_data_fin), bd2_res_esp )
 
 # ----------------------------------------------------------------------
 sys.stderr.write("%s\n" % ("=" * 70))
@@ -223,14 +246,16 @@ def testa_busca_por_campos(rot_teste, args_bus, idents_esp):
   sys.stderr.write(f"  {rot_teste}: testando obj_comentario.busca_por_campos({str(args_bus)}):\n")
   ok = True
   
-  idents_fun = obj_comentario.busca_por_campos(args_bus)
+  idents_fun = obj_comentario.busca_por_campos(args_bus, unico = False)
   if idents_fun == None: idents_fun = ( )
   
   if sorted(idents_fun) != sorted(idents_esp):
     sys.stderr.write(f"  retornou {str(idents_fun)}, deveria ter retornado {str(idents_esp)}\n")
     ok = False
 
-  if not ok:
+  if ok:
+    sys.stderr.write("  CONFERE!\n")
+  else:
     sys.stderr.write("  ** teste falhou\n")
     ok_global = False
 
@@ -277,7 +302,7 @@ bcs11_data_ini = "2024-01-01 08:00:00 UTC"
 bcs11_data_fin = "2024-09-30 08:00:00 UTC"
 bcs11_args_bus = { 'data': (bcs11_data_ini, bcs11_data_fin) }
 bcs11_res_esp = coms_todos
-testa_busca_por_campos("datP", bcs11_args_bus, bcs11_res_esp)
+testa_busca_por_campos("datP1", bcs11_args_bus, bcs11_res_esp)
 
 # Intervalo de datas sem comentários
 bcs12_data_ini = "2025-01-01 08:00:00 UTC"
@@ -285,7 +310,7 @@ bcs12_data_fin = "2025-09-30 08:00:00 UTC"
 bcs12_args_bus = { 'data': (bcs12_data_ini, bcs12_data_fin) }
 bcs12_res_esp = ( )
  
-testa_busca_por_campos("datP", bcs12_args_bus, bcs12_res_esp)
+testa_busca_por_campos("datP2", bcs12_args_bus, bcs12_res_esp)
 
 # # Data parcial:
 # bcs13_data_pat = "*05-17*"
@@ -293,24 +318,24 @@ testa_busca_por_campos("datP", bcs12_args_bus, bcs12_res_esp)
 # bcs13_res_esp = coms_todos
 # testa_busca_por_campos("mesP", bcs13_args_bus, bcs13_res_esp)
 
-# Texto parcial que existe
-bcs15_args_bus = { 'texto': "*sobe*" }
-bcs15_res_esp = (  "C-00000004" , )
+# Frase que existe no início:
+bcs15_args_bus = { 'texto': "~sup%" }
+bcs15_res_esp = (  "C-00000001", "C-00000006", )
 testa_busca_por_campos("texE", bcs15_args_bus, bcs15_res_esp)
 
-# Texto parcial que não ocorre em nenhum comentário:
-bcs16_args_bus = { 'texto': "*Superhomem*" }
+# Frase que não ocorre em nenhum comentário:
+bcs16_args_bus = { 'texto': "~Superhomem" }
 bcs16_res_esp = ( )
 testa_busca_por_campos("texN", bcs16_args_bus, bcs16_res_esp)
 
 # Múltiplos parâmetros com resposta única (supõe lógica "E"):
-bcs17_args_bus = { 'texto': "talvez", 'pai': "C-00000001", 'autor': "U-00000002" }
+bcs17_args_bus = { 'texto': "~%talvez%", 'pai': "C-00000001", 'autor': "U-00000002" }
 bcs17_res_esp = (  "C-00000002", )
 testa_busca_por_campos("mulU", bcs17_args_bus, bcs17_res_esp)
 
 # Múltiplos parâmetros com múltiplas respostas (supõe lógica "E"):
 bcs18_args_bus = { 'autor': "U-00000002", 'video': "V-00000001" }
-bcs18_res_esp = (  "C-00000002", "C-00000008", )
+bcs18_res_esp = (  "C-00000002", "C-00000008", "C-00000011", )
 testa_busca_por_campos("mulM", bcs18_args_bus, bcs18_res_esp)
 
 # Múltiplos parâmetros sem resposta (supõe lógica "E"):
@@ -403,6 +428,6 @@ def imprime_arvore_tuplas(arv, ind):
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)

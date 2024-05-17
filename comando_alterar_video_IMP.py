@@ -3,30 +3,42 @@ import obj_video
 import obj_usuario
 import html_pag_generica
 import html_pag_alterar_video
+import html_pag_ver_video
+import html_pag_mensagem_de_erro
+import util_dict
 from util_erros import ErroAtrib
+
+import sys
 
 def processa(ses, cmd_args):
   
   # Estas condições devem valer para comandos emitidos por páginas do sistema:
-  assert ses != None and obj_sessao.aberta(ses), "Sessão inválida"
-  assert isinstance(cmd_args, dict), "argumentos inválidos para o comando"
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert isinstance(cmd_args, dict)
   
   cmd_args = cmd_args.copy() # Por via das dúvidas.
   erros = []
   
   # Obtem o dono da sessão corrente:
-  usr_ses = obj_sessao.obtem_dono(ses)
-  assert usr_ses is not None
-  para_admin = obj_usuario.eh_administrador(usr_ses)
+  ses_dono = None
+  para_admin = False
+  if ses == None:
+    erros.append("É preciso estar logado para executar esta ação.")
+  elif not obj_sessao.aberta(ses):
+    erros.append("Esta sessão de login foi fechada. É preciso estar logado para executar esta ação.")
+  else:
+    ses_dono = obj_sessao.obtem_dono(ses)
+    assert ses_dono is not None
+    para_admin = obj_usuario.eh_administrador(ses_dono)
 
   # Obtém o vídeo {vid} a alterar, e elimina 'video' de {cmd_args}:
   vid_id = cmd_args.pop('video', None)
   if vid_id != None:
     vid = obj_video.obtem_objeto(vid_id)
     if vid == None:
-      erros.append(f"Vídeo {vid_id} não existe")
-  else
-    erros.append("Vídeo não foi especificado")
+      erros.append(f"O vídeo \"{vid_id}\" não existe")
+  else:
+    erros.append("O vídeo a alterar não foi especificado")
     vid = None
   
   if vid != None:
@@ -36,19 +48,17 @@ def processa(ses, cmd_args):
     # Elimina campos de {cmd_args} cujo valor não vai mudar: 
     util_dict.elimina_alteracoes_nulas(cmd_args, vid_atrs)
 
-    # Confere se não há chaves espúrias em {cmd_args}
-    util_dict.verifica_chaves_espurias(cmd_args, vid_atrs)
-
-    # Verifica se o usuário corrente {usr_ses} pode alterar este vídeo:
+    # Verifica se o usuário corrente {ses_dono} pode alterar este vídeo:
     autor = obj_video.obtem_autor(vid)
-    if usr_ses != autor and not para_admin:
+    assert autor != None
+    if ses_dono == None or (ses_dono != autor and not para_admin):
       erros.append("Você não tem permissão para alterar dados deste vídeo")
   
     # Verifica campos inalteráveis:
     alteraveis = { 'nota', 'titulo' }
     for chave in cmd_args.keys():
       if not chave in alteraveis:
-        erros.append(f"atributo {chave} não pode ser alterado")
+        erros.append(f"O atributo '{chave}' não pode ser alterado")
 
     if 'nota' in cmd_args:
       # Somente administrador pode alterar a nota:
@@ -64,11 +74,15 @@ def processa(ses, cmd_args):
       # Sucesso. Exibimos o vídeo com os dados alterados:
       pag = html_pag_ver_video.gera(ses, vid, erros)
     except ErroAtrib as ex:
-      sys.stderr.write(f"@#@ ex = {str(ex)}\n")
+      # sys.stderr.write(f"@#@ ex = {str(ex)}\n")
       erros += ex.args[0]
 
   if pag == None:
-    # Rep a página de alterar vídeo, mais as mens de erro:
-    pag = html_pag_alterar_video.gera(ses, vid_id, cmd_args, erros)
+    if ses_dono == None or vid_id == None:
+      # Não vale a pena repetir o formulário:
+      pag = html_pag_mensagem_de_erro.gera(ses, erros)
+    else:
+      # Repete a página de alterar vídeo, mais as mens de erro:
+      pag = html_pag_alterar_video.gera(ses, vid_id, cmd_args, erros)
 
   return pag

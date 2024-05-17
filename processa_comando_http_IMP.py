@@ -68,7 +68,8 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
   servidor para processar um pedido HTTP do usuário.
   Eles devem devolver a resposta por meio de {devolve_pagina(hstr)}
   onde {hstr} é uma página em formato HTML (ou {None} em
-  caso de erro), ou {devolve_imagem(himg)} onde {himg}
+  caso de erro), ou {devolve_imagem(arq)} onde {arq}
+  é uma imagem, ou {devolve_video(arq)} onde {arq}
   é uma imagem."""
 
   # CAMPOS E MÉTODOS HERDADOS
@@ -101,13 +102,14 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
     # Extrai os dados do comando HTTP na forma de um dicionário:
     dados = self.extrai_dados(tipo)
     
-    if tipo == 'GET' and (dados['real_path'][0:9] == '/imagens/' or dados['real_path'][0:10] == '/avatares/'):
-      # Pedido de uma imagem:
+    imagens_re = r"/(imagens|avatares|thumbs)/"
+    if tipo == 'GET' and re.match(imagens_re, dados['real_path']):
+      # Pedido de um arquivo:
       nome_imagem = dados['real_path'][1:]
       with open(nome_imagem, 'rb') as arq:
         imagem = arq.read()
       self.devolve_imagem(imagem)
-    elif tipo == 'GET' and dados['real_path'][0:8] == '/videos/':
+    elif tipo == 'GET' and re.match(r"/videos/", dados['real_path']):
       # Pedido de um video stream:
       nome_video = dados['real_path'][1:]
       with open(nome_video, 'rb') as arq:
@@ -320,14 +322,14 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
     if ses != None:
       ses_id = obj_sessao.obtem_identificador(ses)
       cookie = obj_sessao.obtem_cookie(ses)
-      usr_ses = obj_sessao.obtem_dono(ses)
-      usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
+      ses_dono = obj_sessao.obtem_dono(ses)
+      ses_dono_id = obj_usuario.obtem_identificador(ses_dono)
     else:
       ses_id = ""
       cookie = ""
-      usr_ses = None
-      usr_ses_id = ""
-    self.send_header('Set-Cookie', 'usuario=' + usr_ses_id)
+      ses_dono = None
+      ses_dono_id = ""
+    self.send_header('Set-Cookie', 'usuario=' + ses_dono_id)
     self.send_header('Set-Cookie', 'sessao=' + ses_id)
     self.send_header('Set-Cookie', 'cookie_sessao=' + cookie)
 

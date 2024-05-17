@@ -13,7 +13,7 @@ def processa(ses, cmd_args):
   ser {None}, e deve ser um objeto de tipo {obj_sessao.Classe},
   atualmente aberto.
   
-  O parãmetro {cmd_args} é um dicionário que contém os argumentos do
+  O parâmetro {cmd_args} é um dicionário que contém os argumentos do
   comando. Atualmente deve ser vazio.
   
   A função normalmente retorna uma página HTML {pag} que inclui o

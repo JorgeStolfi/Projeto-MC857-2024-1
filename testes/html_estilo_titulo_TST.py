@@ -32,6 +32,6 @@ for cor_texto in "#0044ff", "#dd2200":
   testa_gera(rot_teste, str, cor_texto)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

@@ -93,6 +93,6 @@ testa_processa("GUD_DoProprio",  str, ses_C, { 'comentario': com_C_id })
 testa_processa("GUD_peloAdm",  str, ses_A, { 'comentario': com_T_id })
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

@@ -111,19 +111,14 @@ def busca_por_email(em):
 def busca_por_nome(nome):
   global tabela
   if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_nome}: nome = {nome}\n");
-  args = { 'nome': nome }
   unico = False
-  lista_ids = obj_raiz.busca_por_semelhanca(args, unico, tabela)
+  lista_ids = obj_raiz.busca_por_campo('nome', nome, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {','.join(lista_ids)}\n");
   return lista_ids
 
 def busca_por_campos(args, unico):
   global tabela
   return obj_raiz.busca_por_campos(args, unico, tabela)
-  
-def busca_por_semelhanca(args, unico):
-  global tabela
-  return obj_raiz.busca_por_semelhanca(args, unico, tabela)
   
 def ultimo_identificador():
   global tabela
@@ -212,12 +207,12 @@ def confere_e_elimina_conf_senha(args):
     if senha != None or conf_senha != None:
       # As duas tem que estar presentes e coincidir:
       if senha == None: 
-        erros.append("Nova senha não foi especificada")
+        erros.append("A nova senha não foi especificada")
       elif conf_senha == None: 
-        erros.append("Senha não foi confirmada")
+        erros.append("A senha não foi confirmada")
       elif senha != conf_senha:
-        erros.append("Senhas não batem")
-  args.pop('conf_senha')
+        erros.append("As senhas não batem")
+  args.pop('conf_senha', None)
   return erros
 
 def verifica_criacao(usr, usr_id, atrs):
@@ -247,11 +242,10 @@ def valida_atributos(usr, atrs):
   
   # Validade dos campos fornecidos:
   nulo_ok = False
-  padrao_ok = False
   if 'nome' in atrs:
-    erros += util_nome_de_usuario.valida('nome', atrs['nome'], nulo_ok, padrao_ok)
+    erros += util_nome_de_usuario.valida('nome', atrs['nome'], nulo_ok)
   if 'email' in atrs:
-    erros += util_email.valida('Email', atrs['email'], nulo_ok, padrao_ok)
+    erros += util_email.valida('Email', atrs['email'], nulo_ok)
   if 'administrador' in atrs:
     erros += util_booleano.valida('Administrador', atrs['administrador'], nulo_ok)
      

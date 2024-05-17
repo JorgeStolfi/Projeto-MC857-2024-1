@@ -1,41 +1,50 @@
-import html_elem_form
+import obj_video
+import html_bloco_cabecalho_de_video
+import html_bloco_tabela_de_campos
 import html_elem_button_simples
 import html_elem_button_submit
-import html_bloco_dados_de_video
+import html_elem_form
+import util_dict
 
-def gera(atrs, para_admin):
+def gera(atrs_novo, ed_nota):
 
   # Validação de argumentos (paranóia):
-  assert atrs == None or isinstance(atrs, dict), "{atrs} inválido"
-  assert isinstance(para_admin, bool), "{para_admin} inválido"
-
-  atrs_tab = atrs.copy() if atrs != None else {}
-
-  # Verifica se atributos essenciais estão definidos (paranóia):
-  assert 'autor' in atrs_tab, "Campo 'autor' não especificado"
+  assert atrs_novo == None or type(atrs_novo) is dict
+  assert type(ed_nota) is bool
   
-  # Elimina atributos não editáveis de {atrs_tab}:
-  atrs_tab.pop('data',    None)
-  atrs_tab.pop('duracao', None)
-  atrs_tab.pop('altura',  None)
-  atrs_tab.pop('largura', None)
-  atrs_tab.pop('nota',    None)
+  if atrs_novo == None: atrs_novo = { }
 
-  # Constrói tabela com dados:
-  vid_id = None
-  editavel = True
-  para_proprio = True # Porque vai ser criado
-  ht_tabela = html_bloco_dados_de_video.gera(vid_id, atrs_tab, editavel, para_admin, para_proprio)
- 
+  # Converte objetos para identificadores, limpa {atrs_novo}:
+  atrs_novo = util_dict.para_identificadores(atrs_novo)
+
+  # Cabeçalho com atributos do vídeo
+  ht_cabeca = html_bloco_cabecalho_de_video.gera \
+    ( None, atrs_novo, largura = 600,
+      mostra_id = False, mostra_data = False
+    )
+
+  # Linhas da tabela: 
+  dados_linhas = []
+   
+  dados_linhas.append( ( "Arquivo", "file",    'conteudo', True,  None, ) )
+  dados_linhas.append( ( "Título", "textarea", 'titulo', True,  None, ) )
+
+  # Nota opcionalmente editável:
+  if ed_nota:
+    dados_linhas.append( ( "Nota",  "number",  'nota', True,  "0.00 a 5.00", ) )
+
+  ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_novo)
+
   ht_bt_submit = html_elem_button_submit.gera("Enviar", "fazer_upload_video", None, '#55ee55')
   ht_bt_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, '#ee5555')
 
   ht_conteudo = \
+    ht_cabeca + "<br/>\n" + \
     ht_tabela + "<br/>\n" + \
     ht_bt_submit + "\n" + \
     ht_bt_cancel
 
-  multipart = True
-  ht_form = html_elem_form.gera(ht_conteudo, multipart)
+  # O formulário deve ter {multipart = True} para subir o conteúdo do campo "file":
+  ht_form = html_elem_form.gera(ht_conteudo, multipart = True)
   
   return ht_form

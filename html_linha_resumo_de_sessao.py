@@ -1,6 +1,6 @@
 import html_linha_resumo_de_sessao_IMP
 
-def gera(ses, bt_ver, bt_fechar, mostrar_usr):
+def gera(ses, bt_ver, bt_fechar, mostra_dono):
   """
   Retorna uma lista de fragmentos HTML com os valores dos principais
   atributos do objeto {ses} da classe {obj_sessao.Classe}, incluindo o
@@ -21,4 +21,4 @@ def gera(ses, bt_ver, bt_fechar, mostrar_usr):
   será {{ 'sessao': ses_id }}. Estes botões não aparecem se {ses} é
   {None} (linha de cabeçalhos).
   """
-  return html_linha_resumo_de_sessao_IMP.gera(ses, bt_ver, bt_fechar, mostrar_usr)
+  return html_linha_resumo_de_sessao_IMP.gera(ses, bt_ver, bt_fechar, mostra_dono)

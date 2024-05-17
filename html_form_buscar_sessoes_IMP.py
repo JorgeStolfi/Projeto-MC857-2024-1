@@ -6,9 +6,10 @@ import html_elem_form
 def gera(atrs, admin):
 
   dados_linhas = (
-      ( "Usuário", "text",     "usuario", True,  "U-nnnnnnnn" ),
-      ( "Sessão", "text",     "sessao", True,  "S-nnnnnnnn" ),
-      ( "Aberta",  "checkbox", "aberta",  True,  ""           )
+      ( "Usuário", "text",     'dono',    True,  "U-nnnnnnnn" ),
+      ( "Sessão",  "text",     'sessao',  True,  "S-nnnnnnnn" ),
+      ( "Aberta",  "checkbox", 'aberta',  True,  ""           ),
+      ( "Cookie",  "text",     'cookie',  True,  ""           ),
     )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
@@ -20,4 +21,6 @@ def gera(atrs, admin):
         ht_submit + \
         ht_cancel
 
-  return html_elem_form.gera(ht_conteudo, False)
+  ht_form = html_elem_form.gera(ht_conteudo, False)
+  
+  return ht_form

@@ -24,6 +24,6 @@ testa_gera("P", str, "TESTINHO", False)
 testa_gera("G", str, "TESTÃO", True)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

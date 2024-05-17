@@ -26,24 +26,37 @@ def testa_gera(rot_teste, res_esp, *args):
 
   global ok_global
   modulo = html_bloco_dados_de_sessao
-  funcao = modulo.gera
+  funcao = html_bloco_dados_de_sessao.gera
   frag = True # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
-# Testes do modulo:
-ses1_id = "S-00000001"
-ses1 = obj_sessao.obtem_objeto(ses1_id)
-assert ses1 != None
+# Uma sessão de administrador:
+sesA_id = "S-00000001"
+sesA = obj_sessao.obtem_objeto(sesA_id)
+assert sesA != None
+assert obj_sessao.de_administrador(sesA)
 
-for para_admin in False, True:
-  for para_proprio in False, True:
-    rot_teste = "S" + f"_adm{str(para_admin)[0]}" + f"_pro{str(para_proprio)[0]}"
-    testa_gera(rot_teste,  str, ses1_id, para_admin, para_proprio)
+# Uma sessão de usuário comum:
+sesC_id = "S-00000003"
+sesC = obj_sessao.obtem_objeto(sesC_id)
+assert sesC != None
+assert not obj_sessao.de_administrador(sesC)
+
+# Uma sessão fechada:
+sesF_id = "S-00000005"
+sesF = obj_sessao.obtem_objeto(sesF_id)
+assert sesF != None
+obj_sessao.fecha(sesF)
+assert not obj_sessao.aberta(sesF)
+
+testa_gera("S_A",  str, sesA)
+testa_gera("S_C",  str, sesC)
+testa_gera("S_F",  str, sesF)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

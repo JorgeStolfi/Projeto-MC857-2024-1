@@ -1,6 +1,6 @@
 
 import html_elem_label
-from util_erros import erro_prog
+from util_erros import erro_prog, aviso_prog
 
 def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio):
   if tipo == "hidden" and editavel:

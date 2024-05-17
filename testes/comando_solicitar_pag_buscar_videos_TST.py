@@ -32,23 +32,14 @@ def testa_processa(rot_teste, res_esp, *args):
   return ok
 
 # Sessão para teste:
-ses_id = "S-00000001"
-ses = obj_sessao.obtem_objeto(ses_id)
+sesA_id = "S-00000001"
+sesA = obj_sessao.obtem_objeto(sesA_id)
 
-# Obtém um usuário administrador
-#admin = obj_video.obtem_objeto("U-00000001")
-#assert obj_video.obtem_atributo(admin, 'administrador')
-#ses_A = obj_sessao.cria(admin, "NOPQRSTUVWX")
-
-testa_processa("NL-e0",  str, None, None)
-#testa_processa("NA-e2",  str, ses_comum, ["banana", "abacate"])
-testa_processa("OK-e0",  str, ses, None)
-#testa_processa("OK-e2",  str, ses, ["Roubar", "Mentir"])
-
-#aviso_prog("!!! programa de teste de {comando_solicitar_pag_buscar_videos} ainda não escrito !!!", False)
+testa_processa("sesN",  str, None, {})
+testa_processa("sesA",  str, sesA, {})
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  #aviso_prog("Alguns testes falharam")
-  erro_prog("Alguns testes falharam")
+  #aviso_prog("Alguns testes falharam.")
+  aviso_prog("Alguns testes falharam.", True)

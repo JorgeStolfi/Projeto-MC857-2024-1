@@ -11,6 +11,8 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
   assert com_id == None or isinstance(com_id, str)
   assert atrs == None or isinstance(atrs, dict)
   assert isinstance(largura, int)
+  assert isinstance(mostra_id, bool)
+  assert isinstance(mostra_data, bool)
   assert isinstance(mostra_video, bool)
   assert isinstance(mostra_pai, bool)
   

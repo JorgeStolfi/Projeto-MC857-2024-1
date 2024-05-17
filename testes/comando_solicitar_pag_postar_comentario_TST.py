@@ -95,6 +95,6 @@ testa_processa("GUD_ambos",   str, ses_C, args_VP_gud )
 testa_processa("BAD_ambos",   str, ses_C, args_VP_bad )
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

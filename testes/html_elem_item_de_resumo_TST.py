@@ -35,6 +35,6 @@ for cab, cor_fundo in (False, "#ffcc55"), (False, None), (True, None):
     testa_gera(rot_teste, str, texto, cab, cor_fundo, alinha)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

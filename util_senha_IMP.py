@@ -7,7 +7,7 @@ def valida(chave, val, nulo_ok):
   # letra ou dígito é [A-Za-z0-9].
 
   erros = []
-  epref = f"campo '{chave}' "
+  epref = f"O campo '{chave}' "
 
   if val == None:
     if not nulo_ok:# !!! Implementar conforme documentação na interface !!!

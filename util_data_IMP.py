@@ -4,13 +4,13 @@ import sys, re
 def valida(chave, val, nulo_ok):
 
   erros = []
-  epref = f"campo '{chave}' = \"{val}\" "
+  epref = f"O campo '{chave}' = \"{val}\" "
 
   if val is None:
     if not nulo_ok:
-      erros.append(f"campo '{chave}' não pode ser omitido")
+      erros.append(f"O campo '{chave}' não pode ser omitido")
   elif not isinstance(val, str):
-    erros.append(f"campo '{chave}' tem tipo inválido {type(val)}")
+    erros.append(f"O campo '{chave}' tem tipo inválido {type(val)}, devia ser {'{str}'}")
   else:
     # Padrão geral do formato ISO UTC:
     formatoISO = r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC$'

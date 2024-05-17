@@ -6,7 +6,7 @@ import obj_sessao
 import obj_usuario
 import db_base_sql
 import util_testes
-from util_erros import erro_prog
+from util_erros import erro_prog, aviso_prog
 
 import sys
 
@@ -25,7 +25,7 @@ def testa_processa(rot_teste, res_esp, *args):
 
   global ok_global
   modulo = comando_solicitar_pag_buscar_sessoes
-  funcao = modulo.processa
+  funcao = comando_solicitar_pag_buscar_sessoes.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
@@ -35,19 +35,19 @@ def testa_processa(rot_teste, res_esp, *args):
 sesC = obj_sessao.obtem_objeto("S-00000003")
 sesA = obj_sessao.obtem_objeto("S-00000001")
 
-lixo_args = {'any_arg': 'any_val'}
+lixo_args = { 'any_arg': "any_val" }
 
 test_suites = [
   ('t01', str,              None, {}),        # Mostra pagina de erro: somente administradores podem acessar
   ('t02', str,              sesC, {}),        # Mostra pagina de erro: somente administradores podem acessar
   ('t03', str,              sesA, {}),        # Mostra pagina com formulario de buscar sessoes
-  ('t04', 'AssertionError', sesA, lixo_args), # Levanta AssertionError por conta de argumentos espúrios
+  ('t04', "AssertionError", sesA, lixo_args), # Argumentos espúrios
 ]
 
 for suite in test_suites:
   testa_processa(*suite)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  erro_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.", True)

@@ -20,7 +20,7 @@ obj_sessao.inicializa_modulo(True)
 
 ok_global = True # Vira {False} se um teste falha.
 
-def verifica_sessao(rot_teste, ses, ident, dono, aberta, cookie):
+def verifica_sessao(rot_teste, ses, ident, dono, aberta, cookie, data):
   """Testes básicos de consistência do objeto {ses} da classe {obj_sessao.Classe}, dados
   {ident} e {atrs} esperados."""
   global ok_global
@@ -49,6 +49,12 @@ def verifica_sessao(rot_teste, ses, ident, dono, aberta, cookie):
     if cookie1 != cookie:
       aviso_prog("retornou " + str(cookie1) + ", deveria ter retornado " + str(cookie),True)
       ok = False
+      
+    sys.stderr.write("  testando {obj_sessao.obtem_data_de_criacao()}:\n")
+    data1 = obj_sessao.obtem_data_de_criacao(ses)
+    if data != None and data1 != data:
+      aviso_prog("retornou " + str(data1) + ", deveria ter retornado " + str(data),True)
+      ok = False
  
   if not ok:
     aviso_prog("teste falhou",True)
@@ -67,30 +73,33 @@ ses1 = obj_sessao.busca_por_dono(usr1, False)
 # ----------------------------------------------------------------------
 sys.stderr.write("  testando {obj_sessao.cria}:\n")
 scook1 = "ABCDEFGHIJK"
-s1 = obj_sessao.cria(usr1, scook1)
+data1 = None
+s1 = obj_sessao.cria(usr1, scook1, data1)
 sindice1 = 1
 sident1 = "S-00000001"
-verifica_sessao("s1", s1, sident1, usr1, True, scook1)
+verifica_sessao("s1", s1, sident1, usr1, True, scook1, data1)
 
 scook2 = "BCDEFGHIJKL"
-s2 = obj_sessao.cria(usr2, scook2)
+data2 = "2024-03-01 10:10:10 UTC"
+s2 = obj_sessao.cria(usr2, scook2, data2)
 sindice2 = 2
 sident2 = "S-00000002"
-verifica_sessao("s2", s2, sident2, usr2, True, scook2)
+verifica_sessao("s2", s2, sident2, usr2, True, scook2, data2)
 
 scook3 = "CDEFGHIJKLM"
-s3 = obj_sessao.cria(usr1, scook3)
+data3 = None
+s3 = obj_sessao.cria(usr1, scook3, data3)
 sindice3 = 3
 sident3 = "S-00000003"
-verifica_sessao("s3", s3, sident3, usr1, True, scook3)
+verifica_sessao("s3", s3, sident3, usr1, True, scook3, data3)
 
 obj_sessao.fecha(s1)
-verifica_sessao("fecha s1", s1, sident1, usr1, False, scook1)
+verifica_sessao("fecha s1", s1, sident1, usr1, False, scook1, data1)
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)

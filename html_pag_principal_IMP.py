@@ -19,7 +19,7 @@ def gera(ses, erros):
   else:
     bloco_texto1 = ""
 
-  bloco_video = html_elem_div.gera(None, html_elem_video.gera("V-00000001.mp4", "virus", 400))
+  bloco_video = html_elem_div.gera(None, html_elem_video.gera("V-00000001", 400))
 
   conteudo = bloco_texto1 + bloco_video
   pagina = html_pag_generica.gera(ses, conteudo, erros)

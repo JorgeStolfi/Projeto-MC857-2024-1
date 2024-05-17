@@ -44,6 +44,6 @@ testa_processa("T4",   str, None,    {'video': "V-00000004"})
 testa_processa("T5",   str, None,    {'video': "V-00000005"})
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

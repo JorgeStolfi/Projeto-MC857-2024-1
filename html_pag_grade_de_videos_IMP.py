@@ -1,22 +1,27 @@
 import html_bloco_grade_de_videos
 import html_pag_generica
-import html_bloco_dados_de_video
+import html_pag_mensagem_de_erro
 import html_elem_form
 import obj_video
+import obj_sessao
 
 def gera(ses, vid_ids, ncols, erros):
 
   # Estas condições deveriam ser satisfeitas em chamadas do sistema:
-  assert ses == None or isinstance(ses, obj_sessao.Classe), "sessão inválida"
-  if ses != None: assert onj_sessao.aberta(ses), "sessão foi fechada"
-  assert isinstance(vid_ids, list) or isinstance(vid_ids, tuple), "lista de vídeos inválida"
-  assert isinstance(ncols, int) and ncols > 0, "número de colunas inválido"
-  assert erros == None or isinstance(erros, list) or  isinstance(erros, tuple), "lista de erros inválida"
-  
-  ht_grade, mais_erros = html_bloco_grade_de_videos.gera(vid_ids)
-  
-  assert isinstance(mais_erros, list) or isinstance(mais_erros, tuple)
-  erros = erros + mais_erros
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert isinstance(vid_ids, list) or isinstance(vid_ids, tuple)
+  assert isinstance(ncols, int) and ncols > 0
+  assert erros == None or isinstance(erros, list) or  isinstance(erros, tuple)
 
-  pag = html_pag_generica.gera(ses, ht_grade, erros)
+  erros = [ ] if erros == None else list(erros)
+  
+  try:
+    ht_grade = html_bloco_grade_de_videos.gera(vid_ids, ncols)
+  except ErroAtrib as ex:
+    erros += ex.args[0] 
+  
+  if len(erros) > 0:
+    pag = html_pag_mensagem_de_erro.gera(ses, erros)
+  else:
+    pag = html_pag_generica.gera(ses, ht_grade, None)
   return pag

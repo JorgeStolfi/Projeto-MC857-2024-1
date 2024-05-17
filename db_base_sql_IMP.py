@@ -37,6 +37,9 @@ def executa_comando_CREATE_TABLE(nome_tb, descr_cols):
     cmd = "CREATE TABLE IF NOT EXISTS " + nome_tb + "( " + descr_cols + " )"
     if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_CREATE_TABLE: cmd = \"" + str(cmd) + "\"")
     cursor.execute(cmd)
+    cmd = "PRAGMA case_sensitive_like = false;" # Para que "Ä" seja LIKE "ä".
+    if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_CREATE_TABLE: cmd = \"" + str(cmd) + "\"")
+    cursor.execute(cmd)
     return None
   except sqlite3.Error as msg:
     mostra(4,"db_base_sql_IMP.executa_comando_CREATE_TABLE: !! erro = \"" + str(msg) + "\"")
@@ -110,7 +113,7 @@ def executa_comando_SELECT(nome_tb, cond, nomes_cols):
     if cols != "": cols = cols + ","
     cols = cols + cn
 
-  cmd = "SELECT " + cols + " FROM " + nome_tb + " WHERE " + cond
+  cmd = " SELECT " + cols + " FROM " + nome_tb + " WHERE " + cond
   if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_SELECT: cmd = \"" + str(cmd) + "\"")
   try:
     cursor = db_conexao.cursor()
@@ -126,7 +129,7 @@ def executa_comando_SELECT(nome_tb, cond, nomes_cols):
 
 def executa_comando_DELETE(nome_tb, cond):
   global db_conexao
-  cmd = "DELETE FROM " + nome_tb + " WHERE " + cond
+  cmd = " DELETE FROM " + nome_tb + " WHERE " + cond
   if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_DELETE: cmd = \"" + str(cmd) + "\"")
   try:
     cursor = db_conexao.cursor()

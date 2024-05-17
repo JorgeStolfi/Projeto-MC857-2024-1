@@ -1,12 +1,10 @@
 #! /usr/bin/python3
 
-# Interfaces usadas por este script:
-
-import db_base_sql
-import obj_usuario
 from util_erros import erro_prog, aviso_prog, mostra
 import comando_cadastrar_usuario
-
+import db_base_sql
+import obj_usuario
+import util_testes
 import sys
 
 sys.stderr.write("  Conectando com base de dados...\n")
@@ -15,28 +13,6 @@ assert res == None
 
 ok_global = True # Vira {False} se um teste falha.
 
-# ======================================================================
-def testa_msg_campo_obrigatorio(nome_do_campo):
-  global ok_global
-
-  sys.stderr.write(f"  ----------------------------------------------------------------------\n")
-  sys.stderr.write(f"  testando mensagem de campo obrigatóro para {nome_do_campo}\n")
-
-  resposta = comando_cadastrar_usuario.msg_campo_obrigatorio(nome_do_campo)
-
-  sys.stderr.write(f"  mensagem retornada = {resposta}\n")
-
-  if (resposta != "O campo %s é obrigatório." % nome_do_campo):
-    ok_global = False
-    aviso_prog("Mensagem retornada errada", True)
-
-  sys.stderr.write(f"  ----------------------------------------------------------------------\n")
-
-nome_campo_1 = "Nome"
-testa_msg_campo_obrigatorio(nome_campo_1)
-
-nome_campo_2 = "Senha"
-testa_msg_campo_obrigatorio(nome_campo_2)
 
 # ======================================================================
 def testa_processa(rot_teste, ses, cmd_args, deveria_cadastrar):
@@ -51,7 +27,7 @@ def testa_processa(rot_teste, ses, cmd_args, deveria_cadastrar):
   ok = True
   
   modulo = comando_cadastrar_usuario
-  funcao = processa
+  funcao = comando_cadastrar_usuario.processa
   
   # Verifica se já existe usuário com esse email:
   usr_old_id = obj_usuario.busca_por_email(cmd_args["email"])
@@ -168,6 +144,6 @@ testa_processa("T7-bad", None, cmd_args7, False)
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)

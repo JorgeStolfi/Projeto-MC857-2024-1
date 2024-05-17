@@ -10,27 +10,27 @@ import sys
 def processa(ses, cmd_args):
   erros = []
   
-  id_obj = None
+  obj_id = None
   if not 'objeto' in cmd_args or cmd_args['objeto'] == None:
     erros.append("O identificador do objeto não foi fornecido")
   else:
-    id_obj = cmd_args['objeto'] 
-    if not isinstance(id_obj, str) or len(id_obj) != 10:
-      erros.append(f"O identificador \"{str(id_obj)}\" é inválido")
+    obj_id = cmd_args['objeto'] 
+    if not isinstance(obj_id, str) or len(obj_id) != 10:
+      erros.append(f"O identificador \"{obj_id}\" é inválido")
   
   pag = None
   if len(erros) == 0:
-    letra = id_obj[0]
+    letra = obj_id[0]
     if letra == "U":
-      pag = comando_ver_usuario.processa(ses, {'usuario': id_obj})
+      pag = comando_ver_usuario.processa(ses, {'usuario': obj_id})
     elif letra == "S":
-      pag = comando_ver_sessao.processa(ses, {'sessao': id_obj})
+      pag = comando_ver_sessao.processa(ses, {'sessao': obj_id})
     elif letra == "V":
-      pag = comando_ver_video.processa(ses, {'video': id_obj})
+      pag = comando_ver_video.processa(ses, {'video': obj_id})
     elif letra == "C":
-      pag = comando_ver_comentario.processa(ses, {'comentario': id_obj})
+      pag = comando_ver_comentario.processa(ses, {'comentario': obj_id})
     else:
-      erros.append(f"Classe de objeto \"{letra}\" inválida")
+      erros.append(f"A classe de objeto \"{letra}\" é inválida")
   
   if pag == None:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)

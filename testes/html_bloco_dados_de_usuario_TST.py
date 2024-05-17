@@ -68,9 +68,9 @@ for ses_id in None, sesA1_id, sesC1_id:
     ses = obj_sessao.obtem_objeto(ses_id) if ses_id != None else None
     para_admin = obj_sessao.de_administrador(ses) if ses != None else False
     usr_a_ver = obj_usuario.obtem_objeto(usr_a_ver_id) if usr_a_ver_id != None else None
-    usr_ses = obj_sessao.obtem_dono(ses) if ses != None else None
-    usr_ses_id = obj_usuario.obtem_identificador(usr_ses) if usr_ses != None else None
-    para_proprio = ( usr_a_ver_id != None and usr_a_ver_id == usr_ses_id )
+    ses_dono = obj_sessao.obtem_dono(ses) if ses != None else None
+    ses_dono_id = obj_usuario.obtem_identificador(ses_dono) if ses_dono != None else None
+    para_proprio = ( usr_a_ver_id != None and usr_a_ver_id == ses_dono_id )
     atrs_pairs = ( ( 'N', {}, ), ('U', obj_usuario.obtem_atributos(usr_a_ver), ), ) if usr_a_ver != None else ( ('N', {}, ), )
     for editavel in False, True:
       if (editavel or usr_a_ver_id != None) and (not editavel or ( para_admin or para_proprio )):
@@ -92,6 +92,6 @@ for ses_id in None, sesA1_id, sesC1_id:
           testa_gera(rot_teste, str, usr_a_ver_id, atrs, editavel, para_admin, para_proprio)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

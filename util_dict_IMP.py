@@ -1,3 +1,4 @@
+import obj_raiz
 import util_dict
 import sys, re
 
@@ -6,22 +7,17 @@ def elimina_alteracoes_nulas(cmd_args, obj_atrs):
     # Elimina argumentos supérfluos de {cmd_args}:
     for chave, val_atual in obj_atrs.items():
       if chave in cmd_args:
-        # Reduz objetos em {obj_atrs} a seus identificadores:
-        if isinstance(val_atual, obj_raiz.Classe):
-          val_atual = val_atual.id
-        # Valores em {cmd_args} não podem ser objetos:
         val_novo = cmd_args[chave]
-        assert not isinstance(val_novo, obj_raiz.Classe)
+        # Reduz objetos a seus identificadores: 
+        if isinstance(val_atual, obj_raiz.Classe): val_atual = val_atual.id
+        if isinstance(val_novo, obj_raiz.Classe): val_novo = val_novo.id
         # Elimina se valores são inalterados:
         if val_novo == val_atual:
           cmd_args.pop(chave)
-
-def verifica_chaves_espurias(cmd_args, obj_atrs):
-  if obj_atrs != None:
-    # Valida chaves de {cmd_args}:
+    # Verifica chaves espúrias:
     for chave, val_novo in cmd_args.items():
-      assert chave in obj_atrs, f"Parâmetro espúrio do comando {chave} = {val_novo}" 
-
+      assert chave in obj_atrs, f"Parâmetro espúrio do comando {chave} = {val_novo}"
+  return cmd_args
 
 def para_objetos(args_cmd):
   assert args_cmd != None and isinstance(args_cmd, dict), "parâmetro inválido"
@@ -46,13 +42,31 @@ def para_objetos(args_cmd):
       atrs_res[chave] = val
   return atrs_res
   
-def para_identificadores(atrs_obj): 
-  assert atrs != None and isinstance(atrs, dict), "parâmetro inválido"
+def para_identificadores(obj_atrs): 
+  assert obj_atrs != None and isinstance(obj_atrs, dict), "parâmetro inválido"
   args_res = {}
   erros = []
-  for chave, val in atrs_obj.items():
+  for chave, val in obj_atrs.items():
     if isinstance(val, obj_raiz.Classe):
       args_res[chave] = val.id
     else:
       args_res[chave] = val
   return args_res
+
+def normaliza_busca_por_data(atrs):
+  erros = [ ]
+  
+  if 'data_min' in atrs or 'data_max' in atrs:
+    if 'data' in atrs:
+      erros.append("A busca não pode usar 'data' com 'data_min', 'data_max'")
+    data_min = atrs.pop('data_min', None)
+    data_max = atrs.pop('data_max', None)
+    if data_min == None:
+      erros.append("A busca não pode usar 'data_max' sem 'data_min'")
+    elif data_max == None:
+      erros.append("A busca não pode usar 'data_min' sem 'data_max'")
+    else:
+      # Busca intervalar:
+      atrs['data'] = ( data_min, data_max, )
+  
+  return erros

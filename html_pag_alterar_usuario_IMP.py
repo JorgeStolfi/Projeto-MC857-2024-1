@@ -18,11 +18,11 @@ def gera(ses, usr_id, atrs, erros):
   assert usr != None, f"Usuario {usr_id} não existe"
   
   # Obtem o usuário da sessão, para determinar que campos são editáveis:
-  usr_ses = obj_sessao.obtem_dono(ses)
-  assert usr_ses != None
+  ses_dono = obj_sessao.obtem_dono(ses)
+  assert ses_dono != None
   
   # Cria o formulário básico:
-  para_admin = obj_usuario.eh_administrador(usr_ses)
+  para_admin = obj_usuario.eh_administrador(ses_dono)
   ht_form = html_form_alterar_usuario.gera(usr_id, atrs, para_admin)
     
   ht_bt_cancela = html_elem_button_simples.gera("Cancelar", "pag_principal", None, '#ee5555')

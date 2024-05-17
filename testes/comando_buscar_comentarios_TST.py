@@ -120,6 +120,6 @@ cmd_args_19 = {"autor": "U-00000002", "video": "V-00000004"}
 testa_processa("mulV", str, ses, cmd_args_19)
 
 if ok_global:
-    sys.stderr.write("Testes terminados normalmente.")
+    sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-    aviso_prog("Alguns testes falharam", True)
+    aviso_prog("Alguns testes falharam.", True)

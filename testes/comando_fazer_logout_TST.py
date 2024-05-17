@@ -8,6 +8,7 @@ import db_tabelas_do_sistema
 import obj_usuario
 import obj_sessao
 import util_testes
+from util_erros import aviso_prog
 
 import sys
 
@@ -25,27 +26,34 @@ def testa_processa(rot_teste, res_esp, *args):
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   global ok_global
   modulo = comando_fazer_logout
-  funcao = modulo.processa
+  funcao = comando_fazer_logout.processa
+  html = False # Resultado é HTML?
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
+  ok = util_testes.testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
 
-# Testa logout com uma sessao nao ativa
-ses = None
-testa_processa("Erro", ( str, obj_sessao.Classe, ), ses, {})
-assert ses == None
+# Testa logout com sesão {None}:
+sesN = None
+assert sesN == None
+testa_processa("ErroNone", ( str, None, ), sesN, {})
 
 # Testa logout com uma sessao ativa
-ses = obj_sessao.obtem_objeto("S-00000001")
-assert ses != None
-assert obj_sessao.aberta(ses)
+sesA = obj_sessao.obtem_objeto("S-00000001")
+assert sesA != None
+assert obj_sessao.aberta(sesA)
+testa_processa("Ok", ( str, None, ), sesA, {})
+assert not obj_sessao.aberta(sesA)
 
-testa_processa("Ok", ( str, obj_sessao.Classe, ), ses, {})
-assert not obj_sessao.aberta(ses)
+# Testa logout com sesão já fechada:
+sesF = sesA
+assert sesF != None
+assert not obj_sessao.aberta(sesF)
+testa_processa("ErroInativa", ( str, None, ), sesF, {})
+assert not obj_sessao.aberta(sesF)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

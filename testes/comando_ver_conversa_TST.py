@@ -42,9 +42,10 @@ assert obj_sessao.de_administrador(ses_A1)
 ses_C1 = obj_sessao.obtem_objeto("S-00000003")
 assert not obj_sessao.de_administrador(ses_C1)
 
-erro_prog("!!! {comando_ver_convera_TST} não foi implementado !!!")
+aviso_prog("!!! {comando_ver_convera_TST} não foi implementado !!!\n", False)
+ok_global = False
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  erro_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.", True)

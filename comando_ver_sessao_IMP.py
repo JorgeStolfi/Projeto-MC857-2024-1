@@ -1,14 +1,13 @@
 import html_pag_ver_sessao
-import html_bloco_dados_de_sessao
 import obj_sessao
 
 def processa(ses, cmd_args):
   erros = []
   ses_a_ver = None
   if ses == None or not obj_sessao.aberta(ses):
-    erros.append("precisa estar logado para executar este comando")
+    erros.append("Precisa estar logado para executar este comando")
   else:
-    usr_ses = obj_sessao.obtem_dono(ses)
+    ses_dono = obj_sessao.obtem_dono(ses)
     admin = obj_sessao.de_administrador(ses)
     if 'sessao' not in cmd_args:
       # Identificador da sessão não foi especificado, supõe que é a corrente:
@@ -19,10 +18,11 @@ def processa(ses, cmd_args):
       ses_a_ver_id = cmd_args['sessao']
       ses_a_ver = obj_sessao.obtem_objeto(ses_a_ver_id)
       if ses_a_ver == None:
-        erros.append("sessão inexistente")
+        erros.append("A sessão \"{ses_a_ver_id}\" não existe")
+
     if ses_a_ver != None:
-      if obj_sessao.obtem_dono(ses_a_ver) != usr_ses and not admin:
-        erros.append('sessão não é sua - permissão negada')
+      if obj_sessao.obtem_dono(ses_a_ver) != ses_dono and not admin:
+        erros.append('Você não tem permissão para examinar essa sessão')
         ses_a_ver = None
 
     if ses_a_ver != None:

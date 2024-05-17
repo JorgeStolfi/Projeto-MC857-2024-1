@@ -52,7 +52,7 @@ usrC1 = obj_sessao.obtem_dono(sesC1)
 usrC1_id = obj_usuario.obtem_identificador(usrC1)
 assert usrC1_id == "U-00000002"
 
-ses_dic = { 'A': sesA1, 'C': sesC1, }
+ses_dic = { 'N': None, 'A': sesA1, 'C': sesC1, }
 
 # Um vídeo de {usrC1}:
 vidC1_id = "V-00000002"
@@ -87,6 +87,6 @@ for st, ses in ses_dic.items():
           testa_gera(rot_teste,  str,  ses, vid_id, atrs, erros)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

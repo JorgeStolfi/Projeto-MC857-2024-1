@@ -14,11 +14,12 @@ def processa(ses, cmd_args):
   erros = []
   
   # Valida a sessão do usuário, define o autor:
+  autor = None # For now, redefined if exists.
   autor_id = None # For now, redefined if exists.
   if ses == None:
-    erros.append("Não pode postar sem fazer login")
+    erros.append("É preciso estar logado para executar esta ação")
   elif not obj_sessao.aberta(ses):
-    erros.append("Sessão de login já foi encerrada")
+    erros.append("Esta sessão de login foi fechada. É preciso estar logado para executar esta ação")
   else:
     ses_dono = obj_sessao.obtem_dono(ses)
     assert ses_dono != None
@@ -26,10 +27,9 @@ def processa(ses, cmd_args):
     autor_id = obj_usuario.obtem_identificador(ses_dono)
     
   # Determina o vídeo e possivelmente o comentário pai:
-  vid_id = cmd_args.get('video', None)
-  pai_id = cmd_args.get('pai', None)
+  vid_id = cmd_args.pop('video', None)
+  pai_id = cmd_args.pop('pai', None)
   pai_vid_id = None # For now, redefined if exists.
-  
   if pai_id == None and vid_id == None:
     erros.append("Nem o vídeo nem o comentário pai foram especificados")
   else:
@@ -37,7 +37,7 @@ def processa(ses, cmd_args):
     if pai_id != None:
       pai = obj_comentario.obtem_objeto(pai_id)
       if pai == None:
-        erros.append(f"O comentário {pai_id} não existe")
+        erros.append(f"O comentário \"{pai_id}\" não existe")
       else:
         pai_vid = obj_comentario.obtem_atributo(pai, 'video')
         assert pai_vid != None
@@ -48,11 +48,13 @@ def processa(ses, cmd_args):
     if vid_id != None:
       vid = obj_video.obtem_objeto(vid_id)
       if vid == None:
-        erros.append(f"O vídeo {vid_id} não existe")
+        erros.append(f"O vídeo \"{vid_id}\" não existe")
 
     if pai_vid_id != None and vid_id != None and pai_vid_id != vid_id:
-      erros.append(f"O comentário {pai_id} é do vídeo {pai_vid_id} e não de {vid_id}")
+      erros.append(f"O comentário \"{pai_id}\" é do vídeo \"{pai_vid_id}\" e não de \"{vid_id}\"")
     
+  assert len(cmd_args) == 0, f"Argumentos espúrios \"{cmd_args}\""
+
   if len(erros) > 0:
     pag  = html_pag_mensagem_de_erro.gera(ses, erros)
   else:

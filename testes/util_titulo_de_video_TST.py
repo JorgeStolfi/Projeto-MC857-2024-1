@@ -10,32 +10,35 @@ import sys
 ok_global = True
 
 modulo = util_titulo_de_video
-funcao = modulo.valida
+funcao = util_titulo_de_video.valida
 chave = "el-titulo"
-for xrot, valido_ex, valido_pt, val in \
+for xrot, valido, val in \
     ( # Validos só se {nulo_ok}:
-      ( "Nulo",                     True,   True,  None,                        ),
-      # Valido como exato ou padrão:
-      ( "Valido1",                  True,   True,  "Velozes e Furiosos 2",      ),
-      ( "Valido3",                  True,   True,  "Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghij", ),
-      ( "Valido4",                  True,   True,  "Abcdefghij",                ),
-      # Valido só como padrão:          
-      ( "InícioNaoMaius",           False,  True,  "simbora!"                   ),
-      ( "FinalBranco",              False,  True,  "Nada "                      ),
-      ( "MuitoCurtoFull9",          False,  True,  "Valinoria"                  ),
-      # Inválido em qualquer caso:         
-      ( "MuitoCurtoParcial3",       False,  False, "Va"                         ),
-      ( "MuitoLongo",               False,  False, "V" + ("r"*57) + "um!"       ),
-      ( "CaracsInvalidos",          False,  False, "Titulo X-φ ≥ ぁ"            ),
-      ( "BrancoDuplo",              False,  False, "Coisa  coisa"               ),
+      ( "Nulo",                     False,  None,                        ),
+      # Valido em qualquer caso:
+      ( "Valido1",                  True,   "Velozes e Furiosos 2",      ),
+      ( "Valido3",                  True,   "Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghi Abcdefghij", ),
+      ( "Valido4",                  True,   "Abcdefghij",                ),
+      # Inválido em qualquer caso:          
+      ( "InícioNaoMaius",           False,  "simbora!"                   ),
+      ( "FinalBranco",              False,  "Nada "                      ),
+      ( "MuitoCurtoFull9",          False,  "Valinoria"                  ),
+      ( "MuitoCurtoParcial3",       False,  "Va"                         ),
+      ( "MuitoLongo",               False,  "V" + ("r"*57) + "um!"       ),
+      ( "CaracsInvalidos",          False,  "Titulo X-φ ≥ ぁ"            ),
+      ( "BrancoDuplo",              False,  "Coisa  coisa"               ),
     ):
-  ok = util_testes.testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val)
+  rot_teste = xrot
+  ok = util_testes.testa_funcao_validadora(rot_teste, valido, modulo, funcao, chave, val, False)
   if not ok: ok_global = False
+  if val == None:
+    ok = util_testes.testa_funcao_validadora(rot_teste, True, modulo, funcao, chave, val, True)
+    if not ok: ok_global = False
 
 # ----------------------------------------------------------------------
 # Veredito final:
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
   aviso_prog("Algum teste falhou", True)

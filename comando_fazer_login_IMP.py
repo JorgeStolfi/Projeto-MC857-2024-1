@@ -47,7 +47,8 @@ def processa(ses, dados):
 
     if usr != None:
       cookie = secrets.token_urlsafe(32)
-      ses_nova = obj_sessao.cria(usr, cookie)
+      # Data de criação definida como "agora":
+      ses_nova = obj_sessao.cria(usr, cookie, criacao = None)
       pag = html_pag_principal.gera(ses_nova, None)
     else:
       erros = [ erro_email, erro_senha ]

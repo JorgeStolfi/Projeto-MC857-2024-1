@@ -1,8 +1,11 @@
 import sys
 
-def gera(linhas):
+def gera(linhas, estilo):
 
-  ht_tabela = "<table>\n"
+  if estilo != None:
+    ht_tabela = f"<table style=\"{estilo}\">\n"
+  else:
+    ht_tabela = "<table>\n"
 
   # Adiciona linhas:
   for lin in linhas:

@@ -58,9 +58,9 @@ def cria(atrs):
   if tabela.debug: mostra(0, f"  > obj_comentario.cria({str(atrs)}) ...")
 
   # Data de postagem:
-  if 'data' in atrs: raise ErroAtrib("data não pode ser especificada")
-  data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
-  atrs['data'] = data
+  if not 'data' in atrs:
+    data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+    atrs['data'] = data
 
   erros = valida_atributos(None, atrs)
   if len(erros) != 0: raise ErroAtrib(erros)
@@ -123,12 +123,11 @@ def busca_por_video(vid_id, sem_pai):
   if tabela.debug: sys.stderr.write(f"    > ids encontrados = {lista_ids}\n");
   return lista_ids
 
-def busca_por_campos(args):
+def busca_por_campos(args, unico):
   global tabela
-  unico = False
-  lista_ids = obj_raiz.busca_por_campos(args, unico, tabela)
+  res = obj_raiz.busca_por_campos(args, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
-  return lista_ids
+  return res
 
 def busca_por_autor(usr_id):
   global tabela
@@ -148,13 +147,12 @@ def busca_por_pai(pai_id):
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
   return lista_ids
 
-def busca_por_texto(texto):
+def busca_por_texto(frase):
   global tabela
-  if tabela.debug: sys.stderr.write("  > obj_comentario_IMP.busca_por_texto(" + f"{texto}" + ")\n")
-  assert type(texto) is str
-  texto += "%" + texto + "%"
+  if tabela.debug: sys.stderr.write("  > obj_comentario_IMP.busca_por_texto(" + f"{frase}" + ")\n")
+  assert type(frase) is str
   unico = False
-  lista_ids = obj_raiz.busca_por_campos({'texto':texto}, unico, tabela)
+  lista_ids = obj_raiz.busca_por_campos({ 'texto': "~%" + frase + "%" }, unico, tabela)
   if tabela.debug: sys.stderr.write(f"    > ids encontrados = {str(lista_ids)}\n");
   return lista_ids
 
@@ -193,17 +191,25 @@ def cria_testes(verb):
       ( "C-00000015", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
       ( "C-00000016", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
     ]
-  for com_id, vid_id, autor_id, pai_id, texto in lista_atrs:
+  for com_id_esp, vid_id, autor_id, pai_id, texto in lista_atrs:
     vid = obj_video.obtem_objeto(vid_id)
     autor = obj_usuario.obtem_objeto(autor_id)
     pai = obj_comentario.obtem_objeto(pai_id)
-    atrs = { 'video': vid, 'autor': autor, 'pai': pai, 'texto': texto }
+    dia = com_id_esp[-2:]
+    data = "2024-01-" + dia + " 08:33:25 UTC"
+    atrs = { 
+        'video': vid, 
+        'autor': autor, 
+        'pai': pai, 
+        'texto': texto, 
+        'data': data,
+      }
     com = cria(atrs)
     assert com != None and type(com) is obj_comentario.Classe
     com_id_atu = obj_comentario.obtem_identificador(com)
     texto_atu = obj_comentario.obtem_atributo(com,'texto')
     if verb: sys.stderr.write("  comentário %s = \"%s\" criado\n" % (com_id_atu, texto_atu))
-    assert com_id_atu == com_id # Identificador é o esperado.
+    assert com_id_atu == com_id_esp # Identificador é o esperado.
     assert texto_atu == texto   # O texto foi guardado corretamente.
   return
 
@@ -260,7 +266,7 @@ def valida_atributos(com, atrs):
   if pai_fin != None:
     vid_pai = obj_comentario.obtem_atributo(pai_fin, 'video')
     if vid_pai != vid_fin: 
-      erros.append(f"videos diferentes pai = {str(vid_pai)} com = {str(vid_fin)}")
+      erros.append(f"videos diferentes pai = \"{str(vid_pai)}\" com = \"{str(vid_fin)}\"")
       
   # Verifica completude:
   nargs = 0 # Número de campos em {atrs} reconhecidos.
@@ -268,11 +274,11 @@ def valida_atributos(com, atrs):
     if chave in atrs:
       nargs += 1
     elif com == None:
-      erros.append("campo '" + chave + "' é obrigatório")
+      erros.append(f"O campo '{chave}' é obrigatório")
 
   if nargs < len(atrs):
     # Não deveria ocorrer:
-    erro_prog("campos espúrios em {atrs} = " + str(atrs) + "")
+    erro_prog(f"Atributos espúrios em \"{atrs}\"")
 
   return erros
 

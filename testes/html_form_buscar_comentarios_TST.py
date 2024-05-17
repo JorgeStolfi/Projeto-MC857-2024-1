@@ -25,6 +25,6 @@ for admin in False, True:
     testa_gera("SemValores-adm" + str(admin)[0], str, {}, admin)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

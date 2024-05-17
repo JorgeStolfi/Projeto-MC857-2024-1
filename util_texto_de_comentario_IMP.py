@@ -1,10 +1,10 @@
 import util_texto_de_comentario
 import sys, re
 
-def valida(chave, val, nulo_ok, padrao_ok):
+def valida(chave, val, nulo_ok):
  
   erros = [] 
-  epref = f"campo '{chave}' = \"{str(val)}\" "
+  epref = f"Campo '{chave}' = \"{str(val)}\": "
 
   if val is None:
     if not nulo_ok: 
@@ -16,9 +16,9 @@ def valida(chave, val, nulo_ok, padrao_ok):
     nmin = 1 
     nmax = 1003
     if len(val) < nmin:
-      erros.append(epref + f"muito curto ({n} caracteres, mínimo {nmin})")
+      erros.append(epref + f"é muito curto ({n} caracteres, mínimo {nmin})")
     elif len(val) > nmax:
-      erros.append(epref + f"muito longo ({n} caracteres, máximo {nmax})")
+      erros.append(epref + f"é muito longo ({n} caracteres, máximo {nmax})")
       
     parcial = ( n >= 2 and val[0] == "*" and val[-1] == "*" )
 

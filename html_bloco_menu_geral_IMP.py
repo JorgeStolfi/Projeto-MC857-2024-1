@@ -7,7 +7,7 @@ import html_bloco_bemvindo
 import obj_sessao
 import obj_usuario
 
-from util_erros import erro_prog
+from util_erros import erro_prog, aviso_prog
 
 # Outros módulos importados por esta implementação:
 import re

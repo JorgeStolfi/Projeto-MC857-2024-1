@@ -122,9 +122,9 @@ def busca_por_campos(args, unico, tabela):
   Basicamente, para cada par {ch,val} em {args}, exige que a coluna {ch} da tabela
   tenha valor {val}.  
   
-  Entretanto, se {val} começa e termina com '%', exige apenas que o
+  Entretanto, se {val} começa e termina com '*', exige apenas que o
   valor na coluna {ch} seja apenas similar ao valor especificado em
-  {val} (menos esses caracteres '%'). Especificamente, o valor A é
+  {val} (menos esses caracteres '*'). Especificamente, o valor A é
   semelhante ao valor B se o valor A contém o valor B, sem distinção de
   letras maiúsculas e minúsculas. O valor 'João da Silva' é semelhante
   aos valores 'João', 'joão', 'da', e 'Silva', por exemplo.

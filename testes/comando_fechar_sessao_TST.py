@@ -44,6 +44,6 @@ for rot_teste, ses, cmd_args in [ \
   testa_processa(rot_teste,  str, ses, cmd_args)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

@@ -49,6 +49,7 @@ def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
     sys.stderr.write(f"    levantou {res} ex =  {str(ex)}\n")
     if res_esp != res:
       # Re-raise to get diagnostics.
+      sys.stderr.write(f"@%@ res = {res} res_esp = {res_esp}\n")
       raise
   except ErroAtrib as ex:
     res = "ErroAtrib"
@@ -96,27 +97,6 @@ def testa_funcao_validadora(rot_teste, valido, modulo, funcao, *args):
   pretty = False # Deve formatar o HTML para facilitar view source?
   res_esp = [] if valido else list
   ok = testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args)
-  return ok
-
-def testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val):
-  ok = True
-  for nulo_ok in ( False, True ):
-    for padrao_ok in ( False, True ):
-      for parcial in ( False, True ):
-        if val != None or not ( parcial or padrao_ok):
-          if val == None:
-             valm = None
-             valido = nulo_ok
-          elif parcial:
-            valm = "*" + val + "*"
-            valido = valido_pt and padrao_ok
-          else:
-            valm = val
-            valido = valido_ex
-          rot_teste = xrot + "_pad" + str(parcial)[0] + "_padok" + str(padrao_ok)[0] + "_nulok" + str(nulo_ok)[0] + ("_GUD" if valido else "_BAD")
-          res_esp = [] if valido else list
-          ok_caso = testa_funcao_validadora(rot_teste, valido, modulo, funcao, chave, valm, nulo_ok, padrao_ok)
-          ok = ok and ok_caso
   return ok
 
 def check_result_recursive(r, r_esp):

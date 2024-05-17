@@ -44,6 +44,6 @@ cmd_args1['usuario'] = "U-00000002"
 testa_processa("SucPreenchido",  str, sessao1, cmd_args1)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

@@ -37,16 +37,14 @@ ses = obj_sessao.obtem_objeto("S-00000001")
 assert ses != None
 
 for tag, erros in (
-    ("N", None),
-    ("V", []),
-    ("1", "Você cometeu um erro, rapaz!"),
-    ("2", "Você cometeu um erro, rapaz!\nE outro erro também!"),
-    ("L", ["Você cometeu um erro, rapaz!", "E outro erro também!", "E mais um!"])
+    ("STR", "Você cometeu um erro, rapaz!"),
+    ("STR-NL", "Você cometeu um erro, rapaz!\nE outro erro também!"),
+    ("LIST-3", ["Você cometeu um erro, rapaz!", "E outro erro também!", "E mais um!"])
   ):
   rot_teste = tag
   testa_gera(rot_teste,  str, ses, erros)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

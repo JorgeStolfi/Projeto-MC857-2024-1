@@ -44,6 +44,6 @@ for vid_id in vid_ids:
     testa_gera("res" + tag, list, vid, mostra_autor)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

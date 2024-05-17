@@ -13,6 +13,8 @@ import util_titulo_de_video
 import cv2
 import os
 import re
+import time
+import random
 
 from util_erros import ErroAtrib, erro_prog, mostra
 
@@ -68,9 +70,9 @@ def cria(atrs):
   atrs = atrs.copy() # Para alterar só localmente.
 
   # Data de upload:
-  if 'data' in atrs: raise ErroAtrib("data não pode ser especificada")
-  data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
-  atrs['data'] = data
+  if not 'data' in atrs:
+    data = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+    atrs['data'] = data
 
   # Determina o identificador esperado do vídeo:
   vid_indice = db_obj_tabela.num_entradas(tabela) + 1  # Índice na tabela.
@@ -85,7 +87,7 @@ def cria(atrs):
     wr = open(nome_arq, 'wb')
     wr.write(conteudo)
     wr.close()
-    atrs.pop('conteudo') # Pois não será atributo do objeto.
+    atrs.pop('conteudo', None) # Pois não será atributo do objeto.
   else:
     assert os.path.exists(nome_arq), f"Item 'conteudo' ausente e arquivo {nome_arq} não existe"
   
@@ -169,6 +171,12 @@ def obtem_objeto(vid_id):
   vid = obj_raiz.obtem_objeto(vid_id, tabela, def_obj_mem)
   return vid
 
+def busca_por_autor(autor_id):
+  global tabela
+  if autor_id == None: return []
+  vid_ids = obj_raiz.busca_por_campo('autor', autor_id, False, tabela)
+  return vid_ids
+
 def busca_por_campo(chave, val):
     global tabela
     lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
@@ -177,17 +185,20 @@ def busca_por_campo(chave, val):
 def busca_por_campos(args, unico):
   global tabela
   return obj_raiz.busca_por_campos(args, unico, tabela)
-  
-def busca_por_semelhanca(args, unico):
-  global tabela
-  return obj_raiz.busca_por_semelhanca(args, unico, tabela)
-
-def busca_por_autor(autor_id):
-  global tabela
-  if autor_id == None: return []
-  vid_ids = obj_raiz.busca_por_campo('autor', autor_id, False, tabela)
-  return vid_ids
  
+def obtem_amostra(n):
+  ult_vid_id = obj_video.ultimo_identificador()
+  ult_vid_index = int(ult_vid_id[2:])
+  sys.stderr.write(f"  last video in system = {ult_vid_id}\n")
+  if n > ult_vid_index:
+    raise ErroAtrib(f"Número pedido = {n} excessivo, máximo {ult_vid_index}")
+  # Lista de vídeos aleatórios:
+  res_indices = random.sample(range(1, ult_vid_index + 1), n)
+  res_ids = list(map(lambda index: f"V-{index:08d}", res_indices))
+  assert len(res_ids) == n
+  
+  return res_ids
+
 def ultimo_identificador():
   global tabela
   return obj_raiz.ultimo_identificador(tabela)
@@ -217,11 +228,14 @@ def cria_testes(verb):
   for vid_id_esp, autor_id, titulo, nota in lista_ats:
     autor = obj_usuario.obtem_objeto(autor_id)
     assert autor != None and type(autor) is obj_usuario.Classe
+    dia = vid_id_esp[-2:]
+    data = "2024-01-" + dia + " 08:33:25 UTC"
     atrs_cria = {
-      'autor': autor,
-      'titulo': titulo,
-      'nota': nota,
-    }
+        'autor': autor,
+        'titulo': titulo,
+        'nota': nota,
+        'data': data,
+      }
     vid = cria(atrs_cria)
     assert vid != None and type(vid) is obj_video.Classe
     vid_id = obj_video.obtem_identificador(vid)
@@ -290,26 +304,25 @@ def valida_atributos(vid, atrs_mem):
   for chave, val in atrs_mem.items():
     if chave == 'autor':
       if not isinstance(val, obj_usuario.Classe):
-        erros.append(f"Atributo 'autor{vid_id_msg} não é um objeto usuário")
+        erros.append(f"O atributo 'autor'{vid_id_msg} não é um objeto usuário")
     elif chave == 'data':
       nulo_ok = False
       mais_erros = util_data.valida(chave, val, nulo_ok)
       erros += mais_erros
     elif chave == 'titulo':
       nulo_ok = False
-      parcial = False
-      mais_erros = util_titulo_de_video.valida(chave, val, nulo_ok, parcial)
+      mais_erros = util_titulo_de_video.valida(chave, val, nulo_ok)
       erros += mais_erros
     elif chave == 'nota':
       nota_min = 0
       nota_max = 4
       if not isinstance(val, float):
-        erros.append(f"Atributo 'nota{vid_id_msg} não é um float")
+        erros.append(f"O atributo 'nota'{vid_id_msg} não é um float")
       elif val < nota_min or val > nota_max:
-        erros.append(f"Atributo 'nota{vid_id_msg} = {val} fora da faixa [{nota_min} _ {nota_max}]")
+        erros.append(f"O atributo 'nota'{vid_id_msg} = {val} fora da faixa [{nota_min} _ {nota_max}]")
     elif chave == 'duracao' or chave == 'altura' or chave == 'largura':
       if not isinstance(val, int):
-        erros.append(f"Atributo '{chave}{vid_id_msg} não é um inteiro")
+        erros.append(f"O atributo '{chave}'{vid_id_msg} não é um inteiro")
     else:
       erros.append(f"Atributo inválido '{chave}' = {val}")
 
@@ -319,7 +332,7 @@ def valida_atributos(vid, atrs_mem):
         # O atributo é imutável:
         assert vid_atrs != None and chave in vid_atrs
         if val != vid_atrs[chave]:
-          erros.append(f"Atributo {chave} do vídeo {vid_id} não pode ser alterado")
+          erros.append(f"O atributo '{chave}' do vídeo \"{vid_id}\" não pode ser alterado")
        
   if vid == None and len(erros) == 0:
     # Tentativa de criar um novo objeto.
@@ -327,7 +340,7 @@ def valida_atributos(vid, atrs_mem):
     for col_desc in tabela.colunas:
       chave = col_desc[0] # Chave da coluna da tabela.
       if not chave in atrs_mem:
-        erros.append(f"Atributo {chave} não foi especificado")
+        erros.append(f"O atributo '{chave}' não foi especificado")
 
     # Valida as dimensões do novo vídeo:
     mais_erros = valida_dimensoes(atrs_mem['duracao'], atrs_mem['altura'], atrs_mem['largura'])
@@ -354,9 +367,9 @@ def valida_dimensoes(duracao, altura, largura):
   for chave in 'duracao', 'altura', 'largura':
     val = atrs_val[chave]
     if val == None:
-      erros.append(f"Atributo '{chave}' não está definido")
+      erros.append(f"O atributo '{chave}' não está definido")
     elif not isinstance(val, int):
-      erros.append(f"Atributo '{chave}' não é inteiro")
+      erros.append(f"O atributo '{chave}' = \"{val}\" não é inteiro")
     else:
       val_min = atrs_min[chave]
       val_max = atrs_max[chave]
@@ -404,16 +417,16 @@ def def_obj_mem(obj, vid_id, atrs_SQL):
     if tabela.debug: mostra(2, "modificando objeto, atrs_mem = " + str(atrs_mem))
     assert type(atrs_mem) is dict
     if len(atrs_mem) > len(obj.atrs):
-      erro_prog("numero excessivo de atributos a alterar")
+      erro_prog("Número excessivo de atributos a alterar")
     for chave, val in atrs_mem.items():
       if not chave in obj.atrs:
-        erro_prog(f"chave '{chave}' inválida")
+        erro_prog(f"Chave '{chave}' inválida")
       val_velho = obj.atrs[chave]
       if not type(val_velho) is type(val):
-        erro_prog(f"tipo do campo '{chave}' incorreto")
+        erro_prog(f"Tipo do campo '{chave}' incorreto")
       campos_alteraveis = { 'nota', 'titulo', } # No futuro pode haver mais campos alteraveis.
       if not chave in campos_alteraveis and val != val_velho:
-        erro_prog(f"campo '{chave}' não pode ser alterado - val = {str(val)} val_velho = {str(val_velho)}")
+        erro_prog(f"Campo '{chave}' não pode ser alterado - val = {str(val)} val_velho = {str(val_velho)}")
       obj.atrs[chave] = val
   if tabela.debug: mostra(2, "obj = " + str(obj))
   return obj

@@ -29,9 +29,13 @@ def processa(ses, cmd_args):
   Atributos de {obj_comentario.Classe} que tem valor {None} em
   {cmd_args} (ou estão omitidos) serão ignorados na busca.
   
-  No casos dos campos 'comentario', 'video', 'autor', e 'pai', a
-  busca será feita pelo valor exato. Nos caso dos campos 'texto' e
-  'data', será feita uma busca por valor aproximado.
+  No casos dos campos 'comentario', 'video', 'autor', 'pai' e 'data', a
+  busca será feita pelo valor exato. Nos caso do campo 'texto' será
+  feita uma busca por valor aproximado. Especificamente, será usado o
+  operador SQL "LIKE" com argumento "%{tx}%" onde {tx} é o valor de
+  {cmd_args['texto']} Quaisquer caracteres "%" e "_" em {tx} serão
+  interpretados como nesse operador SQL. A busca vai ignorar a distinção
+  maiúsculas e minúsculas.
 
   Se houver erros nos argumentos, ou a busca não encontrar nenhum
   comentário, devolve o formulário de buscar comentários (veja

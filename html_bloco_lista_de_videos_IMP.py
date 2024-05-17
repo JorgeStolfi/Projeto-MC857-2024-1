@@ -30,6 +30,6 @@ def gera(vid_ids, mostra_autor):
     linhas.append(linha_vid)
 
   # Gera a tabela HTML a partir da lista de linhas
-  ht_tabela = html_elem_table.gera(linhas)
+  ht_tabela = html_elem_table.gera(linhas, None)
 
   return ht_tabela

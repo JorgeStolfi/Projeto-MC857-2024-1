@@ -9,26 +9,28 @@ import obj_video
 
 def processa(ses, cmd_args):
   
-  # Páginas do sistema deveriam garantir estas condições:
-  assert ses == None or obj_sessao.aberta(ses), "Sessão do comando inválida"
-  assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
-  assert 'video' in cmd_args, "Vídeo não especificado"
+  # Validação de tipos (paranóia):
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert cmd_args != None and type(cmd_args) is dict
 
   erros = []
   
   # Obtém o vídeo {vid} em questão e seu identificador {vid_id}:
-  vid_id = cmd_args['video']
-  vid = obj_video.obtem_objeto(vid_id)
-  
-  if vid == None:
-    erros.append(f"Vídeo {vid_id} não existe")
-    ht_bloco = None
+  vid_id = cmd_args.pop('video', None)
+  if vid_id != None:
+    vid = obj_video.obtem_objeto(vid_id)
+    if vid == None:
+      erros.append(f"O vídeo \"{vid_id}\" não existe")
   else:
-    com_ids = obj_comentario.busca_por_video(vid_id)
+    erros.append("O vídeo a buscar não foi especificado")
+    vid = None
+  
+  ht_bloco = None
+  if len(erros) == 0:
+    assert vid != None
+    com_ids = obj_comentario.busca_por_video(vid_id, sem_pai = True)
     if len(com_ids) == 0:
-      # Não encontrou nada.
-      erros.append(f"Vídeo {vid_id} não tem nenhum comentário")
-      ht_bloco = None
+      erros.append(f"O vídeo {vid_id} não tem nenhum comentário")
     else:
       ht_titulo = html_bloco_titulo.gera(f"Comentários do video {vid_id}")
       mostra_autor = True  # Podem ter autores diferentes.

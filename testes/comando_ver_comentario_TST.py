@@ -65,6 +65,6 @@ for tag, com_id in ( \
   testa_processa(tag,  str, ses_C1, {'comentario': com_id})
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  erro_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.", True)

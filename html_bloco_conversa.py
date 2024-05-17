@@ -10,7 +10,8 @@ def gera(conversa, ses_dono):
   
   O parâmetro {ses_dono} deve ser o dono da sessão de login que pediu
   estes dados; ou {None} se o usuário que pediu não está logado.
-  Este parâmetro afeta os campos e 
+  Este parâmetro afeta a visibilidade de alguns campos e os
+  botões embaixo de cada comentário ("Editar", "Responder", etc.)
   
   O resultado desta função será um texto HTML consistindo
   de instâncias de {html_bloco_comentario.gera},

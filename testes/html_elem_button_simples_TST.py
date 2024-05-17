@@ -31,6 +31,6 @@ testa_gera("simples_Cadastrar", str, "Cadastrar", 'solicitar_pag_cadastrar_usuar
 testa_gera("simples_OK",        str, "OK", 'pag_principal', None, '#55ee55')
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

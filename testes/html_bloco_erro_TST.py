@@ -26,6 +26,6 @@ testa_gera("multiple_arguments", str, [ "ERROR MESSAGE", "ERROR DESCRIPTION"])
 testa_gera("all_combined",       str, [ "ERROR TITLE", "ERROR DESCRIPTION 1\nERROR DESCRIPTION 2"])
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.");
+  sys.stderr.write("Testes terminaram normalmente.\n");
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

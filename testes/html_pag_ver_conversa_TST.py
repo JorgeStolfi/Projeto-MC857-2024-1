@@ -55,6 +55,6 @@ conversa = obj_comentario.obtem_conversa(raizes, max_coms, max_nivel)
 testa_gera("C1", str, ses1, titulo, conversa, erros)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

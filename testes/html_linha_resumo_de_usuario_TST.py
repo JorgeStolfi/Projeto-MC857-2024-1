@@ -47,6 +47,6 @@ testa_gera("TUSER2",  list, usr2)
 testa_gera("TUSER5",  list, usr5)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

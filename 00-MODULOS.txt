@@ -1,5 +1,5 @@
 # Módulos em ordem de teste:
-# Last edited on 2024-05-12 22:49:10 by stolfi
+# Last edited on 2024-05-16 11:48:21 by stolfi
 
 + util_erros
 + util_testes
@@ -8,7 +8,7 @@
 + util_booleano
 + util_identificador
 + util_data
-- util_email
++ util_email
 + util_nome_de_usuario
 + util_senha
 + util_texto_de_comentario
@@ -24,7 +24,7 @@
 + obj_usuario
 + obj_sessao
 + obj_video
-- obj_comentario
++ obj_comentario
 
 + db_tabelas_do_sistema
 
@@ -52,6 +52,8 @@
 + html_bloco_erro
 + html_bloco_bemvindo
 + html_bloco_menu_geral
++ html_bloco_cabecalho_de_video
++ html_bloco_rodape_de_video
 
 + html_bloco_tabela_de_campos
 
@@ -65,10 +67,10 @@
 + html_linha_resumo_de_usuario
 + html_bloco_lista_de_usuarios
 
-+ html_bloco_dados_de_video
++ html_bloco_video
 + html_linha_resumo_de_video
 + html_bloco_lista_de_videos
-? html_bloco_grade_de_videos
++ html_bloco_grade_de_videos
 
 + html_bloco_cabecalho_de_comentario
 
@@ -101,62 +103,62 @@
 + html_pag_alterar_usuario
 + html_pag_buscar_usuarios
 
-? html_pag_ver_sessao
++ html_pag_ver_sessao
 + html_pag_login
 + html_pag_buscar_sessoes
 
-? html_pag_ver_video
-? html_pag_upload_video
++ html_pag_ver_video
++ html_pag_upload_video
 + html_pag_alterar_video
 + html_pag_buscar_videos
-? html_pag_grade_de_videos
++ html_pag_grade_de_videos
 
-? html_pag_ver_comentario
-? html_pag_postar_comentario
-? html_pag_alterar_comentario
++ html_pag_ver_comentario
++ html_pag_postar_comentario
++ html_pag_alterar_comentario
 + html_pag_buscar_comentarios
-? html_pag_ver_conversa
++ html_pag_ver_conversa
 
-? comando_ver_sessao
++ comando_ver_sessao
 + comando_solicitar_pag_login
 + comando_fazer_login
-? comando_fazer_logout
-? comando_fechar_sessao
++ comando_fazer_logout
++ comando_fechar_sessao
 + comando_solicitar_pag_buscar_sessoes
-? comando_buscar_sessoes
+- comando_buscar_sessoes
 + comando_buscar_sessoes_de_usuario
  
 + comando_ver_usuario
-? comando_solicitar_pag_cadastrar_usuario
-? comando_cadastrar_usuario
++ comando_solicitar_pag_cadastrar_usuario
++ comando_cadastrar_usuario
 + comando_solicitar_pag_alterar_usuario
-? comando_alterar_usuario
++ comando_alterar_usuario
 + comando_solicitar_pag_buscar_usuarios
-? comando_buscar_usuarios
++ comando_buscar_usuarios
  
-? comando_ver_video
-? comando_solicitar_pag_upload_video
-? comando_fazer_upload_video
++ comando_ver_video
++ comando_solicitar_pag_upload_video
++ comando_fazer_upload_video
 + comando_solicitar_pag_alterar_video
-? comando_alterar_video
-? comando_solicitar_pag_buscar_videos
-? comando_buscar_videos
-? comando_buscar_videos_de_usuario
-? comando_ver_grade_de_videos
++ comando_alterar_video
++ comando_solicitar_pag_buscar_videos
++ comando_buscar_videos
++ comando_buscar_videos_de_usuario
+- comando_ver_grade_de_videos
 
-? comando_ver_comentario
-? comando_solicitar_pag_postar_comentario
-? comando_postar_comentario
-? comando_solicitar_pag_alterar_comentario
-? comando_alterar_comentario
-? comando_solicitar_pag_buscar_comentarios
++ comando_ver_comentario
++ comando_solicitar_pag_postar_comentario
++ comando_postar_comentario
++ comando_solicitar_pag_alterar_comentario
++ comando_alterar_comentario
+- comando_solicitar_pag_buscar_comentarios
 + comando_buscar_comentarios
-? comando_buscar_comentarios_de_video
++ comando_buscar_comentarios_de_video
 + comando_buscar_comentarios_de_usuario
-? comando_buscar_respostas_de_comentario
-? comando_ver_conversa
++ comando_buscar_respostas_de_comentario
+- comando_ver_conversa
 
-? comando_ver_objeto
++ comando_ver_objeto
 
 # Sem teste unitário:
 N processa_comando_http

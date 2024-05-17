@@ -64,20 +64,24 @@ def inicializa_modulo(limpa):
   SQL, resetando o contador em 0."""
   obj_sessao_IMP.inicializa_modulo(limpa)
 
-def cria(dono, cookie):
+def cria(dono, cookie, criacao):
   """
   Cria um novo objeto da classe {obj_sessao.Classe}, associada ao
   usuário {dono}, inicialmente aberta, com o cookie inicial {cookie}.
   Também acrescenta a sessão à base de dados.
   
-  O campo 'criacao' do objeto será a data corrente no momento da chamada
-  desta função. O identificador do novo objeto será derivado do seu
+  Se o parâmetro {criacao} é a data de criação da sessão (atributo 'criacao').
+  Se for {None} será usada a data corrente no momento da chamada
+  desta função. Senão, deve ser uma data em formato ISO com fuso horário
+  "UTC".
+  
+  O identificador do novo objeto será derivado do seu
   índice na tabela.
   
   Em caso de sucesso, retorna o objeto. Caso contrário,
   levanta a exceção {ErroAtrib} com uma lista de mensagens de erro.
   """
-  return obj_sessao_IMP.cria(dono, cookie)
+  return obj_sessao_IMP.cria(dono, cookie, criacao)
 
 def muda_atributos(ses, atrs_mod):
   """Modifica alguns atributos do objeto {ses} da classe
@@ -146,24 +150,38 @@ def obtem_objeto(ses_id):
   Se {ses_id} é {None} ou tal sessão não existe, devolve {None}."""
   return obj_sessao_IMP.obtem_objeto(ses_id)
 
-def busca_por_campo(campo, val):
-  """Localiza todas as sessões cujo atributo {campo} seja {valor}. Retorna a lista de ids
-  dessas sessões."""
-  return obj_sessao_IMP.busca_por_campo(campo, val)  
-
 def busca_por_dono(dono, soh_abertas):
   """Localiza todas as sessões do usuário com identificador {dono}.  
+  Retorna uma lista de identificadores dessas sessões.  
+  Se {dono} é {None} ou não existem tais sessões, devolve uma lista vazia.
+  
+  Se {soh_abertas} é {False}, retorna todas as sessões do {dono},
+  abertas ou fechadas. Neste caso, equivale a {busca_por_campos({ 'dono': dono }, unico=False)}.
+  
   Se {soh_abertas} é {True}, considera apenas as sessões abertas.
-  Retorna uma lista de identificadores dessas sessões.
-  Se {dono} é {None} ou não existem tais sessões, devolve uma lista vazia."""
+  Neste caso, equivale a {busca_por_campos({ 'dono': dono, 'aberta': True }, unico=False)}."""
   return obj_sessao_IMP.busca_por_dono(dono, soh_abertas)
 
-def busca_por_semelhanca(args, unico):
-  """Similar a {busca_por_campos}, mas aceita alguns valores na base de dados 
-  que são semelhantes aos valores em {args}, em vez de iguais a eles.  Vide
-  {db_tabela_generica.busca_por_semelhanca}."""
-  # !!! Deveria ter especificação exato/aproximado para cada campo. !!!
-  return obj_sessao_IMP.busca_por_semelhanca(args, unico)
+def busca_por_campo(campo, val):
+  """Localiza todas as sessões cujo atributo {campo} seja {valor}. Retorna a lista de ids
+  dessas sessões.  Equivale a {busca_por_campos({ chave: val }, unico = False)}."""
+  return obj_sessao_IMP.busca_por_campo(campo, val)  
+
+def busca_por_campos(atrs, unico):
+  """
+  Busca sessões que satisfazem uma combinação de valores em vários
+  campos, definidos pelo dicionário {atrs}. Especificamente, para todo
+  par {ch: val} em {atrs}, exige que o valor do atributo {ch} do objeto
+  case com {val}. Cada valor {val} pode ser um padrão SQL ou um
+  intervalo; veja {obj_raiz.busca_por_campos} para maiores detalhes.
+  
+  Se {unico} for {False}, devolve uma lista, possivelmente vazia,
+  com os identificadores dos objetos encontrados (NÃO os objetos).
+  
+  Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
+  ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
+  se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
+  return obj_sessao_IMP.busca_por_campos(atrs, unico)  
 
 def fecha(ses):
   """Registra o logout do usuário na sessão {ses}, mudando o atributo 'aberta'

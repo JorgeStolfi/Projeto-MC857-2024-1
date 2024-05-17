@@ -40,6 +40,6 @@ testa_gera("V-E0",  str, ses1, vid1, None)
 testa_gera("V-E2",  str, ses1, vid1, ["Veja a mensagem abaixo", "Veja a mensagem acima"])
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

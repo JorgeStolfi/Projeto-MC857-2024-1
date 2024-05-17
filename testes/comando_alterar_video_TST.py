@@ -6,7 +6,7 @@ import obj_video
 import obj_sessao
 import db_base_sql
 import util_testes
-from util_erros import erro_prog
+from util_erros import erro_prog, aviso_prog
 
 import sys
 
@@ -68,6 +68,6 @@ ok_global = ok_global and titulo_atualizou
 
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  erro_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.", True)

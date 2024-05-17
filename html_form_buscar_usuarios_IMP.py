@@ -5,13 +5,15 @@ import html_elem_button_simples
 import html_bloco_tabela_de_campos
 import html_elem_form
 
-def gera(atrs, admin):
+def gera(atrs, para_admin):
 
-  dados_linhas = (
-      ( "ID",         "text",   "usuario",   True,  "U-nnnnnnnn",       ),
-      ( "Nome",       "text",   "nome",      True,  "Fulano de tal",    ),
-      ( "email",      "text",  "email",     True,  "fulano@gmail.com", ),
-    )
+  dados_linhas = [
+      ( "ID",    "text",   "usuario",   True,  "U-nnnnnnnn",       ),
+      ( "Nome",  "text",   "nome",      True,  "Fulano de tal",    ),
+    ]
+  
+  if para_admin:
+    dados_linhas.append( ( "email", "text", "email", True,  "fulano@lugar.com", ) )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
   ht_submit = html_elem_button_submit.gera("Buscar", "buscar_usuarios", None, '#55ee55')

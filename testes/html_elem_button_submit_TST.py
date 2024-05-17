@@ -29,6 +29,6 @@ for tag, texto, URL, cmd_args, cor_fundo in dados:
   testa_gera(tag, str, texto, URL, cmd_args, cor_fundo)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

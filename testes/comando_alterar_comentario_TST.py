@@ -7,6 +7,7 @@ import obj_usuario
 import obj_sessao
 import obj_video
 import db_base_sql
+import util_dict
 import util_testes
 from util_erros import ErroAtrib, aviso_prog
 
@@ -44,11 +45,11 @@ def verifica_atributos(com, atrs_esp):
   sys.stderr.write(f"    verificando o efeito:\n")
 
   ok = True
-  atrs_esp = atrs_esp.copy() # Para não estragar o original.
+  atrs_esp = util_dict.para_identificadores(atrs_esp.copy()) # Para não estragar o original.
   
   # Confere e elimina 'comentario' de {atrs_esp}:
   com_id = obj_comentario.obtem_identificador(com)
-  atrs_atu = obj_comentario.obtem_atributos(com)
+  atrs_atu = util_dict.para_identificadores(obj_comentario.obtem_atributos(com))
   if 'comentario' in atrs_esp:
     com_id_mod = atrs_esp['comentario'];
     if com_id_mod != obj_comentario.obtem_identificador(com):
@@ -133,4 +134,4 @@ verifica_atributos(com1, cmd_args_04) # Devem ter mudado.
 if ok_global:
   sys.stderr.write("Teste terminado normalmente\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

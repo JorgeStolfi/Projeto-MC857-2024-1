@@ -47,6 +47,6 @@ for tag, erros in (
   testa_gera("SemValores-err" + tag,  str, ses, {},    erros)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

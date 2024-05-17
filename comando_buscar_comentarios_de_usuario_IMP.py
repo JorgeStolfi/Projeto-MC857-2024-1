@@ -10,42 +10,43 @@ import obj_comentario
 def processa(ses, cmd_args):
   
   # Páginas do sistema deveriam garantir estas condições:
-  assert ses == None or obj_sessao.aberta(ses), "Sessão do comando inválida"
-  assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
-  # Caso ses seja None, é necessário que seja passado um id de usuário de parâmetro
-  assert not (ses == None and 'usuario' not in cmd_args), "Argumentos inválidos"
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert cmd_args != None and type(cmd_args) is dict
  
   erros = []
 
-  # Caso ses != None, obtem o usuário {usr_ses} dono da sessão:
-  usr_ses = None
+  # Caso ses != None, obtem o usuário {ses_dono} dono da sessão:
+  ses_dono = None
   if ses != None:
-    usr_ses = obj_sessao.obtem_dono(ses); assert usr_ses != None
-    usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
+    ses_dono = obj_sessao.obtem_dono(ses); assert ses_dono != None
+    ses_dono_id = obj_usuario.obtem_identificador(ses_dono)
   
   # Obtém o usuário {autor} a listar e seu identificador {autor_id}:
   if 'usuario' in cmd_args:
     # Alguém quer ver comentários de usuário específico:
     autor_id = cmd_args['usuario']
     autor = obj_usuario.obtem_objeto(autor_id)
+  elif ses_dono != None:
+    autor = ses_dono
+    autor_id = ses_dono_id
   else:
-    autor = usr_ses
-    autor_id = usr_ses_id
+    autor = None
+    autor_id = None
 
   if autor == None:
-    erros.append(f"Usuário indeterminado")
+    erros.append(f"O usuário a buscar não foi especificado")
     ht_bloco = None
   else:
     com_ids = obj_comentario.busca_por_autor(autor_id)
     if len(com_ids) == 0:
-      # Argumentos com erro ou não encontrou nada.
-      erros.append("Usuário não tem nenhum comentário")
+      erros.append(f"O usuário \"{autor_id}\" não postou nenhum comentário")
       ht_conteudo = None
     else:
       # Encontrou pelo menos um comentário. Mostra em forma de tabela:
-      if autor == usr_ses:
+      if autor == ses_dono:
         ht_titulo = html_bloco_titulo.gera("Meus comentários")
       else:
+        assert autor_id != None
         ht_titulo = html_bloco_titulo.gera(f"Comentários do usuário {autor_id}")
       ms_autor = False # Pois todos do mesmo autor.
       ms_video = True  # Podem ser de videos diferentes.

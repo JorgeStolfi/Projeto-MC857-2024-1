@@ -43,7 +43,7 @@ testa_processa("acesso_invalido",  str, ses1, {'sessao': 'S-00000003'})
 testa_processa("sem_argumento",  str, ses1, {})
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)
 

@@ -6,29 +6,32 @@ import obj_sessao
 import obj_usuario
 import html_pag_generica
 
-def gera(ses, atrs, erros):
+import sys
 
-  # Validação de tipos (paranóia):
-  assert ses != None and isinstance(ses, obj_sessao.Classe), "Sessao inválida"
-  assert obj_sessao.aberta(ses), "Sessao já fechada"
-  assert atrs == None or isinstance(atrs, dict), "{atrs} inválido"
-  assert erros == None or isinstance(erros, list) or isinstance(erros, tuple), "{erros} inválido"
-  
+def gera(ses, atrs_novo, erros):
+
+  # Chamadas pelo sistema devem satisfazer estas condições:
+  assert ses != None and isinstance(ses, obj_sessao.Classe)
+  assert obj_sessao.aberta(ses)
+  assert atrs_novo == None or isinstance(atrs_novo, dict)
+  assert erros == None or isinstance(erros, list) or isinstance(erros, tuple)
+
   # Obtém dono da sessão {ses}:
-  usr_ses = obj_sessao.obtem_dono(ses)
-  assert usr_ses != None
-  usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
-  para_admin = obj_usuario.eh_administrador(usr_ses)
+  ses_dono = obj_sessao.obtem_dono(ses)
+  assert ses_dono != None
+  ses_dono_id = obj_usuario.obtem_identificador(ses_dono)
+  para_admin = obj_usuario.eh_administrador(ses_dono)
   
-  atrs_pag = atrs.copy() if atrs != None else { }
+  atrs_novo = atrs_novo.copy() if atrs_novo != None else { }
   
   # Garante atributos essenciais (paranóia):
-  if 'autor' in atrs_pag:
-    assert atrs_pag['autor'] == usr_ses_id
+  if 'autor' in atrs_novo:
+    autor_novo = atrs_novo['autor']
+    assert atrs_novo['autor'] == ses_dono_id
   else:
-    atrs_pag['autor'] = usr_ses_id
+    atrs_novo['autor'] = ses_dono_id
 
-  ht_form = html_form_upload_video.gera(atrs_pag, para_admin)
+  ht_form = html_form_upload_video.gera(atrs_novo, para_admin)
   
   ht_conteudo = ht_form
 

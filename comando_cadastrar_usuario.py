@@ -1,12 +1,4 @@
-# Este módulo processa o acionamento por um novo usuário do botão "Cadastrar" dentro
-# do formulário com os dados para cadastramento, que devem estar preenchidos.
-
 import comando_cadastrar_usuario_IMP
-
-def msg_campo_obrigatorio(nome_do_campo):
-  """Esta função retorna uma mensagem indicando que o preenchimento
-  do campo {nome_do_campo} é obrigatório"""
-  return comando_cadastrar_usuario_IMP.msg_campo_obrigatorio(nome_do_campo)
 
 def processa(ses, cmd_args):
   """Esta função é chamada quando o usuário aperta o botão "Cadastrar"

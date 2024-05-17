@@ -1,6 +1,6 @@
 # Implementação do módulo {util_identificador}.
 
-from util_erros import erro_prog
+from util_erros import erro_prog, aviso_prog
 import sys, re
 
 def de_indice(let, indice):
@@ -35,13 +35,13 @@ def de_lista_de_indices(let, lista_indices):
 def valida(chave, val, letra, nulo_ok):
   erros = []
   if val == None:
-    if not nulo_ok: erros.append(f"campo '{chave}' não pode ser omitido")
+    if not nulo_ok: erros.append(f"O campo '{chave}' não pode ser omitido")
   elif not isinstance(val, str):
-    erros.append(f"campo '{chave}' tem tipo inválido {type(val)}")
+    erros.append(f"O campo '{chave}' tem tipo inválido {type(val)}, devia ser {'{str}'}")
   else:
     n = len(val)
     if n >= 1 and val[0] != letra:
-      erros.append(f"campo '{chave}' = \"{val}\" não é identificador válido: deve comecar com {letra}")
+      erros.append(f"O campo '{chave}' = \"{val}\" não é identificador válido: deve comecar com {letra}")
     if not re.match(r'^-[0-9]{8}$', val[1:]):
-      erros.append(f"campo '{chave}' = \"{val}\" não é identificador válido: deve ser \"{letra}-\" e oito algarismos")
+      erros.append(f"O campo '{chave}' = \"{val}\" não é identificador válido: deve ser \"{letra}-\" e oito algarismos")
   return erros

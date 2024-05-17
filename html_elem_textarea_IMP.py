@@ -2,7 +2,7 @@
 import html_elem_label
 import html_elem_paragraph
 import html_estilo_texto
-from util_erros import erro_prog
+from util_erros import erro_prog, aviso_prog
 
 import sys
 

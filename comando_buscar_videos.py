@@ -27,9 +27,13 @@ def processa(ses, cmd_args):
   Atributos de {obj_video.Classe} que tem valor {None} em
   {cmd_args} (ou estão omitidos) serão ignorados na busca.
   
-  No casos dos campos 'video' e 'autor' de {cmd_args}, a
-  busca será feita pelo valor exato. Nos caso dos campos 'titulo' e
-  'data', será feita uma busca por valor aproximado.
+  No casos dos campos 'video', 'autor' e 'data' de {cmd_args}, a busca
+  será feita pelo valor exato. Nos caso do campo 'titulo', será feita
+  uma busca por valor aproximado. Especificamente, será usado o operador
+  SQL "LIKE" com argumento "%{tit}%" onde {tit} é o valor de
+  {cmd_args['titulo']} Quaisquer caracteres "%" e "_" em {tit} serão
+  interpretados como nesse operador SQL. A busca vai ignorar a distinção
+  maiúsculas e minúsculas.
 
   Se houver erros nos argumentos, ou a busca não encontrar nenhum vídeo,
   devolve o formulário de buscar vídeos com os campos {cmd_args}

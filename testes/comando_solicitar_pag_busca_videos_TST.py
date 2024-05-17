@@ -43,6 +43,6 @@ testa_processa("OK-e0",  str, ses_A, None)
 testa_processa("OK-e2",  str, ses_A, ["Roubar", "Mentir"])
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

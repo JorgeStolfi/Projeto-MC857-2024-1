@@ -41,6 +41,6 @@ testa_processa("A1",  str, ses_A1, {})
 testa_processa("C1",  str, ses_C1, {})
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

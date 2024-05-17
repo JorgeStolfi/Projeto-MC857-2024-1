@@ -92,30 +92,7 @@ def testa_funcao_validadora(rot_teste, valido, modulo, funcao, *args):
   Devolve {True} se o teste deu certo, {False} caso contrário.
   """
   return util_testes_IMP.testa_funcao_validadora(rot_teste, valido, modulo, funcao, *args)
-  
-def testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val):
-  """
-  Usa {testa_funcao_validadora(rot_teste,valido,modulo,funcao,...)} para testar
-  {funcao(chave,valm,nulo_ok,padrao_ok)} variando {nulo_ok} e
-  {padrao_ok} por {Flase,True} onde {valm} é {val} ou "*{val}*" (este
-  último só se {val != None}).
-  
-  Se {val} é {None}, a funcao deve dizer que é válido se e somente se 
-  {nulo_ok} for {True}, independente de {padrao_ok}
-
-  Se {val} não é {None} e {valido_ex} é {True}, a {funcao} deve aceitar 
-  {val} independentemente de {padro_ok}.
-  
-  Se {val} não é {None} e {valido_pt} é {True}, a funcao deve acitar "*{val}*"
-  deve ser válido se e somente se {padrao_ok} é {True}.
-
-  Monta o rótulo do teste a partir de {xrot} outros parametros.
-  
-  Devolve {True} se o teste deu certo, {False} caso contrário.
-  """
-  return util_testes_IMP.testa_funcao_validadora_nulo_padrao(modulo, funcao, xrot, chave, valido_ex, valido_pt, val)
-
-
+ 
 # FORMATAÇÃO DE DADOS PARA DEPURAÇÃO
 
 def formata_valor(dado, html, max_len):

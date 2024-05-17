@@ -74,6 +74,6 @@ testa_atualiza_email_com_sucesso()
 testa_atualiza_email_repetido_falha()
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

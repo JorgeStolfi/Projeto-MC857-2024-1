@@ -60,6 +60,6 @@ for ses_login_tag, ses_login in ( "A", sesA, ), ( "C", sesC, ):
       testa_gera(rot_teste,  str, ses_login, ses_a_ver, erros)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

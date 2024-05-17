@@ -6,6 +6,7 @@ import comando_buscar_sessoes
 import obj_sessao
 import obj_usuario
 import util_testes
+from util_erros import aviso_prog
 
 import sys
 
@@ -33,9 +34,10 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-assert False, "!!! comando_buscar_sessoes_TST.py ainda não escrito !!!"
+aviso_prog("!!! comando_buscar_sessoes_TST.py ainda não escrito !!!", False)
+ok_global = False
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

@@ -56,17 +56,17 @@ usrI = obj_usuario.obtem_objeto(usrI_id)
 assert usrI == None 
 
 for xses, ses in ("N", None), ("A", sesA), ("C", sesC):
-  usr_ses = obj_sessao.obtem_dono(ses) if ses != None else None
-  usr_ses_id = obj_usuario.obtem_identificador(usr_ses) if usr_ses != None else None
+  ses_dono = obj_sessao.obtem_dono(ses) if ses != None else None
+  ses_dono_id = obj_usuario.obtem_identificador(ses_dono) if ses_dono != None else None
   # Usuário a ver é: implícito, o dono da sessão (explícito), terceiro, ou inexistente:
-  for xusr, usr_id in ("N", None), ("P", usr_ses_id), ("T", usrD_id), ("I", usrI_id):
+  for xusr, ses_dono_id in ("N", None), ("P", ses_dono_id), ("T", usrD_id), ("I", usrI_id):
     # Caso {ses==None,xusr=="P"} é igual a {ses==None,xusr=="N"}:
     if not (ses == None and xusr == "P"):
       rot_teste = f"ses{xses}_usr{xusr}"
-      cmd_args = { 'usuario': usr_id } if usr_id != None else {}
+      cmd_args = { 'usuario': ses_dono_id } if ses_dono_id != None else {}
       testa_processa(rot_teste, str, ses, cmd_args )
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam")
+  aviso_prog("Alguns testes falharam.")

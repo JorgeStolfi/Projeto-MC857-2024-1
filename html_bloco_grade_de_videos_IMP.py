@@ -1,5 +1,6 @@
-import random
+import obj_video
 import html_elem_table
+import html_elem_link_img
 
 def gera(vid_ids, ncols):
 
@@ -13,17 +14,18 @@ def gera(vid_ids, ncols):
   ht_elems_linha = []   # Elementos da linha corrente, cada qual um string "<td>...</td>".
   
   for vid_id in vid_ids:
-    assert isisnstance(vid_id, str)
-    vid = onj_video.obtem_objeto(vid_id)
+    assert isinstance(vid_id, str)
+    vid = obj_video.obtem_objeto(vid_id)
     if vid == None:
-      erros.append(f"vídeo {vid_id} não existe")
+      erros.append(f"O vídeo {vid_id} não existe")
     else:
       arquivo = f"thumbs/{vid_id}.png"
       atrs_vid = obj_video.obtem_atributos(vid)
       descr = atrs_vid['titulo']
       alt_px = 80
-      url = arquivo
-      ht_elem = "<td>" + html_elem_link_img.gera(arquivo, descr, alt_px, url) + "</td>"
+      url = f"ver_video?video={vid_id}"
+      ht_link = html_elem_link_img.gera(arquivo, descr, alt_px, url)
+      ht_elem = "<td style=\"text-align: center; border: 1px solid blue; padding:5px;\">&nbsp;" + ht_link + "&nbsp;</td>"
       ht_elems_linha.append(ht_elem)
       if len(ht_elems_linha) == ncols:
         # Completou mais uma linha:
@@ -37,5 +39,5 @@ def gera(vid_ids, ncols):
       ht_elems_linha.append(ht_elem)
     ht_linhas.append(ht_elems_linha)
     
-  ht_tabela = html_elem_table.gera(ht_linhas)
+  ht_tabela = html_elem_table.gera(ht_linhas, None)
   return ht_tabela

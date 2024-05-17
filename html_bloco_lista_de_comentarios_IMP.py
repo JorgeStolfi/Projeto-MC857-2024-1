@@ -23,6 +23,6 @@ def gera(com_ids, mostra_autor, mostra_video, mostra_pai):
     linhas.append(res_campos)
 
   # Gera a tabela HTML a partir da lista de linhas
-  ht_tabela = html_elem_table.gera(linhas)
+  ht_tabela = html_elem_table.gera(linhas, None)
 
   return ht_tabela

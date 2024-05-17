@@ -4,10 +4,17 @@ import html_pag_buscar_videos
 import obj_sessao
 
 def processa(ses, cmd_args):
-  # Estas condições deveriam valer para comandos gerados
-  # pelas páginas do site:
-  assert ses == None or obj_sessao.aberta(ses), "Sessao inválida"
-  assert type(cmd_args) is dict and cmd_args == {}, "Argumentos inválidos"
+
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert isinstance(cmd_args, dict)
   
-  pag = html_pag_buscar_videos.gera(ses, {}, None)
+  erros = []
+  
+  assert len(cmd_args) == 0, f"Argumentos espúrios \"{cmd_args}\""
+   
+  if len(erros) > 0:
+    pag = html_pag_mensagem_de_erro.gera(ses, erros)
+  else:
+    pag = html_pag_buscar_videos.gera(ses, {}, None)
+  
   return pag

@@ -43,14 +43,14 @@ atrs_tot = obj_video.obtem_atributos(vidC1)
 atrs_som = { 'titulo': "Alteradus", }
 atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
 
-for para_admin in False, True:
-  for at, atrs in atrs_dic.items():
-    xpadm = f"_admin{str(para_admin)[0]}"
-    xatrs = f"_atrs{at}"
-    rot_teste = "AV" + xpadm + xatrs
-    testa_gera(rot_teste, str, vidC1_id, atrs, para_admin)
+for ed_nota in False, True:
+  for atrs_tag, atrs in atrs_dic.items():
+    xednt = f"_ednt{str(ed_nota)[0]}"
+    xatrs = f"_atrs{atrs_tag}"
+    rot_teste = "AV" + xednt + xatrs
+    testa_gera(rot_teste, str, vidC1_id, atrs, ed_nota)
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

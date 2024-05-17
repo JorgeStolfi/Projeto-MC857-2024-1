@@ -6,17 +6,17 @@ import html_pag_generica
 def gera(ses, atrs, erros):
 
   # Validação de tipos (paranóia):
-  assert ses != None and isinstance(ses, obj_sessao.Classe), "Sessao inválida"
-  assert obj_sessao.aberta(ses), "Sessao já fechada"
-  assert atrs == None or isinstance(atrs, dict), "{atrs} inválido"
-  assert erros == None or isinstance(erros, list) or isinstance(erros, tuple), "{erros} inválido"
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert atrs == None or isinstance(atrs, dict)
+  assert erros == None or isinstance(erros, list) or isinstance(erros, tuple)
 
   # Obtém dono da sessão {ses}:
   if ses != None:
-    usr_ses = obj_sessao.obtem_dono(ses)
-    assert usr_ses != None
-    para_admin = obj_usuario.eh_administrador(usr_ses)
+    ses_dono = obj_sessao.obtem_dono(ses)
+    assert ses_dono != None
+    para_admin = obj_usuario.eh_administrador(ses_dono)
   else:
+    ses_dono = None
     para_admin = False
   
   atrs_pag = atrs.copy() if atrs != None else { }

@@ -12,7 +12,7 @@ def gera(atrs):
   dados_linhas = (
       ( "ID",       "text",   'video',  True,  "V-NNNNNNNN",      ),
       ( "Título",   "text",   'titulo', True,  "Bla bla bla",     ),
-      ( "Autor",    "text",   'usr',    True,  "Fulano de tal",   ),
+      ( "Autor",    "text",   'autor',  True,  "U-NNNNNNNN",   ),
       ( "Data",     "text",   'data',   True,  "2024",            ),
     )
 

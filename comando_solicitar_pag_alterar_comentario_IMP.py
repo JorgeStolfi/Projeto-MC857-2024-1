@@ -20,15 +20,15 @@ def processa(ses, cmd_args):
   else:
     com = obj_comentario.obtem_objeto(com_id)
     if com == None:
-      erros.append(f"O comentário {com_id} não existe")
+      erros.append(f"O comentário \"{com_id}\" não existe")
   
   # Valida a sessão do usuário, obtem o dono, verifica permissão:
   ses_dono = None
   pode_alterar = False
   if ses == None:
-    erros.append("Não pode editar comentários sem fazer login")
+    erros.append("É preciso estar logado para efetuar esta ação")
   elif not obj_sessao.aberta(ses):
-    erros.append("Esta sessão de login já foi encerrada")
+    erros.append("Esta sessão de login foi fechada. É preciso estar logado para efetuar esta ação")
   elif com != None:
     ses_dono = obj_sessao.obtem_dono(ses)
     ses_admin = obj_usuario.eh_administrador(ses_dono)

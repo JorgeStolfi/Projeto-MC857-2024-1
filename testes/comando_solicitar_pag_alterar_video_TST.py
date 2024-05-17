@@ -31,25 +31,55 @@ def testa_processa(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-ses1_id = "S-00000001"
-ses1 = obj_sessao.obtem_objeto(ses1_id)
 
-ses2_id = "S-00000003"
-ses2 = obj_sessao.obtem_objeto(ses2_id)
+# Sessao de usuário  administrador:
+sesA1_id = "S-00000006"
+sesA1 = obj_sessao.obtem_objeto(sesA1_id)
+assert sesA1 != None
+assert obj_sessao.aberta(sesA1)
+assert obj_sessao.de_administrador(sesA1)
+usrA1 = obj_sessao.obtem_dono(sesA1)
+usrA1_id = obj_usuario.obtem_identificador(usrA1)
+assert usrA1_id == "U-00000008"
 
-# Sessão de usuário administrador
-testa_processa("admin",  str, ses1, {'video': 'V-00000001'})
+# Sessão de usuário comum:
+sesC1_id = "S-00000003"
+sesC1 = obj_sessao.obtem_objeto(sesC1_id)
+assert sesC1 != None
+assert obj_sessao.aberta(sesC1)
+assert not obj_sessao.de_administrador(sesC1)
+usrC1 = obj_sessao.obtem_dono(sesC1)
+usrC1_id = obj_usuario.obtem_identificador(usrC1)
+assert usrC1_id == "U-00000002"
 
-# Sessão de criador do vídeo, não necessariamente admin
-testa_processa("criador-do-video",  str, ses1, {'video': 'V-00000001'})
+ses_dic = { 'N': None, 'A': sesA1, 'C': sesC1, }
 
-# Sessão de usuário comum que não criou o vídeo
-testa_processa("comum-nao-criador",  str, ses2, {'video': 'V-00000001'})
+# Um vídeo de {usrC1}:
+vidC1_id = "V-00000002"
+vidC1 = obj_video.obtem_objeto(vidC1_id)
+assert vidC1 != None
+assert obj_video.obtem_autor(vidC1) == usrC1
 
-# Sessão sem usuário logado
-testa_processa("deslogado",  str, None, {'video': 'V-00000001'})
+# Um vídeo de outro usuário, nenhum dos dois:
+vidC2_id = "V-00000004"
+vidC2 = obj_video.obtem_objeto(vidC2_id)
+assert vidC2 != None
+assert obj_video.obtem_autor(vidC2) != usrC1
+assert obj_video.obtem_autor(vidC2) != usrA1
+
+vid_dic = { 'C1': vidC1_id, 'C2': vidC2_id, }
+
+erros_vaz = []
+erros_tri = ["Mensagem UM", "Mensagem DOIS", "Mensagem TRÊS",]
+
+erros_dic = { 'N': None, 'V': erros_vaz, 'E': erros_tri, }
+
+for ses_tag, ses in ses_dic.items():
+  for vid_tag, vid_id in vid_dic.items():
+    rot_teste = f"C_ses{ses_tag}_vid{vid_tag}"
+    testa_processa(rot_teste,  str,  ses, { 'video': vid_id } )
 
 if ok_global:
-  sys.stderr.write("Testes terminados normalmente.\n")
+  sys.stderr.write("Testes terminaram normalmente.\n")
 else:
-  aviso_prog("Alguns testes falharam", True)
+  aviso_prog("Alguns testes falharam.", True)

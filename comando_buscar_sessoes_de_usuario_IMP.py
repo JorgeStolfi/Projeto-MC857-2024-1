@@ -8,43 +8,50 @@ import obj_usuario
 def processa(ses, cmd_args):
   
   # Páginas do sistema deveriam garantir estas condições:
-  assert ses == None or obj_sessao.aberta(ses), "Sessão do comando inválida"
-  assert cmd_args != None and type(cmd_args) is dict, "Argumentos inválidos"
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
+  assert cmd_args != None and type(cmd_args) is dict
   
   erros = []
   
-  # Obtem o usuário {usr_ses} dono da sessão:
-  usr_ses = obj_sessao.obtem_dono(ses); assert usr_ses != None
-  usr_ses_id = obj_usuario.obtem_identificador(usr_ses)
+  # Obtem o usuário {ses_dono} dono da sessão:
+  ses_dono = None
+  para_admin = None
+  if ses == None:
+    erros.append("É preciso estar logado para executar esta busca")
+  elif not obj_sessao.aberta(ses):
+    erros.append("Esta sessão de login foi fechada. É preciso estar logado para executar esta busca")
+  else:
+    ses_dono = obj_sessao.obtem_dono(ses)
+    assert ses_dono != None
+    para_admin = obj_usuario.eh_administrador(ses_dono)
+  ses_dono_id = obj_usuario.obtem_identificador(ses_dono) if ses_dono != None else None
  
-  # Obtém o usuário {dono} a listar e seu identificador {usr_id}:
+  # Obtém o usuário {usr_a_ver} a listar e seu identificador {usr_a_ver_id}:
   if 'usuario' in cmd_args:
     # Alguém quer ver sessões de usuário específico:
-    usr_id = cmd_args['usuario']
-    usr = obj_usuario.obtem_objeto(usr_id)
-    if usr_id != usr_ses_id and not obj_sessao.de_administrador(ses):
+    usr_a_ver_id = cmd_args['usuario']
+    usr_a_ver = obj_usuario.obtem_objeto(usr_a_ver_id)
+    if usr_a_ver_id != ses_dono_id and not obj_sessao.de_administrador(ses):
       # Usuário comum não pode ver sessãoes de outros:
-      erros.append(f"Permissão negada")
+      erros.append(f"Você não tem permissão para executar esta busca")
   else:
-    # Usuário da sessão {ses} uer ver as próprias sessões:
-    usr = usr_ses
-    usr_id = usr_ses_id
+    # Usuário da sessão {ses} quer ver as próprias sessões:
+    usr_a_ver = ses_dono
+    usr_a_ver_id = ses_dono_id
     
-  if usr == None:
-    erros.append(f"Usuario indeterminado")
-    ht_bloco = None
-  else:
-    ses_ids = obj_sessao.busca_por_campo('dono', usr_id)
+  # Se não houve erros, monta a página {pag} com resultado da busca:
+  pag = None  
+  if len(erros) == 0:
+    ses_ids = obj_sessao.busca_por_campo('dono', usr_a_ver_id)
     if len(ses_ids) == 0:
       # Argumentos com erro ou não encontrou nada.
-      erros.append("Usuário não tem nenhuma sessão")
-      ht_bloco = None
+      erros.append(f"O usuário \"{usr_a_ver_id}\" não tem nenhuma sessão")
     else:
       # Encontrou pelo menos uma sessão.  Mostra em forma de tabela:
-      if usr == usr_ses:
+      if usr_a_ver == ses_dono:
         ht_titulo = html_bloco_titulo.gera("Minhas sessões")
       else:
-        ht_titulo = html_bloco_titulo.gera(f"Sessões do usuário {usr_id}")
+        ht_titulo = html_bloco_titulo.gera(f"Sessões do usuário {usr_a_ver_id}")
       bt_ver = True
       bt_fechar = True
       mostrar_usr = False # Não mostrar a coluna Usuário para o comando buscar sessões de usuário.
@@ -52,9 +59,9 @@ def processa(ses, cmd_args):
       ht_bloco = \
         ht_titulo + "<br/>\n" + \
         ht_tabela
+      pag = html_pag_generica.gera(ses, ht_bloco, erros)
 
-  if ht_bloco == None:
-    pag = html_pag_mensagem_de_erro(ses, erros)
-  else:
-    pag = html_pag_generica.gera(ses, ht_bloco, erros)
+  if pag == None:
+    pag = html_pag_mensagem_de_erro.gera(ses, erros)
+    
   return pag
