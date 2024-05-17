@@ -218,37 +218,36 @@ def cria_testes(verb):
   # Identificadores esperados e atributos dos videos de teste:
   lista_ats = \
     [
-      ( "V-00000001", "U-00000001", "Ejetar de verdade",           3.0, ),
-      ( "V-00000002", "U-00000002", "Fukushima #3",                3.6, ),
-      ( "V-00000003", "U-00000001", "Pipoca pipocando",            1.0, ),
-      ( "V-00000004", "U-00000004", "Vírus do POVRAY",             1.4, ),
-      ( "V-00000005", "U-00000006", "Eletrostática",               1.7, ),
-      ( "V-00000006", "U-00000004", "Apocalipsevirus",             1.5, ),
-      ( "V-00000007", "U-00000002", "Libração da Lua",             2.1, ),
-      ( "V-00000008", "U-00000005", "Árvore galhofeira",           0.5, ),
-      ( "V-00000009", "U-00000005", "Formigando",                  1.8, ),
-      ( "V-00000010", "U-00000005", "Balões errantes",             3.1, ),
-      ( "V-00000011", "U-00000002", "Pesca aérea",                 3.8, ),        
-      ( "V-00000012", "U-00000001", "Testes nucleares 1952-1957",  3.9, ),
-      ( "V-00000013", "U-00000001", "Batata-doce-roxa",            2.1, ),
-      ( "V-00000014", "U-00000006", "Moendo isopor",               2.7, ),
-      ( "V-00000015", "U-00000006", "Isopor moído",                2.8, ),
-      ( "V-00000016", "U-00000006", "Octopus vulgaris",            2.8, ),
-      ( "V-00000017", "U-00000006", "Engenho engenhoso",           2.8, ),
-      ( "V-00000018", "U-00000006", "Teino de sumo",               2.8, ),
-      ( "V-00000019", "U-00000006", "Beroe abyssicola",            2.8, ),
-      ( "V-00000020", "U-00000006", "Stentor muelleri",            2.8, ),
-      ( "V-00000021", "U-00000006", "Huygens descendo em Titã",    2.8, ),
-      ( "V-00000022", "U-00000006", "Nadando com orcas",           2.8, ),
-      ( "V-00000023", "U-00000006", "Erupção do Taal",             2.8, ),
-      ( "V-00000024", "U-00000006", "Formiga vermelha",            2.8, ),
+      ( "V-00000001", "U-00000001", "Ejetar de verdade",           3.0, False,),
+      ( "V-00000002", "U-00000002", "Fukushima #3",                3.6, False,),
+      ( "V-00000003", "U-00000001", "Pipoca pipocando",            1.0, False,),
+      ( "V-00000004", "U-00000004", "Vírus do POVRAY",             1.4, False,),
+      ( "V-00000005", "U-00000006", "Eletrostática",               1.7, False,),
+      ( "V-00000006", "U-00000004", "Apocalipsevirus",             1.5, False,),
+      ( "V-00000007", "U-00000002", "Libração da Lua",             2.1, False,),
+      ( "V-00000008", "U-00000005", "Árvore galhofeira",           0.5, False,),
+      ( "V-00000009", "U-00000005", "Formigando",                  1.8, False,),
+      ( "V-00000010", "U-00000005", "Balões errantes",             3.1, False,),
+      ( "V-00000011", "U-00000002", "Pesca aérea",                 3.8, True,),        
+      ( "V-00000012", "U-00000001", "Testes nucleares 1952-1957",  3.9, True,),
+      ( "V-00000013", "U-00000001", "Batata-doce-roxa",            2.1, True,),
+      ( "V-00000014", "U-00000006", "Moendo isopor",               2.7, False,),
+      ( "V-00000015", "U-00000006", "Isopor moído",                2.8, False,),
+      ( "V-00000016", "U-00000006", "Octopus vulgaris",            2.8, False,),
+      ( "V-00000017", "U-00000006", "Engenho engenhoso",           2.8, False,),
+      ( "V-00000018", "U-00000006", "Teino de sumo",               2.8, False,),
+      ( "V-00000019", "U-00000006", "Beroe abyssicola",            2.8, False,),
+      ( "V-00000020", "U-00000006", "Stentor muelleri",            2.8, False,),
+      ( "V-00000021", "U-00000006", "Huygens descendo em Titã",    2.8, False,),
+      ( "V-00000022", "U-00000006", "Nadando com orcas",           2.8, False,),
+      ( "V-00000023", "U-00000006", "Erupção do Taal",             2.8, False,),
+      ( "V-00000024", "U-00000006", "Formiga vermelha",            2.8, False,),
     ] 
-  for vid_id_esp, autor_id, titulo, nota in lista_ats:
+  for vid_id_esp, autor_id, titulo, nota, bloqueado in lista_ats:
     autor = obj_usuario.obtem_objeto(autor_id)
     assert autor != None and type(autor) is obj_usuario.Classe
     dia = vid_id_esp[-2:]
     data = "2024-01-" + dia + " 08:33:25 UTC"
-    bloqueado = False
     atrs_cria = {
         'autor': autor,
         'titulo': titulo,
