@@ -1,6 +1,6 @@
 import html_form_postar_alterar_comentario_IMP
 
-def gera(com_id, atrs, ed_nota):
+def gera(com_id, atrs, ed_nota, ed_voto):
   """
   Retorna um elemento "<form>...</form>" adequado para
   postar um novo comentário ou alterar os dados de um comentário existente.
@@ -12,6 +12,9 @@ def gera(com_id, atrs, ed_nota):
   identificador é {com_id}.
   
   O parâmetro booleano {ed_nota} diz se o atributo {nota} deve ser
+  editável.
+
+  O parâmetro booleano {ed_voto} diz se o atributo {voto} deve ser
   editável.
   
   O formulário terá campos editáveis com os atributos do comentário. O
@@ -35,4 +38,4 @@ def gera(com_id, atrs, ed_nota):
   com chave 'comentário' mais os valores dos atributos editáveis
   obtidos de {atrs} mais as alterações feitas pelo usuário.
   """
-  return html_form_postar_alterar_comentario_IMP.gera(com_id, atrs, ed_nota)
+  return html_form_postar_alterar_comentario_IMP.gera(com_id, atrs, ed_nota, ed_voto)
