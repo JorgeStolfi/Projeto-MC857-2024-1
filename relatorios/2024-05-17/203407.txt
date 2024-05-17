@@ -12,6 +12,8 @@ os padrões das últimas aulas.
 Como a implementação de comando_alterar_comentario já validava se o usuário era um administrador, precisei apenas
 adicionar um "else" com a chamada da função para alterar o atributo "nota" do comentário.
 
-Adicionei o novo caso de testes T5 em comando_alterar_comentario_TST, testando mudar a nota para 2,5. Funcionou corretamente.
-Adicionei também o caso T6, que tenta alterar "nota" com usuário sem permissão de administrador. Funcionou corretamente,
-levantando uma falha esperada e não alterando o objeto.
+Adicionei o novo caso de testes T5 em comando_alterar_comentario_TST, testando mudar a nota para 2,5. Utilizando
+o mesmo usuário que já havia no teste (adiministrador). Funcionou corretamente.
+
+Adicionei também o caso T6, que tenta alterar "nota" a partir de uma nova sessão, onde o usuário não tem permissão 
+de administrador. Funcionou corretamente, levantando uma falha esperada e não alterando o objeto.
