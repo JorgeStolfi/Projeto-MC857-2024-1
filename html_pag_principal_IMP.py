@@ -1,3 +1,4 @@
+import comando_ver_grade_de_videos
 import obj_sessao
 import obj_usuario
 import html_pag_generica
@@ -19,7 +20,7 @@ def gera(ses, erros):
   else:
     bloco_texto1 = ""
 
-  bloco_video = html_elem_div.gera(None, html_elem_video.gera("V-00000001", 400))
+  bloco_video = html_elem_div.gera(None, comando_ver_grade_de_videos.processa(ses, {}))
 
   conteudo = bloco_texto1 + bloco_video
   pagina = html_pag_generica.gera(ses, conteudo, erros)
