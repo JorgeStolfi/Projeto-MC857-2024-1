@@ -5,14 +5,14 @@ import html_elem_item_de_resumo
 import sys
 import html_elem_button_simples
 
-def gera(com, mostra_autor, mostra_video, mostra_pai):
+def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
   
   com_id = obj_comentario.obtem_identificador(com) if com != None else None
   atrs = obj_comentario.obtem_atributos(com) if com != None else None
 
   itens_resumo = []
   
-  colunas = [ 'comentario', 'video', 'autor',  'pai', 'data',  'texto' ]
+  colunas = [ 'comentario', 'video', 'autor',  'pai', 'data',  'texto', 'nota' ]
   for chave in colunas:
     if chave == 'comentario':
      mostra = True
@@ -30,6 +30,9 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
     elif chave == 'autor':
       mostra = mostra_autor;
       texto = obj_usuario.obtem_identificador(atrs['autor']) if com != None else "Autor"
+    elif chave == 'nota':
+      mostra = mostra_nota;
+      texto = obj_usuario.obtem_identificador(atrs['nota']) if com != None else "nota"
     else:
       mostra = True
       texto = (str(atrs[chave]) if com != None else chave.capitalize()).replace("\n", "\\n")[:50]
