@@ -1,0 +1,8 @@
+Relatorio do integrante 194347 
+
+Apos ser solicitado adicionar no {html_linha_resumo_de_comentario.gera} a demonstração do campo "nota" alem dos outros campos ja presentes e após entender a modificação que fora feito 
+a classe {obj_comentario.Classe} e entender oq ja estava presente em html_linha_resumo_de_comentario_IMP fiz alteraçoes adcionado o campo em "html_linha_resumo_de_comentario.py" na hora 
+que declara e retorna a função o campo "mostra_nota" da emsma forma quando declara a função no html_linha_resumo_de_comentario_IMP.py e por fim adicionei o elif para mostra o campo nota
+terminando a tarefa solicitada,
+
+Atenciosamente Arimã Batista
