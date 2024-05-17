@@ -20,16 +20,22 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
   
   com_id = obj_comentario.obtem_identificador(com)
   com_atrs = obj_comentario.obtem_atributos(com)
-  
-  estilo_texto = html_estilo_texto.gera("18px", "medium", "#000000", None, None)
-  estilo_texto_div = f"display:block; width: {largura}px; word-wrap:break-word; padding: 5px 0px 10px 10px;"
-  
+
   ht_cabeca = html_bloco_cabecalho_de_comentario.gera(com_id, com_atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai)
   
   # ----------------------------------------------------------------------
   # Texto do comentário:
-  
-  texto = com_atrs['texto']
+
+  estilo_texto_div = f"display:block; width: {largura}px; word-wrap:break-word; padding: 5px 0px 10px 10px;"
+
+  # Caso comentario tenha sido bloqueado, não usar o texto do comentário
+  if com_atrs['bloqueado']:
+    texto = "[BLOQUEADO]"
+    estilo_texto = html_estilo_texto.gera("18px", "bold", "#FF0000", None, None)
+  else:
+    texto = com_atrs['texto']
+    estilo_texto = html_estilo_texto.gera("18px", "medium", "#000000", None, None)
+
   ht_texto = html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
 
   # ----------------------------------------------------------------------

@@ -1,0 +1,17 @@
+Tarefa de hoje:
+
+164210 A classe {obj_comentario.Classe} agora tem um campo 'bloqueado'.
+Modifique {html_pag_ver_comentario.gera} (e o que mais for preciso) para
+levar em conta esse atributo. Especificamente, se for {True}, o 'texto' do
+comentário deve ser substituído por "[BLOQUEADO]", se possível em vermelho.
+
+O que fiz:
+
+Como o arquivo `html_pag_ver_comentario` não mexe diretamente com os atributos de
+`obj_comentario`, mas chama `html_bloco_comentario`, editei em `html_bloco_comentario`
+o trecho onde é atribuido o texto e o estilo do texto do comentário de modo a verificar
+o atributo `bloqueado` e no caso de ser {True} não utilizar o texto de {com} e usar um
+estilo com a fonte em vermelho em negrito.
+
+Também editei o `obj_comentario` localmente de modo a bloquear todos os comentários para testar se
+estava funcionando de acordo. 
