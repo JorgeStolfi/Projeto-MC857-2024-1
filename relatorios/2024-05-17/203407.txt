@@ -3,7 +3,15 @@ A classe {obj_comentario.Classe} agora tem um campo 'nota'.
 Modifique {html_pag_alterar_comentario.gera} e {comando_alterar_comentario.processa} 
 (e o que mais for preciso) para alterar esse campo, se e somente se o dono da sessão corrente for um administrador.
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Relatório:
 Comecei criando minha branch (203407) e adicionando a pasta de relatório junto com este arquivo, seguindo
 os padrões das últimas aulas.
 
+Como a implementação de comando_alterar_comentario já validava se o usuário era um administrador, precisei apenas
+adicionar um "else" com a chamada da função para alterar o atributo "nota" do comentário.
+
+Adicionei o novo caso de testes T5 em comando_alterar_comentario_TST, testando mudar a nota para 2,5. Funcionou corretamente.
+Adicionei também o caso T6, que tenta alterar "nota" com usuário sem permissão de administrador. Funcionou corretamente,
+levantando uma falha esperada e não alterando o objeto.
