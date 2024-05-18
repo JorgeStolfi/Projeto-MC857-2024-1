@@ -51,6 +51,14 @@ def processa(ses, cmd_args):
       else:
         # Transforma em padrão para {busca_por_campos}:
         atrs_busca['texto'] = f"~%{val}%"
+    elif chave == 'bloqueado':
+      # Valor 'on' significa "só abertas", 'off' significa "qualquer"
+      if val == 'True':
+        atrs_busca[chave] = True
+      elif val == 'False':
+        atrs_busca[chave] = False
+      else:
+        item_erros = [ f"O valor do atributo '{chave}' = \"{val}\" é inválido" ]
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
