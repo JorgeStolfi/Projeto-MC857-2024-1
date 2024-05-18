@@ -1,0 +1,40 @@
+
+Essa foi a tarefa mais desafiadora até agora, fiquei 5h tentando resolvê-la. Primeiramente adicionei a checkbox 
+no html_form_buscar_videos_IMP, tranquilo. O grande problema foi que um video ser ou não bloqueado, é uma condição
+booleana, que é bem representada no formulario por uma checkbox. Ou seja, se ela foi
+marcada, queremos procurar por videos bloqueados, se não, queremos procurar por videos nao bloqueados. No entanto, no
+html quando uma checkbox não está marcada, o valor relativo a checkbox não é enviado no conteudo do respectivo formulário.
+
+Quotes:
+Note: If a checkbox is unchecked when its form is submitted, neither the name nor the value is submitted to the server.
+There is no HTML-only method of representing a checkbox's unchecked state (e.g. value=unchecked).
+If you wanted to submit a default value for the checkbox when it is unchecked, you could include JavaScript to create
+a <input type="hidden"> within the form with a value indicating an unchecked state.
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox
+
+Dessa maneira, há diversos workarounds para resolver esse problema, como pode ser visto em:
+https://stackoverflow.com/questions/1809494/post-unchecked-html-checkboxes
+
+No entanto, o mais comum que deveria ser enviar um outro elemento html hidden de mesmo nome gera o problema em que 
+o servidor recebe valores para um unico argumento. Como relatado no comentário do slack overflow:
+
+Quotes:
+It should be noted that if you check the box, the browser will send both the hidden and checkbox values. 
+This solution then relies on the server's handling of the post variable with these 2 values.
+If it only takes the last value (e.g. PHP), your code will work as expected. 
+However, some servers handle this differently, Some pick the first value, while others place both values in a list/array.
+
+Isso faz com que seja necessário lidar do lado do server, mas como está estruturado nosso modulo, não era interessante
+lidar com uma lista de valores, e também não fazia muito sentido.
+
+Dessa maneira, após muito pensar, fui pelo caminho de resolver esse problema de não receber o valor no servidor quando
+a checkbox não está marcada do lado do servidor. Dessa maneira, quando não recebe o parametro de bloqueado, setamos
+o valor como False.
+
+Alem disso lidei com o valor da checkbox que chegava do lado do servidor, pegando o valor que recebia, validando e depois convertendo com o
+util_booleano.converter.
+
+Outra coisa que fiz foi adicionar um parametro de bloqueado(Boolean) na lista_atrs de um video em obj_video_IMP. Dessa
+maneira, videos bloqueados já estao presentes na inicializacao do server, facilitando testes e representando melhor
+os diversos tipos de videos.

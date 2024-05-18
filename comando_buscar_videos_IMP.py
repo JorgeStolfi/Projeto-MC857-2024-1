@@ -10,6 +10,7 @@ import html_bloco_titulo
 import util_identificador
 import util_data
 import util_dict
+import util_booleano
 from util_erros import ErroAtrib
 
 def processa(ses, cmd_args):
@@ -43,6 +44,9 @@ def processa(ses, cmd_args):
     elif chave == 'data' or chave == 'data_min' or chave == 'data_max':
       item_erros = util_data.valida(chave, val, nulo_ok = False)
       if len(item_erros) == 0: atrs_busca[chave] = val
+    elif chave == 'bloqueado':
+      item_erros = util_booleano.valida(chave, val, nulo_ok = False)
+      if len(item_erros) == 0: atrs_busca[chave] = util_booleano.converte(val)
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
@@ -64,8 +68,10 @@ def processa(ses, cmd_args):
         else:
           vid_ids = [ vid_id ]
       else:
+        if "bloqueado" not in cmd_args:
+          atrs_busca["bloqueado"] = False
         # Busca por campos aproximados:
-        vid_ids = obj_video.busca_por_campos(cmd_args, unico = False)
+        vid_ids = obj_video.busca_por_campos(atrs_busca, unico = False)
 
       if len(vid_ids) == 0:
         # Não encontrou nenhum usuário:
