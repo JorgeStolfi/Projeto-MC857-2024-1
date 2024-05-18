@@ -3,6 +3,7 @@ import html_pag_mensagem_de_erro
 import obj_sessao
 import obj_video
 import obj_comentario
+import obj_video
 
 def processa(ses, cmd_args):
 
@@ -14,6 +15,8 @@ def processa(ses, cmd_args):
   # Obtém o identificador do vídeo ou comentário a ver:
   vid_id = cmd_args.pop('video', None)
   com_id = cmd_args.pop('comentario', None)
+  max_coms = cmd_args.pop('max_coms', 0)
+  max_nivels = cmd_args.pop('max_nivels', 0)
   
   if vid_id == None and com_id == None:
     erros.append("O identificador do video ou comentário raiz não foi especificado")
@@ -27,7 +30,7 @@ def processa(ses, cmd_args):
         erros.append(f"O vídeo \"{vid_id}\" não existe")
       else:
         titulo = f"Comentários do vídeo {vid_id}"
-        raizes = obj_video.busca_por_campos({ 'video': vid, 'pai': None }, unico = False)
+        raizes = obj_comentario.busca_por_video(vid_id, {False})
     elif com_id != None:
       com = obj_comentario.obtem_objeto(com_id)
       if com == None:
@@ -40,7 +43,7 @@ def processa(ses, cmd_args):
       assert False
       
   if len(erros) == 0:
-    flor = obj_comentario.obtem_floresta(raizes)
+    flor = obj_comentario.obtem_conversa(raizes, max_coms, max_nivels)
     pag = html_pag_ver_conversa.gera(ses, titulo, flor, erros)
   else:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
