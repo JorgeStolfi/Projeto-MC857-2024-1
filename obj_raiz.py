@@ -103,7 +103,7 @@ def obtem_objeto(id_obj, tabela, def_obj_mem):
   Se {id_obj} é {None} ou tal objeto não existe, devolve {None}."""
   return obj_raiz_IMP.obtem_objeto(id_obj, tabela, def_obj_mem)
 
-def busca_por_campo(chave, val, unico, tabela):
+def busca_por_campo(chave, val, unico, tabela, nomes_cols_ord=[], ord=None, limite=None):
   """Procura objetos cujo atributo {chave} tem valor {val}. 
   
   Se {unico} for {False}, devolve uma lista, possivelmente vazia,
@@ -112,7 +112,7 @@ def busca_por_campo(chave, val, unico, tabela):
   Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
   ou o identificador de um objeto (NÃO o objeto, NÃO uma lista) se 
   encontrar apenas um. Em qualquer outro caso, aborta o programa com erro."""
-  return obj_raiz_IMP.busca_por_campo(chave, val, unico, tabela)
+  return obj_raiz_IMP.busca_por_campo(chave, val, unico, tabela, nomes_cols_ord, ord, limite)
 
 def busca_por_campos(args, unico, tabela):
   """

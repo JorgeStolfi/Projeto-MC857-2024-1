@@ -1,0 +1,14 @@
+Primeiro, adicionei a possibilidade de fazer consultas ordenando por um ou mais campos, em ordem crescente ou decrescente e aplicando um limite. Isso foi feito criando 3 atributos nomes_cols_ord, ord, limite e adicionando eles em:
+    - obj_raiz.busca_por_campo
+    - db_obj_tabela.busca_por_campo
+    - db_base_sql.executa_comando_SELECT
+Os parâmetros foram criados com valores "default" para não quebrar as chamadas feitas atualmente.
+Além disso, no db_base_sql.executa_comando_SELECT, a lógica de ordenação e limite foi feita usando LIMT e ORDER BY do SQL.
+
+Em db_obj_tabela_IMP.busca_por_campos_termo_nulo fiz uma pequena alteração para permitir consultas com "WHERE NULL IS NULL", ou seja, consultas sem condições.
+
+Depois disso, no em obj_video.obtem_amostra eu adicionei o parâmetro "ordem", mantendo o comportamento atual de obter vídeos aleatórios caso o valor seja 0 e obtendo vídeos ordenados através de obj_raiz.busca_por_campo, caso o valor seja 1 ou -1.
+
+Alterei o comando_ver_grade_de_videos para obter o argumento "ordem" ou usar 0 caso vazio, e passar para a chamada de obj_video.obtem_amostra.
+
+Por fim, alterei html_bloco_grade_de_videos.gera para adicionar os botões "Melhores", "Aleatórios", e "Piores", disparando os comandos adequados 

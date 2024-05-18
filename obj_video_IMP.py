@@ -190,15 +190,23 @@ def busca_por_campos(args, unico):
   global tabela
   return obj_raiz.busca_por_campos(args, unico, tabela)
  
-def obtem_amostra(n):
-  ult_vid_id = obj_video.ultimo_identificador()
-  ult_vid_index = int(ult_vid_id[2:])
-  sys.stderr.write(f"  last video in system = {ult_vid_id}\n")
-  if n > ult_vid_index:
-    raise ErroAtrib(f"Número pedido = {n} excessivo, máximo {ult_vid_index}")
-  # Lista de vídeos aleatórios:
-  res_indices = random.sample(range(1, ult_vid_index + 1), n)
-  res_ids = list(map(lambda index: f"V-{index:08d}", res_indices))
+def obtem_amostra(n, ordem):
+  global tabela
+
+  if ordem == 0: # Lista de vídeos aleatórios:
+    ult_vid_id = obj_video.ultimo_identificador()
+    ult_vid_index = int(ult_vid_id[2:])
+
+    if n > ult_vid_index:
+     raise ErroAtrib(f"Número pedido = {n} excessivo, máximo {ult_vid_index}")
+  
+    sys.stderr.write(f"  last video in system = {ult_vid_id}\n")
+
+    res_indices = random.sample(range(1, ult_vid_index + 1), n)
+    res_ids = list(map(lambda index: f"V-{index:08d}", res_indices))
+  else: # Lista de vídeos ordenada:
+    res_ids = obj_raiz.busca_por_campo(None, None, False, tabela, ["nota"], ordem, 12)
+
   assert len(res_ids) == n
   
   return res_ids
