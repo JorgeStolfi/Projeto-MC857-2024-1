@@ -55,7 +55,8 @@ def processa(ses, cmd_args):
   if len(erros) == 0:
     # Verifica se o usuário corrente {ses_dono} pode alterar este comentário:
     autor = com_atrs['autor']
-    editavel = para_admin or autor == ses_dono
+    bloqueado = com_atrs['bloqueado']
+    editavel = para_admin or (autor == ses_dono and not bloqueado)
     if not editavel:
       erros.append(f"Você não tem permissão para alterar este comentário")
 
