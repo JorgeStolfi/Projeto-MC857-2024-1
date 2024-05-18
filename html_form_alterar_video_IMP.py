@@ -8,12 +8,12 @@ import html_elem_button_submit
 import html_elem_video
 import util_dict
 
-def gera(vid_id, atrs_mod, ed_nota):
+def gera(vid_id, atrs_mod, eh_adm):
 
   # Validação de argumentos (paranóia):
   assert vid_id != None and type(vid_id) is str
   assert atrs_mod == None or type(atrs_mod) is dict
-  assert type(ed_nota) is bool
+  assert type(eh_adm) is bool
   
   if atrs_mod == None: atrs_mod = { }
 
@@ -41,14 +41,15 @@ def gera(vid_id, atrs_mod, ed_nota):
   dados_linhas.append( ( "Título",  "textarea",  'titulo',  True,  None, ) )
 
   # Nota opcionalmente editável:
-  if ed_nota:
+  if eh_adm:
     dados_linhas.append( ( "Nota",  "number",  'nota', True,  "0.00 a 4.00", ) )
+    dados_linhas.append( ( "Bloqueado",  "checkbox",  'bloqueado', True,  None, ) )
  
   ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_mod)
 
   ht_rodape = html_bloco_rodape_de_video.gera \
     ( vid_id, vid_atrs, largura = 600,
-      mostra_nota = (not ed_nota), mostra_dims = True
+      mostra_nota = (not eh_adm), mostra_dims = True
     )
 
   # Botões do formulário:
