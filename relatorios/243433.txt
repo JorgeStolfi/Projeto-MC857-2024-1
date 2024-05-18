@@ -38,3 +38,5 @@ util_booleano.converter.
 Outra coisa que fiz foi adicionar um parametro de bloqueado(Boolean) na lista_atrs de um video em obj_video_IMP. Dessa
 maneira, videos bloqueados já estao presentes na inicializacao do server, facilitando testes e representando melhor
 os diversos tipos de videos.
+
+E por ultimo, validei o funcionamento da busca no site e no final estava funcionando corretamente.
