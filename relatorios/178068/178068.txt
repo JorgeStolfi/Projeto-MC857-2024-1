@@ -1,0 +1,15 @@
+Fiquei responsável por:
+Defina um módulo {html_elem_link_text} com função {gera(texto)} que gera um link (elemento "{texto}") para um comando dado com argumentos dados, mostrando o texto sublinhado. Use essa função em {html_linha_resumo_de_{XXX} (XXX = sessao, usuario, video, comentario) nas colunas que são identificadores, de modo que clicar em um identificador (como "V-00000012") emite o comando "ver" correspondente (no caso, "ver_video?video=V-00000012").
+
+Temos 4 identificadores diferentes na arquitetura do projeto, presentes nos arquivos {html_linha_resumo_de_{XXX} (XXX = sessao, usuario, video, comentario).
+(S-xxx) sessao -> ver_sessao
+(U-xxx) usuario -> ver_usuario
+(V-xxx) video -> ver_video
+(C-xxx) comentario -> ver_comentario
+
+O novo módulo html_elem_link_text precisa transformar o que ele recebe, que será o identificador do conteúdo para cada módulo acima, em um link em HTML com o comando HTTP respectivo e o texto do identificador.
+Para isso, a função gera(texto) do novo módulo precisa saber qual identificador está sendo passado.
+Pensei em fazer como já fazemos nos botões, passando um argumento indicando a url/comando, caso a caso.
+Escolhi fazer dessa forma para manter um padrão de projeto.
+A funcionalidade de montar o comando HTTP como a URL do link também foi implementada como no botão "Ver", com as mesmas funções de checagem e montagem.
+Apliquei o módulo html_elem_link_text.gera em todos os identificadores dos módulos {html_linha_resumo_de_{XXX} (XXX = sessao, usuario, video, comentario), passando cada parâmetro necessário.
