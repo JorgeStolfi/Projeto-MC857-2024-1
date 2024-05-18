@@ -52,8 +52,8 @@ def gera(vid_id, atrs_mod, ed_nota):
     )
 
   # Botões do formulário:
-  ht_bt_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_video', None, '#55ee55')
-  ht_bt_cancel = html_elem_button_simples.gera("Cancelar", "pag_principal", None, "#ee5555")
+  ht_bt_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_video', None, None)
+  ht_bt_cancel = html_elem_button_simples.gera("Cancelar", "pag_principal", None, None)
 
   ht_conteudo = \
     ht_cabeca + "\n" + \

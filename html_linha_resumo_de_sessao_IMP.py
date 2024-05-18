@@ -42,12 +42,12 @@ def gera(ses, bt_ver, bt_fechar, mostra_dono):
     args_bt = { 'sessao': ses_id } # Argumentos para os botões.
 
     if bt_ver:
-      bt_ver = html_elem_button_simples.gera("Ver", 'ver_sessao', args_bt, '#eeee55')
+      bt_ver = html_elem_button_simples.gera("Ver", 'ver_sessao', args_bt, None)
       ht_campos.append("<td>" + bt_ver + "</td>")
 
     if bt_fechar:
       if atrs['aberta']:
-        bt_fechar = html_elem_button_simples.gera("Fechar", 'fechar_sessao', args_bt, '#FF7700')
+        bt_fechar = html_elem_button_simples.gera("Fechar", 'fechar_sessao', args_bt, None)
       else:
         bt_fechar = " "
       ht_campos.append("<td>" + bt_fechar + "</td>")
