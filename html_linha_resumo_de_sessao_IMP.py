@@ -2,6 +2,7 @@ import obj_sessao
 import obj_usuario
 import html_elem_item_de_resumo
 import html_elem_button_simples
+import html_elem_link_text
 
 import sys
 
@@ -17,10 +18,10 @@ def gera(ses, bt_ver, bt_fechar, mostra_dono):
   for chave in colunas:
     if chave == 'sessao':
       mostra = True
-      texto = ses_id if ses != None else "Sessão"
+      texto = html_elem_link_text.gera(ses_id, "ver_sessao", { 'sessao': ses_id }) if ses != None else "Sessão"
     elif chave == 'dono':
       mostra = mostra_dono
-      texto = obj_usuario.obtem_identificador(atrs['dono']) if ses != None else "Dono"
+      texto = html_elem_link_text.gera(obj_usuario.obtem_identificador(atrs['dono']), "ver_usuario", { 'usuario': obj_usuario.obtem_identificador(atrs['dono']) }) if ses != None else "Dono"
     elif chave == 'aberta':
       mostra = True
       texto = ("Aberta" if atrs['aberta'] else "Fechada") if ses != None else "Estado"
