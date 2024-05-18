@@ -204,7 +204,11 @@ def obtem_amostra(n):
   return res_ids
   
 def recalcula_nota(vid):
-  sys.stderr.write("!!! função {obj_video.recalcula_nota} ainda não foi implementada !!!\n")
+  comVideo = vid
+  notaOriginal = obj_video.obtem_atributo(vid, "nota")
+  #votoOriginal = obj_video.obtem_atributo(vid, "voto")
+  ##sys.stderr.write("!!! função {obj_video.recalcula_nota} ainda não foi implementada !!!\n")
+  #nota = (2.0*4.0 + votoOriginal*notaOriginal**2)/(4.0+notaOriginal**2)
   nota = 2.0
   return nota
 
