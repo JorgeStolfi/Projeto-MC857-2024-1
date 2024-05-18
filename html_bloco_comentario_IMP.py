@@ -7,7 +7,7 @@ import html_elem_div
 import html_elem_span
 import html_estilo_texto
 
-def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar):
+def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar, bt_calcnota):
 
   # Validação de tipos (paranóia):
   assert com != None and isinstance(com, obj_comentario.Classe)
@@ -17,6 +17,7 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
   assert isinstance(bt_conversa, bool)
   assert isinstance(bt_responder, bool)
   assert isinstance(bt_editar, bool)
+  assert isinstance(bt_calcnota, bool)
   
   com_id = obj_comentario.obtem_identificador(com)
   com_atrs = obj_comentario.obtem_atributos(com)
@@ -49,10 +50,13 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
   if bt_editar:
     ht_bt_alterar = html_elem_button_simples.gera(f"Editar", "solicitar_pag_alterar_comentario", cmd_args, '#eeee55')
     ht_botoes += ht_bt_alterar
+
+  # Verifica se o usuário é administrador e se bt_calcnota é True
+  usuario_atual = obj_usuario.obtem_objeto(com_atrs['usuario_id'])
+  if bt_calcnota and obj_usuario.eh_administrador(usuario_atual):
+    ht_bt_recalcular = html_elem_button_simples.gera("Recalcular nota", "recalcular_nota", cmd_args, '#ff5555')
+    ht_botoes += ht_bt_recalcular
     
-  ht_bloco = \
-    ht_cabeca + \
-    ht_texto + \
-    ht_botoes
+  ht_bloco = ht_cabeca + ht_texto + ht_botoes
 
   return ht_bloco
