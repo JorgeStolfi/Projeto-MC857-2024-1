@@ -1,0 +1,1 @@
+Implementei na tela de html_lista_resumo_de_comentario o atributo novo "BLOQUEADO", e atualizei os testes para usar ele.

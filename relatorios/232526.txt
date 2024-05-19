@@ -1,0 +1,5 @@
+Having in mind tests for similar modules, specially for comando_buscar_usuarios, tests for comando_buscar_sessoes were implemented, executed and manually checked to have given the expected results. To even do so, I had to fix several errors in comando_buscar_sessoes_IMP.
+
+A test for every given field and for searching while not logged in was added, but not for every possibility of failure and combination of fields, following the pattern in similar modules as instructed.
+
+That being said, modules reated to obj_sessao seem to be in active development, with the interface having been changed recently, so the names of the fields might require change in the future, such as data_min/max being changed to criacao_mix/max (not changed atm, trying to use them as such returns errors).

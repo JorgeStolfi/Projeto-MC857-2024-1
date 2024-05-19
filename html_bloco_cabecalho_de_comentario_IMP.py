@@ -4,6 +4,7 @@ import obj_comentario
 import html_elem_div
 import html_elem_span
 import html_estilo_texto
+import html_estilo_div_dados
 
 def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai):
 
@@ -17,7 +18,10 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
   assert isinstance(mostra_pai, bool)
   
   estilo_atr = html_estilo_texto.gera("10px", "medium", "#222222", None, None)
-  estilo_cabec_div = f"display:block; width: {largura}px; word-wrap:break-word; padding: 10px 0px 5px 0px; line-height: 85%;"
+
+  width = f"{largura}px"
+  padding = ( "10px", "0px", "5px", "0px" )
+  estilo_cabec_div = html_estilo_div_dados.gera("block", width, "break-word", padding, "85%")
    
   spacer = "&nbsp;&nbsp;"
   

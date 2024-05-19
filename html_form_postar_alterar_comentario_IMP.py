@@ -6,7 +6,7 @@ import html_elem_input
 import html_elem_button_simples
 import html_elem_button_submit
 
-def gera(com_id, atrs, ed_nota):
+def gera(com_id, atrs, ed_nota, ed_voto):
 
   # Validação de argumentos (paranóia):
   assert com_id == None or isinstance(com_id, str)
@@ -40,19 +40,28 @@ def gera(com_id, atrs, ed_nota):
       html_elem_input.gera("number", 'nota', 'nota', com_nota, 0.0, True, None, None, True )
   else:
     ht_nota = ""
+
+  # Voto opcionalmente editável:
+  if ed_voto:
+    ht_voto = "<br/>" + \
+      html_elem_label.gera("Voto:", " ") + \
+      html_elem_input.gera("number", 'voto', 'voto', 0, 0, True, None, None, False )
+  else:
+    ht_voto = ""
  
   # Botões 'Confirmar' e 'Cancelar':
   if com_id == None:
-    ht_submit = html_elem_button_submit.gera("Postar comentário", "postar_comentario", None, '#55ee55')
+    ht_submit = html_elem_button_submit.gera("Postar comentário", "postar_comentario", None, None)
   else:
     cmd_args = { 'comentario': com_id }
-    ht_submit = html_elem_button_submit.gera("Salvar alterações", "alterar_comentario", cmd_args, '#55ee55')
-  ht_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, '#ee5555')
+    ht_submit = html_elem_button_submit.gera("Salvar alterações", "alterar_comentario", cmd_args, None)
+  ht_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, None)
   
   ht_form_conteudo = \
     ht_cabeca + \
     ht_texto + \
     ht_nota + "<br/>" + \
+    ht_voto + "<br/>" + \
     ht_submit + \
     ht_cancel
 

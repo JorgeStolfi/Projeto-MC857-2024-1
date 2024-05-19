@@ -28,7 +28,7 @@ def testa_gera(rot_teste, res_esp, *args):
 def cria_tabela(estilo):
   val = [None]*3
   val[0] = html_elem_input.gera("text", 'veiculo', "ident0", None, None, True, "Me edite!", None, False)
-  val[1] = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
+  val[1] = html_elem_button_simples.gera("OK", 'pag_principal', None, None)
   val[2] = html_elem_paragraph.gera(None, "As armas e os barões assinalados<br/>Que da ocidental praia lusitana")
 
   linhas = []

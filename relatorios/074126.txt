@@ -1,0 +1,6 @@
+Laborátório um tanto mais desafiador.
+Aprendi a usar o método obtem_atributo.
+Implementei um dos métodos propostos de forma incompleta. def recalcula_nota(com).
+Seria necessário usar um for para fazer a média ponderada das notas e votos das respostas ao comentário, mas tive dificuldade de entender a estrutura do objeto para fazer o "for x in y" para calcular a média.
+Para o obj_video, tive ainda mais dificuldade e o método não está correto.
+Não entendi onde estão os comentários no objeto vídeo. O objeto comentário não parece estar contido em objeto video.

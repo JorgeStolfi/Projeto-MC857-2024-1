@@ -11,6 +11,6 @@ def gera(ses, erros):
   if isinstance(erros, str): erros = [ erros, ]
   assert len(erros) > 0 # Não faz sentido chamar esta página sem erros.
 
-  ht_botao = html_elem_button_simples.gera("OK", 'pag_principal', None, '#55ee55')
+  ht_botao = html_elem_button_simples.gera("OK", 'pag_principal', None, None)
   pagina = html_pag_generica.gera(ses, ht_botao, erros)
   return pagina

@@ -1,0 +1,3 @@
+As modificações incluem a adição de uma verificação para determinar se o usuário logado é um administrador. Se for um administrador, a variável `bt_calcnota` é definida como True, o que resulta na exibição do botão "Recalcular nota" nos blocos de vídeo. Se não for um administrador, o botão não será exibido.
+Porém eu realizei as modificações no código, mas o botão para um usuário logado eu não consegui fazer funcionar. Tive dificuldades nessa tarefa. Modifiquei outros arquivos, mas o botão continuou não aparecendo.
+Mandei os códigos modificados por mim para você ver que eu tentei fazer a tarefa solicitada.
