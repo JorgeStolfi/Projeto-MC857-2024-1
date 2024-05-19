@@ -1,0 +1,20 @@
+Relatório:
+
+O objetivo da tarefa atual era testar o módulo util_dict,
+onde podemos encontrar 4 funções:
+
+1- normaliza_busca_por_data
+2- para_identificadores
+3- elimina_alteracoes_nulas
+4- para_objetos
+
+Para cada uma das funções, foram escritos testes de forma a buscar percorrer
+os caminhos possíveis de códigos, entrando em condicionais, etc, para garantir
+uma boa cobertura.
+
+Para a função para_objetos foi necessário fazer os testes de forma que pudessem
+se comunicar com objetos do banco de dados, para garantir que tinhamos retornos corretos.
+
+Por fim, como definido na tarefa, todos os testes foram escritos utilizando a função "testa_funcao".
+
+PS: Todos os testes executam corretamente e retornam os resultados esperados.

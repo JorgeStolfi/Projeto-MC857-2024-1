@@ -79,6 +79,16 @@ for ses_tag, ses in ( "N", None, ), ( "A", sesA, ), ( "C", sesC, ):
       xerr = f"_erros{erros_tag}"
       rot_teste = "VC" + xses + xcom + xerr
       testa_gera(rot_teste, str, ses, com, erros)
+      
+# Testes para os diferentes valores possíveis de voto e de tipos de voto (voto por vídeo e por comentário)
+votos = (0, 1, 2, 3, 4) # Possíveis votos
+comentario_sobre_pai = obj_comentario.obtem_objeto('C-00000010')
+comentario_sobre_video = obj_comentario.obtem_objeto('C-00000008')
+for voto in votos: 
+  for comentario, rotulo in ( ( comentario_sobre_pai, "Pai" ), ( comentario_sobre_video, "Video" )):
+    obj_comentario.muda_atributos(comentario, { 'voto': voto })
+    nome_teste = "Sobre" + rotulo + "_Voto" + str(voto)
+    testa_gera(nome_teste, str, sesA, comentario, [])
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

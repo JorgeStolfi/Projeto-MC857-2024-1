@@ -48,8 +48,10 @@ for bt_alterar in False, True:
     xconv = f"_conv{str(bt_conversa)[0]}"
     for bt_comentar in False, True:
       xcomt = f"_comt{str(bt_comentar)[0]}"
-      tag = xedit + xconv + xcomt
-      testa_gera("exist" + tag,       str, vid1, bt_alterar, bt_conversa, bt_comentar)
+      for calcnota in False, True:
+        xcalc = f"_calc{str(calcnota)[0]}"
+        tag = xedit + xconv + xcomt + xcalc
+        testa_gera("exist" + tag, str, vid1, bt_alterar, bt_conversa, bt_comentar, calcnota)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

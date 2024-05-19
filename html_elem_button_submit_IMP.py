@@ -1,5 +1,6 @@
 import html_estilo_botao
 import html_elem_input
+import html_estilo_button
 
 def gera(texto, URL, cmd_args, cor_fundo):
   args_html = ""
@@ -17,6 +18,8 @@ def gera(texto, URL, cmd_args, cor_fundo):
       args_html += ht_input
 
   # O botão propriamente dito:
+  if cor_fundo == None:
+    cor_fundo = html_estilo_button.escolhe_cor_fundo(texto)
   estilo = html_estilo_botao.gera(cor_fundo)
   html = args_html + \
     "<input" + \

@@ -5,6 +5,7 @@ import html_elem_span
 import html_elem_button_simples
 import html_estilo_texto
 import html_elem_link_img
+import html_elem_link_text
 
 def gera(vid, mostra_autor):
 
@@ -19,10 +20,10 @@ def gera(vid, mostra_autor):
   for chave in colunas:
     if chave == 'video':
       mostra = True
-      texto = obj_video.obtem_identificador(vid) if vid != None else "Vídeo"
+      texto = html_elem_link_text.gera(obj_video.obtem_identificador(vid), "ver_video", { 'video': obj_video.obtem_identificador(vid) })  if vid != None else "Vídeo"
     elif chave == 'autor':
       mostra = mostra_autor
-      texto = obj_usuario.obtem_identificador(atrs['autor']) if vid != None else "Autor"
+      texto = html_elem_link_text.gera(obj_usuario.obtem_identificador(atrs['autor']), "ver_usuario", { 'usuario': obj_usuario.obtem_identificador(atrs['autor']) })  if vid != None else "Autor"
     elif chave == 'duracao':
       mostra = True
       texto = f"{atrs[chave]/1000:.3f} s" if vid != None else "Duração"
@@ -64,7 +65,7 @@ def gera(vid, mostra_autor):
 
   if vid != None:
     bt_args = { 'video': obj_video.obtem_identificador(vid) }
-    bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_args, '#eeee55')
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_args, None)
     itens_resumo.append("<td>" + bt_ver + "</td>")
 
   return itens_resumo

@@ -57,24 +57,24 @@ def gera_botoes_de_busca(usr):
   
   if bmu_debug: sys.stderr.write("    > gera_botoes_de_busca\n")
 
-  cor_bt_busca = "#eeccff"
+  #cor_bt_busca = "#eeccff"
   usr_admin = obj_usuario.eh_administrador(usr) if usr != None else False
 
   hts_botoes = []
   
   # Botões da primeira linha que sempre aparecem:
-  ht_bt_busc_usr = html_elem_button_simples.gera("Buscar usuários",    'solicitar_pag_buscar_usuarios',     None, cor_bt_busca)
+  ht_bt_busc_usr = html_elem_button_simples.gera("Buscar usuários",    'solicitar_pag_buscar_usuarios',     None, None)
   hts_botoes.append(ht_bt_busc_usr)
   
-  ht_bt_busc_vid = html_elem_button_simples.gera("Buscar videos",      'solicitar_pag_buscar_videos',       None, cor_bt_busca)
+  ht_bt_busc_vid = html_elem_button_simples.gera("Buscar videos",      'solicitar_pag_buscar_videos',       None, None)
   hts_botoes.append(ht_bt_busc_vid)
 
-  ht_bt_busc_com = html_elem_button_simples.gera("Buscar Comentários", 'solicitar_pag_buscar_comentarios',  None, cor_bt_busca)
+  ht_bt_busc_com = html_elem_button_simples.gera("Buscar Comentários", 'solicitar_pag_buscar_comentarios',  None, None)
   hts_botoes.append(ht_bt_busc_com)
 
   if usr_admin:
     # Buscar sessões só para administrador
-    ht_bt_busc_ses = html_elem_button_simples.gera("Buscar Sessões",     'solicitar_pag_buscar_sessoes',      None, cor_bt_busca)
+    ht_bt_busc_ses = html_elem_button_simples.gera("Buscar Sessões",     'solicitar_pag_buscar_sessoes',      None, None)
     hts_botoes.append(ht_bt_busc_ses)
 
   if bmu_debug: sys.stderr.write("    < gera_botoes_de_busca: hts_botoes = %s\n" % str(hts_botoes))
@@ -96,7 +96,7 @@ def gera_botoes_linha_principal(usr):
   hts_botoes = []
 
   # Botões que sempre aparecem:
-  ht_bt_principal = html_elem_button_simples.gera("Principal", 'pag_principal', None, cor_bt_home)
+  ht_bt_principal = html_elem_button_simples.gera("Principal", 'pag_principal', None, None)
   hts_botoes.append(ht_bt_principal)
 
   # Botões que dependem de estar logado ou não:
@@ -123,10 +123,10 @@ def gera_botoes_linha_principal_deslogado():
 
   hts_botoes = []
   
-  ht_bt_entrar = html_elem_button_simples.gera("Entrar",     'solicitar_pag_login',             None, cor_bt_login)
+  ht_bt_entrar = html_elem_button_simples.gera("Entrar",     'solicitar_pag_login',             None, None)
   hts_botoes.append(ht_bt_entrar)
   
-  ht_bt_cadastrar = html_elem_button_simples.gera("Cadastrar",  'solicitar_pag_cadastrar_usuario', None, cor_bt_novo)
+  ht_bt_cadastrar = html_elem_button_simples.gera("Cadastrar",  'solicitar_pag_cadastrar_usuario', None, None)
   hts_botoes.append(ht_bt_cadastrar)
 
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_principal_deslogado: hts_botoes = %s\n" % str(hts_botoes))
@@ -150,23 +150,23 @@ def gera_botoes_linha_principal_logado(usr):
 
   hts_botoes = []
  
-  ht_bt_conta = html_elem_button_simples.gera("Minha Conta", 'ver_usuario', None, cor_bt_meus)
+  ht_bt_conta = html_elem_button_simples.gera("Minha Conta", 'ver_usuario', None, None)
   hts_botoes.append(ht_bt_conta)
 
   ht_bt_ses_texto = "Minhas Sessões (%d)" % usr_num_ses
   ht_bt_ses = html_elem_button_simples.gera(ht_bt_ses_texto, 'buscar_sessoes_de_usuario', None, cor_bt_meus)
   hts_botoes.append(ht_bt_ses)
 
-  ht_bt_vid = html_elem_button_simples.gera("Meus Videos", 'buscar_videos_de_usuario', None, cor_bt_meus)
+  ht_bt_vid = html_elem_button_simples.gera("Meus Videos", 'buscar_videos_de_usuario', None, None)
   hts_botoes.append(ht_bt_vid)
   
-  ht_bt_com = html_elem_button_simples.gera("Meus Comentários", 'buscar_comentarios_de_usuario', None, cor_bt_meus)
+  ht_bt_com = html_elem_button_simples.gera("Meus Comentários", 'buscar_comentarios_de_usuario', None, None)
   hts_botoes.append(ht_bt_com)
   
-  ht_bt_upload = html_elem_button_simples.gera("Subir Video", 'solicitar_pag_upload_video', None, "#88eeff")
+  ht_bt_upload = html_elem_button_simples.gera("Subir Video", 'solicitar_pag_upload_video', None, None)
   hts_botoes.append(ht_bt_upload)
   
-  ht_bt_sair = html_elem_button_simples.gera("Sair", 'fazer_logout', None, cor_bt_sair)
+  ht_bt_sair = html_elem_button_simples.gera("Sair", 'fazer_logout', None, None)
   hts_botoes.append(ht_bt_sair)
 
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_principal_logado: hts_botoes = %s\n" % str(hts_botoes))
@@ -182,7 +182,7 @@ def gera_botoes_linha_admin(usr):
   cor_bt_busca = "#eeccff"
 
   ht_busca_obj_input = html_elem_input.gera("text", "objeto", None, None, None, True, "Id do objeto", None, False)
-  ht_busca_obj_bt =    html_elem_button_submit.gera("Checar Objeto", "ver_objeto", None, cor_bt_busca)
+  ht_busca_obj_bt =    html_elem_button_submit.gera("Checar Objeto", "ver_objeto", None, None)
   ht_busca_obj_form = html_elem_form.gera(ht_busca_obj_input + ht_busca_obj_bt, False)
   hts_botoes = [ ht_busca_obj_form, ]
   if bmu_debug: sys.stderr.write("    < gera_botoes_linha_admin: hts_botoes = %s\n" % str(hts_botoes))

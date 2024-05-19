@@ -1,0 +1,12 @@
+Primeiramente eu fiz a alteração na página principal para exibir uma grade de vídeos ao invés de um único vídeo, para isso eu modifiquei 
+a chamada de html_elem_div.gera em html_pag_principal_IMP, substituindo html_elem_video.gera("V-00000001", 400) pela chamada 
+comando_ver_grade_de_videos.processa(ses, {}) que retorna a página HTML com uma grade de 12 vídeos aleatórios
+
+Já para a implementação do programa de testes de comando_ver_grade_de_videos eu copiei a criação da base de testes de outras classes,
+criei o método testa_processa também me baseando em outras classes de modo em que é possível dar um nome pra rotina de testes,
+passar o resultado esperado e os argumentos que serão passados na chamada do método testado. Para realizar os testes eu criei 6 cenários
+diferentes, o primeiro sem passar nenhuma sessão, já que o usuário não precisa estar logado para ver esses vídeos, outros dois com
+sessões válidas de administrador e usuário comum respectivamente, um com uma sessão inválida que, outro com um argumento
+que não é do tipo dicionário e por último um com um argumento do tipo dicionário e não vazio, sendo esses 3 últimos cenários de erro.
+Eu implementei esses cenários pois o módulo comando_ver_grade_de_videos apenas manipula a sessão e os argumentos, já que a criação da
+página ocorre em html_pag_grade_de_videos que também possui o seu próprio programa de testes.
