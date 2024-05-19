@@ -12,7 +12,7 @@ def gera():
   # Monta a tabela com os fragmentos HTML:
   ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, {})
 
-  ht_bt_login = html_elem_button_submit.gera("Entrar", 'fazer_login', None, '#55ee55')
+  ht_bt_login = html_elem_button_submit.gera("Entrar", 'fazer_login', None, None)
 
   ht_conteudo = \
     ht_tabela + "\n" + \

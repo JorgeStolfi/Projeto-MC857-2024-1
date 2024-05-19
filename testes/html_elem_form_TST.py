@@ -70,7 +70,7 @@ def cria_form_de_teste(multipart):
   atrs['segredo'] = "O chefe está roubando da firma"
 
   # Cria botao de interacao com o ht_form
-  ht_botao = html_elem_button_submit.gera("Botao", 'urltest', None, '#55ee55')
+  ht_botao = html_elem_button_submit.gera("Botao", 'urltest', None, None)
 
   # Monta a tabela com os fragmentos HTML:
   ht_tabela = html_bloco_tabela_de_campos.gera(linhas, atrs)

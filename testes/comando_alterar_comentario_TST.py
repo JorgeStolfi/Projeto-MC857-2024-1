@@ -131,6 +131,17 @@ cmd_args_04['texto'] = "Ora bolas!"
 testa_processa("T4", str, ses, cmd_args_04)
 verifica_atributos(com1, cmd_args_04) # Devem ter mudado.
 
+sys.stderr.write("  tentativa de alteração do campo 'texto' com o comentário bloqueado, deve falhar:\n")
+ses_comum = obj_sessao.obtem_objeto("S-00000005")
+obj_comentario.muda_atributos(com1, { 'bloqueado': True } )
+com1_atrs = obj_comentario.obtem_atributos(com1)
+testa_processa("T5", str, ses_comum, cmd_args_01)
+verifica_atributos(com1, com1_atrs) # Não devem ter mudado.
+
+sys.stderr.write("  tentativa de alteração do campo 'texto' com o comentário bloqueado mas com sessão de adm, deve dar certo:\n")
+testa_processa("T6", str, ses, cmd_args_01)
+verifica_atributos(com1, cmd_args_01) # Deve ter alterado.
+
 if ok_global:
   sys.stderr.write("Teste terminado normalmente\n")
 else:

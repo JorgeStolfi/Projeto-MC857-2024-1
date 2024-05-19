@@ -30,7 +30,12 @@ def gera(ses, com, atrs_mod, erros):
   texto_bt = "Salvar alterações"
   cmd_bt = "alterar_comentario"
   ed_nota = para_admin
-  ht_form = html_form_postar_alterar_comentario.gera(com_id, atrs_mod, ed_nota)
+
+  autor = com_atrs['autor']
+  ses_dono = obj_sessao.obtem_dono(ses)
+  ed_voto = para_admin or autor == ses_dono
+
+  ht_form = html_form_postar_alterar_comentario.gera(com_id, atrs_mod, ed_nota, ed_voto)
 
   ht_pag_conteudo = \
     ht_pag_tit + \

@@ -14,11 +14,12 @@ def gera(atrs):
       ( "Título",   "text",   'titulo', True,  "Bla bla bla",     ),
       ( "Autor",    "text",   'autor',  True,  "U-NNNNNNNN",   ),
       ( "Data",     "text",   'data',   True,  "2024",            ),
+      ("Bloqueado", "checkbox", 'bloqueado', True, "", )
     )
-
+  # #55ee55
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
-  ht_submit = html_elem_button_submit.gera("Buscar", "buscar_videos", None, '#55ee55')
-  ht_cancel = html_elem_button_simples.gera("Cancelar", "pag_principal", None, '#ee5555')
+  ht_submit = html_elem_button_submit.gera("Buscar", "buscar_videos", None, None)
+  ht_cancel = html_elem_button_simples.gera("Cancelar", "pag_principal", None, None)
 
   ht_conteudo = \
         ht_table + \

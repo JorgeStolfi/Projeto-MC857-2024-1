@@ -55,7 +55,8 @@ def processa(ses, cmd_args):
   if len(erros) == 0:
     # Verifica se o usuário corrente {ses_dono} pode alterar este comentário:
     autor = com_atrs['autor']
-    editavel = para_admin or autor == ses_dono
+    bloqueado = com_atrs['bloqueado']
+    editavel = para_admin or (autor == ses_dono and not bloqueado)
     if not editavel:
       erros.append(f"Você não tem permissão para alterar este comentário")
 
@@ -69,7 +70,12 @@ def processa(ses, cmd_args):
       # Somente administrador pode alterar a nota:
       if not para_admin:
         erros.append("Você não tem permissão para alterar a nota do comentário")
- 
+
+    if 'voto' in cmd_args:
+      # Somente administrador ou o dono do comentário pode altera-lo
+      if not editavel:
+        erros.append("Você não tem permissão para alterar o voto do comentário") 
+
   pag = None
   if (len(erros) == 0):
     # Tenta modificar os atributos do vídeo:

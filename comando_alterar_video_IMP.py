@@ -45,6 +45,10 @@ def processa(ses, cmd_args):
     # Obtém atributos correntes do video {vid}:
     vid_atrs = obj_video.obtem_atributos(vid) if vid != None else None
 
+    # Se um vídeo está bloqueado então não é possível editá-lo se não for administrador.
+    if 'bloqueado' in vid_atrs and vid_atrs['bloqueado'] and not para_admin:
+      erros.append("Este vídeo está bloqueado, não é possível editá-lo.")
+
     # Elimina campos de {cmd_args} cujo valor não vai mudar: 
     util_dict.elimina_alteracoes_nulas(cmd_args, vid_atrs)
 
@@ -54,8 +58,16 @@ def processa(ses, cmd_args):
     if ses_dono == None or (ses_dono != autor and not para_admin):
       erros.append("Você não tem permissão para alterar dados deste vídeo")
   
-    # Verifica campos inalteráveis:
+    # Verifica campos alteráveis:
     alteraveis = { 'titulo', 'nota', }
+    #o campo 'bloqueado' só é alterável para quem é administrador.
+    if 'bloqueado' in cmd_args:
+      if para_admin:
+        alteraveis.add('bloqueado')
+        cmd_args['bloqueado'] = True if cmd_args['bloqueado'] == 'on' else False
+      else:
+        erros.append("Este vídeo está bloqueado, não é possível editá-lo.")
+
     for chave in cmd_args.keys():
       if not chave in alteraveis:
         erros.append(f"O atributo '{chave}' não pode ser alterado")

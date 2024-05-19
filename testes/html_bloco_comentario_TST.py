@@ -55,14 +55,17 @@ for mostra_id in False, True:
         xmpai = f"_mpai{str(mostra_pai)[0]}"
         for botoes in False, True:
           xbots = f"_bots{str(botoes)[0]}"
-          tag = xmide + xmdat + xmvid + xmpai + xbots
-          bt_conversa = botoes
-          bt_responder = botoes
-          bt_editar = botoes
-          testa_gera \
-            ( "C1" + tag, str, 
+          for calcnota in False, True:
+            xcalc = f"_calc{str(calcnota)[0]}"
+            tag = xmide + xmdat + xmvid + xmpai + xbots + xcalc
+            bt_conversa = botoes
+            bt_responder = botoes
+            bt_editar = botoes
+            bt_calcnota = calcnota
+            testa_gera(
+              "C1" + tag, str, 
               com1, largura, mostra_id, mostra_data, mostra_video, mostra_pai, 
-              bt_conversa, bt_responder, bt_editar
+              bt_conversa, bt_responder, bt_editar, bt_calcnota
             )
 
 if ok_global:
