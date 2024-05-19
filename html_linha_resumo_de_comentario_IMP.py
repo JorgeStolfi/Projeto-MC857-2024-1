@@ -46,7 +46,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
   
   if com != None:
     bt_args = { 'comentario': com_id }
-    bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, '#eeee55')
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, None)
     itens_resumo.append("<td>" + bt_ver + "</td>")
 
   return itens_resumo

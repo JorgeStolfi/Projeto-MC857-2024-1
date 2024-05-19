@@ -40,15 +40,15 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar):
     ht_bloco += "<br/>" 
   
   if bt_alterar:
-    ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_video", cmd_args, '#eeee55')
+    ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_video", cmd_args, None)
     ht_bloco += ht_bt_alterar
 
   if bt_conversa:
-    ht_bt_conversa = html_elem_button_simples.gera(f"Ver comentarios", "ver_conversa", cmd_args, '#eeee55')
+    ht_bt_conversa = html_elem_button_simples.gera(f"Ver comentarios", "ver_conversa", cmd_args, None)
     ht_bloco += ht_bt_conversa
   
   if bt_comentar:
-    ht_bt_comentar = html_elem_button_simples.gera("Comentar", "solicitar_pag_postar_comentario", cmd_args, '#55ee55')
+    ht_bt_comentar = html_elem_button_simples.gera("Comentar", "solicitar_pag_postar_comentario", cmd_args, None)
     ht_bloco += ht_bt_comentar
  
   return ht_bloco

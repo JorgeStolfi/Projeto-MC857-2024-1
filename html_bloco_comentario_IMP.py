@@ -39,15 +39,15 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
   ht_botoes = ""
 
   if bt_conversa:
-    ht_bt_conversa = html_elem_button_simples.gera("Ver respostas", 'ver_conversa', cmd_args, '#808080')
+    ht_bt_conversa = html_elem_button_simples.gera("Ver respostas", 'ver_conversa', cmd_args, None)
     ht_botoes += ht_bt_conversa
 
   if bt_responder:
-    ht_bt_responder = html_elem_button_simples.gera("Responder", "solicitar_pag_postar_comentario", cmd_args, '#55ee55')
+    ht_bt_responder = html_elem_button_simples.gera("Responder", "solicitar_pag_postar_comentario", cmd_args, None)
     ht_botoes += ht_bt_responder
 
   if bt_editar:
-    ht_bt_alterar = html_elem_button_simples.gera(f"Editar", "solicitar_pag_alterar_comentario", cmd_args, '#eeee55')
+    ht_bt_alterar = html_elem_button_simples.gera(f"Editar", "solicitar_pag_alterar_comentario", cmd_args, None)
     ht_botoes += ht_bt_alterar
     
   ht_bloco = \

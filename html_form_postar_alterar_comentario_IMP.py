@@ -51,11 +51,11 @@ def gera(com_id, atrs, ed_nota, ed_voto):
  
   # Botões 'Confirmar' e 'Cancelar':
   if com_id == None:
-    ht_submit = html_elem_button_submit.gera("Postar comentário", "postar_comentario", None, '#55ee55')
+    ht_submit = html_elem_button_submit.gera("Postar comentário", "postar_comentario", None, None)
   else:
     cmd_args = { 'comentario': com_id }
-    ht_submit = html_elem_button_submit.gera("Salvar alterações", "alterar_comentario", cmd_args, '#55ee55')
-  ht_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, '#ee5555')
+    ht_submit = html_elem_button_submit.gera("Salvar alterações", "alterar_comentario", cmd_args, None)
+  ht_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal', None, None)
   
   ht_form_conteudo = \
     ht_cabeca + \
