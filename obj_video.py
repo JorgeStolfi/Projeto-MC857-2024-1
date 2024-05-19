@@ -173,12 +173,12 @@ def busca_por_campos(atrs, unico):
   se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
   return obj_video_IMP.busca_por_campos(atrs, unico)
 
-def obtem_amostra(n):
+def obtem_amostra(n, ordem):
   """Devolve uma lista com os identificadores de {n} vídeos armazenados
   no sistema, escolhidos aleatoriamente.
   
   Falha com erro se houver menos de {n} vídeos no sistema."""
-  return obj_video_IMP.obtem_amostra(n)
+  return obj_video_IMP.obtem_amostra(n, ordem)
 
 def recalcula_nota(vid):
   """Calcula uma nova nota para o vídeo {vid},

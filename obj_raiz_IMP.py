@@ -62,9 +62,9 @@ def obtem_objeto(id_obj, tabela, def_obj_mem):
     obj = db_obj_tabela.obtem_objeto(tabela, def_obj_mem, id_obj)
   return obj
 
-def busca_por_campo(chave, val, unico, tabela):
+def busca_por_campo(chave, val, unico, tabela, nomes_cols_ord, ord, limite):
   assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
-  lista_ids = db_obj_tabela.busca_por_campo(tabela, chave, val, None)
+  lista_ids = db_obj_tabela.busca_por_campo(tabela, chave, val, None, nomes_cols_ord, ord, limite)
   if unico:
     return util_testes.unico_elemento(lista_ids)
   else:

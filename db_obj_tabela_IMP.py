@@ -124,14 +124,14 @@ def obtem_objeto_e_indice(tab, def_obj, ident, ind):
     tab.cache[ident] = obj
   return obj
 
-def busca_por_campo(tab, chave, valor, res_cols):
+def busca_por_campo(tab, chave, valor, res_cols, nomes_cols_ord, ord, limite):
   # Converte {valor} para string na linguagem SQL:
   if tab.debug: sys.stderr.write(f"  > db_obj_tabela.busca_por_campo_IMP: chave = {chave} valor = {str(valor)}\n");
   
   args = { chave: valor, }
-  return busca_por_campos(tab, args, res_cols)
+  return busca_por_campos(tab, args, res_cols, nomes_cols_ord, ord, limite)
 
-def busca_por_campos(tab, args, res_cols):
+def busca_por_campos(tab, args, res_cols, nomes_cols_ord, ord, limite):
   # Supõe que o cache é um subconjuto da base em disco, então procura só na última.
 
   # !!! Verificar a lógica de {res_cols} etc. !!!
@@ -179,7 +179,7 @@ def busca_por_campos(tab, args, res_cols):
     colunas = res_cols
     
   # Executa a busca:
-  res = db_base_sql.executa_comando_SELECT(tab.nome, cond, colunas)
+  res = db_base_sql.executa_comando_SELECT(tab.nome, cond, colunas, nomes_cols_ord, ord, limite)
   
   # Finaliza o resultado:
   if res == None:
@@ -254,7 +254,7 @@ def extrai_nomes_de_cols_SQL(colunas):
 def busca_por_campos_termo_nulo(chave):
   """Devolve o termo de uma condição SQL que exige que o campo da coluna
   {chave} da tabela seja nulo; isto é, "{chave} IS NULL". """
-  termo = f"{chave} IS NULL"
+  termo = f"{"NULL" if chave is None else chave} IS NULL"
   return termo
 
 def busca_por_campos_termo_identidade(chave, val):
