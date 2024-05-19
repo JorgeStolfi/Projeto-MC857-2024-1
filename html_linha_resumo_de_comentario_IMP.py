@@ -12,7 +12,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
 
   itens_resumo = []
   
-  colunas = [ 'comentario', 'video', 'autor',  'pai', 'data',  'texto' ]
+  colunas = [ 'comentario', 'video', 'autor',  'pai', 'data',  'texto', 'voto' ]
   for chave in colunas:
     if chave == 'comentario':
      mostra = True
@@ -30,6 +30,9 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
     elif chave == 'autor':
       mostra = mostra_autor;
       texto = obj_usuario.obtem_identificador(atrs['autor']) if com != None else "Autor"
+    elif chave == 'voto':
+      mostra = True
+      texto = str(atrs['voto']) if com != None else 'Voto'
     else:
       mostra = True
       texto = (str(atrs[chave]) if com != None else chave.capitalize()).replace("\n", "\\n")[:50]
