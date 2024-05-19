@@ -4,6 +4,7 @@ import html_elem_div
 import html_estilo_texto
 import obj_sessao
 import obj_usuario
+import html_estilo_div_dados
 
 from util_erros import erro_prog, aviso_prog
 
@@ -20,6 +21,9 @@ def gera(usr):
   cor_fundo = None
   margens = None
   estilo_texto = html_estilo_texto.gera("18px", "medium", cor_texto, cor_fundo, margens)
+
+  padding = ( "0px", "0px", "0px", "10px" )
+  estilo_parag = html_estilo_div_dados.gera("block", "300px", "break-word", padding, "75%")
 
   # Determina a imagem{ht_imagem} e o texto {ht_texto}
   texto_bem = "Bem-vindo ao nosso site de vídeos!"

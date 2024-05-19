@@ -1,0 +1,12 @@
+Criei um modulo html_estilo_div_dados que gera o CSS dos elementos com os atributos
+"display", "width", "word_wrap", "padding" e "line_height". 
+
+Documentei esse novo modulo no arquivo html_estilo_div_dados.py.
+Implementei a regra de negocio no arquivo html_estilo_div_dados_IMP.py
+
+Utilizei esse novo modulo nos arquivos html_bloco_bemvindo_IMP.py, html_bloco_cabecalho_IMP.py, 
+html_bloco_cabecalho_de_comentario_IMP.py, html_bloco_cabecalho_de_video_IMP.py 
+e html_bloco_rodape_de_video_IMP.py para passar os valores dos atributos por parametro
+de forma generica.
+
+Criei o arquivo de teste html_estilo_div_dados_TST.py que executa todas as combinações de valores do CSS.
