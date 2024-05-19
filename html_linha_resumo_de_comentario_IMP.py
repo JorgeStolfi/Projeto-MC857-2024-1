@@ -13,7 +13,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
 
   itens_resumo = []
   
-  colunas = [ 'comentario', 'video', 'autor',  'pai', 'data',  'texto' ]
+  colunas = [ 'comentario', 'video', 'autor',  'pai', 'data',  'texto', 'voto' ]
   for chave in colunas:
     if chave == 'comentario':
      mostra = True
@@ -31,6 +31,9 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
     elif chave == 'autor':
       mostra = mostra_autor;
       texto = html_elem_link_text.gera(obj_usuario.obtem_identificador(atrs['autor']), "ver_usuario", { 'usuario': obj_usuario.obtem_identificador(atrs['autor']) }) if com != None else "Autor"
+    elif chave == 'voto':
+      mostra = True
+      texto = str(atrs['voto']) if com != None else 'Voto'
     else:
       mostra = True
       texto = (str(atrs[chave]) if com != None else chave.capitalize()).replace("\n", "\\n")[:50]
@@ -44,7 +47,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
   
   if com != None:
     bt_args = { 'comentario': com_id }
-    bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, '#eeee55')
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, None)
     itens_resumo.append("<td>" + bt_ver + "</td>")
 
   return itens_resumo

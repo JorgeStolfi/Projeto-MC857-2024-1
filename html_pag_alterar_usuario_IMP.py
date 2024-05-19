@@ -25,7 +25,7 @@ def gera(ses, usr_id, atrs, erros):
   para_admin = obj_usuario.eh_administrador(ses_dono)
   ht_form = html_form_alterar_usuario.gera(usr_id, atrs, para_admin)
     
-  ht_bt_cancela = html_elem_button_simples.gera("Cancelar", "pag_principal", None, '#ee5555')
+  ht_bt_cancela = html_elem_button_simples.gera("Cancelar", "pag_principal", None, None)
   
   ht_conteudo = \
     ht_form + "\n" + \

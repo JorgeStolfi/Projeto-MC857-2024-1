@@ -18,8 +18,8 @@ def gera(atrs, para_admin):
   ht_tabela = html_bloco_dados_de_usuario.gera(usr_id, atrs_tab, editavel, para_admin, para_proprio)
 
   # Constrói formulário com botões 'Confirmar' e 'Cancelar':
-  ht_bt_submit = html_elem_button_submit.gera("Cadastrar", 'cadastrar_usuario', None, '#55ee55')
-  ht_bt_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal',     None, '#ee5555')
+  ht_bt_submit = html_elem_button_submit.gera("Cadastrar", 'cadastrar_usuario', None, None)
+  ht_bt_cancel = html_elem_button_simples.gera("Cancelar", 'pag_principal',     None, None)
   
   ht_conteudo = \
     ( ht_tabela + "<br/>\n" ) + \

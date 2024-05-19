@@ -16,7 +16,7 @@ def gera(usr_id, atrs, para_admin):
   ht_table = html_bloco_dados_de_usuario.gera(usr_id, atrs, editavel, para_admin, para_proprio)
 
   # Constrói formulário com botões 'Confirmar' e 'Cancelar':
-  ht_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_usuario', None, '#55ee55')
+  ht_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_usuario', None, None)
   conteudo_form = \
     ( ht_table + "<br/>\n" ) + \
     ( ht_submit + " " )

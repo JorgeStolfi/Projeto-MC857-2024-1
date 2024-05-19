@@ -31,7 +31,7 @@ def gera(usr):
 
   if usr != None:
     bt_arg = { 'usuario': obj_usuario.obtem_identificador(usr) }
-    bt_ver = html_elem_button_simples.gera("Ver", "ver_usuario", bt_arg, '#eeee55')
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_usuario", bt_arg, None)
     ht_campos.append("<td>" + bt_ver + "</td>")
 
   return ht_campos

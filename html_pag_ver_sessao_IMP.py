@@ -19,7 +19,7 @@ def gera(ses_login, ses_a_ver, erros):
     # O usuário pode fechar a sessão:
     cmd_args = {}
     cmd_args['sessao'] = obj_sessao.obtem_identificador(ses_a_ver)
-    ht_bt_fechar = html_elem_button_simples.gera('Fechar sessão', 'fechar_sessao', cmd_args, '#FF7700')
+    ht_bt_fechar = html_elem_button_simples.gera('Fechar sessão', 'fechar_sessao', cmd_args, None)
     ht_bloco_ses += ht_bt_fechar
 
   pag = html_pag_generica.gera(ses_login, ht_bloco_ses, erros)
