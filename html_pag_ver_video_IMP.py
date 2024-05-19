@@ -15,7 +15,10 @@ def gera(ses, vid, erros):
   vid_atrs = obj_video.obtem_atributos(vid)
   
   # Título da página:
-  tit = f"Vídeo {vid_id}: {vid_atrs['titulo']}"
+  if(vid_atrs['bloqueado']):
+    tit = "[BLOQUEADO]"
+  else:
+    tit = f"Vídeo {vid_id}: {vid_atrs['titulo']}"
   ht_titulo = html_bloco_titulo.gera(tit)
   
   # Determina botões a mostar:
