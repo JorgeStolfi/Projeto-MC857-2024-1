@@ -70,7 +70,9 @@ def processa(ses, cmd_args):
       # Somente administrador pode alterar a nota:
       if not para_admin:
         erros.append("Você não tem permissão para alterar a nota do comentário")
-
+      else:
+        obj_comentario.muda_atributos(com, {"nota": cmd_args["nota"]})
+        
     if 'voto' in cmd_args:
       # Somente administrador ou o dono do comentário pode altera-lo
       if not editavel:

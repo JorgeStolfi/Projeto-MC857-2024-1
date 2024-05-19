@@ -131,6 +131,23 @@ cmd_args_04['texto'] = "Ora bolas!"
 testa_processa("T4", str, ses, cmd_args_04)
 verifica_atributos(com1, cmd_args_04) # Devem ter mudado.
 
+sys.stderr.write("  tentativa de alteração do campo 'nota' apenas, deve dar certo:\n")
+cmd_args_05 = { 'comentario': com1_id,  'nota': 2.5, }
+testa_processa("T5", str, ses, cmd_args_05)
+verifica_atributos(com1, cmd_args_05) # Deve ter alterado.
+
+# Nova sessão para teste de aleração quando usuário não é administrador.
+nova_sessao = obj_sessao.obtem_objeto("S-00000002")
+sys.stderr.write("  tentativa de alteração do campo 'nota' apenas, sem ser administrador, deve dar errado:\n")
+com1_atrs = obj_comentario.obtem_atributos(com1) # Atributos atuais.
+cmd_args_06 = { 'comentario': com1_id,  'nota': 2.5, }
+try:
+  testa_processa("T6", str, ses, cmd_args_06)
+except:
+  sys.stderr.write("Falha esperada: Usuário não é administrador\n")
+
+verifica_atributos(com1, com1_atrs) # Não deve ter mudado.
+
 sys.stderr.write("  tentativa de alteração do campo 'texto' com o comentário bloqueado, deve falhar:\n")
 ses_comum = obj_sessao.obtem_objeto("S-00000005")
 obj_comentario.muda_atributos(com1, { 'bloqueado': True } )
