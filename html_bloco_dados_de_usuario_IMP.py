@@ -66,17 +66,17 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   if usr_id != None:
     cmd_args = {'usuario': usr_id}
     if not editavel:
-      ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_usuario", cmd_args, '#eeee55')
+      ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_usuario", cmd_args, None)
     if not para_proprio:
       # Não tem estes botões no menu:
       # Somente administrador ou o próprio podem ver as sessões de {usr}:
       if para_admin:
         nab = len(obj_sessao.busca_por_dono(usr, True))
         if nab > 0 and not para_proprio:
-          ht_bt_sessoes = html_elem_button_simples.gera(f"Ver sessões ({nab})", "buscar_sessoes_de_usuario", cmd_args, '#eeee55')
+          ht_bt_sessoes = html_elem_button_simples.gera(f"Ver sessões ({nab})", "buscar_sessoes_de_usuario", cmd_args, None)
       # Mas qualquer um pode ver os vídeos e comentários de {usr}
-      ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': usr_id}, '#eeee55')
-      ht_bt_comentarios = html_elem_button_simples.gera(f"Ver comentarios", "buscar_comentarios_de_usuario", cmd_args, '#eeee55')
+      ht_bt_videos = html_elem_button_simples.gera(f"Ver videos", "buscar_videos_de_usuario", {'usuario': usr_id}, None)
+      ht_bt_comentarios = html_elem_button_simples.gera(f"Ver comentarios", "buscar_comentarios_de_usuario", cmd_args, None)
 
   ht_bloco = \
     ht_table + "<br/>" + \

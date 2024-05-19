@@ -34,7 +34,9 @@ def processa(ses, cmd_args):
     ses_admin = obj_usuario.eh_administrador(ses_dono)
     com_autor = obj_comentario.obtem_atributo(com, 'autor')
     assert com_autor != None
-    pode_alterar = ses_admin or com_autor == ses_dono
+    com_atrs = obj_comentario.obtem_atributos(com)
+    bloqueado = com_atrs['bloqueado']
+    pode_alterar = ses_admin or (com_autor == ses_dono and not bloqueado)
     if not pode_alterar:
       erros.append("Você não tem permissão para editar este comentário")
   
@@ -43,7 +45,6 @@ def processa(ses, cmd_args):
   else:
     # Obtem os atributos atuais do comemtário:
     assert com != None
-    com_atrs = obj_comentario.obtem_atributos(com)
     pag = html_pag_alterar_comentario.gera(ses, com, com_atrs, None)
   return pag
     

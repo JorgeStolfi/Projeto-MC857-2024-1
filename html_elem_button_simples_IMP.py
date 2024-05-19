@@ -1,4 +1,5 @@
 import html_estilo_botao
+import html_estilo_button
 from util_erros import erro_prog, aviso_prog
 import re
 
@@ -14,6 +15,9 @@ def gera(texto, URL, cmd_args, cor_fundo):
         sep = '&'
 
   # Constrói o botão propriamente dito:
+  if cor_fundo == None:
+    cor_fundo = html_estilo_button.escolhe_cor_fundo(texto)
+
   estilo = html_estilo_botao.gera(cor_fundo)
   html = \
     "<button" + \
