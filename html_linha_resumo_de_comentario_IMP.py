@@ -4,6 +4,7 @@ import obj_video
 import html_elem_item_de_resumo
 import sys
 import html_elem_button_simples
+import html_elem_link_text
 
 def gera(com, mostra_autor, mostra_video, mostra_pai):
   
@@ -16,20 +17,20 @@ def gera(com, mostra_autor, mostra_video, mostra_pai):
   for chave in colunas:
     if chave == 'comentario':
      mostra = True
-     texto = com_id if com != None else "Comentário"
+     texto = html_elem_link_text.gera(com_id, "ver_comentario", { 'comentario': com_id }) if com != None else "Comentário"
     elif chave == 'video':
       mostra = mostra_video
-      texto = obj_video.obtem_identificador(atrs['video']) if com != None else "Vídeo"
+      texto = html_elem_link_text.gera(obj_video.obtem_identificador(atrs['video']), "ver_video", { 'video': obj_video.obtem_identificador(atrs['video']) }) if com != None else "Vídeo"
     elif chave == 'pai':
       mostra = mostra_pai
       if com == None:
         texto = "Pai"
       else:
         pai = atrs['pai'] if 'pai' in atrs else None
-        texto = obj_comentario.obtem_identificador(pai) if pai != None else " "
+        texto = html_elem_link_text.gera(obj_comentario.obtem_identificador(pai), "ver_comentario", { 'comentario': obj_comentario.obtem_identificador(pai) }) if pai != None else " "
     elif chave == 'autor':
       mostra = mostra_autor;
-      texto = obj_usuario.obtem_identificador(atrs['autor']) if com != None else "Autor"
+      texto = html_elem_link_text.gera(obj_usuario.obtem_identificador(atrs['autor']), "ver_usuario", { 'usuario': obj_usuario.obtem_identificador(atrs['autor']) }) if com != None else "Autor"
     elif chave == 'voto':
       mostra = True
       texto = str(atrs['voto']) if com != None else 'Voto'
