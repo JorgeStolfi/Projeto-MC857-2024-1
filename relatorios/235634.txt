@@ -1,0 +1,9 @@
+Nome: Giovanna Magario Adamo    RA:235634
+
+Na tarefa do dia 17/05, o objetivo era escrever a implementação do módulo {html_form_buscar_comentarios_IMP.py},
+tomando os outros módulos {html_form_buscar_*} como base. Dei uma olhada e usei como base os módulos {html_form_buscar_videos_IMP},
+{html_form_buscar_sessoes_IMP}, {html_form_buscar_usuarios_IMP} e {html_form_buscar_videos_IMP}. Para criar a sequência de quíntuplas
+dados_linhas, utilizei como base o obj_comentario_IMP e o comando_buscar_comentarios_IMP para implementar somente os campos em que existe opção de buscar,
+vendo quais seriam as chaves. Portanto, implementei o form com os seguintes campos: id (comentario), video, autor, pai, texto e data, colocando os placeholders
+em todos os campos menos no texto (que não possui formato específico). A data, por ter que ser no formato ISO, coloquei a forma que deveria ter e entre parênteses 
+(formato ISO), para deixar claro ao usuário. Por fim, testei a aplicação e a busca está funcional para todos os campos e as mensagens de erro estão corretas.
