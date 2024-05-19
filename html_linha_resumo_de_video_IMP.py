@@ -14,13 +14,22 @@ def gera(vid, mostra_autor):
 
   itens_resumo = []
 
-  colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'largura', 'altura', 'titulo' ]
+  colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'largura', 'altura', 'titulo', 'bloqueado']
   
   destaque = False
   for chave in colunas:
     if chave == 'video':
       mostra = True
       texto = html_elem_link_text.gera(obj_video.obtem_identificador(vid), "ver_video", { 'video': obj_video.obtem_identificador(vid) })  if vid != None else "Vídeo"
+    elif chave == 'titulo':
+      mostra = True
+      if vid == None:
+        texto = "Título"
+      else:
+        if(atrs['bloqueado']):
+          texto = "[BLOQUEADO]"
+        else:
+          texto = str(atrs[chave])
     elif chave == 'autor':
       mostra = mostra_autor
       texto = html_elem_link_text.gera(obj_usuario.obtem_identificador(atrs['autor']), "ver_usuario", { 'usuario': obj_usuario.obtem_identificador(atrs['autor']) })  if vid != None else "Autor"
@@ -58,7 +67,10 @@ def gera(vid, mostra_autor):
       
     if mostra:
       cab = (vid == None)
-      cor_fundo = None
+      if(chave == 'titulo' and atrs['bloqueado'] and vid != None):
+        cor_fundo = ' #FF0000'
+      else:
+        cor_fundo = None
       alinha = "left"
       ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha)
       itens_resumo.append(ht_item)
