@@ -34,9 +34,15 @@ def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
     elif chave == 'nota':
       mostra = mostra_nota;
       texto = obj_usuario.obtem_identificador(atrs['nota']) if com != None else "nota"
-      elif chave == 'voto':
+    elif chave == 'voto':
       mostra = True
       texto = str(atrs['voto']) if com != None else 'Voto'
+    elif chave == 'texto':
+      mostra = True
+      if atrs["bloqueado"] == True:
+        texto = "[BLOQUEADO]"
+      else:
+        texto = (str(atrs[chave]) if com != None else chave.capitalize()).replace("\n", "\\n")[:50]
     else:
       mostra = True
       texto = (str(atrs[chave]) if com != None else chave.capitalize()).replace("\n", "\\n")[:50]
@@ -45,7 +51,10 @@ def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
       cab = (com == None)
       cor_fundo = None
       alinha = "left"
-      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo,alinha)
+      if atrs["bloqueado"] == True:
+        ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo,alinha, "#FF0000")
+      else:
+        ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo,alinha)
       itens_resumo.append(ht_item)
   
   if com != None:

@@ -193,30 +193,29 @@ def cria_testes(verb):
   inicializa_modulo(True)
   lista_atrs = \
     [ 
-      ( "C-00000001", "V-00000001", "U-00000001", None,         "Supimpa!\nDeveras!", ),
-      ( "C-00000002", "V-00000001", "U-00000002", "C-00000001", "Né não! Acho... Talvez...", ),
-      ( "C-00000003", "V-00000002", "U-00000002", None,         "Falta sal.", ),
-      ( "C-00000004", "V-00000003", "U-00000003", None,         "Soberbo!", ),
-      ( "C-00000005", "V-00000001", "U-00000003", "C-00000002", "É sim!", ),
-      ( "C-00000006", "V-00000003", "U-00000004", None,         "Supercílio! " + "k"*60, ),
-      ( "C-00000007", "V-00000001", "U-00000004", "C-00000002", "Batata!", ),
-      ( "C-00000008", "V-00000001", "U-00000002", None,         "Inefável!", ),
-      ( "C-00000009", "V-00000001", "U-00000001", "C-00000005", "Larga mão dessa!\nCoisa feia!\nRespeite os mais bodosos. Se não tem coisa melhor a fazer, vá ver se estou na esquina...", ),
-      ( "C-00000010", "V-00000001", "U-00000004", "C-00000002", "Interessante...\nPorém, na Bessarábia os elefantes dos sátrapas eram tatuados com hieróglifos, não com emojis.\nÉ fake!", ),
-      ( "C-00000011", "V-00000001", "U-00000002", "C-00000005", "Levante deste camastralho!!!", ),
-      ( "C-00000012", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
-      ( "C-00000013", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
-      ( "C-00000014", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
-      ( "C-00000015", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
-      ( "C-00000016", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", ),
+      ( "C-00000001", "V-00000001", "U-00000001", None,         "Supimpa!\nDeveras!", True),
+      ( "C-00000002", "V-00000001", "U-00000002", "C-00000001", "Né não! Acho... Talvez...", True),
+      ( "C-00000003", "V-00000002", "U-00000002", None,         "Falta sal.", False),
+      ( "C-00000004", "V-00000003", "U-00000003", None,         "Soberbo!", False),
+      ( "C-00000005", "V-00000001", "U-00000003", "C-00000002", "É sim!", False),
+      ( "C-00000006", "V-00000003", "U-00000004", None,         "Supercílio! " + "k"*60, False),
+      ( "C-00000007", "V-00000001", "U-00000004", "C-00000002", "Batata!", False),
+      ( "C-00000008", "V-00000001", "U-00000002", None,         "Inefável!", False),
+      ( "C-00000009", "V-00000001", "U-00000001", "C-00000005", "Larga mão dessa!\nCoisa feia!\nRespeite os mais bodosos. Se não tem coisa melhor a fazer, vá ver se estou na esquina...", False),
+      ( "C-00000010", "V-00000001", "U-00000004", "C-00000002", "Interessante...\nPorém, na Bessarábia os elefantes dos sátrapas eram tatuados com hieróglifos, não com emojis.\nÉ fake!", False),
+      ( "C-00000011", "V-00000001", "U-00000002", "C-00000005", "Levante deste camastralho!!!", False),
+      ( "C-00000012", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000013", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000014", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000015", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000016", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
     ]
-  for com_id_esp, vid_id, autor_id, pai_id, texto in lista_atrs:
+  for com_id_esp, vid_id, autor_id, pai_id, texto, bloqueado in lista_atrs:
     vid = obj_video.obtem_objeto(vid_id)
     autor = obj_usuario.obtem_objeto(autor_id)
     pai = obj_comentario.obtem_objeto(pai_id)
     dia = com_id_esp[-2:]
     data = "2024-01-" + dia + " 08:33:25 UTC"
-    bloqueado = False
     voto = ((7 + int(vid_id[-3:]))**2//11) % 5
     nota = (((7 + int(vid_id[-3:]))**2//11) % 401) / 100.0
     atrs = { 
