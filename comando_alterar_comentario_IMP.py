@@ -69,7 +69,12 @@ def processa(ses, cmd_args):
       # Somente administrador pode alterar a nota:
       if not para_admin:
         erros.append("Você não tem permissão para alterar a nota do comentário")
- 
+
+    if 'voto' in cmd_args:
+      # Somente administrador ou o dono do comentário pode altera-lo
+      if not editavel:
+        erros.append("Você não tem permissão para alterar o voto do comentário") 
+
   pag = None
   if (len(erros) == 0):
     # Tenta modificar os atributos do vídeo:
