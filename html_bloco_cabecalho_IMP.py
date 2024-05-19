@@ -3,6 +3,7 @@ import html_estilo_texto
 import html_elem_span
 import html_elem_div
 import html_elem_paragraph
+import html_estilo_div_dados
 
 def gera(titulo, grande):
   
@@ -19,7 +20,10 @@ def gera(titulo, grande):
   cor_fundo = "#ffdf31"
   margens = None
   estilo_tit = html_estilo_texto.gera(f"{tam_fonte}px", "bold", cor_texto, cor_fundo, margens)
-  margin_tit = f"padding: {tam_fonte//6}px 0px 0px 0px;"
+
+  padding = ( f"{tam_fonte//6}px", "0px", "0px", "0px" )
+  margin_tit = html_estilo_div_dados.gera("block", "100%", "break-word", padding, "normal")
+
   ht_tit = html_elem_div.gera(estilo_tit + margin_tit, ht_img + " " + titulo)
 
   ht_cab = "<nav>" +  ht_tit + "</nav>"

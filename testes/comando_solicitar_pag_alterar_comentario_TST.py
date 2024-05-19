@@ -89,8 +89,15 @@ testa_processa("BAD_DeOutro",  str, ses_C, { 'comentario': com_T_id })
 # Usuário comum é o autor:
 testa_processa("GUD_DoProprio",  str, ses_C, { 'comentario': com_C_id })
 
+# Usuário comum é o autor porém o comentário está bloqueado:
+obj_comentario.muda_atributos(com_C, { 'bloqueado': True } )
+testa_processa("BAD_bloqueado",  str, ses_C, { 'comentario': com_C_id })
+
 # Administrador editando página de outro:
 testa_processa("GUD_peloAdm",  str, ses_A, { 'comentario': com_T_id })
+
+# Administrador editando comentário bloqueado:
+testa_processa("GUD_bloqueadoPeloAdm",  str, ses_A, { 'comentario': com_C_id })
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

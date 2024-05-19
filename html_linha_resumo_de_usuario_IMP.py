@@ -1,6 +1,7 @@
 import obj_usuario
 import html_elem_item_de_resumo
 import html_elem_button_simples
+import html_elem_link_text
 
 def gera(usr):
   
@@ -13,7 +14,7 @@ def gera(usr):
   for chave in colunas:
     if chave == 'usuario':
       mostra = True
-      texto = obj_usuario.obtem_identificador(usr) if usr != None else "Usuário"
+      texto = html_elem_link_text.gera(obj_usuario.obtem_identificador(usr), "ver_usuario", { 'usuario': obj_usuario.obtem_identificador(usr) }) if usr != None else "Usuário"
     elif chave == 'admin':
       mostra = True
       texto = ("ADMIN" if atrs['administrador'] else "") if usr != None else ""
@@ -30,7 +31,7 @@ def gera(usr):
 
   if usr != None:
     bt_arg = { 'usuario': obj_usuario.obtem_identificador(usr) }
-    bt_ver = html_elem_button_simples.gera("Ver", "ver_usuario", bt_arg, '#eeee55')
+    bt_ver = html_elem_button_simples.gera("Ver", "ver_usuario", bt_arg, None)
     ht_campos.append("<td>" + bt_ver + "</td>")
 
   return ht_campos

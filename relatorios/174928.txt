@@ -1,0 +1,30 @@
+174928  Implemente o módulo {comando_recalcular_nota}.
+        Recebe argumentos { 'comentario': ID } ou { 'video': ID }.
+        No promeiro caso chama {obj_comentario.recalcula_nota} e usa {obj_comentario.muda_atributos} para alterar o atributo 'nota' do comentário.
+        No segundo caso chama {obj_video.recalcula_nota} e usa {obj_video.muda_atributos}.
+
+O módulo {comando_recalcular_nota} já se encontrava parcialmente implementado.
+Os três arquivos (.py, _IMP.py e _TST.py) já existiam e sofreram as seguintes alterações:
+
+        1. O arquivo comando_recalcular_nota.py já possuia a definição e descrição completa da função,
+        tendo sido realizada apenas a correção dos identificadores que deveriam ser {com_id} e {vid_id}.
+
+        2. O arquivo comando_recalcular_nota_IMP.py, que possui a implementação da função processa(),
+        estava parcialmente implementada, tendo sofrido as seguintes alterações:
+
+                a. Um comentário referente a obtenção de {com_id} ou {vid_id} foi complementado.
+
+                b. Foi deletada a adição de erro apontando a falta de implementação do comando.
+
+                c. Foi feita a implementação do recálculo do atributo 'nota' para ambos os casos (argumento 'comentario' e argumento 'video'),
+                conferindo qual dos dois não é nulo.
+
+                d. A variável 'para_admin' que não era utilizada, foi removida.
+
+                e. Os imports não utilizados foram removidos.
+
+Não foi possível executar o teste do módulo {comando_recalcular_nota},
+pois o arquivo obj_video_IMP.py apresenta um erro de compilação ao tentar realizar o import de 'cv2',
+impossibitando uma conferência confiável da implementação realizada.
+
+

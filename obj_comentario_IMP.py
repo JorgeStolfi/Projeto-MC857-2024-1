@@ -49,8 +49,8 @@ def inicializa_modulo(limpa):
       ( 'autor',     obj_usuario.Classe,    'TEXT',    False ), # Usuário que postou o comentário.
       ( 'pai',       obj_comentario.Classe, 'TEXT',    True  ), # Comentário pai, ou {None}.
       ( 'texto',     type("foo"),           'TEXT',    False ), # Texto do comentário.
-      ( 'voto',      type(418),             'INTEGER', False ), # Opinião sobre víedo ou pai.
-      ( 'nota',      type(3.14),            'FLOAT',   False ), # Opinião sobre víedo ou pai.
+      ( 'voto',      type(418),             'INTEGER', False ), # Opinião sobre vídeo ou pai.
+      ( 'nota',      type(3.14),            'FLOAT',   False ), # Opinião sobre vídeo ou pai.
       ( 'bloqueado', type(False),           'INTEGER', False ), # O comentário foi bloqueado.
       ( 'data',      type("foo"),           'TEXT',    False ), # Data e hora da postagem.
     )
@@ -175,9 +175,13 @@ def busca_por_data(data_ini, data_fin):
   if tabela.debug: sys.stderr.write(f"    > ids encontrados = {str(lista_ids)}\n");
   return lista_ids
   
-def recalcula_nota(com):
-  sys.stderr.write("!!! função {obj_comentario.recalcula_nota} ainda não foi implementada !!!\n")
-  nota = 2.0
+def recalcula_nota(com):#################################################
+  global tabela
+  notaOriginal = obj_comentario.obtem_atributo(com, "nota")
+  votoOriginal = obj_comentario.obtem_atributo(com, "voto")
+  ##sys.stderr.write("!!! função {obj_comentario.recalcula_nota} ainda não foi implementada !!!\n")
+  ##nota = 2.0
+  nota = (2.0*4.0 + votoOriginal*notaOriginal**2)/(4.0+notaOriginal**2)
   return nota
 
 def ultimo_identificador():
