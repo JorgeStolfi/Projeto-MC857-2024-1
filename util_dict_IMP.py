@@ -1,6 +1,9 @@
 import obj_raiz
-import util_dict
 import sys, re
+import obj_usuario
+import obj_sessao
+import obj_video
+import obj_comentario
 
 def elimina_alteracoes_nulas(cmd_args, obj_atrs):
   if obj_atrs != None:

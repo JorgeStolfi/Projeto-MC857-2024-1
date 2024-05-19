@@ -1,6 +1,6 @@
 import html_elem_item_de_resumo_IMP
 
-def gera(texto, cab, cor_fundo, alinha):
+def gera(texto, cab, cor_fundo, alinha, cor_texto=None):
   """
   Retorna um string que é um fragmento HTML consistindo to string {texto},
   formatado com estilo adequado para um item de uma linha de resumo,
@@ -18,5 +18,7 @@ def gera(texto, cab, cor_fundo, alinha):
   
   Mais precisamente o resultado é um elemento '<span style="{estilo}">{texto}</span>'
   com o {estilo} apropriado.
+
+  O parâmetro {cor_texto} especifica a cor que o item deve ser escrito
   """
-  return html_elem_item_de_resumo_IMP.gera(texto, cab, cor_fundo, alinha)
+  return html_elem_item_de_resumo_IMP.gera(texto, cab, cor_fundo, alinha, cor_texto)

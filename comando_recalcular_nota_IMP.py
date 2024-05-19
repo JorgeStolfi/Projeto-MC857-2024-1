@@ -3,12 +3,7 @@ import html_pag_ver_comentario
 import html_pag_ver_video
 import obj_comentario
 import obj_sessao
-import obj_usuario
 import obj_video
-import util_dict
-from util_erros import ErroAtrib
-
-import sys
 
 crec_debug = False  # Deve imprimir mensagens para depuração?
 
@@ -24,7 +19,6 @@ def processa(ses, cmd_args):
   erros = [] # Mensagens de erro.
 
   ses_dono = None
-  para_admin = False
   if ses == None:
     erros.append("É preciso estar logado para executar esta ação")
   elif not obj_sessao.aberta(ses):
@@ -33,17 +27,23 @@ def processa(ses, cmd_args):
     # Obtem o dono da sessão corrente:
     ses_dono = obj_sessao.obtem_dono(ses)
     assert ses_dono is not None
-    para_admin = obj_usuario.eh_administrador(ses_dono)
 
-  # Obtém o comentário {com} a alterar, e elimina 'comentario' de {cmd_args}:
+  # Obtém o id {com_id} do comentário {com} ou o id {vid_id} do video {vid} a alterar,
+  # e elimina 'comentario' ou 'video' de {cmd_args}:
   com_id = cmd_args.pop('comentario', None)
   vid_id = cmd_args.pop('video', None)
 
-  erros.append("!!! O módulo {comando_recalcular_nota} ainda não foi implementado !!!\n")
-
   if len(erros) == 0:
-    assert false, "!!! implementar !!!"
-    pag = None
+    if com_id:
+      nota = obj_comentario.recalcula_nota(com_id)
+      obj_comentario.muda_atributos(com_id, {'nota': nota})
+      com = obj_comentario.obtem_objeto(com_id)
+      pag = html_pag_ver_comentario.gera(ses, com, None)
+    elif vid_id:
+      nota = obj_video.recalcula_nota(vid_id)
+      obj_video.muda_atributos(vid_id, {'nota': nota})
+      vid = obj_video.obtem_objeto(vid_id)
+      pag = html_pag_ver_video.gera(ses, vid, None)
   else:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
 
