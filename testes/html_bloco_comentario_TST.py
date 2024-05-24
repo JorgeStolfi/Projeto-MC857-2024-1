@@ -39,8 +39,13 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-# Comentário existente:
-com1_id = "C-00000009"
+# Comentário existente não bloqueado:
+com9_id = "C-00000009"
+com9 = obj_comentario.obtem_objeto(com9_id)
+assert com9 != None
+
+# Comentário existente bloqueado:
+com1_id = "C-00000001"
 com1 = obj_comentario.obtem_objeto(com1_id)
 assert com1 != None
 
@@ -64,6 +69,11 @@ for mostra_id in False, True:
               bt_responder = botoes
               bt_editar = botoes
               bt_calcnota = calcnota
+              testa_gera(
+                "C9" + tag, str, 
+                com9, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado,
+                bt_conversa, bt_responder, bt_editar, bt_calcnota
+              )
               testa_gera(
                 "C1" + tag, str, 
                 com1, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado,

@@ -23,7 +23,8 @@ incluindo o novo parametro e adicionei um comentário explicando o funcionamento
 Alterei `html_bloco_conversa_IMP` e `html_pag_ver_comentario_IMP` atualizando as chamadas para 
 `html_bloco_comentario` de modo a incluir o novo parametro `mostra_bloqueado`.
 
-Alterei o arquivo `html_bloco_comentario_TST` incluindo o novo parâmetro nos testes.
+Alterei o arquivo `html_bloco_comentario_TST` incluindo o novo parâmetro nos testes e incluindo um
+exemplo de comentário bloqueado nos testes.
 
 Rodei os testes para `html_bloco_comentario`, `html_bloco_conversa` e `html_pag_ver_comentario` e todos
 os testes terminaram normalmente.
