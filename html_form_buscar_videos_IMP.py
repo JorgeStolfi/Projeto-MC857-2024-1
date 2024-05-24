@@ -10,11 +10,12 @@ def gera(atrs):
   # Tupla contendo as seguintes informações: {rot} {tipo} {chave} {editavel} {dica}
   # Para um maior detalhamento, cheque a documentação de `html_bloco_tabela_de_campos.gera`.
   dados_linhas = (
-      ( "ID",       "text",   'video',  True,  "V-NNNNNNNN",      ),
-      ( "Título",   "text",   'titulo', True,  "Bla bla bla",     ),
-      ( "Autor",    "text",   'autor',  True,  "U-NNNNNNNN",   ),
-      ( "Data",     "text",   'data',   True,  "2024",            ),
-      ("Bloqueado", "checkbox", 'bloqueado', True, "", )
+      ( "ID",         "text",     'video',      True, "V-NNNNNNNN"                ),
+      ( "Título",     "text",     'titulo',     True, "Bla bla bla",              ),
+      ( "Autor",      "text",     'autor',      True, "U-NNNNNNNN"                ),
+      ( "Desde data", "text",     'data_min',   True, "2024-05-20 15:00:00 UTC",  ),
+      ( "Até data",   "text",     'data_max',   True, "2024-05-24 15:00:00 UTC",  ),
+      ( "Bloqueado",   "checkbox", 'bloqueado',  True, ""                         )
     )
   # #55ee55
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
