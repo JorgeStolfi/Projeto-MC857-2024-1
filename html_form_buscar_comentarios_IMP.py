@@ -5,6 +5,10 @@ import html_elem_form
 
 def gera(atrs, admin):
 
+  obj_bloqueado = ("Bloqueado", "text", 'bloqueado', True, "True")
+  if not admin:
+    obj_bloqueado = ("", "hidden", 'bloqueado', False, None)
+
   dados_linhas = (
       ( "Comentário", "text",     'comentario',    True,  "C-nnnnnnnn" ),
       ( "Pai",        "text",     'pai',           True,  "C-nnnnnnnn" ),
@@ -12,7 +16,7 @@ def gera(atrs, admin):
       ( "Video",      "text",     'video',         True,  "V-nnnnnnnn" ),
       ( "Data",       "text",     'data',          True,  "2024-01-01 08:33:25 UTC" ),
       ( "Texto",      "text",     'texto',         True,  "Blá bla bla" ),
-      ( "Bloqueado",  "text",     'bloqueado',     True,  "True" ),
+      obj_bloqueado
     )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
