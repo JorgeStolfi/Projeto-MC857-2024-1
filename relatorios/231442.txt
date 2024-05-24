@@ -1,0 +1,8 @@
+Como fiquei responsável por testar o modulo de obj_comentario.recalcula_nota, 
+eu nos testes de obj_comentario comentei todos que não fossem ele, assim teria 
+maior visibilidade.
+Antes de começar a alterar o teste para rodar recursivamente, testei o resultado
+atual. A nota é recalculada e seu valor é 2.0
+Realizei as alterações recalculando os comentários de maneira recursiva em
+obj_comentario_imp e rodei os testes novamente e tudo funcionou como deveria
+Pedi bastante a ajuda do professor, o que foi essencial para finalizar essa tarefa
