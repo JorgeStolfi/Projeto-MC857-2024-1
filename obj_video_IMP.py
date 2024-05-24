@@ -226,7 +226,7 @@ def cria_testes(verb):
   # Identificadores esperados e atributos dos videos de teste:
   lista_ats = \
     [
-      ( "V-00000001", "U-00000001", "Ejetar de verdade",           3.0, False,  ),
+      ( "V-00000001", "U-00000001", "Ejetar de verdade",           3.0, True,  ),
       ( "V-00000002", "U-00000002", "Fukushima #3",                3.6, False,  ),
       ( "V-00000003", "U-00000001", "Pipoca pipocando",            1.0, False,  ),
       ( "V-00000004", "U-00000004", "Vírus do POVRAY",             1.4, False,  ),

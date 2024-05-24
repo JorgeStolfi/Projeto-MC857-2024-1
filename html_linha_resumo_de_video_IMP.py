@@ -6,7 +6,9 @@ import html_elem_button_simples
 import html_estilo_texto
 import html_elem_link_img
 import html_elem_link_text
+import util_bloqueado
 import util_nota
+import util_testes
 
 def gera(vid, mostra_autor):
 
@@ -27,6 +29,7 @@ def gera(vid, mostra_autor):
       texto = "Vídeo" if cab else html_elem_link_text.gera(vid_id, "ver_video", { 'video': vid_id })
     elif chave == 'titulo':
       mostra = True
+      alinha = "left"
       if cab:
         texto = "Título"
       else:
@@ -34,7 +37,7 @@ def gera(vid, mostra_autor):
           texto = "[BLOQUEADO]"
           cor_fundo = "#FF2222"
         else:
-          texto = str(atrs['titulo'])
+          texto = util_testes.trunca_tamanho(str(atrs['titulo']), 15)
     elif chave == 'autor':
       mostra = mostra_autor
       if cab:
@@ -63,6 +66,12 @@ def gera(vid, mostra_autor):
       else:
         thumb_file = f"thumbs/{vid_id}.png"
         texto = html_elem_link_img.gera(thumb_file, None, 40, None)
+    elif chave == 'bloqueado':
+      mostra = True
+      if cab:
+        texto = "🔒"
+      else:
+        texto = util_bloqueado.formata(atrs['bloqueado'])
     else:
       mostra = True
       texto = chave.capitalize() if cab else str(atrs[chave])
