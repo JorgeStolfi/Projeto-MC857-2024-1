@@ -6,3 +6,6 @@ atual. A nota é recalculada e seu valor é 2.0
 Realizei as alterações recalculando os comentários de maneira recursiva em
 obj_comentario_imp e rodei os testes novamente e tudo funcionou como deveria
 Pedi bastante a ajuda do professor, o que foi essencial para finalizar essa tarefa
+
+Eu também fiz algumas alterações nos testes adicionando prints que facilitaram o
+entendimento do resultado esperado e corrigi um erro de digitação.
