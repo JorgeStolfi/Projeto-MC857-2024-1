@@ -15,7 +15,7 @@ def gera(vid, mostra_autor):
 
   itens_resumo = []
 
-  colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'largura', 'altura', 'titulo', 'bloqueado']
+  colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'tamanho', 'titulo', 'bloqueado']
   
   cor_fundo = None
   cor_texto = None
@@ -46,9 +46,9 @@ def gera(vid, mostra_autor):
       mostra = True
       texto = "Duração" if cab else f"{atrs[chave]/1000:.3f} s"
       alinha = "right"
-    elif chave == 'altura' or chave == 'largura':
+    elif chave == 'tamanho':
       mostra = True
-      texto = chave.capitalize() if cab else f"{str(atrs[chave])} px"
+      texto = chave.capitalize() if cab else f"{str(atrs['largura'])}x{str(atrs['altura'])} px"
       alinha = "right"
     elif chave == 'nota':
       mostra = True
