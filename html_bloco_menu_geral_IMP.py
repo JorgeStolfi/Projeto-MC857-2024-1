@@ -22,6 +22,7 @@ def gera(usr):
   
   # Mensagem de boas-vindas:
   hts_linhas.append(html_bloco_bemvindo.gera(usr))
+  hts_linhas.append("<br/>")
   hts_linhas.append(gera_linha(gera_botoes_de_busca(usr)))
   hts_linhas.append(gera_linha(gera_botoes_linha_principal(usr)))
   if usr_admin:
