@@ -1,1 +1,29 @@
 Relatorio - 164210
+
+IMPORTANTE
+- Sempre que você alterar um módulo,execute o programa de teste correspondente e corrija bugs que ele apontar.
+- Se não existir o programa de testes, escreva.
+- Se você alterar um arquivo "_IMP.py" de alguma maneira que possa afetar as funções que chamam esse módulo,
+(1) documente essa mudança nos comentários da interface, e (2) busque todas as chamadas dessa função que você
+alterou, verificando se foram afetadas pela sua mudança. Se foram, corrija o que for necessário.
+- Não se esqueça de peencher seu relatório em "relatorios/{RA}.txt" antes de subir seu branch.
+
+Tarefa de hoje: 
+164210 [Logar como administrador ("primeiro@gmail.com", senha "U-00000001")] 
+Menu "Meus comentários" > Clicar em "C-00000001" : 
+Se o dono da sessão é administrador (apenas), deve aparecer o texto do comentário mesmo se estiver bloueadi,
+com uma indicação de que está bloqueado.
+
+
+O que fiz:
+Alterei `html_bloco_comentario_IMP` adicionando um novo parametro `mostra_bloqueado` que indica se o 
+comentario deve ser mostrado mesmo se estiver bloqueado. Alterei em `html_bloco_comentario` a chamada
+incluindo o novo parametro e adicionei um comentário explicando o funcionamento.
+
+Alterei `html_bloco_conversa_IMP` e `html_pag_ver_comentario_IMP` atualizando as chamadas para 
+`html_bloco_comentario` de modo a incluir o novo parametro `mostra_bloqueado`.
+
+Alterei o arquivo `html_bloco_comentario_TST` incluindo o novo parâmetro nos testes.
+
+Rodei os testes para `html_bloco_comentario`, `html_bloco_conversa` e `html_pag_ver_comentario` e todos
+os testes terminaram normalmente.

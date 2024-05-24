@@ -27,6 +27,7 @@ def gera(ses, com, erros):
     ( com, 
       largura = 600, # Por enquanto.
       mostra_data = True, mostra_id = False, mostra_video = True, mostra_pai = True,
+      mostra_bloqueado = para_logado,
       bt_conversa = True, 
       bt_responder = (ses != None), 
       bt_editar  = (para_admin or para_autor),
