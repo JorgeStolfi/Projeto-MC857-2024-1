@@ -462,3 +462,63 @@ def def_obj_mem(obj, vid_id, atrs_SQL):
       obj.atrs[chave] = val
   if tabela.debug: mostra(2, "obj = " + str(obj))
   return obj
+
+import subprocess
+import os
+
+def cria_quadros(n, altura):
+    # Formatação para obter o número do vídeo (NNNNNNNN) a partir da altura
+    video_num = f'{altura:08d}'
+    video_path = f'videos/V-{video_num}.mp4'
+    
+    # Verificação se o vídeo existe
+    if not os.path.exists(video_path):
+        raise FileNotFoundError(f"Video {video_path} not found.")
+    
+    # Obtendo a duração do vídeo
+    duration_command = [
+        'ffprobe', 
+        '-v', 'error', 
+        '-show_entries', 'format=duration', 
+        '-of', 'default=noprint_wrappers=1:nokey=1', 
+        video_path
+    ]
+    duration_result = subprocess.run(duration_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    
+    duration = float(duration_result.stdout.strip())
+    interval = duration / n
+    
+    # Criando a pasta de destino se não existir
+    thumbs_dir = 'thumbs'
+
+    # Extraindo os quadros
+    for i in range(n):
+        timestamp = interval * i
+        output_file = f'{thumbs_dir}/V-{video_num}-{i:03d}.png'
+        ffmpeg_command = [
+            'ffmpeg', 
+            '-ss', str(timestamp), 
+            '-i', video_path, 
+            '-vframes', '1', 
+            '-q:v', '2', 
+            output_file
+        ]
+        result = subprocess.run(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+def test_cria_quadros():
+    # Define parameters for the test
+    num_frames = 5
+    video_id = 1  # This should match the altura (height) part of your video naming convention
+
+    try:
+        cria_quadros(num_frames, video_id)
+        for i in range(num_frames):
+            thumb_path = f'thumbs/V-{video_id:08d}-{i:03d}.png'
+            if not os.path.exists(thumb_path):
+                raise AssertionError(f"Thumbnail {thumb_path} was not created.")
+        print("Test passed: All thumbnails created successfully.")
+    except Exception as e:
+        print(f"Test failed: {e}")
+
+test_cria_quadros()
