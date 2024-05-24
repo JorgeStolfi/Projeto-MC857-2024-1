@@ -1,8 +1,1 @@
-Minha tarefa foi alterar as implementações de {html_pag_alterar_comentario.gera}, {comando_solicitar_pag_alterar_comentario.processa} e {comando_alterar_comentario.processa} para incluir o novo atributo 'bloqueado' do obj_comentario.
-
-Para fazer isto, realizei as seguintes modificações:
-1) Alterei o arquivo comando_solicitar_pag_alterar_comentario_IMP para considerar que um usuário apenas pode alterar um comentário caso ele seja adm, ou então caso seja dono do comentário e o mesmo não esteja bloqueado;
-2) De acordo com a 1ª modificação, alterei comando_solicitar_pag_alterar_comentario_TST para incluir testes onde o usuário tenta editar um comentário bloqueado e não consegue, e onde um adm tenta editar e consegue;
-3) Modifiquei o arquivo comando_alterar_comentario_IMP de forma similar à 1ª modificação, permitindo que o comentário seja editável apenas se o usuário for ADM ou seja dono do comentário e este não esteja bloqueado;
-4) Adicionei 2 casos de teste no módulo comando_alterar_comentario_TST com um comentário bloqueado, um deles considerando que o usuário é um user comum (deve retornar erro), e um que o usuário é ADM (deve funcionar);
-5) Não precisei alterar o módulo html_pag_alterar_comentario, pois caso ocorra algum erro de permissão este erro será passado como parâmetro para o módulo por conta da correção feita em comando_alterar_comentario_IMP.
+Relatorio - 174868

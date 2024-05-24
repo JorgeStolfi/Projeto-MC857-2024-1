@@ -1,6 +1,6 @@
 import html_elem_item_de_resumo_IMP
 
-def gera(texto, cab, cor_fundo, alinha, cor_texto=None):
+def gera(texto, cab, cor_fundo, alinha, cor_texto):
   """
   Retorna um string que é um fragmento HTML consistindo to string {texto},
   formatado com estilo adequado para um item de uma linha de resumo,
@@ -10,15 +10,16 @@ def gera(texto, cab, cor_fundo, alinha, cor_texto=None):
   cores de texto e fundo padronizados para esse fim. 
   
   Se {cab} é false, supõe que o {texto} é um atributo de objeto, que
-  será mostrado com o fundo da {cor_fundo} indicada (ou transparente se
-  {cor_fundo} for {None}).
+  será mostrado com a cor {cor_texto} (ou preto se {cor_texto} é {None})
+  e o fundo da {cor_fundo} (ou transparente se {cor_fundo} for {None}).
   
   O parâmetro {alinha} especifica o alinhamento horizontal do texto na coluna. Deve ser
   "left", "center",ou "right".
   
   Mais precisamente o resultado é um elemento '<span style="{estilo}">{texto}</span>'
   com o {estilo} apropriado.
-
-  O parâmetro {cor_texto} especifica a cor que o item deve ser escrito
+  
+  O texto deve ser uma única linha e não muito extenso.  Quem chama esta 
+  função deve cuidar para que estas restrições sejam satisfeitas. 
   """
   return html_elem_item_de_resumo_IMP.gera(texto, cab, cor_fundo, alinha, cor_texto)

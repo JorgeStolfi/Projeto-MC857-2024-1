@@ -170,22 +170,34 @@ def busca_por_campos(atrs, unico):
   
   Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
   ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
-  se houver apenas um.  Em qualquer outro case, termina o programa com erro."""
+  se houver apenas um.  Em qualquer outro case, termina o programa com erro.
+  
+  O atributo 'titulo' tem tratamento especial. Se {args} tiver o campo
+  {'titulo': frase}, e a {frase} não começa com "~", a busca vai aceitar
+  vídeos cujo titulo contém a {frase} em qualquer lugar. Por
+  exemplo, se {frase} for " peiXE", vai acetar vídeos cujo titulo é
+  "Temos Peixes", "Nossa peixeira" mas não "Peixes à venda" nem "O
+  Peixésimo".
+  
+  Mais precisamente, se a {frase} não começa com "~", ela é substituída
+  por {"~%" + frase + "%"}. Esse "~" incial determina que a comparação
+  será feita pelo operador LIKE do SQL; veja {obj_raiz.busca_por_campos} para
+  mais detalhes. Em qualquer caso, a comparação vai ignorar a distinção
+  maiúsculas/minusculas, e a {frase} pode conter caracteres '%' ou '_'
+  adicionais.
+  """
   return obj_video_IMP.busca_por_campos(atrs, unico)
 
 def obtem_amostra(n, ordem):
   """Devolve uma lista com os identificadores de {n} vídeos armazenados
-  no sistema, escolhidos aleatoriamente.
+  no sistema, escolhidos aleatoriamente. Se não houver mais de {n} vídeos
+  no sistema, devolve a lista de todos eles.  
   
-  Falha com erro se houver menos de {n} vídeos no sistema."""
+  O parâmetro {ordem} é um inteiro que especifica a ordenação dos
+  identificadores pelo atributo 'nota' do vídeo. Pode ser {+1}
+  para ordem crescente, {-1} para descrescente, e 0 para ordem aleatória
+  (independentemente da nota)."""
   return obj_video_IMP.obtem_amostra(n, ordem)
-
-def recalcula_nota(vid):
-  """Calcula uma nova nota para o vídeo {vid},
-  baseada nas notas e votos dos comentários imediatos
-  (comentários com 'vídeo' = {vid} e 'pai' = {None}). Se {vid}
-  não tem nenhum comentário imediato, devolve 2.0."""
-  return obj_video_IMP.recalcula_nota(vid)
 
 def ultimo_identificador():
   """Devolve o identificador do último vídeo inserido na tabela.

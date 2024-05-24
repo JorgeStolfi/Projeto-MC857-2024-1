@@ -20,19 +20,19 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
   
-def usa_item(texto, cab, cor_fundo, alinha):
+def usa_item(texto, cab, cor_fundo, alinha, cor_texto):
   """Converte um item numa tabela completa"""
-  ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha)
+  ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto)
   ht_linha_1 = f"<tr><td style=\"background: #77ffcc; text-align: {alinha}\" width=500px>Resultado de gera()</td></tr>"
   ht_linha_2 = f"<tr>{ht_item}</tr>"
   ht_tab = "<table>" + ht_linha_1 + ht_linha_2 + "</table>"
   return ht_tab
 
-for cab, cor_fundo in (False, "#ffcc55"), (False, None), (True, None):
+for cab, cor_fundo, cor_texto in (False, "#ffcc55", "#5555ff"), (False, None, None), (True, None, None):
   for alinha in "left", "center", "right":
-    rot_teste = f"cab{str(cab)[0]}_fundo{str(cor_fundo)}_{alinha}"
+    rot_teste = f"cab{str(cab)[0]}_fundo{str(cor_fundo)}_texto{str(cor_texto)}_{alinha}"
     texto = "Cabecalho" if cab else "Item itemoso"
-    testa_gera(rot_teste, str, texto, cab, cor_fundo, alinha)
+    testa_gera(rot_teste, str, texto, cab, cor_fundo, alinha, cor_texto)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n");

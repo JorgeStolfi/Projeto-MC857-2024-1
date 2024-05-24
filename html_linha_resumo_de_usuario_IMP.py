@@ -25,8 +25,9 @@ def gera(usr):
     if mostra:
       cab = (usr == None)
       cor_fundo = None
+      cor_texto = None
       alinha = "left"
-      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha)
+      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto)
       ht_campos.append(ht_item)
 
   if usr != None:

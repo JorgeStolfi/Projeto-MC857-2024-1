@@ -1,6 +1,6 @@
 import html_bloco_video_IMP
 
-def gera(vid, bt_alterar, bt_conversa, bt_comentar):
+def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
   """
   Retorna um fragmento HTML que exibe dados do video {vid}
   (não editáveis) e o vídeo em si.
@@ -27,7 +27,10 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar):
     que emite o comando "solicitar_pag_postar_comentario" para acrescentar 
     um comentário ao vídeo.
     
+    * Se {bt_calcnota} é {True}, inclui um botão "Recalcular nota" ou equivalente,
+    que emite o comando "recalcular_nota" para recalcular a nota do vídeo.
+  
   Em todos estes comandos, os argumentos serão {{ 'video': vid_id }} onde
   {vid_id} é o identificador do vídeo {vid}.
   """
-  return html_bloco_video_IMP.gera(vid, bt_alterar, bt_conversa, bt_comentar)
+  return html_bloco_video_IMP.gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota)

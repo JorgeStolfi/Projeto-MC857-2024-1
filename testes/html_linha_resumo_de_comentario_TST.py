@@ -25,7 +25,7 @@ def testa_gera(rot_teste, res_esp, *args):
   
   global ok_global
   modulo = html_linha_resumo_de_comentario
-  funcao = modulo.gera
+  funcao = html_linha_resumo_de_comentario.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
@@ -43,11 +43,16 @@ com2 = obj_comentario.obtem_objeto(com2_id)
 assert obj_comentario.obtem_atributo(com2, 'pai') != None
 
 for ms_autor in False, True:
+  xaut = f"_msaut{str(ms_autor)[0]}"
   for ms_video in False, True:
+    xvid = f"_msvid{str(ms_video)[0]}"
     for ms_pai in False, True:
-      xargs = f"aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}_"
-      testa_gera(xargs + "C1",  list, com1, ms_autor, ms_video, ms_pai)
-      testa_gera(xargs + "C2",  list, com2, ms_autor, ms_video, ms_pai)
+      xpai = f"_mspai{str(ms_pai)[0]}"
+      for ms_nota in False, True:
+        xnota = f"_mspai{str(ms_nota)[0]}"
+        tag = xaut + xvid + xpai + xnota
+        testa_gera("C1" + tag,  list, com1, ms_autor, ms_video, ms_pai, ms_nota)
+        testa_gera("C2" + tag,  list, com2, ms_autor, ms_video, ms_pai, ms_nota)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

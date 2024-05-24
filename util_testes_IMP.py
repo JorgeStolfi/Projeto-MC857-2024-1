@@ -49,7 +49,7 @@ def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
     sys.stderr.write(f"    levantou {res} ex =  {str(ex)}\n")
     if res_esp != res:
       # Re-raise to get diagnostics.
-      sys.stderr.write(f"@%@ res = {res} res_esp = {res_esp}\n")
+      # sys.stderr.write(f"@%@ res = {res} res_esp = {res_esp}\n")
       raise
   except ErroAtrib as ex:
     res = "ErroAtrib"

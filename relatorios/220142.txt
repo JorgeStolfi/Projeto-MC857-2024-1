@@ -1,11 +1,1 @@
-Nome: Leonardo Novaes do Nascimento
-RA:220142
-
-Foi criada o modulo html_estilo_button para o mapeamento das cores com os botões
-como especificado pela tarefa.
-
-Foi alterado os modulos html_elem_button_simples e html_elem_button_submit para aceitar 
-color como None
-
-Foi alterado as chamadas das funções html_elem_button_simples e html_elem_button_submit
-para colocar None quando possivel
+Relatorio - 220142

@@ -188,13 +188,13 @@ def busca_por_indice(tab, def_obj, ind):
   em vez do identificador do objeto."""
   return db_obj_tabela_IMP.busca_por_indice(tab, def_obj, ind)
 
-def busca_por_campo(tab, chave, valor, res_cols, nomes_cols_ord=[], ord=None, limite=None):
+def busca_por_campo(tab, chave, valor, res_cols):
   """
   Procura na tabela {tab} objetos que tem o valor {val}
   na coluna de nome {chave}.  Equivalente a 
   {busca_por_campos(tab, { chave: valor }, res_cols)}.
   """
-  return db_obj_tabela_IMP.busca_por_campo(tab, chave, valor, res_cols, nomes_cols_ord, ord, limite)
+  return db_obj_tabela_IMP.busca_por_campo(tab, chave, valor, res_cols)
 
 def busca_por_campos(tab, args, res_cols):
   """

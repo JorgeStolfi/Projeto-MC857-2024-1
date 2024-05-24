@@ -17,7 +17,6 @@ def gera(texto, URL, cmd_args, cor_fundo):
   # Constrói o botão propriamente dito:
   if cor_fundo == None:
     cor_fundo = html_estilo_button.escolhe_cor_fundo(texto)
-
   estilo = html_estilo_botao.gera(cor_fundo)
   html = \
     "<button" + \
@@ -30,7 +29,7 @@ def gera(texto, URL, cmd_args, cor_fundo):
 def verifica_chave(chave): 
   """ Verifica se {chave} pode ser um nome válido de 
   parãmetro do comando."""
-  chave_invs = re.findall("[^-a-zA-Z0-9_]", chave)
+  chave_invs = re.findall("[^a-zA-Z0-9_]", chave)
   if len(chave_invs) != 0:
     erro_prog(f"chave inválida: '{chave}'")
 

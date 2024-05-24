@@ -1,7 +1,6 @@
 #! /usr/bin/python3
 
 import obj_video
-
 import db_base_sql 
 import obj_raiz
 import obj_usuario
@@ -87,13 +86,6 @@ def verifica_video(rot_teste, vid, vid_id_esp, atrs_esp):
         if val_fun != "NECAS" and val_fun != val_esp:
           sys.stderr.write(f"  ** retornou {str(val_fun)}, deveria ter retornado {str(val_esp)}\n")
           ok = False
-   
-    sys.stderr.write("  testando {obj_video.recalcula_nota(vid)}:\n")
-    nota_calc = obj_video.recalcula_nota(vid)
-    if not isinstance(nota_calc, float) or nota_calc < 0.0 or nota_calc > 4.0:
-      sys.stderr.write(f"  ** retornou nota inválida {str(nota_calc)}\n")
-      # !!! Deveria passar parâmetro {nota_esp} e comparar se não é {None} !!!
-      ok = False
  
     for chave, val in atrs_fun.items():
       if chave != 'conteudo':

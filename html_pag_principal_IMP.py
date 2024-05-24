@@ -1,27 +1,37 @@
-import comando_ver_grade_de_videos
+import html_bloco_grade_de_videos
 import obj_sessao
 import obj_usuario
+import obj_video
 import html_pag_generica
-import html_elem_span
-import html_elem_div
-import html_elem_video
-import html_estilo_titulo
+import html_bloco_titulo
 from util_erros import erro_prog, mostra
 
-# Outras interfaces usadas por este módulo:
-from datetime import datetime, timezone
-import re, sys
+import sys
 
 def gera(ses, erros):
   if  ses == None:
-    texto1 = "Bem vinde ao nosso site de videos!"
-    estilo1 = html_estilo_titulo.gera("#b00000")
-    bloco_texto1 = html_elem_div.gera(estilo1, texto1)
+    titulo = "Bem vinde ao nosso site de videos!"
+    ht_titulo = html_bloco_titulo.gera(titulo)
   else:
-    bloco_texto1 = ""
+    ht_titulo = ""
 
-  bloco_video = html_elem_div.gera(None, comando_ver_grade_de_videos.processa(ses, {}))
+  ncols = 4  # Colunas da grade.
+  nlins = 3  # Linhas da grade.
+  nvids = ncols*nlins  # Total de células na grade.
 
-  conteudo = bloco_texto1 + bloco_video
-  pagina = html_pag_generica.gera(ses, conteudo, erros)
-  return pagina
+  vid_ids = obj_video.obtem_amostra(nvids, ordem = 0)
+  
+  try:
+    ht_grade = html_bloco_grade_de_videos.gera(vid_ids, ncols)
+  except ErroAtrib as ex:
+    erros += ex.args[0] 
+
+  try:
+    ht_grade = html_bloco_grade_de_videos.gera(vid_ids, ncols)
+  except ErroAtrib as ex:
+    erros += ex.args[0] 
+    ht_grade = ""
+
+  ht_conteudo = ht_titulo + ht_grade
+  pag = html_pag_generica.gera(ses, ht_conteudo, erros)
+  return pag

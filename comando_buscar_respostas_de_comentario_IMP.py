@@ -32,6 +32,7 @@ def processa(ses, cmd_args):
           mostra_autor = True,  # Autores das respostas variam.
           mostra_video = False, # Todas as respostas são do mesmo video.
           mostra_pai = False,   # Todas as respostas tem o mesmo pai.
+          mostra_nota = True,   # Porque não mostraria?
         )
       ht_bloco = \
         ht_titulo + "<br/>\n" + \

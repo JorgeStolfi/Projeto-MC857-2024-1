@@ -103,8 +103,11 @@ def obtem_objeto(id_obj, tabela, def_obj_mem):
   Se {id_obj} é {None} ou tal objeto não existe, devolve {None}."""
   return obj_raiz_IMP.obtem_objeto(id_obj, tabela, def_obj_mem)
 
-def busca_por_campo(chave, val, unico, tabela, nomes_cols_ord=[], ord=None, limite=None):
-  """Procura objetos cujo atributo {chave} tem valor {val}. 
+def busca_por_campo(chave, val, unico, tabela):
+  """Procura objetos cujo atributo {chave} tem valor {val}.  
+  Equivale a {busca_por_campos({chave: val}, unico, tabela)}
+  Veja essa função para os casos especiais em que {val}
+  começa com "~" ou é um par {(vmin,vmax)}.
   
   Se {unico} for {False}, devolve uma lista, possivelmente vazia,
   com os identificadores dos objetos encontrados (NÃO os objetos).
@@ -112,7 +115,7 @@ def busca_por_campo(chave, val, unico, tabela, nomes_cols_ord=[], ord=None, limi
   Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
   ou o identificador de um objeto (NÃO o objeto, NÃO uma lista) se 
   encontrar apenas um. Em qualquer outro caso, aborta o programa com erro."""
-  return obj_raiz_IMP.busca_por_campo(chave, val, unico, tabela, nomes_cols_ord, ord, limite)
+  return obj_raiz_IMP.busca_por_campo(chave, val, unico, tabela)
 
 def busca_por_campos(args, unico, tabela):
   """
@@ -124,10 +127,17 @@ def busca_por_campos(args, unico, tabela):
   
   Entretanto, se {val} começa com '~', exige apenas que o valor na
   coluna {ch} seja apenas similar ao valor especificado em {val} (menos
-  o caracter '~'), segundo as regras do operador SQL "LIKE". Se {val}
-  for uma lista de dois elementos {(vmin, vmax)}, exige que o valor na coluna
-  {ch} esteja entre {vmin} e {vmax}, inclusive. Veja as regras em
-  {db_obj_tabela.busca_por_campos}.
+  o caracter '~'), segundo as regras do operador SQL "LIKE". Esse
+  operador ignora as distinções minúscula/maiúscula, e entende os
+  caracteres '_' e '%' em {val} como significando "qualquer caracter" e
+  "qualquer cadeia de zero ou mais caracteres", respectivamente. Por
+  exemplo, se {val} for "~% peiXE%", vai aceitar linhas da tabela cuja
+  coluna {ch} é "Temos Peixes", "Nossa peixeira" mas não "Peixes à
+  venda" nem "O Peixésimo".
+  
+  Se {val} for uma lista de dois elementos {(vmin, vmax)}, esta função
+  exige que o valor na coluna {ch} da tabela esteja entre {vmin} e
+  {vmax}, inclusive. Veja as regras em {db_obj_tabela.busca_por_campos}.
  
   Se {unico} for {False}, devolve uma lista, possivelmente vazia,
   com os identificadores dos objetos encontrados (NÃO os objetos).
@@ -138,6 +148,19 @@ def busca_por_campos(args, unico, tabela):
   """
   return obj_raiz_IMP.busca_por_campos(args, unico, tabela)
   
+def converte_campo_em_padrao(args, chave):
+  """
+  Se {args} tem um campo {chave: val}, e {val} é um string 
+  que não começa com "~", devolve uma cópia de {args} 
+  onde esse campo foi substituído por {chave: "~%" + val + "%"}.
+  Senão devolve {args} sem alteração.
+  
+  Esta função pode ser usada para forçar que uma busca pelo campo
+  {chave} use forçosamente o operador SQL "LIKE", mesmo que o valor
+  {val} não tenha o prefixo "~".
+  """
+  return obj_raiz_IMP.converte_campo_em_padrao(args, chave)
+
 def ultimo_identificador(tabela):
   """Retorna o identificador do último objeto na tabela {tabela},
   no formato "{letra_tb}-{NNNNNNNN}" onde {NNNNNNNN} é o 

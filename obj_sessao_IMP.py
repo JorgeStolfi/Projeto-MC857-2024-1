@@ -175,6 +175,7 @@ def cria_testes(verb):
       ( "S-00000004", "U-00000003", "DEFGHIJKLMN", False ),
       ( "S-00000005", "U-00000005", "EFGHIJKLMNO", False ),
       ( "S-00000006", "U-00000008", "FGHIJKLMNOP", True  ),
+      ( "S-00000007", "U-00000004", "GHIJKLMNOPQ", False ),
     ]
   for ses_id_esp, dono_id, cookie, admin_esp in lista_ucs:
     dono = obj_usuario.obtem_objeto(dono_id)

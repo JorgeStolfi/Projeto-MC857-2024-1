@@ -4,6 +4,7 @@ import html_pag_ver_video
 import obj_comentario
 import obj_sessao
 import obj_video
+import obj_usuario
 
 crec_debug = False  # Deve imprimir mensagens para depuração?
 
@@ -27,24 +28,38 @@ def processa(ses, cmd_args):
     # Obtem o dono da sessão corrente:
     ses_dono = obj_sessao.obtem_dono(ses)
     assert ses_dono is not None
+    
+  para_admin = obj_usuario.eh_administrador(ses_dono) if ses_dono != None else False
+  if not para_admin:
+    erros.append("Você não tem permissão para executar esta ação")
 
   # Obtém o id {com_id} do comentário {com} ou o id {vid_id} do video {vid} a alterar,
   # e elimina 'comentario' ou 'video' de {cmd_args}:
   com_id = cmd_args.pop('comentario', None)
   vid_id = cmd_args.pop('video', None)
 
+  pag = None
   if len(erros) == 0:
-    if com_id:
-      nota = obj_comentario.recalcula_nota(com_id)
-      obj_comentario.muda_atributos(com_id, {'nota': nota})
+    if com_id != None:
       com = obj_comentario.obtem_objeto(com_id)
-      pag = html_pag_ver_comentario.gera(ses, com, None)
-    elif vid_id:
-      nota = obj_video.recalcula_nota(vid_id)
-      obj_video.muda_atributos(vid_id, {'nota': nota})
+      if com == None:
+        erros.append(f"O comentário {com_id} não existe")
+      else:
+        nota = obj_comentario.recalcula_nota(com)
+        obj_comentario.muda_atributos(com, {'nota': nota})
+        pag = html_pag_ver_comentario.gera(ses, com, None)
+    elif vid_id != None:
       vid = obj_video.obtem_objeto(vid_id)
-      pag = html_pag_ver_video.gera(ses, vid, None)
-  else:
+      if vid == None:
+        erros.append(f"O vídeo {vid_id} não existe")
+      else:
+        nota = obj_comentario.recalcula_nota(vid)
+        obj_video.muda_atributos(vid, {'nota': nota})
+        pag = html_pag_ver_video.gera(ses, vid, None)
+ 
+  if pag == None:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
+  else:
+    assert len(erros) == 0
 
   return pag

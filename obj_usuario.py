@@ -108,21 +108,23 @@ def eh_administrador(usr):
   return obj_usuario_IMP.eh_administrador(usr)
 
 def busca_por_email(em):
-  """Localiza um usuário cujo endereço de email é {em} (um string da forma
+  """
+  Localiza um usuário cujo endereço de email é {em} (um string da forma
   "{nome}@{host}") e devolve o identificador do mesmo (não o objeto);
   ou {None} se não existir tal usuário. Equivale a 
-  {busca_por_campos({'email': em}, unico=True)}. Note que {em}
-  NÃO pode ser um padrão SQL."""
+  {busca_por_campos({'email': em}, unico=True)}.  
+  
+  Note que {em} NÃO pode ser um padrão para SQL LIKE; isto é, NÃO pode
+  coemçar com "~".
+  """
   return obj_usuario_IMP.busca_por_email(em)
 
 def busca_por_nome(nome):
-  """Localiza usuarios usuário cujo nome é {nome} e devolve uma lista
+  """Localiza usuarios cujo nome contém a caceia {nome} e devolve uma lista
   (possivelmente vazia) com os identificadores dos mesmos (não os objetos).
   
-  Equivale a {busca_por_campos({'nome': nome}, unico=False)}.
-  Portanto, se o {nome} começar com '~', considera o restante como um padrão 
-  para o operador LIKE do SQL. Veja {obj_raiz.busca_por_campos} para detalhes
-  deste caso."""
+  Esta função equivale a {busca_por_campos({'nome': nome}, unico=False)}. Veja essa 
+  função para o tratamento especial do campo 'nome'."""
   return obj_usuario_IMP.busca_por_nome(nome)
 
 def busca_por_campos(atrs, unico):
@@ -139,6 +141,19 @@ def busca_por_campos(atrs, unico):
   Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
   ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
   se houver apenas um.  Em qualquer outro case, termina o programa com erro.
+  
+  O atributo 'nome' tem tratamento especial. Se {args} tiver o campo
+  {'nome': frase}, e a {frase} não começa com "~", a busca vai aceitar
+  usuários cujo nome contém a {frase} em qualquer lugar. Por
+  exemplo, se {frase} for "a joS", vai aceitar usuários cujo nome é
+  "Maria José", "Dona Josefina" mas não "José Maria" nem "Diná Josefina".
+  
+  Mais precisamente, se a {frase} não começa com "~", ela é substituída
+  por {"~%" + frase + "%"}. Esse "~" incial determina que a comparação
+  será feita pelo operador LIKE do SQL; veja {obj_raiz.busca_por_campos} para
+  mais detalhes. Em qualquer caso, a comparação vai ignorar a distinção
+  maiúsculas/minusculas, e a {frase} pode conter caracteres '%' ou '_'
+  adicionais.
   """
   return obj_usuario_IMP.busca_por_campos(atrs, unico)
 

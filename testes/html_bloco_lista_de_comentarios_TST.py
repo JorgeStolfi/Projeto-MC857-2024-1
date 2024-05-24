@@ -21,7 +21,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
   global ok_global
   modulo = html_bloco_lista_de_comentarios   
-  funcao = modulo.gera
+  funcao = html_bloco_lista_de_comentarios.gera
   frag = True     # {True} se for apenas um fragmento HTML, {False} se for página completa.
   pretty = False  # Se {True}, formata HTML para legibilidate (mas introduz brancos nos textos).
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
@@ -43,9 +43,10 @@ com_ids = [
 for ms_autor in False, True:
   for ms_video in False, True:
     for ms_pai in False, True:
-      xargs = f"_aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}"
-      testa_gera("muitas" + xargs, str, com_ids, ms_autor, ms_video, ms_pai)
-      testa_gera("lhufas" + xargs, str, [],              ms_autor, ms_video, ms_pai)
+      for ms_nota in False, True:
+        xargs = f"_aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}_nota{str(ms_nota)[0]}"
+        testa_gera("muitas" + xargs, str, com_ids, ms_autor, ms_video, ms_pai, ms_nota)
+        testa_gera("lhufas" + xargs, str, [],      ms_autor, ms_video, ms_pai, ms_nota)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

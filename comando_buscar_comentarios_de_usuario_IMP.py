@@ -33,14 +33,13 @@ def processa(ses, cmd_args):
     autor = None
     autor_id = None
 
+  ht_conteudo = None # A menos que seja gerado.
   if autor == None:
     erros.append(f"O usuário a buscar não foi especificado")
-    ht_bloco = None
   else:
     com_ids = obj_comentario.busca_por_autor(autor_id)
     if len(com_ids) == 0:
       erros.append(f"O usuário \"{autor_id}\" não postou nenhum comentário")
-      ht_conteudo = None
     else:
       # Encontrou pelo menos um comentário. Mostra em forma de tabela:
       if autor == ses_dono:
@@ -48,16 +47,19 @@ def processa(ses, cmd_args):
       else:
         assert autor_id != None
         ht_titulo = html_bloco_titulo.gera(f"Comentários do usuário {autor_id}")
-      ms_autor = False # Pois todos do mesmo autor.
-      ms_video = True  # Podem ser de videos diferentes.
-      ms_pai = True    # Podem ter pais diferentes.
-      ht_tabela = html_bloco_lista_de_comentarios.gera(com_ids, ms_autor, ms_video, ms_pai)
+      ht_tabela = html_bloco_lista_de_comentarios.gera\
+        ( com_ids,
+          mostra_autor = False, # Pois são todos do mesmo autor.
+          mostra_video = True,  # Podem ser de videos diferentes.
+          mostra_pai = True,    # Podem ter pais diferentes.
+          mostra_nota = True,   # Porque não mostraria?
+        )
       ht_conteudo = \
         ht_titulo + "<br/>\n" + \
         ht_tabela
 
   if ht_conteudo == None:
-    pag = html_pag_mensagem_de_erro(ses, erros)
+    pag = html_pag_mensagem_de_erro.gera(ses, erros)
   else:
     pag = html_pag_generica.gera(ses, ht_conteudo, erros)
   return pag

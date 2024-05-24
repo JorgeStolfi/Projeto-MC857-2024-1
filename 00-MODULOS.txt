@@ -1,9 +1,11 @@
 # Módulos em ordem de teste:
-# Last edited on 2024-05-17 11:43:00 by stolfi
+# Last edited on 2024-05-20 17:43:15 by stolfi
 
 + util_erros
 + util_testes
-- util_dict
++ util_dict
++ util_nota
++ util_voto
 
 + util_booleano
 + util_inteiro
@@ -32,6 +34,8 @@
 + html_estilo_botao
 + html_estilo_titulo
 + html_estilo_texto
+- html_estilo_button
++ html_estilo_div_dados
 
 + html_elem_button_simples
 + html_elem_button_submit
@@ -42,6 +46,7 @@
 + html_elem_input
 + html_elem_label
 + html_elem_link_img
+- html_elem_link_text
 + html_elem_paragraph
 + html_elem_span
 + html_elem_table
@@ -71,7 +76,7 @@
 + html_bloco_video
 + html_linha_resumo_de_video
 + html_bloco_lista_de_videos
-+ html_bloco_grade_de_videos
+- html_bloco_grade_de_videos
 
 + html_bloco_cabecalho_de_comentario
 
@@ -126,7 +131,7 @@
 + comando_fazer_logout
 + comando_fechar_sessao
 + comando_solicitar_pag_buscar_sessoes
-- comando_buscar_sessoes
++ comando_buscar_sessoes
 + comando_buscar_sessoes_de_usuario
  
 + comando_ver_usuario
@@ -145,7 +150,7 @@
 + comando_solicitar_pag_buscar_videos
 + comando_buscar_videos
 + comando_buscar_videos_de_usuario
-- comando_ver_grade_de_videos
++ comando_ver_grade_de_videos
 
 + comando_ver_comentario
 + comando_solicitar_pag_postar_comentario
@@ -157,7 +162,7 @@
 + comando_buscar_comentarios_de_video
 + comando_buscar_comentarios_de_usuario
 + comando_buscar_respostas_de_comentario
-- comando_ver_conversa
++ comando_ver_conversa
 
 + comando_recalcular_nota
 

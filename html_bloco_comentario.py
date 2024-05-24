@@ -1,6 +1,6 @@
 import html_bloco_comentario_IMP
 
-def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar):
+def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar, bt_calcnota):
   """
   Retorna um fragmento HTML que exibe atributos de um comentário.
  
@@ -30,5 +30,5 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
   Os argumentos dos comandos emitidos por esses botões serão
   {{ 'comentário': com_id }}.
   """
-  return html_bloco_comentario_IMP.gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar)
+  return html_bloco_comentario_IMP.gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar, bt_calcnota)
 

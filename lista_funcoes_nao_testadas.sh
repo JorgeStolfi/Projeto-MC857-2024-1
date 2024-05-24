@@ -1,5 +1,5 @@
 #! /bin/bash
-# Last edited on 2024-05-17 14:44:19 by stolfi
+# Last edited on 2024-05-19 19:42:32 by stolfi
 
 modulo="$1"; shift
 
@@ -12,7 +12,7 @@ egrep -e '^def ' ${modulo}.py \
   > .funcs
 
 # Acha funções da interface que não estão sendo testadas
-lista_chamadas_de_funcoes.sh tests/${modulo}_TST.py ${modulo} > .uses
+lista_chamadas_de_funcoes.sh testes/${modulo}_TST.py ${modulo} > .uses
 egrep --invert-match --line-regexp -f .uses .funcs  > .missing
 if [[ -s .missing ]]; then
   echo "!! Atenção: estas funções da interface não são chamadas pelo programa de teste:" 1>&2
@@ -20,7 +20,7 @@ if [[ -s .missing ]]; then
 fi
 
 # Mostra chamadas que estão comentadas
-cat tests/${modulo}_TST.py | egrep -e '^[#]+ *test' > .commented
+cat testes/${modulo}_TST.py | egrep -e '^[#]+ *test' > .commented
 if [[ -s .commented ]]; then
   echo "!! Atenção: estas chamadas de funções no programa de testes estão comentadas:" 1>&2
   cat .commented | sed -e 's:^:  :g' 1>&2 

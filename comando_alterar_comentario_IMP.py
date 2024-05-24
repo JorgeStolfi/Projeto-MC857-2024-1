@@ -13,28 +13,27 @@ import sys
 
 caco_debug = False  # Deve imprimir mensagens para depuração?
 
-def msg_campo_obrigatorio(nome_do_campo):
-  return "O campo %s é obrigatório." % nome_do_campo
-
 def processa(ses, cmd_args):
 
   # Estas condições deveriam ser garantidas para comandos emitidos
   # pelas páginas do sistema:
-  assert ses != None and isinstance(ses, obj_sessao.Classe)
+  assert ses == None or isinstance(ses, obj_sessao.Classe)
   assert isinstance(cmd_args, dict)
 
   cmd_args = cmd_args.copy() # Para não alterar o original.
   erros = [] # Mensagens de erro.
 
-  if obj_sessao.aberta(ses):
+  ses_dono = None
+  if ses == None:
+    erros.append("É preciso estar logado para executar este comando")
+  elif not obj_sessao.aberta(ses):
+    erros.append("Esta sessão de login foi fechada. É preciso estar logado para executar este comando")
+  else: 
     # Obtem o dono da sessão corrente:
     ses_dono = obj_sessao.obtem_dono(ses)
     assert ses_dono is not None
-    para_admin = obj_usuario.eh_administrador(ses_dono)
-  else:
-    erros.append("Esta sessão de login foi fechada. Precisa estar logado para executar este comando")
-    ses_dono = None
-    para_admin = False
+
+  para_admin = obj_usuario.eh_administrador(ses_dono) if ses_dono != None else False
 
   # Obtém o comentário {com} a alterar, e elimina 'comentario' de {cmd_args}:
   com_id = cmd_args.pop('comentario', None)
@@ -53,8 +52,11 @@ def processa(ses, cmd_args):
     assert set(cmd_args.keys()) <= set(com_atrs.keys()), "Argumentos espúrios"
 
   if len(erros) == 0:
+    assert ses_dono != None
+    assert com != None
     # Verifica se o usuário corrente {ses_dono} pode alterar este comentário:
     autor = com_atrs['autor']
+    assert autor != None
     bloqueado = com_atrs['bloqueado']
     editavel = para_admin or (autor == ses_dono and not bloqueado)
     if not editavel:

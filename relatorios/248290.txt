@@ -1,13 +1,1 @@
-Relatório 17/05/2024
-
-    Na aula de hoje me foi designada a seguinte tarefa: Modificar {html_pag_alterar_comentario.gera} e {comando_alterar_comentario.processa} 
-(e o que mais for preciso) para alterar esse o campo {voto} da classe {comentário}, se e somente se o dono da sessão corrente for um administrador 
-ou o autor do comentário.
-    Para isso, inicialmente alterei o método {comando_alterar_comentario.processa.gera} para que este aceitasse alterações no campo apenas para usuários
-autorizados. Posteriormente, o mesmo foi feito na função {html_pag_alterar_comentario.gera}, que agora busca o usuário da sessão atual e compara com
-o dono do comentário além de checar o administrador.
-    Por fim, também fez-se necessária a alteração da função {html_form_postar_alterar_comentario.gera} (na interface e implementação). Inseri um novo input
-contendo o campo 'voto' para que este pudesse ser enviado no formulário, input esse que era inexistente. Além disso, o parâmetro 'ed_voto'
-foi inserido para manipulação de permissões no novo campo.
-    O cenário ideal deu certo, já que os únicos comentários que puderam ser acessados e editados foram o do perfil logado "Meus comentários". Cenários 
-contrários não puderam ser testados por ausência de implementação da página de buscar comentários.
+Relatorio - 248290

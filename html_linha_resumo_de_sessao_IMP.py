@@ -34,9 +34,10 @@ def gera(ses, bt_ver, bt_fechar, mostra_dono):
 
     if mostra:
       cab = (ses == None)
-      cor_fundo = None # Precisariamos saber a sessão atual, poderia passar como parâmetro mas não consegui Professor. Peço desculpas.
+      cor_fundo = None # !!! Precisariamos saber a sessão atual !!!
+      cor_texto = None 
       alinha = "left"
-      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha)
+      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto)
       ht_campos.append(ht_item)
   
   if ses != None:

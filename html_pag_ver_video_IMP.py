@@ -26,12 +26,13 @@ def gera(ses, vid, erros):
   vid_autor = obj_video.obtem_autor(vid)
   assert vid_autor != None
   para_admin = ses != None and obj_sessao.de_administrador(ses)
-  para_proprio = ses != None and ( ses_dono == vid_autor )
+  para_autor = ses != None and ( ses_dono == vid_autor )
   
-  bt_alterar = para_admin or para_proprio
+  bt_alterar = para_admin or para_autor
   bt_conversa = True
   bt_comentar = ses != None
-  ht_bloco_vid = html_bloco_video.gera(vid, bt_alterar, bt_conversa, bt_comentar)
+  bt_calcnota = para_admin or para_autor
+  ht_bloco_vid = html_bloco_video.gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota)
   
   ht_conteudo = \
     ht_titulo + "\n" + \

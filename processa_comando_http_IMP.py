@@ -44,6 +44,7 @@ import comando_buscar_comentarios_de_usuario
 import comando_buscar_respostas_de_comentario
 import comando_ver_conversa
 
+import comando_recalcular_nota
 import comando_ver_objeto
 
 import html_estilo_texto
@@ -517,8 +518,12 @@ def processa_comando(tipo, ses, dados):
       pag = comando_buscar_videos_de_usuario.processa(ses, cmd_args)
       
     elif cmd == '/ver_grade_de_videos':
-      # Quer lista dos vídeos de algum usuário:
+      # Quer uma amostra aleatória dos vídeos que existem:
       pag = comando_ver_grade_de_videos.processa(ses, cmd_args)
+      
+    elif cmd == '/recalcular_nota':
+      # Quer recalcular a nota de um vídeo ou comentário:
+      pag = comando_recalcular_nota.processa(ses, cmd_args)
 
     # --- comandos referentes a {obj_comentario.Classe} -----------------------
       

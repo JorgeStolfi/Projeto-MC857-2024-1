@@ -32,7 +32,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
   global ok_global
   modulo = html_bloco_comentario
-  funcao = modulo.gera
+  funcao = html_bloco_comentario.gera
   frag = True # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)

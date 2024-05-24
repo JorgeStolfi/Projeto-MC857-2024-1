@@ -37,11 +37,11 @@ def cria(atrs_mem, tabela, def_obj_mem):
 
 def muda_atributos(obj, mods_mem, tabela, def_obj_mem):
   assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
-  
-  # Converte valores de formato memória para formato SQL.
-  mods_SQL = db_conversao_sql.dict_mem_para_dict_SQL(mods_mem, tabela.colunas, True)
-  res = db_obj_tabela.atualiza_objeto(tabela, def_obj_mem, obj.id, mods_SQL)
-  assert res == obj
+  if len(mods_mem) > 0: 
+    # Converte valores de formato memória para formato SQL.
+    mods_SQL = db_conversao_sql.dict_mem_para_dict_SQL(mods_mem, tabela.colunas, True)
+    res = db_obj_tabela.atualiza_objeto(tabela, def_obj_mem, obj.id, mods_SQL)
+    assert res == obj
   return
 
 def obtem_identificador(obj):
@@ -62,9 +62,9 @@ def obtem_objeto(id_obj, tabela, def_obj_mem):
     obj = db_obj_tabela.obtem_objeto(tabela, def_obj_mem, id_obj)
   return obj
 
-def busca_por_campo(chave, val, unico, tabela, nomes_cols_ord, ord, limite):
+def busca_por_campo(chave, val, unico, tabela):
   assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"
-  lista_ids = db_obj_tabela.busca_por_campo(tabela, chave, val, None, nomes_cols_ord, ord, limite)
+  lista_ids = db_obj_tabela.busca_por_campo(tabela, chave, val, None)
   if unico:
     return util_testes.unico_elemento(lista_ids)
   else:
@@ -80,6 +80,17 @@ def busca_por_campos(args, unico, tabela):
     erro_prog("busca na tabela falhou, res = " + res)
   else:
     erro_prog("busca na tabela devolveu resultado inválido, res = \"" + str(res) + "\"")
+    
+def converte_campo_em_padrao(args, chave):
+  # sys.stderr.write(f"@*@ args = {args} chave = '{chave}'\n")
+  if chave in args:
+    frase = args[chave]
+    if isinstance(frase, str) and len(frase) >= 1 and frase[0] != "~":
+      # Trata implicitamente a frase como um padrão SQL:
+      args = args.copy() # Para não estragar o orignal
+      args[chave] = "~%" + frase + "%"
+  # sys.stderr.write(f"@#@ args = {args}\n")
+  return args
 
 def ultimo_identificador(tabela):
   assert tabela != None and tabela.colunas != None, "{tabela} é {None} -- módulo não inicializado?"

@@ -35,13 +35,17 @@ def formata_arvore(arv, ses_dono):
   raiz = obj_comentario.obtem_objeto(raiz_id)
   if raiz == None: erro_prog(f"Comentário {raiz_id} não existe")
   raiz_autor = obj_comentario.obtem_autor(raiz)
-  ses_admin = obj_usuario.eh_administrador(ses_dono) if ses_dono != None else False
+  assert raiz_autor != None
+  logado = (ses_dono != None)
+  para_admin = obj_usuario.eh_administrador(ses_dono) if ses_dono != None else False
+  para_autor = (ses_dono == raiz_autor) if ses_dono != None else False
   ht_raiz = html_bloco_comentario.gera \
     ( raiz, largura = 600, mostra_id = True, mostra_data = True, 
       mostra_video = False, mostra_pai = False, 
       bt_conversa = True, 
-      bt_responder = (ses_dono != None), 
-      bt_editar = (ses_dono != None) and (ses_admin or (ses_dono == raiz_autor))
+      bt_responder = logado, 
+      bt_editar = (para_admin or para_autor),
+      bt_calcnota = (para_admin or para_autor)
     )
 
   ht_subarvs = formata_floresta(arv[1:], ses_dono)

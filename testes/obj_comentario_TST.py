@@ -27,6 +27,11 @@ sys.stderr.write("  Inicializando módulo {comentario}, limpando tabela, criando
 obj_comentario.inicializa_modulo(True)
 obj_comentario.cria_testes(True)
 
+obj_comentario.liga_diagnosticos(False)
+db_base_sql.liga_diagnosticos(False)
+
+# !!! Verificar se {ok_global} está sendo resetado quando um teste falha !!!
+
 ok_global = True # Vira {False} se um teste falha.
 
 def verifica_comentario(rot_teste, com, com_id_esp, atrs_esp):
@@ -215,7 +220,7 @@ bv2_vid_id = "V-00000003"
 bv2_res_esp = ( "C-00000004", "C-00000006", cr0_id, cr1_id, )
 testa_busca_simples("bv2", 'video', bv2_vid_id, bv2_res_esp)
 
-bv3_vid_id = "V-00000004"
+bv3_vid_id = "V-00000005"
 bv3_res_esp = ()
 testa_busca_simples("bv3", 'video', bv3_vid_id, bv3_res_esp)
 
@@ -234,7 +239,7 @@ bu2_res_esp =  (
   )
 testa_busca_simples("bu2", 'autor', bu2_usr_id, bu2_res_esp)
 
-bu3_usr_id = "U-00000006"
+bu3_usr_id = "U-00000008"
 bu3_res_esp =  ( )
 testa_busca_simples("bu3", 'autor', bu3_usr_id, bu3_res_esp)
 
@@ -243,7 +248,7 @@ sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.busca_por_texto()}:\n")
 
 bt1_txt = "não"
-bt1_res_esp =  (  "C-00000002", "C-00000009",  "C-00000010", cr1_id )
+bt1_res_esp =  (  "C-00000002", "C-00000009", "C-00000010", "C-00000017", cr1_id )
 testa_busca_simples("bt1", 'texto', bt1_txt, bt1_res_esp)
 
 bt2_txt = "_es%a"
@@ -261,7 +266,8 @@ coms_todos = ( \
     "C-00000007", "C-00000008", "C-00000009",
     "C-00000010", "C-00000011", "C-00000012",
     "C-00000013", "C-00000014", "C-00000015",
-    "C-00000016", cr0_id,       cr1_id,
+    "C-00000016", "C-00000017", "C-00000018", 
+    cr0_id,       cr1_id,
   )
 
 bd1_data_ini = "2024-04-05 08:00:00 UTC"
@@ -467,6 +473,15 @@ def imprime_arvore_tuplas(arv, ind):
 #   rot_teste = f"CR_{vid_id}_{com_id}"
 #   testa_obtem_arvore(vid, com)
 
+# ----------------------------------------------------------------------
+sys.stderr.write("%s\n" % ("=" * 70))
+sys.stderr.write("  testando {obj_comentario.recalcula_nota(vid)}:\n")
+
+nota_calc = obj_comentario.recalcula_nota(vid1)
+if not isinstance(nota_calc, float) or nota_calc < 0.0 or nota_calc > 4.0:
+  sys.stderr.write(f"  ** retornou nota inválida {str(nota_calc)}\n")
+  # !!! Deveria verificar se a nota foi calculada corretamente !!!
+  ok = False
 
 # ----------------------------------------------------------------------
 # Veredito final:

@@ -33,10 +33,13 @@ def processa(ses, cmd_args):
       erros.append(f"O vídeo {vid_id} não tem nenhum comentário")
     else:
       ht_titulo = html_bloco_titulo.gera(f"Comentários do video {vid_id}")
-      mostra_autor = True  # Podem ter autores diferentes.
-      mostra_video = False # São todos do mesmo vídeo.
-      mostra_pai = True    # Podem ter pais diferentes.
-      ht_tabela = html_bloco_lista_de_comentarios.gera(com_ids, mostra_autor, mostra_video, mostra_pai)
+      ht_tabela = html_bloco_lista_de_comentarios.gera \
+        ( com_ids, 
+          mostra_autor = True,  # Podem ter autores diferentes.
+          mostra_video = False, # São todos do mesmo vídeo.
+          mostra_pai = True,    # Podem ter pais diferentes.
+          mostra_nota = True,   # Porque não mostraria?
+        )
       ht_bloco = \
         ht_titulo + "<br/>\n" + \
         ht_tabela

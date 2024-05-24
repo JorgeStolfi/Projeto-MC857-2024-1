@@ -105,6 +105,7 @@ def processa(ses, cmd_args):
         mostra_autor = True,
         mostra_video = True,
         mostra_pai = True,
+        mostra_nota = True,
       )
     ht_bloco = \
       ht_titulo + "<br/>\n" + \

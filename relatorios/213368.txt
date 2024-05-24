@@ -1,5 +1,1 @@
-Objetivo:  A classe {obj_comentario.Classe} agora tem um campo 'voto'. Modifique {html_linha_resumo_de_comentario.gera} para mostrar esse campo.
-
-
-No arquivo html_linha_resumo_de_comentario_IMP.py foi adicionado o item "voto" na lista 'colunas' e  o corpo do "for" também foi alterado para 
-mostrar o voto
+Relatorio - 213368

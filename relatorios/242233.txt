@@ -1,14 +1,1 @@
-Minha tarefa era fazer com que vídeos bloqueados não possam ser vistos na página 
-de ver vídeos, suprimindo a janela do vídeo em si e trocando seu título para 
-"[BLOQUEADO]".
-
-Em {html_pag_ver_video_IMP.gera} adicionei um if para trocar o título do 
-vídeo nos casos em que ele for bloqueado.
-
-Em {html.bloco_video_IMP.gera} adicionei um condicional para não gerar a 
-janela de vídeo nos casos em que o vídeo for bloqueado, ficando uma linha 
-vazia onde normalmente ficaria a janela, e outro condicional para suprimir 
-os botões de interação com o vídeo(alterar, ver comentários e comentar)
-
-Em {obj_video_IMP.cria_testes} defini explicitamente o atributo "bloqueado"
-para cada vídeo criado.
+Relatorio - 242233

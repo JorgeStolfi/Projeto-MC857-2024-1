@@ -130,13 +130,15 @@ def busca_por_video(vid_id, sem_pai):
 
 def busca_por_campo(chave, val):
   global tabela
-  lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
+  lista_ids = busca_por_campos({ chave: val }, False)
   return lista_ids
 
 def busca_por_campos(args, unico):
   global tabela
+  args = obj_raiz.converte_campo_em_padrao(args, 'texto');
+  # sys.stderr.write(f"@!@ args = {args}\n")
   res = obj_raiz.busca_por_campos(args, unico, tabela)
-  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(lista_ids)}\n");
+  if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {str(res)}\n");
   return res
 
 def busca_por_autor(usr_id):
@@ -161,9 +163,8 @@ def busca_por_texto(frase):
   global tabela
   if tabela.debug: sys.stderr.write("  > obj_comentario_IMP.busca_por_texto(" + f"{frase}" + ")\n")
   assert type(frase) is str
-  unico = False
-  lista_ids = obj_raiz.busca_por_campos({ 'texto': "~%" + frase + "%" }, unico, tabela)
-  if tabela.debug: sys.stderr.write(f"    > ids encontrados = {str(lista_ids)}\n");
+  lista_ids = busca_por_campos({ 'texto': frase }, unico = False)
+  if tabela.debug: sys.stderr.write(f"  < ids encontrados = {str(lista_ids)}\n");
   return lista_ids
 
 def busca_por_data(data_ini, data_fin):
@@ -175,14 +176,45 @@ def busca_por_data(data_ini, data_fin):
   if tabela.debug: sys.stderr.write(f"    > ids encontrados = {str(lista_ids)}\n");
   return lista_ids
   
-def recalcula_nota(com):#################################################
+def recalcula_nota(obj):
   global tabela
-  notaOriginal = obj_comentario.obtem_atributo(com, "nota")
-  votoOriginal = obj_comentario.obtem_atributo(com, "voto")
-  ##sys.stderr.write("!!! função {obj_comentario.recalcula_nota} ainda não foi implementada !!!\n")
-  ##nota = 2.0
-  nota = (2.0*4.0 + votoOriginal*notaOriginal**2)/(4.0+notaOriginal**2)
-  return nota
+  
+  # Obtem os IDs dos comentários relevantes:
+  unico = False
+  if isinstance(obj, obj_comentario.Classe):
+    resp_ids = obj_raiz.busca_por_campos( { 'pai': obj }, unico, tabela )
+  elif isinstance(obj, obj_video.Classe):
+    resp_ids = obj_raiz.busca_por_campos( { 'video': obj, 'pai': None }, unico, tabela )
+  else:
+    assert False, f"tipo inválido {type(obj)}"
+  nota_nova = calcula_media_dos_votos(resp_ids)
+  return nota_nova
+
+def calcula_media_dos_votos(lista_ids):
+
+  # Obtém os objetos:
+  resp_coms = [ obj_comentario.obtem_objeto(x) for x in lista_ids ]
+  
+  # Extrai lista de pares {(voto, nota)}:
+  pares = [ 
+      ( obj_comentario.obtem_atributo(x, 'voto'), 
+        obj_comentario.obtem_atributo(x, 'nota'), 
+      ) for x in resp_coms 
+    ]
+  
+  # Adiciona o par default:
+  pares.append( ( 2, 2.00 ) )
+  
+  # Calcula a média ponderada dos votos com pesos {nota**2}:
+  soma_n2 = 0
+  soma_vn2 = 0
+  for voto, nota in pares:
+    nota2 = nota**2
+    soma_n2 += nota2
+    soma_vn2 += voto*nota2
+  media = soma_vn2/soma_n2
+  media = float(int(media*100)/100)
+  return media
 
 def ultimo_identificador():
   global tabela
@@ -193,31 +225,31 @@ def cria_testes(verb):
   inicializa_modulo(True)
   lista_atrs = \
     [ 
-      ( "C-00000001", "V-00000001", "U-00000001", None,         "Supimpa!\nDeveras!", True),
-      ( "C-00000002", "V-00000001", "U-00000002", "C-00000001", "Né não! Acho... Talvez...", True),
-      ( "C-00000003", "V-00000002", "U-00000002", None,         "Falta sal.", False),
-      ( "C-00000004", "V-00000003", "U-00000003", None,         "Soberbo!", False),
-      ( "C-00000005", "V-00000001", "U-00000003", "C-00000002", "É sim!", False),
-      ( "C-00000006", "V-00000003", "U-00000004", None,         "Supercílio! " + "k"*60, False),
-      ( "C-00000007", "V-00000001", "U-00000004", "C-00000002", "Batata!", False),
-      ( "C-00000008", "V-00000001", "U-00000002", None,         "Inefável!", False),
-      ( "C-00000009", "V-00000001", "U-00000001", "C-00000005", "Larga mão dessa!\nCoisa feia!\nRespeite os mais bodosos. Se não tem coisa melhor a fazer, vá ver se estou na esquina...", False),
-      ( "C-00000010", "V-00000001", "U-00000004", "C-00000002", "Interessante...\nPorém, na Bessarábia os elefantes dos sátrapas eram tatuados com hieróglifos, não com emojis.\nÉ fake!", False),
-      ( "C-00000011", "V-00000001", "U-00000002", "C-00000005", "Levante deste camastralho!!!", False),
-      ( "C-00000012", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
-      ( "C-00000013", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
-      ( "C-00000014", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
-      ( "C-00000015", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
-      ( "C-00000016", "V-00000001", "U-00000005", "C-00000005", "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000001", "V-00000001", "U-00000001", None,         2, 2.00, "Supimpa!\nDeveras!", True),
+      ( "C-00000002", "V-00000001", "U-00000002", "C-00000001", 1, 3.00, "Né não! Acho... Talvez...", True),
+      ( "C-00000003", "V-00000002", "U-00000002", None,         0, 2.00, "Falta sal.", False),
+      ( "C-00000004", "V-00000003", "U-00000003", None,         4, 4.00, "Soberbo!", False),
+      ( "C-00000005", "V-00000001", "U-00000003", "C-00000002", 0, 2.00, "É sim!", False),
+      ( "C-00000006", "V-00000003", "U-00000004", None,         4, 2.00, "Supercílio! " + "k"*60, False),
+      ( "C-00000007", "V-00000001", "U-00000004", "C-00000002", 3, 1.00, "Batata!", False),
+      ( "C-00000008", "V-00000001", "U-00000002", None,         2, 2.00, "Inefável!", False),
+      ( "C-00000009", "V-00000001", "U-00000001", "C-00000005", 0, 2.00, "Larga mão dessa!\nCoisa feia!\nRespeite os mais bodosos. Se não tem coisa melhor a fazer, vá ver se estou na esquina...", False),
+      ( "C-00000010", "V-00000001", "U-00000004", "C-00000002", 1, 3.50, "Interessante...\nPorém, na Bessarábia os elefantes dos sátrapas eram tatuados com hieróglifos, não com emojis.\nÉ fake!", False),
+      ( "C-00000011", "V-00000001", "U-00000002", "C-00000005", 0, 3.00, "Levante deste camastralho!!!", False),
+      ( "C-00000012", "V-00000001", "U-00000005", "C-00000005", 3, 1.00, "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000013", "V-00000001", "U-00000005", "C-00000005", 3, 1.00, "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000014", "V-00000001", "U-00000005", "C-00000005", 3, 1.00, "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000015", "V-00000001", "U-00000005", "C-00000005", 3, 1.00, "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000016", "V-00000001", "U-00000005", "C-00000005", 3, 1.00, "Boa tarde! Sou a viúva do Príncipe Ngwande de Timbuktu e preciso de sua ajuda.", False),
+      ( "C-00000017", "V-00000004", "U-00000006", None,         1, 3.00, "Não gostei!\nFundo verde, que coisa!", False),
+      ( "C-00000018", "V-00000004", "U-00000007", None,         4, 2.00, "Adorei!\nFundo verde, que legal!", False),
     ]
-  for com_id_esp, vid_id, autor_id, pai_id, texto, bloqueado in lista_atrs:
+  for com_id_esp, vid_id, autor_id, pai_id, voto, nota, texto, bloqueado in lista_atrs:
     vid = obj_video.obtem_objeto(vid_id)
     autor = obj_usuario.obtem_objeto(autor_id)
     pai = obj_comentario.obtem_objeto(pai_id)
     dia = com_id_esp[-2:]
     data = "2024-01-" + dia + " 08:33:25 UTC"
-    voto = ((7 + int(vid_id[-3:]))**2//11) % 5
-    nota = (((7 + int(vid_id[-3:]))**2//11) % 401) / 100.0
     atrs = { 
         'video': vid, 
         'autor': autor, 

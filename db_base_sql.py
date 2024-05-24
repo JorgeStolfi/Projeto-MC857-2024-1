@@ -76,7 +76,7 @@ def executa_comando_UPDATE(nome_tb, cond, atrs):
   """
   return db_base_sql_IMP.executa_comando_UPDATE(nome_tb, cond, atrs)
 
-def executa_comando_SELECT(nome_tb, cond, nomes_cols, nomes_cols_ord=[], ord=None, limite=None):
+def executa_comando_SELECT(nome_tb, cond, nomes_cols):
   """
   Enumera as linhas da tabela {nome_tb} que satisfazem a condição SQL
   {cond}.
@@ -97,7 +97,7 @@ def executa_comando_SELECT(nome_tb, cond, nomes_cols, nomes_cols_ord=[], ord=Non
   Se nenhuma entrada satisfizer a condição {cond}, o resultado 
   é uma lista vazia.
   """
-  return db_base_sql_IMP.executa_comando_SELECT(nome_tb, cond, nomes_cols, nomes_cols_ord, ord, limite)
+  return db_base_sql_IMP.executa_comando_SELECT(nome_tb, cond, nomes_cols)
 
 def executa_comando_DELETE(nome_tb, cond):
   """

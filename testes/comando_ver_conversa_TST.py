@@ -26,7 +26,7 @@ def testa_processa(rot_teste, res_esp, *args):
   
   global ok_global
   modulo = comando_ver_conversa
-  funcao = modulo.processa
+  funcao = comando_ver_conversa.processa
   frag = False # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)

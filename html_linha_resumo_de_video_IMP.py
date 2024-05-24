@@ -6,6 +6,7 @@ import html_elem_button_simples
 import html_estilo_texto
 import html_elem_link_img
 import html_elem_link_text
+import util_nota
 
 def gera(vid, mostra_autor):
 
@@ -16,63 +17,58 @@ def gera(vid, mostra_autor):
 
   colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'largura', 'altura', 'titulo', 'bloqueado']
   
-  destaque = False
+  cor_fundo = None
+  cor_texto = None
+  alinha = "left"
+  cab = (vid == None)
   for chave in colunas:
     if chave == 'video':
       mostra = True
-      texto = html_elem_link_text.gera(obj_video.obtem_identificador(vid), "ver_video", { 'video': obj_video.obtem_identificador(vid) })  if vid != None else "Vídeo"
+      texto = "Vídeo" if cab else html_elem_link_text.gera(vid_id, "ver_video", { 'video': vid_id })
     elif chave == 'titulo':
       mostra = True
-      if vid == None:
+      if cab:
         texto = "Título"
       else:
         if(atrs['bloqueado']):
           texto = "[BLOQUEADO]"
+          cor_fundo = "#FF2222"
         else:
-          texto = str(atrs[chave])
+          texto = str(atrs['titulo'])
     elif chave == 'autor':
       mostra = mostra_autor
-      texto = html_elem_link_text.gera(obj_usuario.obtem_identificador(atrs['autor']), "ver_usuario", { 'usuario': obj_usuario.obtem_identificador(atrs['autor']) })  if vid != None else "Autor"
+      if cab:
+        texto = "Autor"
+      else:
+        autor_id = obj_usuario.obtem_identificador(atrs['autor'])
+        texto = html_elem_link_text.gera(autor_id, "ver_usuario", { 'usuario': autor_id })
     elif chave == 'duracao':
       mostra = True
-      texto = f"{atrs[chave]/1000:.3f} s" if vid != None else "Duração"
+      texto = "Duração" if cab else f"{atrs[chave]/1000:.3f} s"
+      alinha = "right"
     elif chave == 'altura' or chave == 'largura':
       mostra = True
-      texto = f"{str(atrs[chave])} px" if vid != None else chave.capitalize()
+      texto = chave.capitalize() if cab else f"{str(atrs[chave])} px"
+      alinha = "right"
     elif chave == 'nota':
       mostra = True
-      if vid == None:
+      if cab:
         texto = "Nota"
       else:
-        nota = float(atrs[chave])
-        assert nota >= 0.0 and nota <= 4.0, f"Nota {nota} inválida"
-        texto = f"{nota:.2f} "
-        # Formata a nota de forma condicional com emojis, 
-        # 0 - muito ruim, 1 - ruim, 2 - indiferente, 3 - bom, 4 - muito bom.
-        # -1 - default, sem nota.
-        # A nota é armazenada como float, então é necessário arredondar para int.
-        emoji = [ "🤮", "😞", "😐", "😊", "😍", ]
-        rnota = round(nota)
-        texto += emoji[rnota]
+        texto = util_nota.formata(atrs['nota'])
     elif chave == 'thumb':
       mostra=True
-      if vid == None:
+      if cab:
         texto = "Thumb"
       else:
         thumb_file = f"thumbs/{vid_id}.png"
         texto = html_elem_link_img.gera(thumb_file, None, 40, None)
     else:
       mostra = True
-      texto = atrs[chave] if vid != None else chave.capitalize()
+      texto = chave.capitalize() if cab else str(atrs[chave])
       
     if mostra:
-      cab = (vid == None)
-      if(chave == 'titulo' and atrs['bloqueado'] and vid != None):
-        cor_fundo = ' #FF0000'
-      else:
-        cor_fundo = None
-      alinha = "left"
-      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha)
+      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto)
       itens_resumo.append(ht_item)
 
   if vid != None:

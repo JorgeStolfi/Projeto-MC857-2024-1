@@ -47,10 +47,8 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
       ht_bt_comentar = html_elem_button_simples.gera("Comentar", "solicitar_pag_postar_comentario", cmd_args, '#55ee55')
       ht_bloco += ht_bt_comentar
  
-    # Verifica se o usuário é administrador e se bt_calcnota é True
-    usuario_atual = obj_usuario.obtem_objeto(vid_atrs['usuario_id'])
-    if bt_calcnota and obj_usuario.eh_administrador(usuario_atual):
-      ht_bt_recalcular = html_elem_button_simples.gera("Recalcular nota", "recalcular_nota", cmd_args, '#ff5555')
-      ht_bloco += ht_bt_recalcular
+    if bt_calcnota:
+      ht_bt_calcnota = html_elem_button_simples.gera("Recalcular nota", "recalcular_nota", cmd_args, '#ff5555')
+      ht_bloco += ht_bt_calcnota
       
   return ht_bloco

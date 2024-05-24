@@ -6,6 +6,7 @@ import obj_comentario
 import obj_usuario
 import obj_sessao
 import obj_video
+import obj_raiz
 import db_base_sql
 import util_dict
 import util_testes
@@ -21,6 +22,10 @@ assert res is None
 
 sys.stderr.write("  Criando alguns objetos...\n")
 db_tabelas_do_sistema.cria_todos_os_testes(True)
+
+# db_base_sql.liga_diagnosticos(True)
+# obj_raiz.liga_diagnosticos(True)
+# obj_comentario.liga_diagnosticos(True)
 
 ok_global = True # Vira {False} se algum teste falha.
 
@@ -139,6 +144,7 @@ verifica_atributos(com1, cmd_args_05) # Deve ter alterado.
 # Nova sessão para teste de aleração quando usuário não é administrador.
 nova_sessao = obj_sessao.obtem_objeto("S-00000002")
 sys.stderr.write("  tentativa de alteração do campo 'nota' apenas, sem ser administrador, deve dar errado:\n")
+
 com1_atrs = obj_comentario.obtem_atributos(com1) # Atributos atuais.
 cmd_args_06 = { 'comentario': com1_id,  'nota': 2.5, }
 try:

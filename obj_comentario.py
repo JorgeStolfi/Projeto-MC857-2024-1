@@ -175,16 +175,12 @@ def busca_por_autor(usr_id):
 def busca_por_texto(frase):
   """
   Localiza comentários cujo atributo 'texto' contem a cadeia {frase}.
-  Devolve o uma lista com os identificadores desses comentários (não os objetos);
+  Devolve uma lista com os identificadores desses comentários (não os objetos);
   ou {None} se nenhum comentário contém essa cadeia.
   
-  A {frase} pode ocorrer em qualquer ponto do texto do comentário, e a
-  comparação ignora a distinção maiúsculas/minusculas. Por exemplo, se
-  {frase} for " peiXE", vai encontrar comentários cujo texto é "Temos
-  Peixes", "Nossa peixeira" mas não "Peixes à venda" nem "O Peixésimo".
-  
-  Esta função equivale a {busca_por_campos({ 'texto': "~%" + frase + "%" }, unico=False).
-  A {frase} pode conter caracteres '%' ou '_' adicionais, como no operador LIKE do SQL.
+  Esta função é equivalente a 
+  {busca_por_campos({ 'texto': frase }, unico=False)}.  Note o tratamento especial
+  do campo 'texto' por essa função.
   """
   return obj_comentario_IMP.busca_por_texto(frase)
 
@@ -196,7 +192,8 @@ def busca_por_data(data_ini, data_ter):
 
 def busca_por_campo(chave, val):
   """Localiza todos os comentários cujo campo {chave} seja {valor}. Retorna a lista de ids
-  desses comentários. Equivale a {busca_por_campos({ chave: val }, unico=False)}"""
+  desses comentários. Equivale a {busca_por_campos({ chave: val }, unico=False)}.
+  Note o tratamento especial do campo 'texto' por essa função."""
   return obj_comentario_IMP.busca_por_campo(chave, val)  
 
 def busca_por_campos(args, unico):
@@ -213,6 +210,20 @@ def busca_por_campos(args, unico):
   Se {unico} for {True}, devolve {None} se não encontrar nenhum objeto,
   ou o identificador de um objeto encontrado (NÃO o objeto, NÃO uma lista)  
   se houver apenas um.  Em qualquer outro case, termina o programa com erro.
+  
+  O atributo 'texto' tem tratamento especial. Se {args} tiver o campo
+  {'texto': frase}, e a {frase} não começa com "~", a busca vai aceitar
+  comentários cujo texto contém a {frase} em qualquer lugar. Por
+  exemplo, se {frase} for " peiXE", vai aceitar comentários cujo texto é
+  "Temos Peixes", "Nossa peixeira" mas não "Peixes à venda" nem "O
+  Peixésimo".
+  
+  Mais precisamente, se a {frase} não começa com "~", ela é substituída
+  por {"~%" + frase + "%"}. Esse "~" incial determina que a comparação
+  será feita pelo operador LIKE do SQL; veja {obj_raiz.busca_por_campos} para
+  mais detalhes. Em qualquer caso, a comparação vai ignorar a distinção
+  maiúsculas/minusculas, e a {frase} pode conter caracteres '%' ou '_'
+  adicionais.
   """
   return obj_comentario_IMP.busca_por_campos(args, unico)
 
@@ -236,12 +247,33 @@ def obtem_conversa(raizes, max_coms, max_nivel):
   """
   return obj_comentario_IMP.obtem_conversa(raizes, max_coms, max_nivel)
 
-def recalcula_nota(com):
-  """Calcula uma nova nota para o comentário {com},
-  baseada nas notas e votos das respostas imediatas
-  (comentários com 'pai' = {com}). Se {com}
-  não tem nenhuma resposta, devolve 2.0."""
-  return obj_comentario_IMP.recalcula_nota(com)
+def recalcula_nota(obj):
+  """
+  Calcula e devolve uma nova nota para o objeto {obj}, que pode ser um
+  comentário ou um vídeo. NÃO altera o atributo 'nota' do objeto.
+  
+  Se {obj} for um comentário {com}, a nova nota será baseada baseada nas
+  notas e votos das suas respostas imediatas (comentários com 'pai' =
+  {com}).
+  
+  Se {obj} for um vídeo {vid}, a nova nota será baseada nas notas e
+  votos de seues comentários imediatos (comentários com 'vídeo' = {vid}
+  e 'pai' = {None}), sem levar em conta as respostas a esses
+  comentários.
+  
+  Em ambos os casos, usa {calcula_media_dos_votos} aplicada aos
+  comentários relevantes.
+  """
+  return obj_comentario_IMP.recalcula_nota(obj)
+
+def calcula_media_dos_votos(lista_ids):
+  """Dada uma lista {lista_ids} de identificadores de comentários, 
+  calcula a média ponderada dos votos desses comentários, onde
+  o peso de cada voto é o quadrado da respectiva nota. 
+  O resultado é arredondado para duas casas decimais.
+  Inclui sempre um voto {2} com nota {2.00}; postanto, se
+  {lista_ids} é vazia, o resultado é {2.00}. """
+  return obj_comentario_IMP.calcula_media_dos_votos(lista_ids)
 
 def ultimo_identificador():
   """Devolve o identificador do último comentário inserido na tabela.

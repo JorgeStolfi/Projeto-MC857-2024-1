@@ -57,11 +57,9 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
     ht_bt_alterar = html_elem_button_simples.gera(f"Editar", "solicitar_pag_alterar_comentario", cmd_args, None)
     ht_botoes += ht_bt_alterar
 
-  # Verifica se o usuário é administrador e se bt_calcnota é True
-  usuario_atual = obj_usuario.obtem_objeto(com_atrs['usuario_id'])
-  if bt_calcnota and obj_usuario.eh_administrador(usuario_atual):
-    ht_bt_recalcular = html_elem_button_simples.gera("Recalcular nota", "recalcular_nota", cmd_args, '#ff5555')
-    ht_botoes += ht_bt_recalcular
+  if bt_calcnota:
+    ht_bt_calcnota = html_elem_button_simples.gera("Recalcular nota", "recalcular_nota", cmd_args, '#ff5555')
+    ht_botoes += ht_bt_calcnota
     
   ht_bloco = ht_cabeca + ht_texto + ht_botoes
 

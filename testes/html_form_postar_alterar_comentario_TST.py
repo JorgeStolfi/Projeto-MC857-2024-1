@@ -40,22 +40,27 @@ comC1 = obj_comentario.obtem_objeto(comC1_id)
 assert comC1 != None
 comC1_atrs = obj_comentario.obtem_atributos(comC1)
 
-# Form para criação:
+# Executa os testes de criação:
 for ed_nota in False, True:
   xedn = "_ednota{str(ed_nota)[0]}"
-  rot_teste = "CR" + xedn
-  testa_gera(rot_teste, str, None, comC1_atrs, ed_nota)
+  for ed_voto in False, True:
+    xedv = "_edvoto{str(ed_voto)[0]}"
+    rot_teste = "CR" + xedn + xedv
+    testa_gera(rot_teste, str, None, comC1_atrs, ed_nota, ed_voto)
 
-# Form para alteração:
-atrs_tot = obj_comentario.obtem_atributos(comC1)
-atrs_som = { 'texto': "Alteradus", }
-atrs_dic = { 'N': {}, 'T': atrs_tot, 'S': atrs_som, }
+# Executa testes de alteração:
+atrs_triv = comC1_atrs # Todos atributos sem alterar nada.
+atrs_txto = { 'texto': "Alteradus", }
+atrs_voto = { 'voto': (comC1_atrs['voto'] + 1) % 5, }
+atrs_dic = { 'Nulo': {}, 'Triv': atrs_triv, 'Txto': atrs_txto, 'Voto': atrs_voto }
 for atrs_tag, atrs in atrs_dic.items():
-  xatr = f"_atr{atrs_tag}"
+  xatr = f"_atrs{atrs_tag}"
   for ed_nota in False, True:
     xedn = "_ednota{str(ed_nota)[0]}"
-    rot_teste = "AL" + xatr + xedn
-    testa_gera(rot_teste, str, comC1_id, atrs, ed_nota)
+    for ed_voto in False, True:
+      xedv = "_edvoto{str(ed_voto)[0]}"
+      rot_teste = "AL" + xatr + xedn + xedv
+      testa_gera(rot_teste, str, comC1_id, atrs, ed_nota, ed_voto)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

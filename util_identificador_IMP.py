@@ -20,7 +20,7 @@ def para_indice(let, id_obj):
 def de_lista_de_indices(let, lista_indices):
   lista_ids_obj = []
   if lista_indices != None:
-    assert type(lista_indices) is tuple or type(lista_indices) is list
+    assert isinstance(lista_indices, tuple) or isinstance(lista_indices, list), f"lista_indices = {lista_indices}"
     # Resultado deve ser uma lista de tuplas, cada uma contendo apenas um índice:
     for el in lista_indices:
       if type(el) is int:

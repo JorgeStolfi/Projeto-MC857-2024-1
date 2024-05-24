@@ -34,9 +34,9 @@ def processa(ses, cmd_args):
   
   # Converte {cmd_args} na lista de atributos {atrs_com} para postagem:
   cmd_args = util_dict.para_identificadores(cmd_args)
-  sys.stderr.write(f"@1@  erros = {erros}\n")
+  # sys.stderr.write(f"@1@  erros = {erros}\n")
   atrs_com = converte_argumentos(cmd_args, ses_dono_id, erros)
-  sys.stderr.write(f"@2@  erros = {erros}\n")
+  # sys.stderr.write(f"@2@  erros = {erros}\n")
 
   # Tenta criar o comentário:
   com = None

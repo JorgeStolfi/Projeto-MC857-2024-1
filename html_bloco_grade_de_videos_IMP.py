@@ -6,11 +6,12 @@ import html_elem_button_simples
 def gera_form_botoes_de_ordenacao():
   cor_bt_ordem = "#eeccff"
 
-  ht_bt_melhores = html_elem_button_simples.gera("Melhores", 'ver_grade_de_videos', { 'ordem': '-1' }, cor_bt_ordem)
-  ht_bt_aleatorios = html_elem_button_simples.gera("Aleatórios", 'ver_grade_de_videos', { 'ordem': '0' }, cor_bt_ordem)
-  ht_bt_piores = html_elem_button_simples.gera("Piores", 'ver_grade_de_videos', { 'ordem': '+1' }, cor_bt_ordem)
+  ht_bt_melhores = html_elem_button_simples.gera("Melhores", 'ver_grade_de_videos', { 'ordem': "-1" }, cor_bt_ordem)
+  ht_bt_aleatorios = html_elem_button_simples.gera("Aleatórios", 'ver_grade_de_videos', { 'ordem': "0" }, cor_bt_ordem)
+  ht_bt_piores = html_elem_button_simples.gera("Piores", 'ver_grade_de_videos', { 'ordem': "+1" }, cor_bt_ordem)
 
-  return ht_bt_melhores + "  " + ht_bt_aleatorios + "  " + ht_bt_piores
+  ht_botoes = ht_bt_melhores + " " + ht_bt_aleatorios + " " + ht_bt_piores
+  return ht_botoes
 
 def gera(vid_ids, ncols):
 
@@ -52,4 +53,6 @@ def gera(vid_ids, ncols):
   ht_tabela = html_elem_table.gera(ht_linhas, None)
   ht_botoes_ordenacao = gera_form_botoes_de_ordenacao()
 
-  return ht_tabela + "\n" + ht_botoes_ordenacao
+  ht_bloco = ht_tabela + "\n" + ht_botoes_ordenacao
+  
+  return ht_bloco

@@ -1,15 +1,1 @@
-Na aula de hoje foi solicitado que eu adicionasse o novo campo 'voto' da classe 'Comentario' nos valores retornados pela busca por comentários.
-
-Porém, a busca por comentários ainda não foi implementada, pois é a tarefa de um outro aluno na aula de hoje.
-
-Sendo assim, comuniquei o ocorrido com o professor e fiquei sem outras atividades para a aula.
-
-Aproveitei o tempo para explorar o repositório e suas dependencias.
-Verifiquei que meu servidor não estava rodando na aula de hoje (com o codigo atualizado).
-Vi que era necessário instalar o pacote opencv. Então o instalei com o comando
-```
-pip install opencv-python
-```
-e o servidor funcionou normalmente.
-
-Sendo assim, deixo minha contribuição para a aula de hoje com a sugestão de que este pacote seja instalado nas máquinas do instituto.
+Relatorio - 238464

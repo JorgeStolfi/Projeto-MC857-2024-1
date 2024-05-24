@@ -38,7 +38,7 @@ def testa_processa(rot_teste, res_esp, *args):
 ses_adm_id = "S-00000001"
 ses_adm = obj_sessao.obtem_objeto(ses_adm_id)
 
-# Teste passando um id do video
+# Teste passando um id do usuário
 usr1_id = {'usuario': "U-00000002"}
 
 testa_processa("T1",         str, ses_adm, usr1_id)

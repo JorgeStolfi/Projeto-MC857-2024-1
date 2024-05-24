@@ -1,13 +1,1 @@
-Bruno Gonçalves Rodrigues - 232450     17/05/2024
-
-Minha tarefa de hoje foi: "A classe {obj_comentario.Classe} agora tem um campo 'bloqueado'. Modifique {html_pag_buscar_comentarios.gera}
-(e o que mais for preciso) para incluir esse campo nas buscas."
-
-Para que a página de busca de comentários funcionasse corretamente, foi necessário implementar o formulário de busca "html_form_buscar_comentarios".
-Para isso, eu modifiquei o arquivo de implementação "html_form_buscar_comentarios_IMP", criando um formulário (html_bloco_tabela_de_campos) com os
-atributos que poderiam ser usados para a busca (comentario, pai, autor, video, data, texto).
-
-Inclui também a busca pelo atributo "bloqueado", conforme indicado, mas para isso foi necessário modificar o "comando_buscar_comentarios" para incluir a busca
-deste atributo. Para isso, modifiquei a função "processa" da implementação "comando_buscar_comentarios_IMP" para receber a chave 'bloqueado' e, caso
-a chave seja 'True', buscar comentários com esse valor para o campo 'bloqueado', e o mesmo caso o valor seja 'False'. Caso seja passado outro valor,
-é retornada uma mensagem de erro dizendo que o valor do atributo é inválido. Testei a busca para cada um dos atributos e todas funcionaram perfeitamente.
+Relatorio - 232450

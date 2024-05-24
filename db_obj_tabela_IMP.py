@@ -68,15 +68,17 @@ def atualiza_objeto(tab, def_obj, ident, mods_SQL):
     erro_prog("identificador '" + ident + "' nao encontrado")
   else:
     assert isinstance(obj, tab.classe)
-  # Atualiza os atributos do objeto na memória:
-  res = def_obj(obj, ident, mods_SQL)
-  assert res == obj
-  # Atualiza a base de dados:
-  ind = util_identificador.para_indice(tab.letra, ident)
-  cond = "indice = " + str(ind)
-  res = db_base_sql.executa_comando_UPDATE(tab.nome, cond, mods_SQL)
-  if res != None:
-    erro_prog("UPDATE da tabela '" + tab.nome + "' falhou")
+  
+  if len(mods_SQL) > 0:
+    # Atualiza os atributos do objeto na memória:
+    res = def_obj(obj, ident, mods_SQL)
+    assert res == obj
+    # Atualiza a base de dados:
+    ind = util_identificador.para_indice(tab.letra, ident)
+    cond = "indice = " + str(ind)
+    res = db_base_sql.executa_comando_UPDATE(tab.nome, cond, mods_SQL)
+    if res != None:
+      erro_prog("UPDATE da tabela '" + tab.nome + "' falhou" + f" res = {res}")
   return obj
 
 def obtem_objeto(tab, def_obj, ident):
@@ -124,15 +126,17 @@ def obtem_objeto_e_indice(tab, def_obj, ident, ind):
     tab.cache[ident] = obj
   return obj
 
-def busca_por_campo(tab, chave, valor, res_cols, nomes_cols_ord, ord, limite):
-  # Converte {valor} para string na linguagem SQL:
-  if tab.debug: sys.stderr.write(f"  > db_obj_tabela.busca_por_campo_IMP: chave = {chave} valor = {str(valor)}\n");
-  
+def busca_por_campo(tab, chave, valor, res_cols):
+  if tab.debug: sys.stderr.write(f"  > db_obj_tabela_IMP.busca_por_campo: chave = {chave} valor = {str(valor)}\n");
   args = { chave: valor, }
-  return busca_por_campos(tab, args, res_cols, nomes_cols_ord, ord, limite)
+  res = busca_por_campos(tab, args, res_cols)
+  if tab.debug: sys.stderr.write(f"  < db_obj_tabela_IMP.busca_por_campo: res = {res}\n");
+  return res
 
-def busca_por_campos(tab, args, res_cols, nomes_cols_ord, ord, limite):
+def busca_por_campos(tab, args, res_cols):
   # Supõe que o cache é um subconjuto da base em disco, então procura só na última.
+
+  if tab.debug: sys.stderr.write(f"  > db_obj_tabela_IMP.busca_por_campos: args = {args}\n");
 
   # !!! Verificar a lógica de {res_cols} etc. !!!
   # !!! Melhorar comportamento em caso de erro. !!!
@@ -179,7 +183,7 @@ def busca_por_campos(tab, args, res_cols, nomes_cols_ord, ord, limite):
     colunas = res_cols
     
   # Executa a busca:
-  res = db_base_sql.executa_comando_SELECT(tab.nome, cond, colunas, nomes_cols_ord, ord, limite)
+  res = db_base_sql.executa_comando_SELECT(tab.nome, cond, colunas)
   
   # Finaliza o resultado:
   if res == None:
@@ -187,12 +191,14 @@ def busca_por_campos(tab, args, res_cols, nomes_cols_ord, ord, limite):
     res = []
   elif isinstance(res, str):
     # {res} deve ser uma mensagem de erro:
-    erro_prog("SELECT falhou " + str(res))
+    erro_prog("SELECT falhou - res = " + str(res))
   else:
     # {res} deve ser uma lista de índices, ou de tuplas de valores das colunas pedidas:
     if res_cols == None:
       # Converte lista de índices para lista de identificadores:
       res = util_identificador.de_lista_de_indices(tab.letra, res)
+
+  if tab.debug: sys.stderr.write(f"  < db_obj_tabela_IMP.busca_por_campos: res = {res}\n");
   return res
 
 def num_entradas(tab): 
@@ -213,14 +219,14 @@ def cria_tabela_SQL(nome, colunas):
   cols_SQL = converte_colunas_para_cols_SQL(colunas)
   res = db_base_sql.executa_comando_CREATE_TABLE(nome, cols_SQL);
   if res != None:
-    erro_prog(f"CREATE_TABLE falhou: {res}")
+    erro_prog(f"CREATE_TABLE falhou: res = {res}")
   return
 
 def limpa_tabela_SQL(nome):
   res = db_base_sql.executa_comando_DROP_TABLE(nome);
   if res != None:
     assert type(res) is str
-    erro_prog("DROP_TABLE de " + nome + " falhou, res = '" + str(res) + "' falhou")
+    erro_prog("DROP_TABLE de " + nome + " falhou, res = " + str(res))
   return
 
 def converte_colunas_para_cols_SQL(colunas):
@@ -254,7 +260,7 @@ def extrai_nomes_de_cols_SQL(colunas):
 def busca_por_campos_termo_nulo(chave):
   """Devolve o termo de uma condição SQL que exige que o campo da coluna
   {chave} da tabela seja nulo; isto é, "{chave} IS NULL". """
-  termo = f"{"NULL" if chave is None else chave} IS NULL"
+  termo = f"{chave} IS NULL"
   return termo
 
 def busca_por_campos_termo_identidade(chave, val):

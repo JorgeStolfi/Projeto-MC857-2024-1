@@ -1,6 +1,7 @@
 import obj_raiz
 import obj_video
 import obj_usuario
+import obj_comentario
 
 import db_obj_tabela
 import db_tabelas_do_sistema
@@ -183,42 +184,37 @@ def busca_por_autor(autor_id):
 
 def busca_por_campo(chave, val):
   global tabela
-  lista_ids = obj_raiz.busca_por_campo(chave, val, False, tabela)
+  lista_ids = busca_por_campos( { chave: val }, unico = False)
   return lista_ids
 
 def busca_por_campos(args, unico):
   global tabela
+  args = obj_raiz.converte_campo_em_padrao(args, 'titulo');
   return obj_raiz.busca_por_campos(args, unico, tabela)
  
 def obtem_amostra(n, ordem):
   global tabela
 
-  if ordem == 0: # Lista de vídeos aleatórios:
-    ult_vid_id = obj_video.ultimo_identificador()
-    ult_vid_index = int(ult_vid_id[2:])
+  ult_vid_id = obj_video.ultimo_identificador()
+  ult_vid_index = int(ult_vid_id[2:])
 
-    if n > ult_vid_index:
-     raise ErroAtrib(f"Número pedido = {n} excessivo, máximo {ult_vid_index}")
-  
-    sys.stderr.write(f"  last video in system = {ult_vid_id}\n")
+  # Caso o número de vídeos seja insucificente, devolve uma lista menor:
+  if n > ult_vid_index: n = ult_vid_index
 
-    res_indices = random.sample(range(1, ult_vid_index + 1), n)
-    res_ids = list(map(lambda index: f"V-{index:08d}", res_indices))
-  else: # Lista de vídeos ordenada:
-    res_ids = obj_raiz.busca_por_campo(None, None, False, tabela, ["nota"], ordem, 12)
+  res_indices = random.sample(range(1, ult_vid_index + 1), n)
+  res_ids = list(map(lambda index: f"V-{index:08d}", res_indices))
 
-  assert len(res_ids) == n
+  if ordem != 0:
+    pares = []
+    for vid_id in res_ids:
+      vid = obj_video.obtem_objeto(vid_id)
+      assert vid != None
+      nota = obj_video.obtem_atributo(vid, 'nota')
+      pares.append(( vid_id, nota,))
+    pares.sort(key = lambda x: ordem*x[1])
+    res_ids = [ x[0] for x in pares ]
   
   return res_ids
-  
-def recalcula_nota(vid):
-  comVideo = vid
-  notaOriginal = obj_video.obtem_atributo(vid, "nota")
-  #votoOriginal = obj_video.obtem_atributo(vid, "voto")
-  ##sys.stderr.write("!!! função {obj_video.recalcula_nota} ainda não foi implementada !!!\n")
-  #nota = (2.0*4.0 + votoOriginal*notaOriginal**2)/(4.0+notaOriginal**2)
-  nota = 2.0
-  return nota
 
 def ultimo_identificador():
   global tabela
@@ -235,7 +231,7 @@ def cria_testes(verb):
       ( "V-00000003", "U-00000001", "Pipoca pipocando",            1.0, False,  ),
       ( "V-00000004", "U-00000004", "Vírus do POVRAY",             1.4, False,  ),
       ( "V-00000005", "U-00000006", "Eletrostática",               1.7, False,  ),
-      ( "V-00000006", "U-00000004", "Apocalipsevirus",             1.5, True,  ),
+      ( "V-00000006", "U-00000004", "Apocalipsevirus",             1.5, True,   ),
       ( "V-00000007", "U-00000002", "Libração da Lua",             2.1, False,  ),
       ( "V-00000008", "U-00000005", "Árvore galhofeira",           0.5, False,  ),
       ( "V-00000009", "U-00000005", "Formigando",                  1.8, False,  ),
@@ -246,7 +242,7 @@ def cria_testes(verb):
       ( "V-00000014", "U-00000006", "Moendo isopor",               2.7, False,  ),
       ( "V-00000015", "U-00000006", "Isopor moído",                2.8, False,  ),
       ( "V-00000016", "U-00000006", "Octopus vulgaris",            2.8, False,  ),
-      ( "V-00000017", "U-00000006", "Engenho engenhoso",           2.8, True,  ),
+      ( "V-00000017", "U-00000006", "Engenho engenhoso",           2.8, True,   ),
       ( "V-00000018", "U-00000006", "Teino de sumo",               2.8, False,  ),
       ( "V-00000019", "U-00000006", "Beroe abyssicola",            2.8, False,  ),
       ( "V-00000020", "U-00000006", "Stentor muelleri",            2.8, False,  ),

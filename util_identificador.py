@@ -27,7 +27,6 @@ def de_lista_de_indices(let, indices):
   lista ou tupla de tamanho 1 cujo único elemento é um inteiro."""
   return util_identificador_IMP.de_lista_de_indices(let,indices)
 
-
 def valida(chave, val, letra, nulo_ok):
   """Exige que o parâmetro {val} seja um string com aparência de
   identificador, no formato "{L}-{NNNNNNNN} onde {L} é a {letra}

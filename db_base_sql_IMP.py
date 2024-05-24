@@ -105,7 +105,7 @@ def executa_comando_UPDATE(nome_tb, cond, atrs):
     mostra(4,"db_base_sql_IMP.executa_comando_UPDATE: !! erro = \"" + str(msg) + "\"")
     return msg
 
-def executa_comando_SELECT(nome_tb, cond, nomes_cols, nomes_cols_ord, ord, limite):
+def executa_comando_SELECT(nome_tb, cond, nomes_cols):
   global db_conexao
   cols = ""
   for cn in nomes_cols:
@@ -114,11 +114,6 @@ def executa_comando_SELECT(nome_tb, cond, nomes_cols, nomes_cols_ord, ord, limit
     cols = cols + cn
 
   cmd = " SELECT " + cols + " FROM " + nome_tb + " WHERE " + cond
-  if len(nomes_cols_ord) > 0 and ord != None:
-    ord_cmd = "DESC" if ord == -1 else "ASC"
-    cmd += " ORDER BY " + ",".join(nomes_cols_ord) + " " + ord_cmd
-  if limite != None:
-    cmd += " LIMIT " + str(limite)
   if db_debug: mostra(4,"db_base_sql_IMP.executa_comando_SELECT: cmd = \"" + str(cmd) + "\"")
   try:
     cursor = db_conexao.cursor()

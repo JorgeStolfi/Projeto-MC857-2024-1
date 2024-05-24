@@ -1,7 +1,1 @@
-
-A tarefa de hoje era a seguinte:
-A classe {obj_video.Classe} agora tem um campo 'bloqueado'. Modifique {html_pag_alterar_video.gera}, {comando_solicitar_pag_alterar_video.processa} e {comando_alterar_video.processa} (e o que mais for preciso) para permitir alteração desse campo, se e somente se o dono da sessão corrente for um administrador; e proibir alterações por outros usuários se esse atributo for {True}.
-
-Então eu, usando o campo bloqueado, adicionei uma verificação em 'comando_alterar_video_IMP.py' para saber se o vídeo está bloqueado, pois se está então ele não é editável, apenas no caso do usuário ser um administrador.
-
-Em 'html_form_alterar_video_IMP.py' eu adicionei um campo do tipo 'checkbox' para representar o valor do vídeo estar bloqueado ou não, sendo assim editável, mas paenas para os administradores.
+Relatorio - 214777

@@ -102,22 +102,21 @@ def obtem_objeto(usr_id):
 
 def busca_por_email(em):
   global tabela
-  unico = True
   if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_email}: email = {em}\n");
-  usr_id = obj_raiz.busca_por_campo('email', em, unico, tabela)
+  usr_id = obj_raiz.busca_por_campo('email', em, unico = True, tabela = tabela)
   if tabela.debug: sys.stderr.write(f"    > id encontrado = {usr_id}\n");
   return usr_id
 
 def busca_por_nome(nome):
   global tabela
   if tabela.debug: sys.stderr.write(f"  > {obj_usuario.busca_por_nome}: nome = {nome}\n");
-  unico = False
-  lista_ids = obj_raiz.busca_por_campo('nome', nome, unico, tabela)
+  lista_ids = busca_por_campos({ 'nome': nome }, unico = False)
   if tabela.debug: sys.stderr.write(f"    > lista de ids encontrada = {','.join(lista_ids)}\n");
   return lista_ids
 
 def busca_por_campos(args, unico):
   global tabela
+  args = obj_raiz.converte_campo_em_padrao(args, 'nome');
   return obj_raiz.busca_por_campos(args, unico, tabela)
   
 def ultimo_identificador():
