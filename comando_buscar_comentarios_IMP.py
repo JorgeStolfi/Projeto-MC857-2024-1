@@ -89,17 +89,20 @@ def processa(ses, cmd_args):
       # Faz a busca dentro de um {try:} caso ela levante {ErroAtrib}:
       try:
         com_ids_res = obj_comentario.busca_por_campos(atrs_busca, unico = False)
-        if len(com_ids_res) == 0:
-          erros.append("Não foi encontrado nenhum comentário com os dados fornecidos")
+
       except ErroAtrib as ex:
         erros += ex.args[0]
 
   if len(erros) == 0:
-    assert len(com_ids_res) > 0
+    
     # Mostra os comentários encontrados na forma de tabela:
-    assert len(com_ids_res) > 0
     com_ids_res = sorted(list(com_ids_res))
-    ht_titulo = html_bloco_titulo.gera("Comentários encontrados")
+    if len(com_ids_res) == 0:
+      ht_titulo = html_bloco_titulo.gera("Nenhum comentário encontrado")
+
+    else:
+      ht_titulo = html_bloco_titulo.gera("Comentários encontrados")
+    
     ht_tabela = html_bloco_lista_de_comentarios.gera \
       ( com_ids_res, 
         mostra_autor = True,
@@ -107,9 +110,11 @@ def processa(ses, cmd_args):
         mostra_pai = True,
         mostra_nota = True,
       )
+    
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela
+    
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
   else:
     # Repete o formulário com os dados válidos:
