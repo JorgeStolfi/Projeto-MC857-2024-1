@@ -119,6 +119,10 @@ testa_processa("mulM", str, ses, cmd_args_18)
 cmd_args_19 = {"autor": "U-00000002", "video": "V-00000004"}
 testa_processa("mulV", str, ses, cmd_args_19)
 
+# Teste passando intervalo de nota:
+cmd_args_20 = {"nota_min": "1.00", "nota_max": "1.00"}
+testa_processa("nota", str, ses, cmd_args_20)
+
 if ok_global:
     sys.stderr.write("Testes terminaram normalmente.\n")
 else:
