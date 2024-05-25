@@ -7,6 +7,9 @@ def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
   identificador {com_id}. Esta função serve para gerar os elementos de
   uma linha da tabela produzida por {html_bloco_lista_de_comentarios.gera}.
 
+  O parãmetro {ses} deve {None} ou um objeto {obj_sessao.Classe}
+  de uma sessão atualmente aberta.
+
   Os parametros {mostra_autor}, {mostra_video} e {mostra_pai} determinam
   se o resumo vai incluir os campos 'autor', 'video' e 'pai',
   respectivamente.

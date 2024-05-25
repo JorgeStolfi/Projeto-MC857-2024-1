@@ -20,7 +20,8 @@ correspondentes. Caso o usuário não seja admin, esse bloco de código não é 
 
 Por ter passado um novo argumento de sessão para o módulo, eu precisei alterar as chamadas do módulo
 para incluir esse novo argumento, bem como alguns outros módulos que chamam esse anteriormente, como
-"html_bloco_lista_de_comentarios" e "comando_buscar_comentarios_de_usuario".
+"html_bloco_lista_de_comentarios" e "comando_buscar_comentarios_de_usuario". Modifiquei também
+as descrições de parâmetros das interfaces desses módulos.
 
 Para que tudo funcionasse ok, alterei o arquivo de teste de 'html_linha_resumo_de_comentario',
 para que o mesmo executasse com o número correto de argumentos, passando uma sessão para ele.
