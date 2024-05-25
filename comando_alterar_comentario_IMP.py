@@ -63,7 +63,7 @@ def processa(ses, cmd_args):
       erros.append(f"Você não tem permissão para alterar este comentário")
 
     # Verifica campos inalteráveis:
-    alteraveis = { 'texto', 'nota', 'voto', }
+    alteraveis = { 'texto', 'nota', 'voto'}
     for chave in cmd_args.keys():
       if not chave in alteraveis:
         erros.append(f"O atributo '{chave}' não pode ser alterado")

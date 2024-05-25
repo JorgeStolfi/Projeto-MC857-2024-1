@@ -1,6 +1,7 @@
 import obj_comentario
 import obj_usuario
 import obj_video
+import obj_sessao
 import html_elem_item_de_resumo
 import html_elem_button_simples
 import html_elem_link_text
@@ -9,7 +10,7 @@ import util_voto
 
 import sys
 
-def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
+def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
   
   com_id = obj_comentario.obtem_identificador(com) if com != None else None
   atrs = obj_comentario.obtem_atributos(com) if com != None else None
@@ -87,5 +88,22 @@ def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
     bt_args = { 'comentario': com_id }
     ht_bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, None)
     itens_resumo.append("<td>" + ht_bt_ver + "</td>")
+
+    ses_dono = obj_sessao.obtem_dono(ses); assert ses_dono != None
+    admin = obj_usuario.eh_administrador(ses_dono)
+
+    if admin:
+      is_block = obj_comentario.obtem_atributo(com, "bloqueado")
+      bt_block_args = { 'comentario': com_id, 'bloqueado': str(not is_block) }
+    
+      if is_block:
+        bt_block_text = 'Desbloquear'
+        bt_background_color = '#11DD11'
+      else:
+        bt_block_text = 'Bloquear'
+        bt_background_color = '#fb1528'
+
+      ht_bt_bloquear = html_elem_button_simples.gera(bt_block_text, "alterar_comentario", bt_block_args, bt_background_color)
+      itens_resumo.append("<td>" + ht_bt_bloquear + "</td>")  
 
   return itens_resumo

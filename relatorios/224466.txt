@@ -1,1 +1,32 @@
-Relatorio - 224466
+Relatório - 224466
+
+Aula do dia 24/05/2024
+
+Na tarefa dessa aula fiquei responsável por logar como admin utilizando o usuário
+"primeiro@gmail.com", e entrar na página "Meus Comentários", no qual eu deveria implementar
+um botão ao lado do comentário com o texto "Bloquear" ou "Desbloquear", dependendo do
+estado atual do comentário. Esses botões só deveriam aparecer para administradores. Ao clicar
+no botão, o comando "alterar_comentario" deveria ser disparado com o ID do comentário e novo
+estado da flag "bloqueado" a ser preenchido.
+
+As principais modificações que eu precisei fazer estão no arquivo 'html_linha_resumo_de_comentario',
+no qual para cada comentário que deve ser mostrado, agora a função recebe um argumento de sessão
+(ses) que indica a sessão atualmente ativa. A partir dela, eu verifico se o usuário dono da sessão
+é um admin, caso seja, eu faço as tratativas esperadas, buscando o estado atual da flag "bloqueado"
+do comentário e configurando seu novo estado como o inverso do atual, bem como fazendo uma simples
+condicional para identificar o texto correto para o botão. Retorno esse botão ao final, com os dados
+correspondentes. Caso o usuário não seja admin, esse bloco de código não é adentrado, e o botão
+"Bloquear"/"Desbloquear" nem aparece.
+
+Por ter passado um novo argumento de sessão para o módulo, eu precisei alterar as chamadas do módulo
+para incluir esse novo argumento, bem como alguns outros módulos que chamam esse anteriormente, como
+"html_bloco_lista_de_comentarios" e "comando_buscar_comentarios_de_usuario".
+
+Para que tudo funcionasse ok, alterei o arquivo de teste de 'html_linha_resumo_de_comentario',
+para que o mesmo executasse com o número correto de argumentos, passando uma sessão para ele.
+
+Por fim, precisei fazer uma pequena modificação no arquivo "html_bloco_cabecalho_de_comentario",
+pois quando era clicado no botão "Bloquear"/"Desbloquear" aparecia um erro, relacionado a nota/voto
+de um determinado comentário. Apesar disso ser em outra parte da funcionalidade, eu corrigi a chamada
+desses dois atributos, criando uma condicional antes para verificar se eles existem. Com isso, 
+ao clicar nos botões agora, é possível ir para a página de editar comentário.
