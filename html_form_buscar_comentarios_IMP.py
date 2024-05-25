@@ -10,7 +10,8 @@ def gera(atrs, admin):
       ( "Pai",        "text",     'pai',           True,  "C-nnnnnnnn" ),
       ( "Autor",      "text",     'autor',         True,  "U-nnnnnnnn" ),
       ( "Video",      "text",     'video',         True,  "V-nnnnnnnn" ),
-      ( "Data",       "text",     'data',          True,  "2024-01-01 08:33:25 UTC" ),
+      ( "Desde data", "text",     'data_min',      True,  "2024-01-01 08:33:25 UTC" ),
+      ( "Até data",   "text",     'data_max',      True,  "2024-01-01 08:33:25 UTC" ),
       ( "Texto",      "text",     'texto',         True,  "Blá bla bla" ),
       ( "Bloqueado",  "text",     'bloqueado',     True,  "True" ),
     )
