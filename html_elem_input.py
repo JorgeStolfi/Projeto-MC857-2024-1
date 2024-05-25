@@ -1,6 +1,6 @@
 import html_elem_input_IMP
 
-def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio):
+def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal):
   """
   Gera o HTML para um campo de dados "<input type='{tipo}' ... />" com atributos dados.
   Este fragmento geralmente é incluído em um formulário "<form>...</form>".
@@ -61,5 +61,9 @@ def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio)
 
   O parâmetro {obrigatorio} indica se o campo deve ser obrigatóriamente preenchido ou não.
   Isso altera visualmente a forma como o campo é exibido para o usuário pelo navegador.
+
+  O parâmetro {decimal} é relevante quando {tipo} for 'number' e determina se o
+  campo aceitará valores decimais. No momento estão sendo considerados valores de até
+  2 casas decimais.
   """  
-  return html_elem_input_IMP.gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio)
+  return html_elem_input_IMP.gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal)

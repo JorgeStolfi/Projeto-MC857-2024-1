@@ -2,7 +2,7 @@
 import html_elem_label
 from util_erros import erro_prog, aviso_prog
 
-def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio):
+def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal):
   if tipo == "hidden" and editavel:
     erro_prog("chave '%s': campo de tipo 'hidden' não pode ser editável" % chave)
     
@@ -45,6 +45,7 @@ def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio)
   ht_dica = ( " placeholder=\"" + dica + "\"" if dica != None else "" )
   ht_cmd = ( " onchange=\"window.location.href=" + cmd + "\"" if cmd != None else "" )
   ht_estilo = ( " style=\"background-color:#c7c7c7\"" if not editavel else "" )
+  ht_decimal = (" step=\"0.01\"" if decimal else "" )
   ht_input = \
     "<input" + \
       ht_tipo + \
@@ -59,5 +60,6 @@ def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio)
       ht_cmd + \
       ht_obrigatorio + \
       ht_estilo + \
+      ht_decimal + \
     "/>"
   return ht_texto_simples + ht_input
