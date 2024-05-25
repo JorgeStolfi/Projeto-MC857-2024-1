@@ -7,6 +7,8 @@ import obj_usuario
 import obj_sessao
 import util_dict
 import util_identificador
+import util_voto
+import util_nota
 import util_texto_de_comentario
 from util_erros import ErroAtrib, erro_prog, mostra
 
@@ -125,7 +127,8 @@ def converte_argumentos(cmd_args, ses_dono_id, erros):
   
   voto = cmd_args.pop('voto', None)
   if voto != None and voto != "":
-    erros_item = util_inteiro.valida('voto', voto, 0, 4, False)
+    voto = int(voto)
+    erros_item = util_voto.valida('voto', voto, 0, 4, False)
     if len(erros_item) == 0:
       atrs_com['voto'] = int(voto)
     else:
@@ -134,8 +137,17 @@ def converte_argumentos(cmd_args, ses_dono_id, erros):
     # Providencia um voto default:
     atrs_com['voto'] = 2
   
-  # A nota inicial é sempre 2.0:
-  atrs_com['nota'] = 2.0 
+  
+  if nota!= None and nota!= "":
+    nota = float(nota)
+    erros_item = util_nota.valida('nota', nota, 0.0, 4.0, False)
+    if len(erros_item) == 0:
+      atrs_com['nota'] = nota
+    else:
+      erros+= erros_item
+  else:
+    # A nota inicial é sempre 2.0
+    atrs_com['nota'] = 2.0
   
   bloqueado = cmd_args.pop('bloqueado', None)
   if bloqueado != None and bloqueado != "":
