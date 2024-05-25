@@ -51,4 +51,8 @@ def normaliza_busca_por_data(atrs):
   Se não houver erros, devolve uma lista vazia."""
   return util_dict_IMP.normaliza_busca_por_data(atrs)
 
+def normaliza_busca_por_notas(atrs):
+
+  return util_dict_IMP.normaliza_busca_por_notas(atrs)
+
 # !!! Comandos que tratam dados vindos de formularios devem eliminar brancos e newlines inciais e finais de valores de campos antes de validar e usar. !!!

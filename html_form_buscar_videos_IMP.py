@@ -14,6 +14,8 @@ def gera(atrs):
       ( "Título",   "text",   'titulo', True,  "Bla bla bla",     ),
       ( "Autor",    "text",   'autor',  True,  "U-NNNNNNNN",   ),
       ( "Data",     "text",   'data',   True,  "2024",            ),
+      ( "Nota min",  "text",   'nota_min', True, "0"),
+      ( "Nota max",  "text",   'nota_max', True, "4"),
       ("Bloqueado", "checkbox", 'bloqueado', True, "", )
     )
   # #55ee55
