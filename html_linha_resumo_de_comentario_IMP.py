@@ -9,7 +9,7 @@ import util_voto
 
 import sys
 
-def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
+def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_mostrar_texto):
   
   com_id = obj_comentario.obtem_identificador(com) if com != None else None
   atrs = obj_comentario.obtem_atributos(com) if com != None else None
@@ -65,7 +65,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
       mostra = True
       if cab:
         texto = "Texto"
-      elif atrs["bloqueado"]:
+      elif atrs["bloqueado"] and not forcar_mostrar_texto:
         texto = "[BLOQUEADO]"
         cor_fundo = "#FFFF55"
       else:
