@@ -22,7 +22,8 @@ def gera(ses):
   dados_linhas = \
     (
       ( "ID da sessão",       "text", 'sessao',     False, None, ),
-      ( "Criada em",          "text", 'data_login', False, None, ),
+      #( "Criada em",          "text", 'data_login', False, None, ), # Original/Old
+      ( "Criada em",          "text", 'criacao', False, None, ),# Alterado data_login para "criacao" conforme obj_sessao_IMP
       ( "Dono",               "text", 'dono',       False, None, ),
       ( "Cookie",             "text", 'cookie',     False, None, ),
       ( "Status",             "text", 'aberta',     False, None, ),
