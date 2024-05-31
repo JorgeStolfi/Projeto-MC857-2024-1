@@ -14,7 +14,8 @@ def gera(texto, URL, cmd_args, cor_fundo):
       dica = None
       cmd = None
       obrigatorio = False
-      ht_input = html_elem_input.gera(tipo, chave, ident, val, val_min, editavel, dica, cmd, obrigatorio)
+      decimal = False
+      ht_input = html_elem_input.gera(tipo, chave, ident, val, val_min, editavel, dica, cmd, obrigatorio, decimal)
       args_html += ht_input
 
   # O botão propriamente dito:

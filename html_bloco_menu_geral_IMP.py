@@ -182,7 +182,7 @@ def gera_botoes_linha_admin(usr):
 
   cor_bt_busca = "#eeccff"
 
-  ht_busca_obj_input = html_elem_input.gera("text", "objeto", None, None, None, True, "Id do objeto", None, False)
+  ht_busca_obj_input = html_elem_input.gera("text", "objeto", None, None, None, True, "Id do objeto", None, False, False)
   ht_busca_obj_bt =    html_elem_button_submit.gera("Checar Objeto", "ver_objeto", None, None)
   ht_busca_obj_form = html_elem_form.gera(ht_busca_obj_input + ht_busca_obj_bt, False)
   hts_botoes = [ ht_busca_obj_form, ]
