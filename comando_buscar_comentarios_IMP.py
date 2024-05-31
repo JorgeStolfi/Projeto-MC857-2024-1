@@ -1,5 +1,6 @@
 import obj_comentario
 import obj_sessao
+import obj_usuario
 import html_bloco_lista_de_comentarios
 import html_bloco_titulo
 import html_pag_generica
@@ -7,8 +8,9 @@ import html_pag_buscar_comentarios
 import util_identificador
 import util_dict
 import util_data
-import obj_usuario
+from util_erros import ErroAtrib
 
+import re
 import sys
 
 def processa(ses, cmd_args):
@@ -63,6 +65,11 @@ def processa(ses, cmd_args):
         atrs_busca[chave] = False
       else:
         item_erros = [ f"O valor do atributo '{chave}' = \"{val}\" é inválido" ]
+    elif chave == 'nota_min' or chave == 'nota_max':
+      if re.match(r'\d.\d\d', val):
+        atrs_busca[chave] = float(val)
+      else:
+        item_erros = [ f"O valor do atributo '{chave}' = \"{val}\" é inválido" ]
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
@@ -74,6 +81,9 @@ def processa(ses, cmd_args):
   
   # Converte 'data_min', 'data_max' para 'data' intervalar:
   erros += util_dict.normaliza_busca_por_data(atrs_busca)
+
+  # Converte 'nota_min', 'nota_max' para 'nota' intervalar:
+  erros += util_dict.normaliza_busca_por_nota(atrs_busca)
 
   if 'comentario' in atrs_busca:
     if len(atrs_busca) != 1:
