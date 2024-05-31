@@ -41,7 +41,7 @@ def formata_arvore(arv, ses_dono):
   para_autor = (ses_dono == raiz_autor) if ses_dono != None else False
   ht_raiz = html_bloco_comentario.gera \
     ( raiz, largura = 600, mostra_id = True, mostra_data = True, 
-      mostra_video = False, mostra_pai = False, 
+      mostra_video = False, mostra_pai = False, mostra_bloqueado = para_admin,
       bt_conversa = True, 
       bt_responder = logado, 
       bt_editar = (para_admin or para_autor),

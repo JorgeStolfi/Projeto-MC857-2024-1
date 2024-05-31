@@ -1,1 +1,18 @@
 Relatorio - 241882
+
+Para a tarefa do dia 24/05/2024, foi determinada a necessidade de adicionar um título
+ao formulário localizado no menu "Buscar comentários" e, além disso, alterar a label no
+formulário anteriormente chamada de "Pai" para "Em resposta a:", e alterar sua ordem para
+depois do campo "video".
+
+Como determinado na tarefa, foi alterado o módulo "html_pag_buscar_comentarios_IMP" para 
+a adição do título acima do formulário de busca de comentários. Para isso, bastou chamar
+a função html_bloco_titulo com os devidos parâmetros e concatenar o resultado em html gerado
+junto ao código html do formulário de busca. Desta forma a página foi gerada corretamente,
+com o devido título, assim como esperado.
+
+Por fim, para editar a label a ordem dos campos do formulário, foi necessário alterar o módulo
+html_form_buscar_comentarios, onde bastou editar as strings relacionadas e a ordem dos dados
+na lista de campos.
+
+Todos os testes foram executados e terminaram normalmente. Nenhum bug ocorreu.

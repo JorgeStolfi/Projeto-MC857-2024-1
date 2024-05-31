@@ -1,1 +1,8 @@
 Relatorio - 194347
+
+Foi me dado a tarefa de corrigir o problema que impedia o usuario de responder 
+comentario apos tentar entender o problema constatei que era o mesmo problema que 
+impedia os usuarios de comentar o videos tambem e provavelmente estaria no modulo
+"comando_solicitar_pag_postar_comentario" porem com meu conehcimento atual e tempo dado
+não fui consegui resolver o problema dado
+atenciosamente Arimã Batista

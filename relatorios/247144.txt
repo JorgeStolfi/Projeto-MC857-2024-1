@@ -1,1 +1,78 @@
 Relatorio - 247144
+1 - Inicialmente reproduzi o bug que foi relatado
+2 -  Procurando o fluxo de execução para buscar usuários de modo que:
+    html_form_buscar_usuarios -> comando_buscar_usuarios -> html_bloco_lista_usuarios -> html_linha_resumo_de_usuario_IMP
+    
+    Na classe html_linha_resumo_de_usuario_IMP encontrei o primeiro BUG, de front. Na linha 18 - 20 estava:
+      elif chave == 'admin':
+      mostra = True
+      texto = ("ADMIN" if atrs['administrador'] else "") if usr != None else ""
+
+    Note que não estava passando o parametro certo com o nome cabeçalho admin caso o usuário fosse none, desse modo fiz a alteração para:
+      texto = ("Sim" if atrs['administrador'] else "") if usr != None else chave.capitalize()
+
+    Agora caso o admin fosse admin passaria Sim e caso não fosse passaria branco, além de passar a palavra ADMIN para o cabeçalho
+
+
+3 - Agora, procurando como ocultar o email caso o usuário não seja administrador podemos observar nos fluxos que apenas a classe 
+    comando_buscar_usuarios sabe se o usuário é um admim, de modo que sendo a tabela renderizada apenas em html_linha_resumo_de_usuario_IMP, deveriamos passar essa informação para frente.
+
+    3.1 - Adicionar o parametro admin (boolean) na classe Html_bloco_lista_de_usuarios(admin, usr_res_ids)
+    3.2 - Adicionar o parâmetro admin (boolean) na classe html_linha_resumo_de_usuario(admin, usr)
+    3.3 - Na classe comando_buscar_usuarios, na chamada para a classe Html_bloco_lista_de_usuarios, adicionar o parâmetro 'para_admin':
+            ht_tabela = html_bloco_lista_de_usuarios.gera(para_admin, usr_res_ids)
+    
+    3.4 - Na classe html_bloco_lista_de_usuarios fazemos duas chamadas a classe html_linha_resumo_de_usuario, dos quais adicionamos o boolean admin:
+        Linha 11 - cabecalhos = html_linha_resumo_de_usuario.gera(admin, None)
+        Linha 19 - res_campos = html_linha_resumo_de_usuario.gera(admin, usr)
+
+4 - Finalmente na classe html_linha_resumo_de_usuario adicionamos a seguinte validação:
+    elif chave == 'email':
+      mostra = True
+      if admin:
+        texto = str(atrs[chave]) if usr != None else chave.capitalize()
+      else:
+        mostra = False
+
+    De modo que a coluna de email sequer apareça caso não seja admin.
+
+5 - Atualização da documentação apenas da última classe html_linha_resumo_de_usuario:
+ Se {admin} é {True} produz a linha email normalmente no resultado e caso seja {False}, ou seja, não é uma admin que está solcitando, então não devolve email
+
+
+6 - Testes:
+    
+Testes no módulo comando_buscar_usuarios, Resultado:
+        Testes terminaram normalmente.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-rw-r--r-- 1 ra247144 ec2021-fra 25717 May 24 21:29 testes/saida/comando_buscar_usuarios.html
+
+Testes no módulo html_bloco_lista_de_usuarios, Resultado:
+    - Fiz a adição no arquivo de testes, adicionando o parametro booleano que faltava: 
+        testa_gera("muitos", str, True, ids_usuarios)
+        testa_gera("lhufos", str, True, ids_usuarios)
+        testa_gera("lhufos", str, False, ids_usuarios)
+    
+
+  ----------------------------------------------------------------------
+Testes terminaram normalmente.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-rw-r--r-- 1 ra247144 ec2021-fra 4315 May 24 21:32 testes/saida/html_bloco_lista_de_usuarios.html
+
+
+
+
+Testes no módulo html_linha_resumo_de_usuario, Resultado:
+    Fiz a adição no arquivo de Testes das variaveis booleanas necessárias
+    testa_gera("TUSER1",  list, True, usr1)
+    testa_gera("TUSER2",  list, True, usr2)
+    testa_gera("TUSER5",  list, True, usr5)
+    testa_gera("TUSER5",  list, False, usr5)
+    
+Testes terminaram normalmente.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-rw-r--r-- 1 ra247144 ec2021-fra 4781 May 24 21:34 testes/saida/html_linha_resumo_de_usuario.html
+
+
+
+    

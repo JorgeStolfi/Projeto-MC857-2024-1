@@ -39,8 +39,13 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-# Comentário existente:
-com1_id = "C-00000009"
+# Comentário existente não bloqueado:
+com9_id = "C-00000009"
+com9 = obj_comentario.obtem_objeto(com9_id)
+assert com9 != None
+
+# Comentário existente bloqueado:
+com1_id = "C-00000001"
 com1 = obj_comentario.obtem_objeto(com1_id)
 assert com1 != None
 
@@ -53,20 +58,27 @@ for mostra_id in False, True:
       xmvid = f"_mvid{str(mostra_video)[0]}"
       for mostra_pai in False, True:
         xmpai = f"_mpai{str(mostra_pai)[0]}"
-        for botoes in False, True:
-          xbots = f"_bots{str(botoes)[0]}"
-          for calcnota in False, True:
-            xcalc = f"_calc{str(calcnota)[0]}"
-            tag = xmide + xmdat + xmvid + xmpai + xbots + xcalc
-            bt_conversa = botoes
-            bt_responder = botoes
-            bt_editar = botoes
-            bt_calcnota = calcnota
-            testa_gera(
-              "C1" + tag, str, 
-              com1, largura, mostra_id, mostra_data, mostra_video, mostra_pai, 
-              bt_conversa, bt_responder, bt_editar, bt_calcnota
-            )
+        for mostra_bloqueado in False, True:
+          xm_bloqueado = f"_mbloqueado{str(mostra_bloqueado)[0]}"
+          for botoes in False, True:
+            xbots = f"_bots{str(botoes)[0]}"
+            for calcnota in False, True:
+              xcalc = f"_calc{str(calcnota)[0]}"
+              tag = xmide + xmdat + xmvid + xmpai + xm_bloqueado + xbots + xcalc
+              bt_conversa = botoes
+              bt_responder = botoes
+              bt_editar = botoes
+              bt_calcnota = calcnota
+              testa_gera(
+                "C9" + tag, str, 
+                com9, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado,
+                bt_conversa, bt_responder, bt_editar, bt_calcnota
+              )
+              testa_gera(
+                "C1" + tag, str, 
+                com1, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado,
+                bt_conversa, bt_responder, bt_editar, bt_calcnota
+              )
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

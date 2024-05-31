@@ -1,6 +1,6 @@
 import html_linha_resumo_de_comentario_IMP
 
-def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
+def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_mostrar_texto):
   """
   Devolve uma lista de fragmentos HTML com os valores dos principais
   atributos do objeto {com} da classe {obj_comentario.Classe}, incluindo o
@@ -24,4 +24,4 @@ def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
   Se {com} não é {None}, resultado inclui também um botão "Ver" que dispara um comando
   HTTP "ver_comentario".  O argumento desse comando será {{ 'comentario': com_id }}.
   """
-  return html_linha_resumo_de_comentario_IMP.gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota)
+  return html_linha_resumo_de_comentario_IMP.gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_mostrar_texto)

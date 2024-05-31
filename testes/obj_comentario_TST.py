@@ -478,6 +478,7 @@ sys.stderr.write("%s\n" % ("=" * 70))
 sys.stderr.write("  testando {obj_comentario.recalcula_nota(vid)}:\n")
 
 nota_calc = obj_comentario.recalcula_nota(vid1)
+print("Nota recalculada: ", nota_calc)
 if not isinstance(nota_calc, float) or nota_calc < 0.0 or nota_calc > 4.0:
   sys.stderr.write(f"  ** retornou nota inválida {str(nota_calc)}\n")
   # !!! Deveria verificar se a nota foi calculada corretamente !!!

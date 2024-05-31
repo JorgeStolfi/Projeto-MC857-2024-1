@@ -5,7 +5,7 @@ import obj_usuario
 import obj_sessao
 
 import db_base_sql
-import db_tabelas_do_sistema
+from util_erros import aviso_prog
 import util_testes
 import sys
 

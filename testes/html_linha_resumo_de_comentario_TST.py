@@ -53,11 +53,13 @@ for ms_autor in False, True:
     xvid = f"_msvid{str(ms_video)[0]}"
     for ms_pai in False, True:
       xpai = f"_mspai{str(ms_pai)[0]}"
-      for ms_nota in False, True:
-        xnota = f"_mspai{str(ms_nota)[0]}"
-        tag = xaut + xvid + xpai + xnota
-        testa_gera("C1" + tag,  list, ses1, com1, ms_autor, ms_video, ms_pai, ms_nota)
-        testa_gera("C2" + tag,  list, ses1, com2, ms_autor, ms_video, ms_pai, ms_nota)
+      for ms_forca_texto in False, True:
+        xforca_texto = f"_msft{str(ms_forca_texto)[0]}"
+        for ms_nota in False, True:
+          xnota = f"_mspai{str(ms_nota)[0]}"
+          tag = xaut + xvid + xpai + xnota + xforca_texto
+          testa_gera("C1" + tag,  list, ses1, com1, ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
+          testa_gera("C2" + tag,  list, ses1, com2, ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

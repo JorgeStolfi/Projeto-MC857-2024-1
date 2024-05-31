@@ -1,0 +1,14 @@
+A tabela exibida ao busca pelos comentário é a gerada pelo `html_bloco_lista_de_comentarios`. O conteúdo das linhas é gerado pelo `html_linha_resumo_de_comentario`, o texto das células é gerado no `hmtl_elem_item_de_resumo` 
+
+Adicionei um parâmetro opcional {tam_fonte} ao método `hmtl_elem_item_de_resumo.gera`, com valor default de "20px", esse valor é passado para a implementação e para o módulo `html_estilo_texto` onde é usado para settar o tamanho da fonte.
+
+Em `html_linha_resumo_de_comentario` passei o parâmetro {tam_fonte} com o valor de "14px".
+
+
+Em `html_bloco_lista_de_comentarios` alterei o parâmetro de estilo que é passado para `html_elem_table.gera` e passei o CSS `width: 100%`, para melhorar um pouco a visibilidade dos campos da tabela.
+
+Testei a tabela com as resoluções 1920x1080, 1366x768, 1280x720, 1024x768 e 800x600 e em todas o pedaço de texto é exibido totalmente.
+
+O texto já está truncado em 50 caracteres em `html_linha_resumo_de_comentario_IMP.py#L72`.
+
+Testes terminaram normalmente.

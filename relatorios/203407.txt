@@ -1,1 +1,28 @@
 Relatorio - 203407
+
+Tarefa:
+203407 Nas páginas geradas pelos comandos "ver_conversas", se o resulado for vazio 
+o título da página deve dizer "Não há respostas ao comentário C-..." em vez de "Respostas ao comentário ..." .
+Mas essa situação NÃO deve ser apresentada como uma mensagem de erro. Idem quando os comandos "buscar_videos", 
+"buscar_usuarios", "buscar_sessoes", "buscar_comentarios" devolvem lista vazia. Corrigir.
+
+Relatório:
+
+ver_conversas:
+modifiquei o código para procurar primeiro as raizes. Assim, foi possível montar o título de acordo com o esperado.
+
+buscar_videos:
+Percebi que quando a lista de videos era vazia, um erro era adicionado. Removi o erro e adicionei o titulo 
+"Nenhum vídeo foi encontrado". Fiz os ajustes para que a lista vazia de vídeo não fosse tratada como erro,
+e a página não fosse recarregada.
+
+buscar_sessoes:
+Neste comando, um erro era criado quando a busca retornava uma lista com zero elementos. Removi o erro,
+juntamente com um assert da lista ser maior que zero. Ajustei o título de acordo com o que foi pedido.
+
+buscar_comentarios:
+Similar ao passo anterior, removi a parte onde a lista fazia era considerada como erro. Também removi
+"assert len(com_ids_res) > 0", para poder tratar o título de acordo.
+
+Em todos os casos executei os testes unitátios de cada comando, fazendo ajustes no código quando necessário.
+Novos casos de testes não foram incluídos.
