@@ -1,5 +1,6 @@
 import obj_comentario
 import obj_sessao
+import obj_usuario
 import html_bloco_lista_de_comentarios
 import html_bloco_titulo
 import html_pag_generica
@@ -8,8 +9,8 @@ import util_identificador
 import util_dict
 import util_data
 from util_erros import ErroAtrib
-import re
 
+import re
 import sys
 
 def processa(ses, cmd_args):
@@ -17,6 +18,9 @@ def processa(ses, cmd_args):
   # Estas condições deveriam valer para comandos emitidos pelas páginas do site:
   assert ses == None or isinstance(ses, obj_sessao.Classe)
   assert isinstance(cmd_args, dict)
+
+  ses_dono = obj_sessao.obtem_dono(ses); 
+  para_admin = obj_usuario.eh_administrador(ses_dono)
 
   erros = []
   resultados = []
@@ -99,27 +103,33 @@ def processa(ses, cmd_args):
       # Faz a busca dentro de um {try:} caso ela levante {ErroAtrib}:
       try:
         com_ids_res = obj_comentario.busca_por_campos(atrs_busca, unico = False)
-        if len(com_ids_res) == 0:
-          erros.append("Não foi encontrado nenhum comentário com os dados fornecidos")
+
       except ErroAtrib as ex:
         erros += ex.args[0]
 
   if len(erros) == 0:
-    assert len(com_ids_res) > 0
+    
     # Mostra os comentários encontrados na forma de tabela:
-    assert len(com_ids_res) > 0
     com_ids_res = sorted(list(com_ids_res))
-    ht_titulo = html_bloco_titulo.gera("Comentários encontrados")
+    if len(com_ids_res) == 0:
+      ht_titulo = html_bloco_titulo.gera("Nenhum comentário encontrado")
+
+    else:
+      ht_titulo = html_bloco_titulo.gera("Comentários encontrados")
+    
     ht_tabela = html_bloco_lista_de_comentarios.gera \
       ( com_ids_res, 
         mostra_autor = True,
         mostra_video = True,
         mostra_pai = True,
         mostra_nota = True,
+        forcar_mostrar_texto = para_admin
       )
+    
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela
+    
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
   else:
     # Repete o formulário com os dados válidos:

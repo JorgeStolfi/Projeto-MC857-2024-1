@@ -56,7 +56,7 @@ def gera(vid_id, atrs, largura, mostra_id, mostra_data):
     autor_nome = obj_usuario.obtem_atributo(autor, 'nome')
     assert autor_id != None
     assert autor_nome != None
-    ht_autor = html_elem_span.gera(estilo_atr, "Por: " + autor_id + " " + autor_nome)
+    ht_autor = html_elem_span.gera(estilo_atr, "Autor: " + autor_id + " " + autor_nome)
     ht_linha_2 += ht_autor
   
   if ht_linha_2 != "": ht_linha_2 += "<br/>"

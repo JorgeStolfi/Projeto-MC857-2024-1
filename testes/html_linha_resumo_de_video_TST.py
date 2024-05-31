@@ -7,6 +7,8 @@ import db_base_sql
 import db_tabelas_do_sistema
 import obj_video
 import util_testes
+from util_erros import aviso_prog
+
 
 import sys
 
