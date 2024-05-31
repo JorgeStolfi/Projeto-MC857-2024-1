@@ -19,7 +19,6 @@ def processa(ses, cmd_args):
   para_admin = ses != None and obj_sessao.de_administrador(ses)
   
   erros = []
-
   # Valida os valores dos atributos da busca, e elimina campos {None}:
   atrs_busca = {}
   for chave, val in cmd_args.items():
@@ -87,7 +86,7 @@ def processa(ses, cmd_args):
   if len(usr_res_ids) != 0:
     # Encontrou pelo menos um usuário.  Mostra em forma de tabela:
     ht_titulo = ht_titulo = html_bloco_titulo.gera("Usuários encontrados")
-    ht_tabela = html_bloco_lista_de_usuarios.gera(usr_res_ids)
+    ht_tabela = html_bloco_lista_de_usuarios.gera(para_admin, usr_res_ids)
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela
