@@ -1,6 +1,7 @@
 import obj_comentario
 import obj_usuario
 import obj_video
+import obj_sessao
 import html_elem_item_de_resumo
 import html_elem_button_simples
 import html_elem_link_text
@@ -9,19 +10,25 @@ import util_voto
 
 import sys
 
-def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
+def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_mostrar_texto):
   
   com_id = obj_comentario.obtem_identificador(com) if com != None else None
   atrs = obj_comentario.obtem_atributos(com) if com != None else None
 
   itens_resumo = []
+  cab = (com == None)
   
   colunas = [ 'comentario', 'data', 'nota', 'autor',  'video', 'pai', 'voto', 'texto' ]
 
+  if forcar_mostrar_texto:
+    colunas.append('🔒')
+
+  bloqueado = False
+  if not cab:
+    bloqueado = atrs['bloqueado'] and not forcar_mostrar_texto
   cor_fundo = None
   cor_texto = None
   alinha = "left"
-  cab = (com == None)
   for chave in colunas:
     if chave == 'comentario':
      mostra = True
@@ -65,11 +72,19 @@ def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
       mostra = True
       if cab:
         texto = "Texto"
-      elif atrs["bloqueado"]:
+      elif bloqueado:
         texto = "[BLOQUEADO]"
         cor_fundo = "#FFFF55"
       else:
         texto = ((str(atrs[chave])).replace("\n", "\\n"))[:50]
+    elif chave == '🔒':
+      mostra = True
+      alinha = "center"
+      if cab:
+        texto = '🔒'
+      else:
+        texto = '🔒' if atrs['bloqueado'] else ''
+      cor_fundo = "#FFFF55"
     else:
       mostra = True
       if cab:
@@ -80,12 +95,29 @@ def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota):
       
     if mostra:
       alinha = "left"
-      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto)
+      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto, "14px")
       itens_resumo.append(ht_item)
-  
+
   if not cab:
     bt_args = { 'comentario': com_id }
     ht_bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, None)
     itens_resumo.append("<td>" + ht_bt_ver + "</td>")
+
+    ses_dono = obj_sessao.obtem_dono(ses); assert ses_dono != None
+    admin = obj_usuario.eh_administrador(ses_dono)
+
+    if admin:
+      is_block = obj_comentario.obtem_atributo(com, "bloqueado")
+      bt_block_args = { 'comentario': com_id, 'bloqueado': str(not is_block) }
+    
+      if is_block:
+        bt_block_text = 'Desbloquear'
+        bt_background_color = '#11DD11'
+      else:
+        bt_block_text = 'Bloquear'
+        bt_background_color = '#fb1528'
+
+      ht_bt_bloquear = html_elem_button_simples.gera(bt_block_text, "alterar_comentario", bt_block_args, bt_background_color)
+      itens_resumo.append("<td>" + ht_bt_bloquear + "</td>")  
 
   return itens_resumo

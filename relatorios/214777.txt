@@ -1,1 +1,16 @@
 Relatorio - 214777
+
+Tarefa:
+ [Logar como administrador ("primeiro@gmail.com", senha "U-00000001")] Menu "Meus comentários": Se o dono da sessão é administrador,
+ o texto dos comentários bloqueados deve aparecer. Para o administrador, deve haver uma coluna extra cujo cabeçalho é um emoji de cadeado,
+ e em cada linha mostra cadeado ou branco para dizer que está bloqueado ou não. Corrija.
+
+Execução:
+Modifiquei diversos arquivos que chamavam a função "html_bloco_lista_de_comentarios.gera" para adicionarem um parâmetro extra 
+indicando se era necessário que fosse mostrado o conteúdo do comentário (no caso de um administrador). Tentei evitar passar o valor 
+do usuário ser ou não administrador pois entendo que isso não é algo que uma classe HTML deveria se preocupar, ela não deveria ter 
+lógica de negócio. Quando esse parâmetro é True, ele adiciona uma coluna extra e coloca nela o valor de estar ou não bloqueado o vídeo,
+mostrando o texto do comentário onde antes aparecia "[BLOQUEADO]". Quando esse parâmetro é False, o comportamento é igual ao anterior
+que já existia no projeto.
+Alterei classes de testes para também testarem esse fluxo.
+

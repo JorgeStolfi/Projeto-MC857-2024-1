@@ -1,1 +1,7 @@
 Relatorio - 240013
+
+Nome: Lucas Jacinto Gonçalves 
+RA: 240013
+
+Eu realizei alterações no arquivo comando_alterar_comentario_IMP.py para validação dos atributos do dicionário atrs_mod tanto para nota quanto para voto.
+Após a validação no arquivo util_nota e util_voto, eles são corretamente recebidos e são alterados pelo usuário corretamente. Testei as alterações e funcionou, corrigindo o problema.

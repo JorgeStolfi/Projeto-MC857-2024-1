@@ -19,7 +19,7 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
   assert isinstance(mostra_video, bool)
   assert isinstance(mostra_pai, bool)
   
-  estilo_atr = html_estilo_texto.gera("10px", "medium", "#222222", None, None)
+  estilo_atr = html_estilo_texto.gera("8px", "medium", "#222222", None, None)
 
   width = f"{largura}px"
   padding = ( "10px", "0px", "5px", "0px" )
@@ -43,10 +43,11 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
     if ht_linha_1 != "": ht_linha_1 += spacer
     ht_linha_1 += ht_com_id
     
-  tx_nota = util_nota.formata(atrs['nota'])
-  ht_nota = html_elem_span.gera(estilo_atr, "Nota: " + tx_nota)
-  if ht_linha_1 != "": ht_linha_1 += spacer
-  ht_linha_1 += ht_nota
+  if 'nota' in atrs and atrs['nota'] != None:
+    tx_nota = util_nota.formata(atrs['nota'])
+    ht_nota = html_elem_span.gera(estilo_atr, "Nota: " + tx_nota)
+    if ht_linha_1 != "": ht_linha_1 += spacer
+    ht_linha_1 += ht_nota
     
   if ht_linha_1 != "": ht_linha_1 += "<br/>"
   
@@ -98,11 +99,12 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
     ht_pai = html_elem_span.gera(estilo_atr, f"Em resposta a: {pai_id}")
     if ht_linha_3 != "": ht_linha_3 += " "
     ht_linha_3 += ht_pai
-    
-  tx_voto = util_voto.formata(atrs['voto'])
-  ht_voto = html_elem_span.gera(estilo_atr, "Voto: " + tx_voto)
-  if ht_linha_3 != "": ht_linha_3 += spacer
-  ht_linha_3 += ht_voto
+
+  if 'voto' in atrs and atrs['voto'] != None:    
+    tx_voto = util_voto.formata(atrs['voto'])
+    ht_voto = html_elem_span.gera(estilo_atr, "Voto: " + tx_voto)
+    if ht_linha_3 != "": ht_linha_3 += spacer
+    ht_linha_3 += ht_voto
 
   if ht_linha_3 != "": ht_linha_3 += "<br/>"
    

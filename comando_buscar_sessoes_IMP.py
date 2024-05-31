@@ -84,16 +84,20 @@ def processa(ses, cmd_args):
       # Faz a busca dentro de um {try:} caso ela levante {ErroAtrib}:
       try:
         ses_ids_res = obj_sessao.busca_por_campos(atrs_busca, unico = False)
-        if len(ses_ids_res) == 0:
-          erros.append("Não foi encontrada nenhuma sessão com os dados fornecidos")
+
       except ErroAtrib as ex:
         erros += ex.args[0]
 
   if len(erros) == 0:
     # Mostra as sessãoes encontradas na forma de tabela:
-    assert len(ses_ids_res) > 0
     ses_ids_res = sorted(list(ses_ids_res))
-    ht_titulo = html_bloco_titulo.gera("Sessões encontradas")
+    
+    if len(ses_ids_res) == 0:
+       ht_titulo = html_bloco_titulo.gera("Nenhuma sessão foi encontrada")
+    
+    else:
+      ht_titulo = html_bloco_titulo.gera("Sessões encontradas")
+    
     ht_tabela = html_bloco_lista_de_sessoes.gera\
       ( ses_ids_res, 
         bt_ver = True, bt_fechar = para_admin, 

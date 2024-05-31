@@ -1,16 +1,8 @@
-import html_elem_link_img
-import html_elem_paragraph
 import html_elem_div
+import html_elem_link_img
 import html_estilo_texto
 import obj_sessao
 import obj_usuario
-import html_estilo_div_dados
-
-from util_erros import erro_prog, aviso_prog
-
-# Outros módulos importados por esta implementação:
-import re
-import sys
 
 bmu_debug = False
 
@@ -21,9 +13,6 @@ def gera(usr):
   cor_fundo = None
   margens = None
   estilo_texto = html_estilo_texto.gera("18px", "medium", cor_texto, cor_fundo, margens)
-
-  padding = ( "0px", "0px", "0px", "10px" )
-  estilo_parag = html_estilo_div_dados.gera("block", "300px", "break-word", padding, "75%")
 
   # Determina a imagem{ht_imagem} e o texto {ht_texto}
   texto_bem = "Bem-vindo ao nosso site de vídeos!"
@@ -55,12 +44,10 @@ def gera(usr):
       texto = texto_ola + "<br/>" + texto_bem
 
   # Formata {texto}:
-  # estilo_parag = "\n display:block; word-wrap:break-word;  width: 100%;\n  margin-top: 10px;\n  margin-bottom: 2px;\n  text-indent: 10px;\n  line-height: 75%;"
-  estilo_parag = "display:block; width: 300px; word-wrap:break-word; padding: 0px 0px 0px 10px; line-height: 75%;"
-  ht_texto = html_elem_paragraph.gera(estilo_parag, html_elem_div.gera(estilo_texto, texto))
+  ht_texto = html_elem_div.gera(estilo_texto, texto)
   
   ht_bloco = \
-    "<nav style=\"display:block;\" >" + \
+    "<nav style=\"display:flex; gap:10px;\">" + \
     ht_imagem + \
     ht_texto + \
     "</nav>"

@@ -3,7 +3,7 @@ import html_elem_item_de_resumo
 import html_elem_button_simples
 import html_elem_link_text
 
-def gera(usr):
+def gera(admin, usr):
   
   atrs = obj_usuario.obtem_atributos(usr) if usr != None else None
 
@@ -17,7 +17,14 @@ def gera(usr):
       texto = html_elem_link_text.gera(obj_usuario.obtem_identificador(usr), "ver_usuario", { 'usuario': obj_usuario.obtem_identificador(usr) }) if usr != None else "Usuário"
     elif chave == 'admin':
       mostra = True
-      texto = ("ADMIN" if atrs['administrador'] else "") if usr != None else ""
+      texto = ("Sim" if atrs['administrador'] else "") if usr != None else chave.capitalize()
+    elif chave == 'email':
+      mostra = True
+      if admin:
+        texto = str(atrs[chave]) if usr != None else chave.capitalize()
+      else:
+        mostra = False
+
     else:
       mostra = True
       texto = str(atrs[chave]) if usr != None else chave.capitalize()

@@ -6,7 +6,9 @@ import html_elem_button_simples
 import html_estilo_texto
 import html_elem_link_img
 import html_elem_link_text
+import util_bloqueado
 import util_nota
+import util_testes
 
 def gera(vid, mostra_autor):
 
@@ -15,7 +17,7 @@ def gera(vid, mostra_autor):
 
   itens_resumo = []
 
-  colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'largura', 'altura', 'titulo', 'bloqueado']
+  colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'tamanho', 'titulo', 'bloqueado']
   
   cor_fundo = None
   cor_texto = None
@@ -27,6 +29,7 @@ def gera(vid, mostra_autor):
       texto = "Vídeo" if cab else html_elem_link_text.gera(vid_id, "ver_video", { 'video': vid_id })
     elif chave == 'titulo':
       mostra = True
+      alinha = "left"
       if cab:
         texto = "Título"
       else:
@@ -34,7 +37,7 @@ def gera(vid, mostra_autor):
           texto = "[BLOQUEADO]"
           cor_fundo = "#FF2222"
         else:
-          texto = str(atrs['titulo'])
+          texto = util_testes.trunca_tamanho(str(atrs['titulo']), 15)
     elif chave == 'autor':
       mostra = mostra_autor
       if cab:
@@ -46,9 +49,9 @@ def gera(vid, mostra_autor):
       mostra = True
       texto = "Duração" if cab else f"{atrs[chave]/1000:.3f} s"
       alinha = "right"
-    elif chave == 'altura' or chave == 'largura':
+    elif chave == 'tamanho':
       mostra = True
-      texto = chave.capitalize() if cab else f"{str(atrs[chave])} px"
+      texto = chave.capitalize() if cab else f"{str(atrs['largura'])}x{str(atrs['altura'])} px"
       alinha = "right"
     elif chave == 'nota':
       mostra = True
@@ -63,6 +66,12 @@ def gera(vid, mostra_autor):
       else:
         thumb_file = f"thumbs/{vid_id}.png"
         texto = html_elem_link_img.gera(thumb_file, None, 40, None)
+    elif chave == 'bloqueado':
+      mostra = True
+      if cab:
+        texto = "🔒"
+      else:
+        texto = util_bloqueado.formata(atrs['bloqueado'])
     else:
       mostra = True
       texto = chave.capitalize() if cab else str(atrs[chave])

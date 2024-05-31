@@ -78,25 +78,19 @@ def processa(ses, cmd_args):
         # Busca por campos aproximados:
         vid_ids = obj_video.busca_por_campos(atrs_busca, unico = False)
 
-      if len(vid_ids) == 0:
-        # Não encontrou nenhum usuário:
-        erros.append(f"Não foi encontrado nenhum vídeo com os dados fornecidos")
-
     except ErroAtrib as ex:
       erros += ex.args[0]
 
-  if len(vid_ids) != 0:
+  if len(vid_ids) == 0:
     # Encontrou pelo menos um vídeo.  Mostra em forma de tabela:
-    ht_titulo = html_bloco_titulo.gera("Vídeos encontrados")
-    ht_tabela = html_bloco_lista_de_videos.gera(vid_ids, mostra_autor = True)
-    ht_bloco = \
-      ht_titulo + "<br/>\n" + \
-      ht_tabela
-    pag = html_pag_generica.gera(ses, ht_bloco, erros)
+    ht_titulo = html_bloco_titulo.gera("Nenhum vídeo foi encontrado")
   else:
-    # Argumentos com erro ou não encontrou nada.
-    # Repete a página de busca, com eventuais mensagens de erro:
-    admin = obj_sessao.de_administrador(ses)
-    pag = html_pag_buscar_videos.gera(ses, cmd_args, erros)
+    ht_titulo = html_bloco_titulo.gera("Vídeos encontrados")
+
+  ht_tabela = html_bloco_lista_de_videos.gera(vid_ids, mostra_autor = True)
+  ht_bloco = \
+    ht_titulo + "<br/>\n" + \
+    ht_tabela
+  pag = html_pag_generica.gera(ses, ht_bloco, erros)
 
   return pag

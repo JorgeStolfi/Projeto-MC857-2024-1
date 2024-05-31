@@ -181,8 +181,16 @@ def recalcula_nota(obj):
   
   # Obtem os IDs dos comentários relevantes:
   unico = False
+  notas = []
+  # Se o objeto é um comentário, busca os comentários filhos dele
   if isinstance(obj, obj_comentario.Classe):
     resp_ids = obj_raiz.busca_por_campos( { 'pai': obj }, unico, tabela )
+    for resp_id in resp_ids:
+      resp = obj_comentario.obtem_objeto(resp_id)
+      notas.append(recalcula_nota(resp))
+      return sum(notas)/len(notas)      
+
+  # Se o objeto é um vídeo, busca os comentários dele
   elif isinstance(obj, obj_video.Classe):
     resp_ids = obj_raiz.busca_por_campos( { 'video': obj, 'pai': None }, unico, tabela )
   else:
