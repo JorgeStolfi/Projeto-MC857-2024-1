@@ -7,6 +7,8 @@ import html_pag_mensagem_de_erro
 import html_pag_ver_comentario
 import obj_video
 import util_dict
+import util_nota
+import util_voto
 from util_erros import ErroAtrib
 
 import sys
@@ -63,7 +65,7 @@ def processa(ses, cmd_args):
       erros.append(f"Você não tem permissão para alterar este comentário")
 
     # Verifica campos inalteráveis:
-    alteraveis = { 'texto', 'nota', 'voto', }
+    alteraveis = { 'texto', 'nota', 'voto'}
     for chave in cmd_args.keys():
       if not chave in alteraveis:
         erros.append(f"O atributo '{chave}' não pode ser alterado")
@@ -72,18 +74,26 @@ def processa(ses, cmd_args):
       # Somente administrador pode alterar a nota:
       if not para_admin:
         erros.append("Você não tem permissão para alterar a nota do comentário")
-      else:
-        obj_comentario.muda_atributos(com, {"nota": cmd_args["nota"]})
         
     if 'voto' in cmd_args:
       # Somente administrador ou o dono do comentário pode altera-lo
       if not editavel:
-        erros.append("Você não tem permissão para alterar o voto do comentário") 
+        erros.append("Você não tem permissão para alterar o voto do comentário")
+      
+        
 
   pag = None
   if (len(erros) == 0):
     # Tenta modificar os atributos do vídeo:
     atrs_mod = util_dict.para_objetos(cmd_args)
+    if 'nota' in atrs_mod:
+      erros+= util_nota.valida('nota', atrs_mod['nota'], False)
+      if len(erros) == 0:
+        atrs_mod['nota'] = float(atrs_mod['nota'])
+    if 'voto' in atrs_mod:
+      erros+= util_voto.valida('voto', atrs_mod['voto'], False)
+      if len(erros) == 0:
+        atrs_mod['voto'] = int(atrs_mod['voto'])
     if caco_debug: sys.stderr.write("    chamando {obj_comentario.muda_atributos}...\n")
     try:
       obj_comentario.muda_atributos(com, atrs_mod)

@@ -4,6 +4,8 @@ import html_elem_button_simples
 import html_elem_video
 import html_bloco_cabecalho_de_video
 import html_bloco_rodape_de_video
+import html_elem_img
+import html_elem_table
 
 def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
 
@@ -27,7 +29,21 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
   
   ht_rodape = html_bloco_rodape_de_video.gera(vid_id, vid_atrs, largura=600, mostra_nota=True, mostra_dims=True)
 
-  ht_bloco = ht_cabeca + "\n" + ht_video + "\n" + ht_rodape
+  ht_bloco = ht_cabeca + "\n" + ht_video + "\n" + ht_rodape + "\n"
+
+  # Acrescenta thumbs
+  alt_px = 80
+  ht_elems_thumbs = []
+
+  for i in range(5):
+    arquivo = f"thumbs/{vid_id}-{i:04d}.png"
+    ht_img = html_elem_img.gera(arquivo, f"{vid_atrs['titulo']}-{i:04d}", alt_px)
+    ht_elem_thumb = "<td style=\"text-align: center; border: 1px solid blue; padding:5px;\">&nbsp;" + ht_img + "&nbsp;</td>"
+    ht_elems_thumbs.append(ht_elem_thumb)
+  
+  ht_tabela_thumbs = html_elem_table.gera([ht_elems_thumbs], None)
+
+  ht_bloco += ht_tabela_thumbs + "\n"
   
   # Acrescenta botões para ver outras coisas do vídeo, se for o caso:
   if(not vid_atrs['bloqueado']):

@@ -20,15 +20,17 @@ def gera(atrs, ses):
   # Tupla contendo as seguintes informações: {rot} {tipo} {chave} {editavel} {dica}
   # Para um maior detalhamento, cheque a documentação de `html_bloco_tabela_de_campos.gera`.
   dados_linhas = (
-    ( "ID",       "text",   'video',  True,  "V-NNNNNNNN",      ),
-    ( "Título",   "text",   'titulo', True,  "Bla bla bla",     ),
-    ( "Autor",    "text",   'autor',  True,  "U-NNNNNNNN",   ),
-    ( "Data",     "text",   'data',   True,  "2024",            ),
-  )
-
+      ( "ID",         "text",    'video',      True,  "V-NNNNNNNN", ),
+      ( "Título",     "text",    'titulo',     True,  "Bla bla bla", ),
+      ( "Autor",      "text",    'autor',      True,  "U-NNNNNNNN", ),
+      ( "Desde data", "text",    'data_min',   True, "2024-05-20 15:00:00 UTC", ),
+      ( "Até data",   "text",    'data_max',   True, "2024-05-24 15:00:00 UTC", ),
+      ( "Nota min",   "text",    'nota_min',   True, "0.00" ),
+      ( "Nota max",   "text",    'nota_max',   True, "4.00" ),
+    )
   if para_admin:
-    dados_linhas += (("Bloqueado", "checkbox", 'bloqueado', True, ""),)
-  # #55ee55
+    dados_linhas += ( ( "Bloqueado", "checkbox", 'bloqueado', True, ""), )
+    
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)
   ht_submit = html_elem_button_submit.gera("Buscar", "buscar_videos", None, None)
   ht_cancel = html_elem_button_simples.gera("Cancelar", "pag_principal", None, None)

@@ -34,17 +34,17 @@ def testa_gera(rot_teste, res_esp, *args):
 linhas = []
 for ed in False, True:
   linhas += \
-    [ ("Nome",          "text",     "itNome",        ed, (""                    if ed else None), ),
-      ("Carro",         "text",     "itCarro",       ed, ("Marca-ano"           if ed else None), ),
-      ("Idade",         "number",   "itIdade",       ed, ("XX"                  if ed else None), ),
-      ("Telefone",      "tel",      "itTel",         ed, ("+XX (XX) XXXXX-XXXX" if ed else None), ),
-      ("Email",         "email",    "itEmail",       ed, ("email@domain.com"    if ed else None), ),
-      ("Administrador", "checkbox", "checkboxAdmin", ed, (""                    if ed else None), ),
-      ("Patrocinador",  "text",     "itPatro",       ed, ("U-NNNNNNNN"          if ed else None), ),
-      ("Lema",          "textarea", "itLema",        ed, ("Seu lema"            if ed else None), ),
+    [ ("Nome",          "text",     "itNome",        ed, (""                    if ed else None), False,),
+      ("Carro",         "text",     "itCarro",       ed, ("Marca-ano"           if ed else None), False,),
+      ("Idade",         "number",   "itIdade",       ed, ("XX"                  if ed else None), False,),
+      ("Telefone",      "tel",      "itTel",         ed, ("+XX (XX) XXXXX-XXXX" if ed else None), False,),
+      ("Email",         "email",    "itEmail",       ed, ("email@domain.com"    if ed else None), False,),
+      ("Administrador", "checkbox", "checkboxAdmin", ed, (""                    if ed else None), False,),
+      ("Patrocinador",  "text",     "itPatro",       ed, ("U-NNNNNNNN"          if ed else None), False,),
+      ("Lema",          "textarea", "itLema",        ed, ("Seu lema"            if ed else None), False,),
     ]
 
-linhas.append( ("Segredo", "hidden", "itSegredo", False, None, ) )
+linhas.append( ("Segredo", "hidden", "itSegredo", False, None, False, ) )
 
   
 usr3_id = "U-00000003"

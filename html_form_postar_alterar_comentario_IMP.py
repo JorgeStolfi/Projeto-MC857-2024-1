@@ -37,7 +37,7 @@ def gera(com_id, atrs, ed_nota, ed_voto):
     com_nota = atrs.get('nota', 2.0)
     ht_nota = "<br/>" + \
       html_elem_label.gera("Nota:", " ") + \
-      html_elem_input.gera("number", 'nota', 'nota', com_nota, 0.0, True, None, None, True )
+      html_elem_input.gera("number", 'nota', 'nota', com_nota, 0.0, True, None, None, True, True )
   else:
     ht_nota = ""
 
@@ -45,7 +45,7 @@ def gera(com_id, atrs, ed_nota, ed_voto):
   if ed_voto:
     ht_voto = "<br/>" + \
       html_elem_label.gera("Voto:", " ") + \
-      html_elem_input.gera("number", 'voto', 'voto', 0, 0, True, None, None, False )
+      html_elem_input.gera("number", 'voto', 'voto', 0, 0, True, None, None, False, False )
   else:
     ht_voto = ""
  

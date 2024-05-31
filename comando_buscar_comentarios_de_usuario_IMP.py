@@ -12,6 +12,9 @@ def processa(ses, cmd_args):
   # Páginas do sistema deveriam garantir estas condições:
   assert ses == None or isinstance(ses, obj_sessao.Classe)
   assert cmd_args != None and type(cmd_args) is dict
+
+  ses_dono = obj_sessao.obtem_dono(ses); 
+  para_admin = obj_usuario.eh_administrador(ses_dono)
  
   erros = []
 
@@ -48,11 +51,13 @@ def processa(ses, cmd_args):
         assert autor_id != None
         ht_titulo = html_bloco_titulo.gera(f"Comentários do usuário {autor_id}")
       ht_tabela = html_bloco_lista_de_comentarios.gera\
-        ( com_ids,
+        ( ses,
+          com_ids,
           mostra_autor = False, # Pois são todos do mesmo autor.
           mostra_video = True,  # Podem ser de videos diferentes.
           mostra_pai = True,    # Podem ter pais diferentes.
           mostra_nota = True,   # Porque não mostraria?
+          forcar_mostrar_texto = para_admin # Apenas admins forçam a visualização do texto
         )
       ht_conteudo = \
         ht_titulo + "<br/>\n" + \

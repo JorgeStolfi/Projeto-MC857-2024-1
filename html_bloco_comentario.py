@@ -1,6 +1,6 @@
 import html_bloco_comentario_IMP
 
-def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar, bt_calcnota):
+def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota):
   """
   Retorna um fragmento HTML que exibe atributos de um comentário.
  
@@ -12,6 +12,9 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
   Os parâmetros booleanos {mostra_id}, {mostra_data}, {mostra_video} e {mostra_pai}
   especificam se devem ser exibidos o identificador e os atributos 'video' e 'pai' 
   do comentário, respectivamente.
+
+  O parâmetro booleano {mostra_bloqueado} especifica se o comentario deve ser exibido,
+  mesmo se estiver bloqueado
    
   Os parâmetros booleanos {bt_conversa}, {bt_responder}, e {bt_editar}
   especificam a inclusão de certos botões sob o texto:
@@ -30,5 +33,5 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
   Os argumentos dos comandos emitidos por esses botões serão
   {{ 'comentário': com_id }}.
   """
-  return html_bloco_comentario_IMP.gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar, bt_calcnota)
+  return html_bloco_comentario_IMP.gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota)
 

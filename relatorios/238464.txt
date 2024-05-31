@@ -1,1 +1,13 @@
 Relatorio - 238464
+
+Na aula de hoje precisei modificar o formulário da página de buscar por vídeos.
+
+Modifiquei o formulário para receber uma data mínima e uma data máxima ao invés
+de apenas uma única data.
+
+Também modifiquei a data dica do campo para conter uma data UTC completa.
+
+Depois dessa modificação, executei o teste o arquivo `html_form_buscar_videos` e vi
+que ele funcionou normalmente, sem quebrar. Verifiquei também que o comando de buscar_videos
+já possui a funcionalidade de receber data_min e data_max ao invés de apenas data.
+Com isso, concluí que o trabalho estava completo.

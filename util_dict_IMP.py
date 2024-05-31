@@ -73,3 +73,20 @@ def normaliza_busca_por_data(atrs):
       atrs['data'] = ( data_min, data_max, )
   
   return erros
+
+def normaliza_busca_por_nota(atrs):
+  erros = [ ]
+  
+  if 'nota_min' in atrs or 'nota_max' in atrs:
+    if 'nota' in atrs:
+      erros.append("A busca não pode usar 'nota' com 'nota_min', 'nota_max'")
+    nota_min = atrs.pop('nota_min', None)
+    nota_max = atrs.pop('nota_max', None)
+    if nota_min == None:
+      erros.append("A busca não pode usar 'nota_max' sem 'nota_min'")
+    elif nota_max == None:
+      erros.append("A busca não pode usar 'nota_min' sem 'nota_max'")
+    else:
+      # Busca intervalar:
+      atrs['nota'] = ( nota_min, nota_max, )
+  return erros

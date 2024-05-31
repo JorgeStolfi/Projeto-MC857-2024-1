@@ -7,7 +7,7 @@ import html_elem_div
 import html_elem_span
 import html_estilo_texto
 
-def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conversa, bt_responder, bt_editar, bt_calcnota):
+def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota):
 
   # Validação de tipos (paranóia):
   assert com != None and isinstance(com, obj_comentario.Classe)
@@ -29,15 +29,19 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, bt_conv
 
   estilo_texto_div = f"display:block; width: {largura}px; word-wrap:break-word; padding: 5px 0px 10px 10px;"
 
-  # Caso comentario tenha sido bloqueado, não usar o texto do comentário
+  # Caso comentario tenha sido bloqueado, não usar o texto do comentário a não ser que seja admin
   if com_atrs['bloqueado']:
     texto = "[BLOQUEADO]"
     estilo_texto = html_estilo_texto.gera("18px", "bold", "#FF0000", None, None)
+    ht_texto = html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
+    if mostra_bloqueado:
+      texto = com_atrs['texto']
+      estilo_texto = html_estilo_texto.gera("18px", "medium", "#FFFFFF", "#FF0000", None)
+      ht_texto = ht_texto + html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
   else:
     texto = com_atrs['texto']
     estilo_texto = html_estilo_texto.gera("18px", "medium", "#000000", None, None)
-
-  ht_texto = html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
+    ht_texto = html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
 
   # ----------------------------------------------------------------------
   # Botões:

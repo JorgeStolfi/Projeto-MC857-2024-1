@@ -1,5 +1,6 @@
 import html_pag_ver_sessao
 import obj_sessao
+import html_pag_principal # Acrescentado, estava faltando.
 
 def processa(ses, cmd_args):
   erros = []

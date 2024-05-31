@@ -39,7 +39,8 @@ def inicializa_modulo(limpa):
   colunas = \
     (
       ( 'dono',     obj_usuario.Classe, 'TEXT',    False ), # Objeto/id do usuário logado na sessão.
-      ( 'criacao', type("foo"),        'TEXT',    False ), # Momento de criação da sessão.
+      ( 'criacao', type("foo"),        'TEXT',    False ), # Momento de criação da sessão. # Original/Old
+      #( 'data_login', type("foo"),        'TEXT',    False ), # Momento de criação da sessão. # Alterado criacao para "data_login" conforme html_bloco_dados_de_sessao_IMP
       ( 'aberta',  type(False),        'INTEGER', False ), # Estado da sessao (1 = aberta).
       ( 'cookie',  type("foo"),        'TEXT',    False ), # Cookie da sessao.
     )

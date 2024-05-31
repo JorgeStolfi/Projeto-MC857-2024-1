@@ -1,6 +1,6 @@
 import html_linha_resumo_de_usuario_IMP
 
-def gera(usr):
+def gera(admin, usr):
   """
   Devolve uma lista de fragmentos HTML com os valores dos principais
   atributos do objeto {usr} da classe {obj_usuario.Classe}, incluindo o
@@ -15,5 +15,7 @@ def gera(usr):
   Veja {html_elem_item_de_resumo.gera}.
   
   Se {usr} não é {None}, resultado inclui também um botão "Ver" que dispara um comando
-  HTTP "ver_usuario".  O argumento desse comando será {{ 'usuario': usr_id }}."""
-  return html_linha_resumo_de_usuario_IMP.gera(usr)
+  HTTP "ver_usuario".  O argumento desse comando será {{ 'usuario': usr_id }}.
+  
+  Se {admin} é {True} produz a linha email normalmente no resultado e caso seja {False}, ou seja, não é uma admin que está solcitando, então não devolve email"""
+  return html_linha_resumo_de_usuario_IMP.gera(admin, usr)
