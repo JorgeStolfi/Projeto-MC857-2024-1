@@ -44,9 +44,10 @@ for ms_autor in False, True:
   for ms_video in False, True:
     for ms_pai in False, True:
       for ms_nota in False, True:
-        xargs = f"_aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}_nota{str(ms_nota)[0]}"
-        testa_gera("muitas" + xargs, str, com_ids, ms_autor, ms_video, ms_pai, ms_nota)
-        testa_gera("lhufas" + xargs, str, [],      ms_autor, ms_video, ms_pai, ms_nota)
+        for ms_forca_texto in False, True:
+          xargs = f"_aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}_nota{str(ms_nota)[0]}_forca_texto{str(ms_forca_texto)[0]}"
+          testa_gera("muitas" + xargs, str, com_ids, ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
+          testa_gera("lhufas" + xargs, str, [],      ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

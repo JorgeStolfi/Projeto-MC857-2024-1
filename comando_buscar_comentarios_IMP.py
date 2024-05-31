@@ -7,6 +7,7 @@ import html_pag_buscar_comentarios
 import util_identificador
 import util_dict
 import util_data
+import obj_usuario
 
 import sys
 
@@ -15,6 +16,9 @@ def processa(ses, cmd_args):
   # Estas condições deveriam valer para comandos emitidos pelas páginas do site:
   assert ses == None or isinstance(ses, obj_sessao.Classe)
   assert isinstance(cmd_args, dict)
+
+  ses_dono = obj_sessao.obtem_dono(ses); 
+  para_admin = obj_usuario.eh_administrador(ses_dono)
 
   erros = []
   resultados = []
@@ -109,6 +113,7 @@ def processa(ses, cmd_args):
         mostra_video = True,
         mostra_pai = True,
         mostra_nota = True,
+        forcar_mostrar_texto = para_admin
       )
     
     ht_bloco = \

@@ -6,12 +6,16 @@ import html_pag_mensagem_de_erro
 import obj_comentario
 import obj_sessao
 import obj_video
+import obj_usuario
 
 def processa(ses, cmd_args):
   
   # Validação de tipos (paranóia):
   assert ses == None or isinstance(ses, obj_sessao.Classe)
   assert cmd_args != None and type(cmd_args) is dict
+
+  ses_dono = obj_sessao.obtem_dono(ses); 
+  para_admin = obj_usuario.eh_administrador(ses_dono)
 
   erros = []
   
@@ -39,6 +43,7 @@ def processa(ses, cmd_args):
           mostra_video = False, # São todos do mesmo vídeo.
           mostra_pai = True,    # Podem ter pais diferentes.
           mostra_nota = True,   # Porque não mostraria?
+          forcar_mostrar_texto = para_admin # Apenas admins forçam a visualização do texto
         )
       ht_bloco = \
         ht_titulo + "<br/>\n" + \
