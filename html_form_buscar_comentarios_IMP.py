@@ -5,6 +5,10 @@ import html_elem_form
 
 def gera(atrs, admin):
 
+  obj_bloqueado = ("Bloqueado", "text", 'bloqueado', True, "True")
+  if not admin:
+    obj_bloqueado = ("", "hidden", 'bloqueado', False, None)
+
   dados_linhas = (
       ( "Comentário",     "text",     'comentario',    True,  "C-nnnnnnnn" ),
       ( "Autor",          "text",     'autor',         True,  "U-nnnnnnnn" ),

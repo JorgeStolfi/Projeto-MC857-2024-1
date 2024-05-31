@@ -19,8 +19,12 @@ def processa(ses, cmd_args):
   assert ses == None or isinstance(ses, obj_sessao.Classe)
   assert isinstance(cmd_args, dict)
 
-  ses_dono = obj_sessao.obtem_dono(ses); 
-  para_admin = obj_usuario.eh_administrador(ses_dono)
+  if ses != None and obj_sessao.aberta(ses):
+    ses_dono = obj_sessao.obtem_dono(ses); 
+    para_admin = obj_usuario.eh_administrador(ses_dono)
+  else:
+    ses-dono = None
+    para_admin = False
 
   erros = []
   resultados = []
@@ -73,6 +77,9 @@ def processa(ses, cmd_args):
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
+
+    if not para_admin:
+      atrs_busca['bloqueado'] = False
 
     erros += item_erros
   
