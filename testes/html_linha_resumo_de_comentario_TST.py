@@ -6,7 +6,9 @@ import html_linha_resumo_de_comentario
 import db_base_sql
 import db_tabelas_do_sistema
 import obj_comentario
+import obj_sessao
 import util_testes
+from util_erros import aviso_prog
 
 import sys
 
@@ -32,6 +34,9 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
+# sessão de admin
+ses1 = obj_sessao.obtem_objeto("S-00000001")
+
 # Um comentário sem pai:
 com1_id = "C-00000001"
 com1 = obj_comentario.obtem_objeto(com1_id)
@@ -49,12 +54,12 @@ for ms_autor in False, True:
     for ms_pai in False, True:
       xpai = f"_mspai{str(ms_pai)[0]}"
       for ms_forca_texto in False, True:
-        xforca_texto = f"_msforcatexto{str(ms_forca_texto)[0]}"
+        xforca_texto = f"_msft{str(ms_forca_texto)[0]}"
         for ms_nota in False, True:
           xnota = f"_mspai{str(ms_nota)[0]}"
           tag = xaut + xvid + xpai + xnota + xforca_texto
-          testa_gera("C1" + tag,  list, com1, ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
-          testa_gera("C2" + tag,  list, com2, ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
+          testa_gera("C1" + tag,  list, ses1, com1, ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
+          testa_gera("C2" + tag,  list, ses1, com2, ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

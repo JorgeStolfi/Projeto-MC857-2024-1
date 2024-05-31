@@ -51,7 +51,8 @@ def processa(ses, cmd_args):
         assert autor_id != None
         ht_titulo = html_bloco_titulo.gera(f"Comentários do usuário {autor_id}")
       ht_tabela = html_bloco_lista_de_comentarios.gera\
-        ( com_ids,
+        ( ses,
+          com_ids,
           mostra_autor = False, # Pois são todos do mesmo autor.
           mostra_video = True,  # Podem ser de videos diferentes.
           mostra_pai = True,    # Podem ter pais diferentes.
