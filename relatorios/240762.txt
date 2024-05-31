@@ -1,9 +1,1 @@
-Relatorio - 240762
-
-Todas alterações foram no módulo html_bloco_video.
-
-Adicionei uma quebra de linha após as informações do vídeo.
-
-Criei uma tabela, usando o módulo html_elem_table com uma única linha com 5 células, cada célula contendo uma imagem (html_elem_img).
-
-Rodei o comando "./testa.sh html_bloco_video" e os testes passaram.
+# relatorio da aula de 2024-05-31

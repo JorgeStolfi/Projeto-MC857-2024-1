@@ -1,13 +1,1 @@
-Relatorio - 174868
-
-A minha tarefa de hoje consiste em corrigir o input do campo das notas para permitir que o usuário coloque uma nota fracionária.
-Para realizar essa correção eu precisei:
-1) Alterar todo o módulo {html_bloco_tabela_de_campos} (incluindo IMP e TST) para aceitar uma nova propriedade de linha, sendo ela "decimal", que define quando um input deve aceitar decimais ou não (válido apenas para inputs de tipo "number");
-2) Por consequência, também precisei alterar todo o módulo {html_elem_input} (incluindo IMP e TST) para permitir um novo parâmetro "decimal" para definir esta propriedade. Para isso eu validei cada linha no método gera() e verifiquei se já existiam 6 parâmetros ou não, desta forma é possível que sejam passados os 6 valores, mas também é permitido que sejam passados apenas 5. Desta maneira não se faz necessário mexer em todos os outros arquivos que utilizam este módulo;
-3) Como eu modifiquei este modulo que já é utilizado diversas vezes no código, precisei alterar a implementação de diversos outros arquivos para incluir o novo parâmetro. Sendo estes os seguintes:
-  * {html_bloco_menu_geral_IMP}
-  * {html_elem_button_submit_IMP}
-  * {html_form_alterar_video_IMP}
-  * {html_form_postar_alterar_comentario_IMP}
-  * {html_elem_table_TST}
-4) Também testei todos os módulos modificados e o único que apresenta erro é o html_form_postar_alterar_comentario, mas o erro não tem nada a ver com a modificação referente aos valores decimais e já estava presente anteriormente.
+# relatorio da aula de 2024-05-31

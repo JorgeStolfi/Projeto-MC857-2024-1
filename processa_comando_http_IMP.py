@@ -620,9 +620,9 @@ def formata_dados_http(cmd, cmd_args, resto, html):
   resto_d = resto.copy()
   tipo = resto_d['command']; del resto_d['command'] # 'GET', 'POST', ou 'HEAD'
   # Dados principais:
-  max_len = 2000
-  ht_cmd_args = util_testes.formata_valor(cmd_args, html, max_len)
-  ht_resto = util_testes.formata_valor(resto_d, html, max_len)
+  max_len = 2000; max_els = 50
+  ht_cmd_args = util_testes.formata_valor(cmd_args, html, max_len, max_els)
+  ht_resto = util_testes.formata_valor(resto_d, html, max_len, max_els)
 
   # Monta um bloco HTML com os dados de depuração:
   ht_tit = (f"Resposta a comando HTTP \"{tipo}\" recebido com dados principais:")
@@ -651,8 +651,7 @@ def mostra_dados(dado):
   formatado e com os campos longs devidamente truncados."""
   
   html = False
-  max_len = 2000
-  dado = util_testes.formata_valor(dado, html, max_len)
+  dado = util_testes.formata_valor(dado, html, max_len = 2000, max_els = 50)
   sys.stderr.write(("-"*70)+"\n")
   sys.stderr.write("dado =\n")
   sys.stderr.write(dado)

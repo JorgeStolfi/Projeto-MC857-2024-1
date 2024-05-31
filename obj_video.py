@@ -21,6 +21,7 @@ class Classe(obj_video_IMP.Classe_IMP):
     'largura'   {int}   Largura de cada frame, em pixels.
     'altura'    {int}   Atura de cada frame, em pixels.
     'nota'      {float} Nota média do vídeo (0 a 4).
+    'vistas'    {int}   Número de vezes que foi visto.
     'bloqueado' {bool}  Bloqueado pelos admnistradores.
 
   Outros atributos (categoria, legendas, etc) poderão ser acrescentados
@@ -38,7 +39,9 @@ class Classe(obj_video_IMP.Classe_IMP):
   administradores ou calculado a partir dos votos e notas dos comentários
   associados ao vídeo.  Seu valor varia de 0 ("muito ruim", "detestado")
   a 4 ("muito bom", "adorado").
-  
+    
+  O campo 'vistas' é um inteiro que conta quantas vezes alguém assistiu o vídeo.
+ 
   Em todas as funções abaixo, o parâmetro {vid} deve ser {None}
   ou um objeto desta classe.
 
@@ -188,16 +191,22 @@ def busca_por_campos(atrs, unico):
   """
   return obj_video_IMP.busca_por_campos(atrs, unico)
 
-def obtem_amostra(n, ordem):
-  """Devolve uma lista com os identificadores de {n} vídeos armazenados
-  no sistema, escolhidos aleatoriamente. Se não houver mais de {n} vídeos
-  no sistema, devolve a lista de todos eles.  
+def obtem_amostra(n):
+  """Devolve uma lista com os identificadores de {n} vídeos armazenados no
+  sistema, escolhidos aleatoriamente e listados em ordem aleatória. Se
+  não houver mais de {n} vídeos no sistema, devolve a lista de todos
+  eles."""
+  return obj_video_IMP.obtem_amostra(n)
+
+def ordena_identificadores(lista_ids, chave, ordem):
+  """Devolve uma cópia da lista de identificadores {lista_ids},
+  ordenada pelo atributo {chave}.
   
   O parâmetro {ordem} é um inteiro que especifica a ordenação dos
   identificadores pelo atributo 'nota' do vídeo. Pode ser {+1}
-  para ordem crescente, {-1} para descrescente, e 0 para ordem aleatória
-  (independentemente da nota)."""
-  return obj_video_IMP.obtem_amostra(n, ordem)
+  para ordem crescente, {-1} para decrescente. Se for 0, simplesmente
+  copia a lista sem mudar a ordem."""
+  return obj_video_IMP.ordena_identificadores(lista_ids, chave, ordem)
 
 def ultimo_identificador():
   """Devolve o identificador do último vídeo inserido na tabela.

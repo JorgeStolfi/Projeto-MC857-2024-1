@@ -67,7 +67,7 @@ def verifica_criacao(rot_teste, vid_id, ses, cmd_args):
 
   assert ses != None and obj_sessao.aberta(ses)
   ses_id = obj_sessao.obtem_identificador(ses)
-  xargs = util_testes.trunca_tamanho(str(cmd_args), 100)
+  xargs = util_testes.trunca_valor(str(cmd_args), 100, 20)
   sys.stderr.write(f"rot_teste = {rot_teste} verificando vídeo {vid_id} ses = {str(ses_id)} cmd_args = {xargs}\n")
   ses_dono = obj_sessao.obtem_dono(ses)
   assert ses_dono != None

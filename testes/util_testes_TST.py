@@ -37,10 +37,10 @@ def testa_formata_valor(rot_teste, val, html):
   global ok_global
   global ok_global
   modulo = util_testes
-  funcao = modulo.formata_valor
+  funcao = util_testes.formata_valor
   frag = True    # Resultados HTML são só fragmentos?
   pretty = False # Deve formatar o HTML para facilitar view source?
-  ok = util_testes.testa_funcao(rot_teste, modulo, funcao, str, html,frag,pretty,   val, html, 1000)
+  ok = util_testes.testa_funcao(rot_teste, modulo, funcao, str, html,frag,pretty,   val, html, 1000, 20)
   if ok and not html:
     d1f = util_testes.formata_valor(rot_teste, val, html);
     sys.stderr.write("    " + ("~"*70) + "\n")

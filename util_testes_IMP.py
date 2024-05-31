@@ -6,6 +6,7 @@ from util_erros import ErroAtrib
 from bs4 import BeautifulSoup as bsoup  # Pretty-print of HTML
 
 max_len_debug = 120  # Aumente este valor se necessário
+max_els_debug = 20   # Aumente este valor se necessário
 
 def escreve_resultado_html(modulo, funcao, rot_teste, ht_res, frag, pretty):
   nome_mod = modulo.__name__ + "." if modulo != None else ""
@@ -36,12 +37,12 @@ def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
   
   sys.stderr.write(f"  {'-'*70}\n")
   sys.stderr.write(f"    testando {modulo.__name__}.{funcao.__name__}\n")
-  st_args = trunca_tamanho(str(args), max_len_debug)
+  st_args = trunca_valor(str(args), max_len_debug, max_els_debug)
   sys.stderr.write(f"    rot_teste = '{rot_teste}' args = {st_args}'\n")
   
   try:
     res = funcao(*args)
-    st_res = trunca_tamanho(str(res), max_len_debug)
+    st_res = trunca_valor(str(res), max_len_debug, max_els_debug)
     st_res = re.sub("\n", r"\\n", st_res)
     sys.stderr.write(f"    retorno normal, resultado = {st_res}\n")
   except AssertionError as ex:
@@ -80,11 +81,11 @@ def testa_funcao(rot_teste, modulo, funcao, res_esp, html, frag, pretty, *args):
       # Converte cada elemento:
       for el in res:
         if not isinstance(el, str): el = str(el)
-        st_el = protege_html(trunca_tamanho(el, max_len_debug))
+        st_el = protege_html(trunca_valor(el, max_len_debug, max_els_debug))
         ht_res.append(st_el);
     else:
       res = str(res)
-      ht_res = protege_html(trunca_tamanho(res, max_len_debug))
+      ht_res = protege_html(trunca_valor(res, max_len_debug, max_els_debug))
 
   escreve_resultado_html(modulo, funcao, rot_teste, ht_res, (not html or frag), pretty)
 
@@ -173,9 +174,9 @@ def gera_pagina_de_fragmentos(ht_res):
   pag = ht_cabecalho + ht_titulo + ht_res_formatado + ht_rodape
   return pag
 
-def formata_valor(dado, html, max_len):
+def formata_valor(dado, html, max_len, max_els):
 
-  dado = trunca_tamanho(dado, max_len)
+  dado = trunca_valor(dado, max_len, max_els)
   
   indenta = '&nbsp;&nbsp;' if html else '  '
   quebra = '<br/>' if html else ''
@@ -188,20 +189,21 @@ def formata_valor(dado, html, max_len):
   
   return dados_lin
  
-def trunca_tamanho(dado, max_len):
+def trunca_valor(dado, max_len, max_els):
   # Indicadores de truncamento:
   fin_bytes = " [...]"
   ins_str = " «...» "
   ins_list = "..."
   
   # Lengths of prefix and suffix of truncated strings:
-  pre_len = (2*max_len)//3
-  pos_len = max_len - pre_len
+  if max_len == None: max_len = 200 # So that the following works.
+  pre_len = max(2, 2*(max_len - len(ins_str))//3)
+  pos_len = max(2, max_len - len(ins_str) - pre_len)
 
   # Length of prefix and suffix of truncated lists:
-  max_els = max(4, max_len//10)
-  pre_els = max(2, pre_len//10)
-  pos_els = max(1, pos_len//10)
+  if max_els == None: max_els = 50 # So that the following works.
+  pre_els = max(2, max_els//2)
+  pos_els = max(2, max_els - pre_els)
   
   max_nbytes = 60;
   
@@ -219,8 +221,17 @@ def trunca_tamanho(dado, max_len):
       arg_trunc = arg_trunc + " )"
       arg = arg_trunc
     elif isinstance(arg, str):
+      # arg = re.sub("[\\]", r"\\", arg)
+      arg = re.sub("\n", r"\n", arg)
+      # arg = re.sub("[\r]", r"\r", arg)
+      # arg = re.sub("[\t]", r"\t", arg)
+      # arg = re.sub("[\f]", r"\f", arg)
+      # arg = re.sub("[\b]", r"\b", arg)
+      # arg = re.sub("[\"]", r"\"", arg)
       if len(arg) > max_len:
-        arg_trunc = arg[:pre_len] + ins_str + arg[-pos_len:]
+        arg_pre = arg[:pre_len]
+        arg_pos = arg[-pos_len:]
+        arg_trunc = arg_pre + ins_str + arg_pos
         arg = arg_trunc
     elif isinstance(arg, dict):
       res = {}
@@ -266,5 +277,5 @@ def unico_elemento(lista):
     else:
       raise ErroAtrib([ f"argumento tem {len(lista)} elementos, máximo 1" ])
   else:
-    st_lista = trunca_tamanho(str(lista), 200)
+    st_lista = trunca_valor(lista, 60, 20)
     raise ErroAtrib([ f"argumento {st_lista} não é {None} ou lista" ])

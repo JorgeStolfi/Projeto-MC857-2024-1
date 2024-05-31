@@ -40,14 +40,19 @@ com_ids = [
   "C-00000009",
 ]
 
-for ms_autor in False, True:
-  for ms_video in False, True:
-    for ms_pai in False, True:
-      for ms_nota in False, True:
-        for ms_forca_texto in False, True:
-          xargs = f"_aut{str(ms_autor)[0]}_vid{str(ms_video)[0]}_pai{str(ms_pai)[0]}_nota{str(ms_nota)[0]}_forca_texto{str(ms_forca_texto)[0]}"
-          testa_gera("muitas" + xargs, str, com_ids, ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
-          testa_gera("lhufas" + xargs, str, [],      ms_autor, ms_video, ms_pai, ms_nota, ms_forca_texto)
+for para_admin in False, True:
+  xadm = f"_adm{str(para_admin)[0]}"
+  for ms_autor in False, True:
+    xaut = f"_aut{str(ms_autor)[0]}"
+    for ms_video in False, True:
+      xvid = f"_vid{str(ms_video)[0]}"
+      for ms_pai in False, True:
+        xpai = f"_pai{str(ms_pai)[0]}"
+        for ms_nota in False, True:
+          xnota = f"_nota{str(ms_nota)[0]}"
+            xargs = xadm + xaut + xvid + xpai + xnota
+            testa_gera("muitas" + xargs, str, com_ids, para_admin, ms_autor, ms_video, ms_pai, ms_nota)
+            testa_gera("lhufas" + xargs, str, [],      para_admin, ms_autor, ms_video, ms_pai, ms_nota)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

@@ -64,9 +64,34 @@ def converte_argumentos(cmd_args, ses_dono_id, erros):
   
   cmd_args = cmd_args.copy() # Para não estragar o original.
   atrs_com = {}
-  
+    
+
+
+  # Neste contexto, 'pai' {None} é o mesmo que chave ausente:
+  pai_id = cmd_args.pop('pai', None)
+  pai = None
+  if pai_id != None:
+    erros_item = util_identificador.valida('pai', pai_id, "C", False)
+    if len(erros_item) == 0:
+      pai = obj_comentario.obtem_objeto(pai_id)
+      if pai == None:
+        erros.append(f"O comentario \"{pai_id}\" não existe")
+      else:
+        atrs_com['pai'] = pai
+    else:
+      erros += erros_item
+  else:
+    atrs_com['pai'] = None
+    
   video_id = cmd_args.pop('video', None)
-  if video_id != None:
+  video = None
+  if video_id == None:
+    if pai != None:
+      video = obj_comentario.obtem_video(pai)
+      video_id = obj_video.obtem_identificador(video)
+    else:
+      erros.append("O atributo 'video' não foi especificado")
+  else:
     erros_item = util_identificador.valida('video', video_id, "V", False)
     if len(erros_item) == 0:
       video = obj_video.obtem_objeto(video_id)
@@ -76,28 +101,10 @@ def converte_argumentos(cmd_args, ses_dono_id, erros):
         atrs_com['video'] = video
     else:
       erros += erros_item
-  else:
-    erros.append("O atributo 'video' não foi especificado")
-    
-  # Neste contexto, 'pai' {None} é o mesmo que chave ausente:
-  pai_id = cmd_args.pop('pai', None)
-  if pai_id != None:
-    erros_item = util_identificador.valida('pai', pai_id, "C", False)
-    if len(erros_item) == 0:
-      pai = obj_comentario.obtem_objeto(pai_id)
-      if pai == None:
-        erros.append(f"O comentario \"{pai_id}\" não existe")
-      elif obj_comentario.obtem_atributo(pai, 'video') != video:
-        erros.append(f"O comentario \"{pai_id}\" é a respeito de outro vídeo")
-      else:
-        atrs_com['pai'] = pai
-    else:
-      erros += erros_item
-  else:
-    atrs_com['pai'] = None
-  
+ 
   autor_id = cmd_args.pop('autor', None)
   if autor_id == None: autor_id = ses_dono_id
+  autor = None
   if autor_id != None:
     erros_item = util_identificador.valida('autor', autor_id, "U", False)
     if len(erros_item) == 0:
@@ -128,7 +135,7 @@ def converte_argumentos(cmd_args, ses_dono_id, erros):
   voto = cmd_args.pop('voto', None)
   if voto != None and voto != "":
     voto = int(voto)
-    erros_item = util_voto.valida('voto', voto, 0, 4, False)
+    erros_item = util_voto.valida('voto', voto, False)
     if len(erros_item) == 0:
       atrs_com['voto'] = int(voto)
     else:
@@ -137,17 +144,8 @@ def converte_argumentos(cmd_args, ses_dono_id, erros):
     # Providencia um voto default:
     atrs_com['voto'] = 2
   
-  
-  if nota!= None and nota!= "":
-    nota = float(nota)
-    erros_item = util_nota.valida('nota', nota, 0.0, 4.0, False)
-    if len(erros_item) == 0:
-      atrs_com['nota'] = nota
-    else:
-      erros+= erros_item
-  else:
-    # A nota inicial é sempre 2.0
-    atrs_com['nota'] = 2.0
+  # A nota inicial é sempre 2.0
+  atrs_com['nota'] = 2.0
   
   bloqueado = cmd_args.pop('bloqueado', None)
   if bloqueado != None and bloqueado != "":

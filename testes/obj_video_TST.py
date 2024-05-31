@@ -36,7 +36,7 @@ def verifica_video(rot_teste, vid, vid_id_esp, atrs_esp):
   
   sys.stderr.write("  %s\n" % ("-" * 70))
   sys.stderr.write(f"  teste {rot_teste}, vídeo {vid_id_esp}")
-  atrs_esp_str = str(util_testes.trunca_tamanho(atrs_esp, 2000))
+  atrs_esp_str = str(util_testes.trunca_valor(atrs_esp, 2000, 50))
   sys.stderr.write(f" atrs_esp = {atrs_esp_str}\n")
   ok = obj_video.verifica_criacao(vid, vid_id_esp, atrs_esp)
   
@@ -123,7 +123,7 @@ def testa_obj_video_cria_muda(rot_teste, valido, modif, vid_id, atrs):
   
   try:
 
-    atrs_esp_str = str(util_testes.trunca_tamanho(atrs, 2000))
+    atrs_esp_str = str(util_testes.trunca_valor(atrs, 2000, 50))
     if modif:
       sys.stderr.write(f"  testando obj_video.muda_atributos id = {vid_id} atrs = {atrs_esp_str}\n")
       vid = obj_video.obtem_objeto(vid_id)
@@ -231,6 +231,7 @@ cr1_atrs = {
   'autor': usr1,
   'titulo': "Video Uno e Unico",
   'nota': 2.0,
+  'vistas': 0,
   'conteudo': cr1_bytes,
   'bloqueado': False,
 }
@@ -244,6 +245,7 @@ cr2_atrs = {
   'autor': usr4,
   'titulo': "Video Due e Duplo",
   'nota': 2.0,
+  'vistas': 0,
   'conteudo': cr2_bytes,
   'bloqueado': False,
 }
@@ -318,6 +320,17 @@ md5_atrs = {
 }
 testa_obj_video_cria_muda("md5_bloqueado", True, True, md5_vid_id, md5_atrs)
 assert obj_video.obtem_atributo(md5_vid, 'bloqueado') == md5_bloqueado
+
+# Teste OK - alteração de nota:
+md6_vid_id = cr2_id
+md6_vid = obj_video.obtem_objeto(md6_vid_id)
+assert md6_vid != None
+md6_vistas = 10000
+md6_atrs = {
+  'vistas': md6_vistas
+}
+testa_obj_video_cria_muda("md6_vistas", True, True, md6_vid_id, md6_atrs)
+assert obj_video.obtem_atributo(md6_vid, 'vistas') == md6_vistas
 
 assert testa_cria_quadros() == 1
 # ----------------------------------------------------------------------

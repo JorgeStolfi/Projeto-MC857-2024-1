@@ -37,7 +37,7 @@ def gera(vid, mostra_autor):
           texto = "[BLOQUEADO]"
           cor_fundo = "#FF2222"
         else:
-          texto = util_testes.trunca_tamanho(str(atrs['titulo']), 15)
+          texto = util_testes.trunca_valor(str(atrs['titulo']), 15, None)
     elif chave == 'autor':
       mostra = mostra_autor
       if cab:

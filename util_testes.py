@@ -95,17 +95,20 @@ def testa_funcao_validadora(rot_teste, valido, modulo, funcao, *args):
  
 # FORMATAÇÃO DE DADOS PARA DEPURAÇÃO
 
-def formata_valor(dado, html, max_len):
-  """Esta função de depuração recebe um valor simples ou estruturado {dado} e devolve um
-  string que mostra esses velor em formato relativamente
-  legível.  O {dado} é primeiro processado com {trunca_tamanho(dado,max_len)}.
+def formata_valor(dado, html, max_len, max_els):
+  """
+  Esta função de depuração recebe um valor simples ou estruturado
+  {dado} e devolve um string que mostra esses velor em formato
+  relativamente legível. O {dado} é primeiro processado com
+  {trunca_valor(dado,max_len,max_els)}.
   
   O resultado é basicamente JSON com quebras de linha e indentação.
   
   Se o booleano {html} é {False}, o resultado é um string que pode
   ser impresso em {stderr}.  Se {html} é {True}, o resultado 
-  usa formatação HTML, que pode ser incluído numa página HTML."""
-  return util_testes_IMP.formata_valor(dado, html, max_len)
+  usa formatação HTML, que pode ser incluído numa página HTML.
+  """
+  return util_testes_IMP.formata_valor(dado, html, max_len, max_els)
 
 def unico_elemento(lista):
   """O parâmetro {lista} deve ser {None}  ou uma lista ou tupla.
@@ -115,10 +118,22 @@ def unico_elemento(lista):
   com uma mensagem explicando o erro."""
   return util_testes_IMP.unico_elemento(lista)
 
-def trunca_tamanho(dado, max_len):
-  """Percorre recursivamente os campos de {dado}, truncando campos 
-  {str} que tem mais de {max_len} caracteres,
-  e campos {list} ou {tuple} que tem mais de {max_len//10} elementos.
-  Também converte elementos {bytes} para um {str} curto indicativo.
-  Retorna uma cópia de {dado} com zero ou mais campos truncados."""
-  return util_testes_IMP.trunca_tamanho(dado, max_len)
+def trunca_valor(dado, max_len, max_els):
+  """
+  Esta função de depuração recebe um valor simples ou estruturado
+  {dado} e devolve uma cópia recursiva do mesmo, truncando campos muito longos.
+  
+  cada valor de tipo {str} terá caracteres especiais como "\t", "\n" etc
+  substituídos por "\\n"; então, se o resultado tiver mais de {max_len}
+  caracteres, será truncado deixando só as pontas com " «...» " no meio.
+  
+  Cada valor de tipo {list} ou {tuple} que tiver mais de {max_els}
+  elementos também será reduzido a seus primeiros e últimos elementos,
+  com os do meio substituídos por "..."
+  
+  Cada valor de tipo {bytes} para um {str} curto indicativo terminando com " [...]".
+  
+  Valores de outros tipos são convertidos para string com {str()} e o resultado
+  é tratado como acima.
+  """
+  return util_testes_IMP.trunca_valor(dado, max_len, max_els)

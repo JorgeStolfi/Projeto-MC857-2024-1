@@ -1,10 +1,1 @@
-Relatorio - 178068
-Boa noite Professor. Fiquei responsável por:
-[Não Logado] Menu "Buscar Comentários" : Em vez de um campo "Data" deveria haver dois campos "Desde data:" e "Até data" que definem campos "data_min" e "data_max" enviados para o comando "buscar_comentarios". A dica deveria ser uma data ISO completa com fuso "UTC". Corrija.
-
-Iniciei executando o servidor.py e acessando a página Buscar Comentários. Identifiquei o campo a ser alterado, e os módulos associados ao processo de geração do HTML para o formulário e execução do comando "buscar_comentarios" com os inputs do formulário.
-No módulo <html_form_buscar_comentarios>, fiz a remoção do campo "Data" e adição dos campos "Desde data" com chave "data_min"  e "Até data" com chave "data_max", e dicas no formato ISO verificado corretamente pelo <util_data> como formatado em outras partes do site. Aqui fiquei em dúvida se precisaria utilizar a ISO 8601 (no formato 2018-11-16T18:36:40), mas acredito que está correto pela própria verificação do <util_data>.
-Módulos <html_bloco_tabela_de_campos>, <html_elem_form>, <html_elem_button_submit> e <html_pag_buscar_comentarios> não precisaram ser alterados. Os campos do formulário são enviados pelo comando POST corretamente sem necessidade de alteração das interfaces.
-Verificado o módulo <comando_buscar_comentarios>, que já continha implementado o tratamento das chaves data_min e data_max.
-Executado o teste do módulo alterado <html_form_buscar_comentarios> (./teste.sh html_form_buscar_comentarios), resultando em testes terminados normalmente.
-Não houve mudanças nas interfaces dos módulos ou no funcionamento de módulos relacionados.
+# relatorio da aula de 2024-05-31

@@ -53,7 +53,7 @@ def normaliza_busca_por_data(atrs):
 
 def normaliza_busca_por_nota(atrs):
   """Se {atrs} tiver campos 'nota_min' e 'nota_max',
-  substitui ambos por 'data' cujo valor é a lista
+  substitui ambos por 'nota' cujo valor é a lista
   {(val_min, val_max)} dos respectivos valores.
   
   Se uma dessas duas chaves estiver presente em {atrs},

@@ -41,7 +41,7 @@ def verifica_comentario(rot_teste, com, com_id_esp, atrs_esp):
 
   sys.stderr.write("  %s\n" % ("-" * 70))
   sys.stderr.write("  teste %s, comentário %s\n" % (rot_teste, com_id_esp))
-  atrs_esp_str = str(util_testes.trunca_tamanho(atrs_esp, 2000))
+  atrs_esp_str = str(util_testes.trunca_valor(atrs_esp, 2000, 50))
   sys.stderr.write(f" atrs_esp = {atrs_esp_str}\n")
   ok = obj_comentario.verifica_criacao(com, com_id_esp, atrs_esp)
   

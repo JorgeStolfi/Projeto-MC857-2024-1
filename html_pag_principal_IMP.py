@@ -19,7 +19,7 @@ def gera(ses, erros):
   nlins = 3  # Linhas da grade.
   nvids = ncols*nlins  # Total de células na grade.
 
-  vid_ids = obj_video.obtem_amostra(nvids, ordem = 0)
+  vid_ids = obj_video.obtem_amostra(nvids)
   
   try:
     ht_grade = html_bloco_grade_de_videos.gera(vid_ids, ncols)

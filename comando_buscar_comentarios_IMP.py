@@ -23,7 +23,7 @@ def processa(ses, cmd_args):
     ses_dono = obj_sessao.obtem_dono(ses); 
     para_admin = obj_usuario.eh_administrador(ses_dono)
   else:
-    ses-dono = None
+    ses_dono = None
     para_admin = False
 
   erros = []
@@ -126,11 +126,11 @@ def processa(ses, cmd_args):
     
     ht_tabela = html_bloco_lista_de_comentarios.gera \
       ( com_ids_res, 
+        para_admin,
         mostra_autor = True,
         mostra_video = True,
         mostra_pai = True,
-        mostra_nota = True,
-        forcar_mostrar_texto = para_admin
+        mostra_nota = True
       )
     
     ht_bloco = \

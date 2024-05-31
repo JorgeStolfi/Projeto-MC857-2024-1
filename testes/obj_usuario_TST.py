@@ -53,6 +53,7 @@ usr1_atrs = {
   'nome': "José Primeiro", 
   'senha': "U!00000001", 
   'email': "primeiro@gmail.com",
+  'vnota': 2.00,
   'administrador': False
 }
 uindice1 = 1
@@ -63,6 +64,7 @@ usr2_atrs = {
   'nome': "João Segundo", 
   'senha': "U!00000002", 
   'email': "segundo@ic.unicamp.br",
+  'vnota': 2.00,
   'administrador': False
 }
 uindice2 = 2
@@ -75,7 +77,8 @@ sys.stderr.write("  testando {obj_usuario.muda_atributos}:\n")
 # Alteração OK
 usr1_mods = {
   'nome': "Josegrosso de Souza",
-  'senha': "U!12345678"
+  'senha': "U!12345678",
+  'vnota': 3.00,
 }
 obj_usuario.muda_atributos(usr1, usr1_mods)
 usr1_d_atrs = usr1_atrs
@@ -93,6 +96,7 @@ if type(usr2) is obj_usuario.Classe:
   usr2_m_atrs = usr2_atrs.copy()
   usr2_m_atrs['nome'] = 'Mutatis Mutande'
   usr2_m_atrs['senha'] = 'U!87654321'
+  usr2_m_atrs['vnota'] = 1.00
   obj_usuario.muda_atributos(usr2, usr2_m_atrs)
   verifica_usuario("usr2_m", usr2, uident2, usr2_m_atrs)
 

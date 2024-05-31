@@ -10,7 +10,7 @@ import util_voto
 
 import sys
 
-def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_mostrar_texto):
+def gera(com, para_admin, mostra_autor, mostra_video, mostra_pai, mostra_nota):
   
   com_id = obj_comentario.obtem_identificador(com) if com != None else None
   atrs = obj_comentario.obtem_atributos(com) if com != None else None
@@ -19,20 +19,20 @@ def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_m
   cab = (com == None)
   
   colunas = [ 'comentario', 'data', 'nota', 'autor',  'video', 'pai', 'voto', 'texto' ]
+  if para_admin: colunas.append('bloqueado')
 
-  if forcar_mostrar_texto:
-    colunas.append('🔒')
+  bloqueado = False if cab else atrs['bloqueado']
 
-  bloqueado = False
-  if not cab:
-    bloqueado = atrs['bloqueado'] and not forcar_mostrar_texto
-  cor_fundo = None
-  cor_texto = None
-  alinha = "left"
   for chave in colunas:
+    cor_fundo = None
+    cor_texto = None
+    alinha = "left"
     if chave == 'comentario':
      mostra = True
-     texto = "Comentário" if cab else html_elem_link_text.gera(com_id, "ver_comentario", { 'comentario': com_id })
+     if cab:
+       texto = "Comentário" 
+     else:
+       texto = html_elem_link_text.gera(com_id, "ver_comentario", { 'comentario': com_id })
     elif chave == 'video':
       mostra = mostra_video
       if cab:
@@ -45,7 +45,7 @@ def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_m
     elif chave == 'pai':
       mostra = mostra_pai
       if cab:
-        texto = "Pai"
+        texto = "Resposta a"
       else:
         pai = atrs['pai'] if 'pai' in atrs else None
         if pai == None:
@@ -70,21 +70,26 @@ def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_m
       texto = "Voto" if cab else util_voto.formata(atrs['voto'])
     elif chave == 'texto':
       mostra = True
+      alinha = "left"
       if cab:
         texto = "Texto"
-      elif bloqueado:
-        texto = "[BLOQUEADO]"
-        cor_fundo = "#FFFF55"
       else:
-        texto = ((str(atrs[chave])).replace("\n", "\\n"))[:50]
-    elif chave == '🔒':
+        if atrs['bloqueado'] and not para_admin:
+          texto = "[BLOQUEADO]"
+          cor_fundo = "#FFFF55"
+        else:
+          texto = ((atrs['texto']).replace("\n", "\\n"))[:50]
+    elif chave == 'bloqueado':
       mostra = True
       alinha = "center"
       if cab:
-        texto = '🔒'
+        texto = "🔒"
       else:
-        texto = '🔒' if atrs['bloqueado'] else ''
-      cor_fundo = "#FFFF55"
+        if atrs['bloqueado']:
+          texto = "🔒"
+          cor_fundo = "#FFFF55"
+        else:
+          texto = ""
     else:
       mostra = True
       if cab:
@@ -94,7 +99,6 @@ def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_m
         texto = (str(val).replace("\n", "\\n"))[:50]
       
     if mostra:
-      alinha = "left"
       ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto, "14px")
       itens_resumo.append(ht_item)
 
@@ -103,21 +107,17 @@ def gera(ses, com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_m
     ht_bt_ver = html_elem_button_simples.gera("Ver", "ver_comentario", bt_args, None)
     itens_resumo.append("<td>" + ht_bt_ver + "</td>")
 
-    ses_dono = obj_sessao.obtem_dono(ses); assert ses_dono != None
-    admin = obj_usuario.eh_administrador(ses_dono)
-
-    if admin:
-      is_block = obj_comentario.obtem_atributo(com, "bloqueado")
-      bt_block_args = { 'comentario': com_id, 'bloqueado': str(not is_block) }
+    if para_admin:
+      bt_bloq_args = { 'comentario': com_id, 'bloqueado': str(not bloqueado) }
     
-      if is_block:
-        bt_block_text = 'Desbloquear'
-        bt_background_color = '#11DD11'
+      if bloqueado:
+        bt_bloq_texto = 'Desbloquear'
+        bt_bloq_cor = '#11dd11'
       else:
-        bt_block_text = 'Bloquear'
-        bt_background_color = '#fb1528'
+        bt_bloq_texto = 'Bloquear'
+        bt_bloq_cor = '#fb1528'
 
-      ht_bt_bloquear = html_elem_button_simples.gera(bt_block_text, "alterar_comentario", bt_block_args, bt_background_color)
+      ht_bt_bloquear = html_elem_button_simples.gera(bt_bloq_texto, "alterar_comentario", bt_bloq_args, bt_bloq_cor)
       itens_resumo.append("<td>" + ht_bt_bloquear + "</td>")  
 
   return itens_resumo

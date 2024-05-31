@@ -17,7 +17,8 @@ def processa(ses, cmd_args):
   nlins = 5  # Linhas da grade.
   nvids = ncols*nlins  # Total de células na grade.
 
-  vid_ids = obj_video.obtem_amostra(nvids, ordem)
+  vid_ids = obj_video.obtem_amostra(nvids)
+  vid_ids = obj_video.ordena_identificadores(vid_ids, 'nota', ordem)
       
   if len(erros) == 0:
     pag = html_pag_grade_de_videos.gera(ses, vid_ids, ncols, None)

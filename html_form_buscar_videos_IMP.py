@@ -7,15 +7,7 @@ import html_elem_form
 import obj_usuario
 import obj_sessao
 
-def gera(atrs, ses):
-
-  if ses != None and obj_sessao.aberta(ses):
-    # Obtem o dono da sessão corrente:
-    ses_dono = obj_sessao.obtem_dono(ses)
-    assert ses_dono != None
-    para_admin = obj_usuario.eh_administrador(ses_dono)
-  else:
-    para_admin = False
+def gera(atrs, para_admin):
 
   # Tupla contendo as seguintes informações: {rot} {tipo} {chave} {editavel} {dica}
   # Para um maior detalhamento, cheque a documentação de `html_bloco_tabela_de_campos.gera`.
@@ -28,6 +20,8 @@ def gera(atrs, ses):
       ( "Nota min",   "text",    'nota_min',   True, "0.00" ),
       ( "Nota max",   "text",    'nota_max',   True, "4.00" ),
     )
+    
+  # Se que pediu é administardor, deixa fazer busca também por 'bloqueado'.
   if para_admin:
     dados_linhas += ( ( "Bloqueado", "checkbox", 'bloqueado', True, ""), )
     

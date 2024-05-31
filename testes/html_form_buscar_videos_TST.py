@@ -13,7 +13,7 @@ def testa_gera(rot_teste, res_esp, *args):
 
   global ok_global
   modulo = html_form_buscar_videos
-  funcao = modulo.gera
+  funcao = html_form_buscar_videos.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
@@ -27,8 +27,10 @@ atrs1 = \
     'arq': 'la_la_land.mp4',
   }
 
-testa_gera("SemValores", str, {})
-testa_gera("ComValores", str, atrs1)
+for para_admin in True, False:
+  xadm = f"_adm{str(para_admin)[0]}"
+  testa_gera("SemValores" + xadm, str, {},    para_admin)
+  testa_gera("ComValores" + xadm, str, atrs1, para_admin)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

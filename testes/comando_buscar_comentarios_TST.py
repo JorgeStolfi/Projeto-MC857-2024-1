@@ -1,7 +1,5 @@
 #! /usr/bin/python3
 
-import sys
-
 import comando_buscar_comentarios
 import db_base_sql
 import db_tabelas_do_sistema
@@ -11,6 +9,8 @@ import obj_usuario
 import obj_video
 from util_erros import aviso_prog
 import util_testes
+
+import sys
 
 # Conecta no banco e carrega alimenta com as informações para o teste
 

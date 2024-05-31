@@ -36,7 +36,7 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_
     ht_texto = html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
     if mostra_bloqueado:
       texto = com_atrs['texto']
-      estilo_texto = html_estilo_texto.gera("18px", "medium", "#FFFFFF", "#FF0000", None)
+      estilo_texto = html_estilo_texto.gera("18px", "medium", "#333333", "#FF0000", None)
       ht_texto = ht_texto + html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
   else:
     texto = com_atrs['texto']
@@ -46,7 +46,7 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_
   # ----------------------------------------------------------------------
   # Botões:
 
-  cmd_args = { 'comentario': com_id }
+  cmd_args = { 'pai': com_id }
   ht_botoes = ""
 
   if bt_conversa:

@@ -31,13 +31,13 @@ def processa(ses, cmd_args):
       erros.append(f"O comentário \"{pai_id}\" não tem nenhuma resposta")
     else:
       ht_titulo = html_bloco_titulo.gera(f"Respostas ao comentario {pai_id}")
-      ht_tabela = html_bloco_lista_de_comentarios.gera\
+      ht_tabela = html_bloco_lista_de_comentarios.gera \
         ( com_ids, 
+          para_admin,
           mostra_autor = True,  # Autores das respostas variam.
           mostra_video = False, # Todas as respostas são do mesmo video.
           mostra_pai = False,   # Todas as respostas tem o mesmo pai.
           mostra_nota = True,   # Porque não mostraria?
-          forcar_mostrar_texto = para_admin # Apenas admins forçam a visualização do texto
         )
       ht_bloco = \
         ht_titulo + "<br/>\n" + \

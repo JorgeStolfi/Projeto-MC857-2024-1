@@ -39,11 +39,11 @@ def processa(ses, cmd_args):
       ht_titulo = html_bloco_titulo.gera(f"Comentários do video {vid_id}")
       ht_tabela = html_bloco_lista_de_comentarios.gera \
         ( com_ids, 
+          para_admin,
           mostra_autor = True,  # Podem ter autores diferentes.
           mostra_video = False, # São todos do mesmo vídeo.
           mostra_pai = True,    # Podem ter pais diferentes.
           mostra_nota = True,   # Porque não mostraria?
-          forcar_mostrar_texto = para_admin # Apenas admins forçam a visualização do texto
         )
       ht_bloco = \
         ht_titulo + "<br/>\n" + \

@@ -1,9 +1,1 @@
-Primeiramente no arquivo html_linha_resumo_de_video_IMP eu adicionei uma nova condição no for de colunas para tratar
-a coluna bloqueado, para o cabeçalho sempre é mostrado o emoji 🔒. Já para tratar cada linha da tabela eu criei o
-módulo util_bloqueado, semelhante a outros já implementados, o método formata dele retorna o emoji de cadeado caso 
-bloqueado seja true e uma string vazia caso contrário.
-
-Já para alinhar o título do vídeo a esquerda e truncá-lo, eu inclui a variável alinha com valor left no if para chave
-titulo e adicionei uma chamada para util_testes.trunca_tamanho com tamanho 15 na geração do texto das linhas.
-
-Para testar a coluna bloqueado eu modifiquei um dos vídeos para que ele fosse criado com bloqueado true
+# relatorio da aula de 2024-05-31

@@ -17,6 +17,7 @@ class Classe(obj_usuario_IMP.Classe_IMP):
     'nome'           {str}     Nome completo do usuário.
     'email'          {str}     Email para identificacao no login.
     'senha'          {str}     Senha do usuário.
+    'vnota'          {float}   Nota média dos vídeos do usuário, 0.00 a 4.00.
     'administrador'  {bool}    {True} sse o usuário é administrador. 
    
   Outros atributos (CPF, vídeos, preferências, etc.) poderão ser

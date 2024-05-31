@@ -50,14 +50,13 @@ def processa(ses, cmd_args):
       else:
         assert autor_id != None
         ht_titulo = html_bloco_titulo.gera(f"Comentários do usuário {autor_id}")
-      ht_tabela = html_bloco_lista_de_comentarios.gera\
-        ( ses,
-          com_ids,
+      ht_tabela = html_bloco_lista_de_comentarios.gera \
+        ( com_ids,
+          para_admin,
           mostra_autor = False, # Pois são todos do mesmo autor.
           mostra_video = True,  # Podem ser de videos diferentes.
           mostra_pai = True,    # Podem ter pais diferentes.
           mostra_nota = True,   # Porque não mostraria?
-          forcar_mostrar_texto = para_admin # Apenas admins forçam a visualização do texto
         )
       ht_conteudo = \
         ht_titulo + "<br/>\n" + \

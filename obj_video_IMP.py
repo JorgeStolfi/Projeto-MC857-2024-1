@@ -11,6 +11,7 @@ import util_identificador
 import util_data
 import util_booleano
 import util_titulo_de_video
+from util_erros import ErroAtrib, erro_prog, mostra
 
 import cv2
 import os
@@ -18,10 +19,8 @@ import re
 import time
 import random
 
-from util_erros import ErroAtrib, erro_prog, mostra
-
 from datetime import datetime, timezone
-from math import log, gcd
+from math import log, gcd, sin
 import os
 import subprocess
 import json
@@ -56,6 +55,7 @@ def inicializa_modulo(limpa):
       ( 'autor',     obj_usuario.Classe,  'TEXT',    False ), # Objeto/id do usuário que fez upload.
       ( 'titulo',    type("foo"),         'TEXT',    False ), # Título do video.
       ( 'nota',      type(418.1),         'FLOAT',   False ), # Nota média do video (0 a 4).
+      ( 'vistas',    type(418),           'INTEGER', False ), # Número de vezes que foi assistido.
       ( 'bloqueado', type(False),         'INTEGER', False ), # O vídeo foi bloqueado.
       ( 'data',      type("foo"),         'TEXT',    False ), # Data e hora do upload do video.
       ( 'duracao',   type(418),           'INTEGER', False ), # Duração do video em milissegundos.
@@ -192,7 +192,7 @@ def busca_por_campos(args, unico):
   args = obj_raiz.converte_campo_em_padrao(args, 'titulo');
   return obj_raiz.busca_por_campos(args, unico, tabela)
  
-def obtem_amostra(n, ordem):
+def obtem_amostra(n):
   global tabela
 
   ult_vid_id = obj_video.ultimo_identificador()
@@ -203,15 +203,25 @@ def obtem_amostra(n, ordem):
 
   res_indices = random.sample(range(1, ult_vid_index + 1), n)
   res_ids = list(map(lambda index: f"V-{index:08d}", res_indices))
+  return res_ids
 
-  if ordem != 0:
+def ordena_identificadores(lista_ids, chave, ordem):
+  if ordem == 0:
+    res_ids = lista_ids.copy()
+  else:
     pares = []
     for vid_id in res_ids:
       vid = obj_video.obtem_objeto(vid_id)
       assert vid != None
-      nota = obj_video.obtem_atributo(vid, 'nota')
+      nota = obj_video.obtem_atributo(vid, chave)
       pares.append(( vid_id, nota,))
-    pares.sort(key = lambda x: ordem*x[1])
+    if ordem == +1:
+      decr = False
+    elif ordem == -1:
+      decr = True
+    else:
+      assert False, f"parãmetro inválido ordem = {ordem}"
+    pares.sort(key = lambda x: x[1], reverse = decr)
     res_ids = [ x[0] for x in pares ]
   
   return res_ids
@@ -256,10 +266,12 @@ def cria_testes(verb):
     assert autor != None and type(autor) is obj_usuario.Classe
     dia = vid_id_esp[-2:]
     data = "2024-01-" + dia + " 08:33:25 UTC"
+    vistas = int(100*(1 + sin(int(vid_id_esp[2:]))))
     atrs_cria = {
         'autor': autor,
         'titulo': titulo,
         'nota': nota,
+        'vistas': vistas,
         'data': data,
         'bloqueado': bloqueado,
       }
@@ -351,6 +363,11 @@ def valida_atributos(vid, atrs_mem):
         erros.append(f"O atributo 'nota'{vid_id_msg} não é um float")
       elif val < nota_min or val > nota_max:
         erros.append(f"O atributo 'nota'{vid_id_msg} = {val} fora da faixa [{nota_min:.0f} _ {nota_max:.0f}]")
+    elif chave == 'vistas':
+      if not isinstance(val, int):
+        erros.append(f"O atributo 'vistas'{vid_id_msg} não é um int")
+      elif val < 0:
+        erros.append(f"O atributo 'vistas'{vid_id_msg} = {val} é negativo")
     elif chave == 'duracao' or chave == 'altura' or chave == 'largura':
       if not isinstance(val, int):
         erros.append(f"O atributo '{chave}'{vid_id_msg} não é um inteiro")
@@ -359,7 +376,7 @@ def valida_atributos(vid, atrs_mem):
 
     if vid != None and len(erros) == 0:
       # Tentativa de alterar o campo {chave} para {val}.
-      campos_alteraveis = { 'nota', 'titulo', 'bloqueado', }
+      campos_alteraveis = { 'nota', 'vistas', 'titulo', 'bloqueado', }
       if not chave in campos_alteraveis: 
         # O atributo é imutável:
         assert vid_atrs != None and chave in vid_atrs
@@ -456,7 +473,7 @@ def def_obj_mem(obj, vid_id, atrs_SQL):
       val_velho = obj.atrs[chave]
       if not type(val_velho) is type(val):
         erro_prog(f"Tipo do campo '{chave}' incorreto")
-      campos_alteraveis = { 'nota', 'titulo', 'bloqueado', }
+      campos_alteraveis = { 'nota', 'vistas', 'titulo', 'bloqueado', }
       if not chave in campos_alteraveis and val != val_velho:
         erro_prog(f"Campo '{chave}' não pode ser alterado - val = {str(val)} val_velho = {str(val_velho)}")
       obj.atrs[chave] = val

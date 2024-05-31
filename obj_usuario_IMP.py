@@ -5,6 +5,7 @@ import util_nome_de_usuario
 import util_senha
 import util_email
 import util_booleano
+import util_nota
 
 import db_obj_tabela
 import db_tabelas_do_sistema
@@ -42,7 +43,8 @@ def inicializa_modulo(limpa):
   colunas = \
     ( ( 'nome',          type("foo"), 'TEXT',    False ), # Nome completo.
       ( 'senha',         type("foo"), 'TEXT',    False ), # Senha de login.
-      ( 'email',         type("foo"), 'TEXT',    False ), # Endereço de email
+      ( 'email',         type("foo"), 'TEXT',    False ), # Endereço de email.
+      ( 'vnota',         type(418.8), 'FLOAT',   False ), # Nota média dos vídeos.
       ( 'administrador', type(False), 'INTEGER', False ), # Define se o usuário é administrador (1=administrador)
     )
 
@@ -184,6 +186,7 @@ def cria_testes(verb):
       },
     ]
   for atrs in lista_atrs:
+    atrs['vnota'] = 2.00
     usr_id_esp = atrs['id']; del atrs['id']
     usr = cria(atrs)
     assert usr != None and type(usr) is obj_usuario.Classe
@@ -245,6 +248,8 @@ def valida_atributos(usr, atrs):
     erros += util_nome_de_usuario.valida('nome', atrs['nome'], nulo_ok)
   if 'email' in atrs:
     erros += util_email.valida('Email', atrs['email'], nulo_ok)
+  if 'vnota' in atrs:
+    erros += util_nota.valida('Nota vídeos', atrs['vnota'], nulo_ok)
   if 'administrador' in atrs:
     erros += util_booleano.valida('Administrador', atrs['administrador'], nulo_ok)
      

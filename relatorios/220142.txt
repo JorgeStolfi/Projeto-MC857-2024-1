@@ -1,18 +1,1 @@
-Relatorio - 220142
-
-Nome: Leonardo Novaes do Nascimento
-
-Eu escrevi a função criar_quadros que:
-
-* Encontra a duração do video
-
-* Encontra intervalos igualmente espaçados 
-
-* extrai e armazena os quadros nos intervalos igualmente espaçados
-
-Atualizei o arquivo obj_video com a nova função 
-
-Por fim,foi adicionado um função de teste no arquivo obj_video_TST, 
-para validar a função criar_quadros
-
-OBS: Alguns video precisam de uma altura especifica para poder decodificar
+# relatorio da aula de 2024-05-31

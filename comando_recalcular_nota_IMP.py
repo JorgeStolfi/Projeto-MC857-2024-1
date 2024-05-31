@@ -57,9 +57,9 @@ def processa(ses, cmd_args):
         obj_video.muda_atributos(vid, {'nota': nota})
         pag = html_pag_ver_video.gera(ses, vid, None)
  
-  if pag == None:
+  if len(erros) > 0:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
   else:
-    assert len(erros) == 0
+    assert pag != None
 
   return pag

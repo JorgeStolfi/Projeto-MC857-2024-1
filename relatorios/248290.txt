@@ -1,11 +1,1 @@
-Relatorio - 248290
-
-Tarefa do dia 24/05/2024:
-    Na aula de hoje me foi designada a seguinte tarefa: no formulário de busca de comentários existe um campo 'Bloqueado' para filtrar comentários bloqueados
-ou não, usuários que não são administradores não podem ver este campo (tipo hidden) e seu valor deve ser False por default nestes casos.
-    Inicialmente alterei o arquivo {html_form_buscar_comentarios_IMP} para tratar o html. Usando o atributo admin vindo do argumento da função gera, 
-manipulei a exibição do campo conforme seu valor: quando administrador, o campo é exibido normalmente, do contrário, seu tipo e hidden, não
-editável e sem texto para exibição.
-    Em seguida, alterei o arquivo {comando_buscar_comentarios_IMP} para tratar o método de busca, após implementar a lógica para checar se o dono da 
-sessão é admin, utilizei a variável is_admin para tratar a busca, quando o usuário não for um administrador, o valor do campo 'bloqueado' é False e a 
-busca retorna apenas os não bloqueados, como pedido no enunciado da tarefa.
+# relatorio da aula de 2024-05-31

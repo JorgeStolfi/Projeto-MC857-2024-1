@@ -1,9 +1,1 @@
-Relatorio - 243433
-Primeiramente eu troquei o estilo da nav de block para flex, dessa maneira o texto já ficou ao lado da imagem.
-No entanto havia um parágrafo entre a imagem e o texto, portanto removi esse parágrafo. Nisso o texto ficou
-muito colado da imagem, e portanto adicionei um padding no texto. Mas pensando melhor, percebi que tal responsabilidade
-nao deveria estar no padding do texto e sim na nav que continha esses elementos. Dessa maneira, adicionei um gap
-no estilo da nav. E como esse html do bloco de bemvindo ficou muito colado com a linha dos botoes de busca, adicionei
-uma break line para separar esses elementos. Tudo isso sempre a cada alteração vendo como ficava o site.
-Depois rodei os testes e estava no estilo que eu desejava e finalizei a tarefa.
-
+# relatorio da aula de 2024-05-31

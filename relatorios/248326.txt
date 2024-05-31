@@ -1,4 +1,1 @@
-Módulo "html_pag_ver_usuario": A variável 'editável' era definida sempre como 'False', mudei para ser False se não estivermos logado. 
-
-Módulo "html_pag_ver_usuario_IMP": Ele mostrava o botão de alterar caso 'editável' fosse 'False', alterei para mostrar apenas se 'editável' for True.
-Nesse mesmo módulo também fiz com que o botão de ver vídeos e comentários esteja visível para qualquer um, mesmo se não estivermos logados.
+# relatorio da aula de 2024-05-31

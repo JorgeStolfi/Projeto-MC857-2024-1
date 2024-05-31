@@ -1,3 +1,1 @@
-Relatorio - 232526
-
-Adicionei campos nota_min e nota_max no formulário em html_form_buscar_comentarios e lógica correspondente de validação (e eventual busca) em comando_buscar_comentários. Função auxiliar foi criada em util_dict. Outros usos de funções alteradas não necessitam de alteração, pois a interface segue compatível, somente havendo adição de parâmetros opcionais. Documentação e cobertura de testes foram alteradas tendo em vista as alterações.
+# relatorio da aula de 2024-05-31

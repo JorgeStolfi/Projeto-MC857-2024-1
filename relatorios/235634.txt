@@ -1,11 +1,1 @@
-Relatorio - 235634
-Nesta tarefa, o objetivo era, em Meus vídeos, transformar os campos de 'Largura' e 'Altura' em um único campo de nome 'Tamanho', utilizando a formatação
-'{largura}x{altura} px' para mostrar os valores no campo. Para isso, foi necessária somente a alteração do módulo html_linha_resumo_de_video,
-alterei primeiramente o arquivo html_linha_resumo_de_video_IMP para implementar o campo 'Tamanho' e excluir os campos 'Largura' e 'Altura', 
-implementando o 'if' responsável pelo preenchimento do campo, utilizando os atributos 'largura' e 'altura', e, portanto, não houve a necessidade
-de alterar os atributos do objeto. Documentei esta alteração no arquivo html_linha_resumo_de_video, conforme instruído. Quanto ao uso deste módulo
-por outros módulos, somente o módulo html_bloco_lista_de_video o utiliza diretamente, e este é utilizado tanto em 'Meus vídeos' (comando_buscar_videos_de_usuario)
-quanto no 'Buscar vídeos' (comando_buscar_videos) e, como não houve alteração de parâmetros passado nem de funções, esses módulos não foram afetados,
-não necessitando de alterações, o que ocorreu foi apenas que os campos 'Largura' e 'Altura' se tornaram 'Tamanho' tanto na tabela retornada em 'Meus vídeos'
-quanto na tabela retornada em 'Buscar vídeos', o que faz sentido para mim, para manter a coerência e coesão do sistema. Os testes também não apresentaram bugs,
-não necessitando de correções.
+# relatorio da aula de 2024-05-31

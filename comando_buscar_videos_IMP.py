@@ -60,7 +60,7 @@ def processa(ses, cmd_args):
   
   # Converte 'data_min', 'data_max' para 'data' intervalar:
   erros += util_dict.normaliza_busca_por_data(atrs_busca)
-  erros += util_dict.normaliza_busca_por_notas(atrs_busca)
+  erros += util_dict.normaliza_busca_por_nota(atrs_busca)
   vid_ids = []
   if len(erros) == 0:
     try:
