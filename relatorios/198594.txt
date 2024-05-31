@@ -1,0 +1,6 @@
+Relatorio - 198594
+
+Verificado funcionamento dos modulos de forms e pagina de buscar videos
+Verificado como implementar a verificação de sessão de administrador
+Implementado condicao para verificar se o usuario é administrador e adicionar o campo de Bloqueado nas linhas de dados
+Testado com usuario administrador e usuario comum/deslogado
