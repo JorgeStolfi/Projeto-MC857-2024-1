@@ -1,6 +1,6 @@
 import html_form_buscar_comentarios
 import util_testes
-
+from util_erros import  aviso_prog 
 import sys
 
 ok_global = True # Vira {False} se algum teste falha.

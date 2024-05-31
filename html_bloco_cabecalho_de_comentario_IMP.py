@@ -19,7 +19,7 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
   assert isinstance(mostra_video, bool)
   assert isinstance(mostra_pai, bool)
   
-  estilo_atr = html_estilo_texto.gera("10px", "medium", "#222222", None, None)
+  estilo_atr = html_estilo_texto.gera("8px", "medium", "#222222", None, None)
 
   width = f"{largura}px"
   padding = ( "10px", "0px", "5px", "0px" )

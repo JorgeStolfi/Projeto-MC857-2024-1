@@ -10,13 +10,13 @@ def gera(atrs, admin):
     obj_bloqueado = ("", "hidden", 'bloqueado', False, None)
 
   dados_linhas = (
-      ( "Comentário", "text",     'comentario',    True,  "C-nnnnnnnn" ),
-      ( "Pai",        "text",     'pai',           True,  "C-nnnnnnnn" ),
-      ( "Autor",      "text",     'autor',         True,  "U-nnnnnnnn" ),
-      ( "Video",      "text",     'video',         True,  "V-nnnnnnnn" ),
-      ( "Data",       "text",     'data',          True,  "2024-01-01 08:33:25 UTC" ),
-      ( "Texto",      "text",     'texto',         True,  "Blá bla bla" ),
-      obj_bloqueado
+      ( "Comentário",           "text",     'comentario',    True,  "C-nnnnnnnn" ),
+      ( "Autor",                "text",     'autor',         True,  "U-nnnnnnnn" ),
+      ( "Video",                "text",     'video',         True,  "V-nnnnnnnn" ),
+      ( "Em resposta a",        "text",     'pai',           True,  "C-nnnnnnnn" ),
+      ( "Data",                 "text",     'data',          True,  "2024-01-01 08:33:25 UTC" ),
+      ( "Texto",                "text",     'texto',         True,  "Blá bla bla" ),
+      ( "Bloqueado",            "text",     'bloqueado',     True,  "True" ),
     )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)

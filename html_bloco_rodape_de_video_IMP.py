@@ -1,5 +1,6 @@
 import obj_video
 import obj_usuario
+import util_voto
 import html_elem_div
 import html_elem_span
 import html_estilo_texto
@@ -30,7 +31,7 @@ def gera(vid_id, atrs, largura, mostra_nota, mostra_dims):
 
   if mostra_nota and 'nota' in atrs and atrs['nota'] != None:
     nota = float(atrs['nota'])
-    ht_nota = html_elem_span.gera(estilo_atr, "Nota: " + f"{nota:.2f}")
+    ht_nota = html_elem_span.gera(estilo_atr, "Nota: " + f"{nota:.2f}" + " " + util_voto.formata(nota))
     ht_linha_1 += ht_nota
     
   if mostra_dims:
@@ -48,7 +49,7 @@ def gera(vid_id, atrs, largura, mostra_nota, mostra_dims):
       duracao = float(atrs['duracao'])/1000 # Em segundos.
       altura = int(atrs['altura'])
       latgura = int(atrs['largura'])
-      dims = f"Duracão: {duracao:.3f}s {largura}x{altura}px" 
+      dims = f"Duracão: {duracao:.3f}s Tamanho: {largura}x{altura}px" 
       ht_dims = html_elem_span.gera(estilo_atr,  dims)
       if ht_linha_1 != "": ht_linha_1 += " "
       ht_linha_1 += ht_dims

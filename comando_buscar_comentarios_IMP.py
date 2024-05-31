@@ -7,6 +7,7 @@ import html_pag_buscar_comentarios
 import util_identificador
 import util_dict
 import util_data
+import obj_usuario
 
 import sys
 
@@ -17,9 +18,11 @@ def processa(ses, cmd_args):
   assert isinstance(cmd_args, dict)
 
   if ses != None and obj_sessao.aberta(ses):
-    is_admin = obj_sessao.de_administrador(ses)
+    ses_dono = obj_sessao.obtem_dono(ses); 
+    para_admin = obj_usuario.eh_administrador(ses_dono)
   else:
-    is_admin = False
+    ses-dono = None
+    para_admin = False
 
   erros = []
   resultados = []
@@ -68,7 +71,7 @@ def processa(ses, cmd_args):
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
 
-    if not is_admin:
+    if not para_admin:
       atrs_busca['bloqueado'] = False
 
     erros += item_erros
@@ -97,27 +100,33 @@ def processa(ses, cmd_args):
       # Faz a busca dentro de um {try:} caso ela levante {ErroAtrib}:
       try:
         com_ids_res = obj_comentario.busca_por_campos(atrs_busca, unico = False)
-        if len(com_ids_res) == 0:
-          erros.append("Não foi encontrado nenhum comentário com os dados fornecidos")
+
       except ErroAtrib as ex:
         erros += ex.args[0]
 
   if len(erros) == 0:
-    assert len(com_ids_res) > 0
+    
     # Mostra os comentários encontrados na forma de tabela:
-    assert len(com_ids_res) > 0
     com_ids_res = sorted(list(com_ids_res))
-    ht_titulo = html_bloco_titulo.gera("Comentários encontrados")
+    if len(com_ids_res) == 0:
+      ht_titulo = html_bloco_titulo.gera("Nenhum comentário encontrado")
+
+    else:
+      ht_titulo = html_bloco_titulo.gera("Comentários encontrados")
+    
     ht_tabela = html_bloco_lista_de_comentarios.gera \
       ( com_ids_res, 
         mostra_autor = True,
         mostra_video = True,
         mostra_pai = True,
         mostra_nota = True,
+        forcar_mostrar_texto = para_admin
       )
+    
     ht_bloco = \
       ht_titulo + "<br/>\n" + \
       ht_tabela
+    
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
   else:
     # Repete o formulário com os dados válidos:

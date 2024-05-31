@@ -13,10 +13,10 @@ def gera(dados_linhas, atrs):
   possivelmente alterados ou preenchidos pele usuário, serão enviados ao
   servidor como argumentos desse comando.
 
-  O parâmetro {dados_linhas} é uma seqüência de quíntuplas
-  {(rot,tipo,chave,editavel,dica)}, cada uma delas descrevendo as
+  O parâmetro {dados_linhas} é uma seqüência de sextuplas
+  {(rot,tipo,chave,editavel,dica,decimal)}, cada uma delas descrevendo as
   propriedades de uma linha da tabela. Em cada
-  quíntupla, 
+  sextupla, 
   
     * {rot} é o rótulo visível da linha, o texto que vai aparecer 
       como um "<label>...</label>" à esquerda do elemento "<input>".
@@ -38,6 +38,9 @@ def gera(dados_linhas, atrs):
     * {dica} é um string que será exibido no campo caso o valor especificado em 
       {args} for {None} ou não existir.  Será usado no atributo 
       "placeholder=" do elemento "<input>".
+
+    * {decimal} é um booleano que especifica se o campo aceita decimais
+      ou não (valido apenas para inputs do tipo "number")
   
   O valor inicial {val} de cada elemento "<input>" ou "<textarea>" é
   normalmente obtido do dicionário {atrs} com a {chave} correspondente.

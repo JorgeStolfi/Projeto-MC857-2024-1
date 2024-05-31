@@ -1,1 +1,10 @@
 Relatorio - 232450
+
+Minha tarefa era "Menu "Buscar Vídeos" : A página deveria ter um título {html_bloco_titulo} 
+"Dados para a busca de vídeos" ou algo assim. Acrescente."
+
+Para isso, no módulo 'html_pag_buscar_videos_IMP", importei o bloco 'html_bloco_titulo', criei
+a instância 'ht_titulo' e a combinei com a 'ht_form', com uma quebra de linha, em 'ht_bloco'.
+Passei então 'ht_bloco' como parâmametro para a função html_pag_generica.gera().
+
+O título apareceu como esperado, rodei os testes para este módulo e todos passaram.

@@ -38,12 +38,12 @@ def gera(vid_id, atrs_mod, eh_adm):
   dados_linhas = []
 
   # Titulo sempre aparece, possivelmente editável:
-  dados_linhas.append( ( "Título",  "textarea",  'titulo',  True,  None, ) )
+  dados_linhas.append( ( "Título",  "textarea",  'titulo',  True,  None, False, ) )
 
   # Nota opcionalmente editável:
   if eh_adm:
-    dados_linhas.append( ( "Nota",  "number",  'nota', True,  "0.00 a 4.00", ) )
-    dados_linhas.append( ( "Bloqueado",  "checkbox",  'bloqueado', True,  None, ) )
+    dados_linhas.append( ( "Nota",  "number",  'nota', True,  "0.00 a 4.00", True, ) )
+    dados_linhas.append( ( "Bloqueado",  "checkbox",  'bloqueado', True,  None, False, ) )
  
   ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_mod)
 

@@ -6,12 +6,16 @@ def gera(vid, mostra_autor):
   atributos do objeto {vid} da classe {obj_video.Classe}, incluindo o
   identificador {com_id}. Esta função serve para gerar os elementos de
   uma linha da tabela produzida por {html_bloco_lista_de_videos.gera}.
+  Observação: para os atributos 'largura' e 'altura', os seus valores
+  são mostrados no campo de nome 'Tamanho' ao invés de ter um campo só para
+  'largura' e outro para 'altura', sendo mostrados no formato e ordem
+  '{largura}x{altura} px'.
 
   O parametro booleano {mostra_autor} determina se o resumo vai incluir
   o campo 'autor'.
   
   Se {vid} for {None}, o resultado é uma lista com os cabeçalhos das
-  colunas da tabela ("Vídeo", "Autor", "Data", etc.), em vez dos valores
+  colunas da tabela ("Vídeo", "Autor", "Data", "Tamanho" etc.), em vez dos valores
   dos atributos.
   
   Cada elemento do resultado estará formatado com um estilo adequado.

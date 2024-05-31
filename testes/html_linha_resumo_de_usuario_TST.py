@@ -42,9 +42,11 @@ usr2 = obj_usuario.obtem_objeto(usr2_ident)
 usr5_ident = "U-00000005"
 usr5 = obj_usuario.obtem_objeto(usr5_ident)
 
-testa_gera("TUSER1",  list, usr1)
-testa_gera("TUSER2",  list, usr2)
-testa_gera("TUSER5",  list, usr5)
+testa_gera("TUSER1",  list, True, usr1)
+testa_gera("TUSER2",  list, True, usr2)
+testa_gera("TUSER5",  list, True, usr5)
+testa_gera("TUSER5",  list, False, usr5)
+
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")
