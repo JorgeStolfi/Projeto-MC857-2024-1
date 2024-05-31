@@ -11,6 +11,7 @@ import util_identificador
 import util_data
 import util_dict
 import util_booleano
+import util_nota
 from util_erros import ErroAtrib
 
 def processa(ses, cmd_args):
@@ -47,6 +48,10 @@ def processa(ses, cmd_args):
     elif chave == 'bloqueado':
       item_erros = util_booleano.valida(chave, val, nulo_ok = False)
       if len(item_erros) == 0: atrs_busca[chave] = util_booleano.converte(val)
+    elif chave == 'nota_min' or chave == 'nota_max':
+      item_erros = util_nota.valida(chave, val, nulo_ok = False)
+      if len(item_erros) == 0: atrs_busca[chave] = val
+
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
@@ -55,7 +60,7 @@ def processa(ses, cmd_args):
   
   # Converte 'data_min', 'data_max' para 'data' intervalar:
   erros += util_dict.normaliza_busca_por_data(atrs_busca)
-  
+  erros += util_dict.normaliza_busca_por_notas(atrs_busca)
   vid_ids = []
   if len(erros) == 0:
     try:

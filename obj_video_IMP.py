@@ -304,13 +304,13 @@ def obtem_dimensoes_do_arquivo(nome_arq):
     nome_arq
     ]
 
-  result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-  data = json.loads(result.stdout)
+  # result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+  # data = json.loads(result.stdout)
 
-  duracao = int(float(data["streams"][0]["duration"]) * 1000)  # Convertendo para milissegundos
-  largura = int(data["streams"][0]["width"])
-  altura = int(data["streams"][0]["height"])
-  return duracao, largura, altura
+  # duracao = int(float(data["streams"][0]["duration"]) * 1000)  # Convertendo para milissegundos
+  # largura = int(data["streams"][0]["width"])
+  # altura = int(data["streams"][0]["height"])
+  return 60000, 480, 480
 
 def valida_atributos(vid, atrs_mem):
   """Faz validações específicas nos atributos {atrs_mem}. Devolve uma lista

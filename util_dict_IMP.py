@@ -89,5 +89,4 @@ def normaliza_busca_por_nota(atrs):
     else:
       # Busca intervalar:
       atrs['nota'] = ( nota_min, nota_max, )
-  
   return erros
