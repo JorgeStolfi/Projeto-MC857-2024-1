@@ -26,18 +26,29 @@ def processa(ses, cmd_args):
   if len(erros) == 0:
     if vid_id != None:
       vid = obj_video.obtem_objeto(vid_id)
+      
       if vid == None:
         erros.append(f"O vídeo \"{vid_id}\" não existe")
+      
       else:
         titulo = f"Comentários do vídeo {vid_id}"
         raizes = obj_comentario.busca_por_video(vid_id, {False})
+    
     elif com_id != None:
       com = obj_comentario.obtem_objeto(com_id)
+      
       if com == None:
         erros.append(f"O comentario \"{com_id}\" não existe")
+      
       else:
-        titulo = f"Respostas ao comentário {com_id}"
         raizes = obj_comentario.busca_por_campo('pai', com)
+        
+        if len(raizes) > 0:
+          titulo =  f"Respostas ao comentário {com_id}" 
+        
+        else:
+          titulo = f"Não há respostas ao comentário {com_id}"
+    
     else:
       # Não deveria passar aqui:
       assert False
