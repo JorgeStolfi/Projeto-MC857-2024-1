@@ -462,3 +462,36 @@ def def_obj_mem(obj, vid_id, atrs_SQL):
       obj.atrs[chave] = val
   if tabela.debug: mostra(2, "obj = " + str(obj))
   return obj
+
+def cria_quadros(id_video, n, altura):
+    video_path = f'videos/{id_video}.mp4'
+    
+    duration_command = [
+        'ffprobe', 
+        '-v', 'error', 
+        '-show_entries', 'format=duration', 
+        '-of', 'default=noprint_wrappers=1:nokey=1', 
+        video_path
+    ]
+    duration_result = subprocess.run(duration_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    
+    duration = float(duration_result.stdout.strip())
+    interval = round(duration / n, 2)
+    thumbs_dir = 'thumbs'
+
+    for i in range(n):
+        timestamp = interval * i
+        output_file = f'{thumbs_dir}/{id_video}-{i:03d}.png'
+        ffmpeg_command = [
+            'ffmpeg', 
+            '-ss', str(timestamp), 
+            '-i', video_path, 
+            '-vframes', '1', 
+            '-q:v', '2',
+            '-vf', f'scale=-1:{altura}',
+            output_file
+        ]
+        result = subprocess.run(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if result.returncode != 0:
+          raise RuntimeError(f"Erro ao executar ffmpeg")
+    return result
