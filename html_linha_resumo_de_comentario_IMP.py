@@ -94,7 +94,7 @@ def gera(com, mostra_autor, mostra_video, mostra_pai, mostra_nota, forcar_mostra
       
     if mostra:
       alinha = "left"
-      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto)
+      ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto, "14px")
       itens_resumo.append(ht_item)
 
   if not cab:
