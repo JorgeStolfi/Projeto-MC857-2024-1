@@ -35,7 +35,9 @@ def processa(ses, cmd_args):
   operador SQL "LIKE" com argumento "%{tx}%" onde {tx} é o valor de
   {cmd_args['texto']} Quaisquer caracteres "%" e "_" em {tx} serão
   interpretados como nesse operador SQL. A busca vai ignorar a distinção
-  maiúsculas e minúsculas.
+  maiúsculas e minúsculas. No caso dos campos 'nota_min' e 'nota_max',
+  ambos serão combinados em um único campo 'nota' intervalar, sendo feita
+  busca conforme regras determinadas em {db_obj_tabela.busca_por_campos}.
 
   Se houver erros nos argumentos, ou a busca não encontrar nenhum
   comentário, devolve o formulário de buscar comentários (veja

@@ -11,6 +11,7 @@ import util_identificador
 import util_data
 import util_dict
 import util_booleano
+import util_nota
 from util_erros import ErroAtrib
 
 def processa(ses, cmd_args):
@@ -47,6 +48,10 @@ def processa(ses, cmd_args):
     elif chave == 'bloqueado':
       item_erros = util_booleano.valida(chave, val, nulo_ok = False)
       if len(item_erros) == 0: atrs_busca[chave] = util_booleano.converte(val)
+    elif chave == 'nota_min' or chave == 'nota_max':
+      item_erros = util_nota.valida(chave, val, nulo_ok = False)
+      if len(item_erros) == 0: atrs_busca[chave] = val
+
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
@@ -55,7 +60,7 @@ def processa(ses, cmd_args):
   
   # Converte 'data_min', 'data_max' para 'data' intervalar:
   erros += util_dict.normaliza_busca_por_data(atrs_busca)
-  
+  erros += util_dict.normaliza_busca_por_notas(atrs_busca)
   vid_ids = []
   if len(erros) == 0:
     try:
@@ -73,25 +78,19 @@ def processa(ses, cmd_args):
         # Busca por campos aproximados:
         vid_ids = obj_video.busca_por_campos(atrs_busca, unico = False)
 
-      if len(vid_ids) == 0:
-        # Não encontrou nenhum usuário:
-        erros.append(f"Não foi encontrado nenhum vídeo com os dados fornecidos")
-
     except ErroAtrib as ex:
       erros += ex.args[0]
 
-  if len(vid_ids) != 0:
+  if len(vid_ids) == 0:
     # Encontrou pelo menos um vídeo.  Mostra em forma de tabela:
-    ht_titulo = html_bloco_titulo.gera("Vídeos encontrados")
-    ht_tabela = html_bloco_lista_de_videos.gera(vid_ids, mostra_autor = True)
-    ht_bloco = \
-      ht_titulo + "<br/>\n" + \
-      ht_tabela
-    pag = html_pag_generica.gera(ses, ht_bloco, erros)
+    ht_titulo = html_bloco_titulo.gera("Nenhum vídeo foi encontrado")
   else:
-    # Argumentos com erro ou não encontrou nada.
-    # Repete a página de busca, com eventuais mensagens de erro:
-    admin = obj_sessao.de_administrador(ses)
-    pag = html_pag_buscar_videos.gera(ses, cmd_args, erros)
+    ht_titulo = html_bloco_titulo.gera("Vídeos encontrados")
+
+  ht_tabela = html_bloco_lista_de_videos.gera(vid_ids, mostra_autor = True)
+  ht_bloco = \
+    ht_titulo + "<br/>\n" + \
+    ht_tabela
+  pag = html_pag_generica.gera(ses, ht_bloco, erros)
 
   return pag

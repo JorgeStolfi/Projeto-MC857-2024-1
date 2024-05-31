@@ -40,8 +40,9 @@ ids_usuarios = [
   "U-00000009",
 ]
 
-testa_gera("muitos", str, ids_usuarios)
-testa_gera("lhufos", str, ids_usuarios)
+testa_gera("muitos", str, True, ids_usuarios)
+testa_gera("lhufos", str, True, ids_usuarios)
+testa_gera("lhufos", str, False, ids_usuarios)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

@@ -1,1 +1,7 @@
 Relatorio - 242233
+
+Minha tarefa era reduzir a fonte do cabeçalho de um comentário(onde ficam as informações de quem é o autor, data, Id e nota),
+no módulo "html_bloco_cabecalho_de_comentario_IMP" fiz a modificação na chamada de "html_estilo_texto.gera" que recebia como 
+parâmetro de tamanho da fonte 10px, reduzi para 8px para deixar o texto do comentário em mais destaque.
+
+Ao executar os testes do módulo "html_bloco_cabecalho_de_comentario" não obtive nenhum erro.

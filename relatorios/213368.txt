@@ -1,1 +1,15 @@
 Relatorio - 213368
+
+Objetivo:  Menu "Buscar vídeos" : deveria aparecer dois campos "Nota min:" e "Nota max" para buscar vídeos com certas notas. Se fornecidos esses parâmetros devem ser enviados ao comando "buscar_videos" com chaves 'nota_min' e 'nota_max'. Corrigir.
+
+No arquivo html_form_buscar_videos_IMP.py foram adiocinada as tuplas ( "Nota min",  "text",   'nota_min', True, "0") e 
+( "Nota max",  "text",   'nota_max', True, "4") na tupla dados_linhas para adicionar os campos de nota min e nota max no formulário de busca.
+
+No arquivo util_dict_IMP.py foi criada a função normaliza_busca_por_notas que faz as tratativas para quado houver busca por nota, 
+também foi adicionada a chamada para esta função no arquivo util_dict.py
+
+Por fim, no arquivo comando_buscar_videos_IMP.py foram feitas as tratativas para os campos nota_min e nota_max,
+assim como a chamada da função normaliza_busca_por_notas
+
+Com isso temos que a busca por nota está funcional.
+

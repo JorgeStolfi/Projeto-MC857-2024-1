@@ -6,14 +6,16 @@ import html_elem_form
 def gera(atrs, admin):
 
   dados_linhas = (
-      ( "Comentário", "text",     'comentario',    True,  "C-nnnnnnnn" ),
-      ( "Pai",        "text",     'pai',           True,  "C-nnnnnnnn" ),
-      ( "Autor",      "text",     'autor',         True,  "U-nnnnnnnn" ),
-      ( "Video",      "text",     'video',         True,  "V-nnnnnnnn" ),
-      ( "Desde data", "text",     'data_min',      True,  "2024-01-01 08:33:25 UTC" ),
-      ( "Até data",   "text",     'data_max',      True,  "2024-01-01 08:33:25 UTC" ),
-      ( "Texto",      "text",     'texto',         True,  "Blá bla bla" ),
-      ( "Bloqueado",  "text",     'bloqueado',     True,  "True" ),
+      ( "Comentário",     "text",     'comentario',    True,  "C-nnnnnnnn" ),
+      ( "Autor",          "text",     'autor',         True,  "U-nnnnnnnn" ),
+      ( "Video",          "text",     'video',         True,  "V-nnnnnnnn" ),
+      ( "Em resposta a",  "text",     'pai',           True,  "C-nnnnnnnn" ),
+      ( "Desde data",     "text",     'data_min',      True,  "2024-01-01 08:33:25 UTC" ),
+      ( "Até data",       "text",     'data_max',      True,  "2024-01-01 08:33:25 UTC" ),
+      ( "Nota mínima",    "text",     'nota_min',      True,  "1.00" ),
+      ( "Nota máxima",    "text",     'nota_max',      True,  "2.00" ),
+      ( "Texto",          "text",     'texto',         True,  "Blá bla bla" ),
+      ( "Bloqueado",      "text",     'bloqueado',     True,  "True" ),
     )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs)

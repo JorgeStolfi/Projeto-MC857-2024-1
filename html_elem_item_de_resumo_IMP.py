@@ -1,7 +1,7 @@
 import html_estilo_texto
 import html_elem_span
 
-def gera(texto, cab, cor_fundo, alinha, cor_texto):
+def gera(texto, cab, cor_fundo, alinha, cor_texto, tam_fonte):
   if cab:
     # Força estilo e cores padronizadas do cabeçalho de coluna:
     peso_fonte = "bold"
@@ -11,7 +11,6 @@ def gera(texto, cab, cor_fundo, alinha, cor_texto):
     peso_fonte = "medium"
     if cor_texto == None: cor_texto = "#000000"
 
-  tam_fonte = "20px"
   margens = ( "0px", "0.30em", "0px", "0.70em" )
   estilo = html_estilo_texto.gera(tam_fonte, peso_fonte, cor_texto, cor_fundo, margens)
   halign = f"text-align: {alinha}"
