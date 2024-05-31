@@ -257,7 +257,7 @@ def recalcula_nota(obj):
   {com}).
   
   Se {obj} for um vídeo {vid}, a nova nota será baseada nas notas e
-  votos de seues comentários imediatos (comentários com 'vídeo' = {vid}
+  votos de seus comentários imediatos (comentários com 'vídeo' = {vid}
   e 'pai' = {None}), sem levar em conta as respostas a esses
   comentários.
   
