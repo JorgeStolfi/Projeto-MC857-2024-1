@@ -10,6 +10,7 @@ import obj_comentario
 import obj_sessao
 import obj_usuario
 import obj_video
+from util_erros import aviso_prog
 import util_identificador
 import util_testes
 
