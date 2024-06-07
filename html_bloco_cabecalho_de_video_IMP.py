@@ -4,6 +4,7 @@ import html_elem_div
 import html_elem_span
 import html_estilo_texto
 import html_estilo_div_dados
+import html_elem_link_text
 
 def gera(vid_id, atrs, largura, mostra_id, mostra_data):
 
@@ -56,7 +57,8 @@ def gera(vid_id, atrs, largura, mostra_id, mostra_data):
     autor_nome = obj_usuario.obtem_atributo(autor, 'nome')
     assert autor_id != None
     assert autor_nome != None
-    ht_autor = html_elem_span.gera(estilo_atr, "Autor: " + autor_id + " " + autor_nome)
+    btn_autor = html_elem_link_text.gera(autor_id, "ver_usuario", { 'usuario': autor_id })
+    ht_autor = html_elem_span.gera(estilo_atr, "Autor: " + btn_autor + " " + autor_nome)
     ht_linha_2 += ht_autor
   
   if ht_linha_2 != "": ht_linha_2 += "<br/>"
