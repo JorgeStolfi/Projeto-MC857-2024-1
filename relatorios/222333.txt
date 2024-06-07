@@ -1,4 +1,4 @@
-# relatorio da aula de 2024-05-31
+# relatorio da aula de 2024-06-07
 
 No relatório da aula de hoje, minha tarefa foi em melhorar a visualização da página "/ver_objeto", mais especificamente a linha 2 do cabeçalho ("Sobre: ... Em resposta a...").
 A alteração geral deveria ser quebrar tal linha em duas.
