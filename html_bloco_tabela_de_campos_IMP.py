@@ -58,7 +58,7 @@ def gera_input_ou_textarea(tipo, chave, ident, val, val_min, dica, editavel, dec
   ht_val = converte_valor(val)
     
   # Determina {ident} do campo:
-  ident = None # Por enquanto. Devia entrar como argumento.
+  ident = None if not ident else ident
     
   # Dica e valor inicial são mutuamente exclusivos:
   if ht_val != None:
