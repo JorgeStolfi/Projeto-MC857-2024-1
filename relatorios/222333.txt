@@ -1,1 +1,32 @@
 # relatorio da aula de 2024-05-31
+
+No relatório da aula de hoje, minha tarefa foi em melhorar a visualização da página "/ver_objeto", mais especificamente a linha 2 do cabeçalho ("Sobre: ... Em resposta a...").
+A alteração geral deveria ser quebrar tal linha em duas.
+
+Assim, iniciou-se a tarefa quebrando e formatando a primeira das linhas, que deveria conter "Sobre: " com o ID do vídeo e seu título truncado em 40 caracteres.
+A modificação foi feita no módulo {html_bloco_cabecalho_de_comentario}, pois é onde a formatação é originalmente feita.
+Para obter o título do vídeo, usou-se o obj_video, e para a truncar o mesmo em 40 caracteres, a função "trunca_valor" do módulo {util_testes}. Validou-se no servidor a modificação e confirmou-se que agora estava funcionando.
+
+Em seguida, partiu-se para a formatação do próximo atributo: o comentário em si. Conforme especificado, caso o pai não fosse None, deveria ter uma segunda linha que deveria conter "Em resposta a:", o ID do comentário pai, o texto do mesmo (truncado para 40 caracteres), e o "Voto".
+Para essa implementação, usou-se o mesmo objeto de comentário utilizado na primeira etapa: o C-00000002, já que o mesmo tinha um pai. 
+Obteve-se o texto do comentário pelo objeto obj_comentario, e para a formatação do mesmo (truncagem em 40 caracteres), também foi utilizada a função "trunca_valor" do módulo {util_testes}.
+Para realizar a quebra de linha, adicionou-se um texto "<br/>", que é uma Tag HTML que é feita para isso, logo antes de adicionar o texto do "Em resposta a".
+Entrando na página no navegador, foi possível confirmar a funcionalidade conforme o esperado, com as duas linhas exibindo corretamente o conteúdo esperado.
+
+Caso o pai fosse None, não deveria haver uma segunda linha conforme o especificado, e o voto iria logo depois das informações do título do vídeo. 
+Validou-se, usando o comentário C-00000001 (que não tem pai), que sem realizar mais nenhuma alteração, o comportamento já estava conforme o esperado, de modo que:
+1. A linha original agora foi quebrada em duas: a primeira contendo o título do vídeo truncado devidamente (caso necessário).
+2. A segunda (opcional) é exibida apenas caso haja algum "pai", e agora ela contém o texto "Em resposta a:" e as informações do comentário.
+3. O voto é exibido corretamente, ao final da primeira linha (caso não haja um pai) e ao final da segunda caso haja.
+
+Assim, pode-se afirmar que o desenvolvimento ocorreu conforme o esperado, e as funcionalidades foram devidamente implementadas.
+
+Para facilitar todas as validações, também foram escritos os testes do módulo, considerando os seguintes cenários:
+1. Exibição de um título com menos de 40 caracteres
+2. Exibição de um título com mais de 40 caracteres, para validar a truncagem.
+3. Exibição de um comentário com menos de 40 caracteres
+4. Exibição de um comentário com mais de 40 caracteres, para validar a truncagem.
+
+Conforme os padrões e as boas práticas do projeto, os testes foram feitos dentro do módulo {html_bloco_cabecalho_de_comentario_TST}.
+
+Após escrever os 4 testes, executou-se o Script de testes e validou-se que o comportamento estava conforme o esperado para todos os cenários, confirmando o sucesso no desenvolvimento da tarefa.

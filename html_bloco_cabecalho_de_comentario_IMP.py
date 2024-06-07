@@ -7,6 +7,7 @@ import html_estilo_texto
 import html_estilo_div_dados
 import util_nota
 import util_voto
+import util_testes
 
 def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai):
 
@@ -86,7 +87,8 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
       video = obj_video.obtem_objeto(video_id)
     assert video != None
     assert video_id != None
-    ht_video = html_elem_span.gera(estilo_atr, "Sobre: " + video_id)
+    titulo_do_video = obj_video.obtem_atributo(video, 'titulo')
+    ht_video = html_elem_span.gera(estilo_atr, f"Sobre: {video_id} - {util_testes.trunca_valor(titulo_do_video, 40, None)}")
     ht_linha_3 += ht_video
     
   if mostra_pai and 'pai' in atrs and atrs['pai'] != None:
@@ -96,8 +98,11 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
     else:
       pai_id = atrs['pai']
     assert pai_id != None
-    ht_pai = html_elem_span.gera(estilo_atr, f"Em resposta a: {pai_id}")
+    comentario = obj_comentario.obtem_objeto(pai_id)
+    texto_do_comentario = obj_comentario.obtem_atributo(comentario, 'texto')
+    ht_pai = html_elem_span.gera(estilo_atr, f"Em resposta a: {pai_id} - {util_testes.trunca_valor(texto_do_comentario, 40, None)}")
     if ht_linha_3 != "": ht_linha_3 += " "
+    ht_linha_3 += "<br/>"
     ht_linha_3 += ht_pai
 
   if 'voto' in atrs and atrs['voto'] != None:    
