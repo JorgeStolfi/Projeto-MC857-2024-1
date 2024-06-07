@@ -54,8 +54,19 @@ testa_processa("ses_error", "AssertionError", 'error', {})
 testa_processa('ses_error_dict', "AssertionError", ses_C, {"bla, bla, bla"}) 
 
 # Teste de módulo comando_ver_grade_de_videos para argumento diferente de vazio
-testa_processa('ses_error_args', "AssertionError", ses_C, {"error": True}) 
+testa_processa('ses_error_args', "AssertionError", ses_C, {"error": True})
 
+# Teste de módulo comando_ver_grade_de_videos para argumento ordem=+nota
+testa_processa("ses_C",  str, ses_C, {"ordem": "+nota"})
+
+# Teste de módulo comando_ver_grade_de_videos para argumento ordem=-nota
+testa_processa("ses_C",  str, ses_C, {"ordem": "-nota"})
+
+# Teste de módulo comando_ver_grade_de_videos para argumento ordem=+vistas
+testa_processa("ses_C",  str, ses_C, {"ordem": "+vistas"})
+
+# Teste de módulo comando_ver_grade_de_videos para argumento ordem=-vistas
+testa_processa("ses_C",  str, ses_C, {"ordem": "-vistas"})
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")
