@@ -30,7 +30,7 @@ def gera(vid_ids, ncols):
     if vid == None:
       erros.append(f"O vídeo {vid_id} não existe")
     else:
-      arquivo = f"thumbs/{vid_id}.png"
+      arquivo = f"capas/{vid_id}.png"
       atrs_vid = obj_video.obtem_atributos(vid)
       descr = atrs_vid['titulo']
       alt_px = 80

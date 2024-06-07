@@ -19,10 +19,10 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_
   Os parâmetros booleanos {bt_conversa}, {bt_responder}, e {bt_editar}
   especificam a inclusão de certos botões sob o texto:
   
-    * Se {bt_conversa} for {True}, haverá um botão
-    "Ver respostas" que, quando clicado, emitirá um comando
-    "ver_conversa" para mostrar a árvore de comentários
-    resultante a este.
+    * Se {bt_conversa} for {True}, haverá um botão "Ver respostas" que,
+    quando clicado, emitirá um comando "ver_conversa" para mostrar a
+    árvore de respostas geradas por este comantário (respostas
+    imediatas, respostas a essas respostas, etc.).
   
     * Se {bt_responder} for {True}, haverá botão "Responder" que, quando
     clicado, emitirá um comando "solicitar_pag_postar_comentario".

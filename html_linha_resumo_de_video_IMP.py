@@ -17,7 +17,7 @@ def gera(vid, mostra_autor):
 
   itens_resumo = []
 
-  colunas = [ 'thumb','video', 'autor', 'nota', 'data', 'duracao', 'tamanho', 'titulo', 'bloqueado']
+  colunas = [ 'capa','video', 'autor', 'nota', 'data', 'duracao', 'tamanho', 'titulo', 'bloqueado']
   
   cor_fundo = None
   cor_texto = None
@@ -59,13 +59,13 @@ def gera(vid, mostra_autor):
         texto = "Nota"
       else:
         texto = util_nota.formata(atrs['nota'])
-    elif chave == 'thumb':
+    elif chave == 'capa':
       mostra=True
       if cab:
-        texto = "Thumb"
+        texto = "Capa"
       else:
-        thumb_file = f"thumbs/{vid_id}.png"
-        texto = html_elem_link_img.gera(thumb_file, None, 40, None)
+        arq_capa = f"capas/{vid_id}.png"
+        texto = html_elem_link_img.gera(arq_capa, None, 40, None)
     elif chave == 'bloqueado':
       mostra = True
       if cab:

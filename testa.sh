@@ -23,7 +23,7 @@ mkdir -p testes/saida
 
 # Cria links para folders que o programa de testes e as páginas HTML podem querer ler:
 for tdir in testes testes/saida; do 
-  for idir in imagens videos avatares thumbs DB; do
+  for idir in imagens videos avatares capas quadros DB; do
     ( cd ${tdir} && if [[ ! ( -r ${idir} ) ]]; then ln -s ../${idir}; fi )
   done
 done

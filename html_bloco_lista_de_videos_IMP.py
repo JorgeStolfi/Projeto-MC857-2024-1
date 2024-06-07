@@ -19,9 +19,9 @@ def gera(vid_ids, mostra_autor):
     # busca por identificador do video no banco
     vid = obj_video.obtem_objeto(vid_id)
 
-    thumb = f'/thumbs/{vid_id}.png'
+    capa = f'/capas/{vid_id}.png'
 
-    vid.atrs.update({'thumb':thumb})
+    vid.atrs.update({'capa': capa})
    
     # Gera uma lista de fragmentos HTML com as informacoes desse video
     linha_vid = html_linha_resumo_de_video.gera(vid, mostra_autor)

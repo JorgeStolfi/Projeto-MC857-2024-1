@@ -103,7 +103,7 @@ class Processador_de_pedido_HTTP(BaseHTTPRequestHandler):
     # Extrai os dados do comando HTTP na forma de um dicionário:
     dados = self.extrai_dados(tipo)
     
-    imagens_re = r"/(imagens|avatares|thumbs)/"
+    imagens_re = r"/(imagens|avatares|capas|quadros)/"
     if tipo == 'GET' and re.match(imagens_re, dados['real_path']):
       # Pedido de um arquivo:
       nome_imagem = dados['real_path'][1:]

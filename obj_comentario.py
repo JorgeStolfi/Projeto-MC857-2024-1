@@ -235,7 +235,7 @@ def obtem_conversa(raizes, max_coms, max_nivel):
   O parâmetro {raizes} deve ser uma lista, possivelmente vazia,
   de identificadores de comentários.
   
-  O resultado da função uma floresta de comentários: uma lista,
+  O resultado da função é uma floresta de comentários: uma lista,
   possivelmente vazia, cada elemento da qual é uma árvore de
   comentários. Uma árvore de comentários {arv} é uma lista cujo primeiro
   elemento {arv[0]} é um identificador de comentário (a raiz), sendo o

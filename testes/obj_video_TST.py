@@ -1,6 +1,5 @@
 #! /usr/bin/python3
 
-import os
 import obj_video
 import db_base_sql 
 import obj_raiz
@@ -9,6 +8,7 @@ import util_testes
 
 from util_erros import ErroAtrib, erro_prog, mostra, aviso_prog
 
+import os
 import sys
 
 # ----------------------------------------------------------------------
@@ -19,8 +19,10 @@ db_base_sql.conecta("DB",None,None)
 sys.stderr.write("  Inicializando módulo {usuario}, limpando tabela, criando usuários para teste:\n")
 obj_usuario.cria_testes(True)
 
+
 sys.stderr.write("  Inicializando módulo {video}, limpando tabela, criando vídeos para teste:\n")
 obj_video.inicializa_modulo(True)
+obj_video.liga_diagnosticos(True)
 obj_video.cria_testes(True)
 
 # ----------------------------------------------------------------------
@@ -169,51 +171,6 @@ def testa_obj_video_cria_muda(rot_teste, valido, modif, vid_id, atrs):
 
   return ok
 
-def testa_cria_quadros():
-    print("testando {obj_video.cria_quadros('V-00000001', 5, 100)}:")
-    num_frames = 5
-    video_id = "V-00000001"
-    altura = 100
-
-    try:
-        obj_video.cria_quadros(video_id, num_frames, altura)
-        for i in range(num_frames):
-            thumb_path = f'thumbs/{video_id}-{i:03d}.png'
-            if not os.path.exists(thumb_path):
-                raise AssertionError(f" Não foi encontrado o arquivo {thumb_path}")
-    except Exception as e:
-        print(f"Teste falou: {e}")
-        return -1
-    print("testando {obj_video.cria_quadros('V-00000002', 10, 400)}:")
-    num_frames = 10
-    video_id = "V-00000002"
-    altura = 400
-
-    try:
-        obj_video.cria_quadros(video_id, num_frames, altura)
-        for i in range(num_frames):
-            thumb_path = f'thumbs/{video_id}-{i:03d}.png'
-            if not os.path.exists(thumb_path):
-                raise AssertionError(f" Não foi encontrado o arquivo {thumb_path}")
-    except Exception as e:
-        print(f"Teste falou: {e}")
-        return -1
-    print("testando {obj_video.cria_quadros('V-00000003', 3, 100)}:")
-    num_frames = 3
-    video_id = "V-00000003"
-    altura = 100
-
-    try:
-        obj_video.cria_quadros(video_id, num_frames, altura)
-        for i in range(num_frames):
-            thumb_path = f'thumbs/{video_id}-{i:03d}.png'
-            if not os.path.exists(thumb_path):
-                raise AssertionError(f" Não foi encontrado o arquivo {thumb_path}")
-    except Exception as e:
-        print(f"Teste falou: {e}")
-        return -1
-    return 1
-
 sys.stderr.write("  Obtendo dois usuários para teste:\n")
 
 usr1 = obj_usuario.obtem_objeto("U-00000001")
@@ -332,7 +289,6 @@ md6_atrs = {
 testa_obj_video_cria_muda("md6_vistas", True, True, md6_vid_id, md6_atrs)
 assert obj_video.obtem_atributo(md6_vid, 'vistas') == md6_vistas
 
-assert testa_cria_quadros() == 1
 # ----------------------------------------------------------------------
 # Outros testes:
 

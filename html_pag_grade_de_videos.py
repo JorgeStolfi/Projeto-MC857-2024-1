@@ -1,10 +1,10 @@
 import html_pag_grade_de_videos_IMP
 
 def gera(ses, vid_ids, ncols, erros):
-  """Retorna uma página HTML que mostra um conjunto de vídeos na forma de
-  uma grade de thumbnails. Quando o mouse paira sobre cada thumbnail,
-  aparece um popup com o título do vídeo e possivelmente outros dados.
-  Clicando no thumbnail de um vídeo gera um comando "ver_video" para o mesmo.
+  """Retorna uma página HTML que mostra os vídeos {vid_ids} na forma de
+  uma grade com as imagens de capa dos mesmos. Quando o mouse paira sobre cada
+  imagem, aparece um popup com o título do vídeo e possivelmente outros dados.
+  Clicando na capa de um vídeo gera um comando "ver_video" para o mesmo.
   
   O parâmetro {ses} deve ser a sessão de login que pediu a página
   (on objeto de tipo {obj_sessao.Classe}, aberto) ou {None} se 

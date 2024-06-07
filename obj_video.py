@@ -88,10 +88,15 @@ def cria(atrs):
   "videos/{vid_id}.mp4", onde {vid_id} é o identificador do objeto video
   a ser criado. Se a chave 'conteúdo' não existir em {atrs}, supõe que o
   arquivo já está gravado com esse nome.
-  
+
   Os campos 'duracao', 'largura' e 'altura' do objeto não devem estar
   presentes em {atrs}; eles serão extraídos do arquivo. 
   O identificador do novo objeto será derivado do seu índice na tabela.
+  
+  Esta função também cria o arquivo "capas/{vid_id}.png" com a imagem de capa do vídeo, 
+  e os arquivos "quadros/{vid_id}-{qdr}.png" onde {qdr} é "000", "001", ...,
+  "{NQ-1}", com {NQ} quadros extraídos do vídeo a intervalos regulares.  
+  Por enquanto, {NQ} é fixo em 6.
   
   Em caso de sucesso, retorna o objeto criado. Caso contrário,
   levanta a exceção {ErroAtrib} com uma lista de mensagens de erro.

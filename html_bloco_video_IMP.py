@@ -31,19 +31,20 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
 
   ht_bloco = ht_cabeca + "\n" + ht_video + "\n" + ht_rodape + "\n"
 
-  # Acrescenta thumbs
-  alt_px = 80
-  ht_elems_thumbs = []
+  # Acrescenta quadros
+  alt_px = 32
+  ht_elems_quadros = []
 
-  for i in range(5):
-    arquivo = f"thumbs/{vid_id}-{i:04d}.png"
-    ht_img = html_elem_img.gera(arquivo, f"{vid_atrs['titulo']}-{i:04d}", alt_px)
-    ht_elem_thumb = "<td style=\"text-align: center; border: 1px solid blue; padding:5px;\">&nbsp;" + ht_img + "&nbsp;</td>"
-    ht_elems_thumbs.append(ht_elem_thumb)
+  NQ = 6 # Por enquanto.  Tem que casar com {obv_video.cria}.
+  for iq in range(NQ):
+    arquivo = f"quadros/{vid_id}-{iq:03d}.png"
+    ht_img = html_elem_img.gera(arquivo, f"{iq:03d}", alt_px)
+    ht_elem_quadro = "<td style=\"text-align: center; border: 1px solid blue; padding:5px;\">&nbsp;" + ht_img + "&nbsp;</td>"
+    ht_elems_quadros.append(ht_elem_quadro)
   
-  ht_tabela_thumbs = html_elem_table.gera([ht_elems_thumbs], None)
+  ht_tabela_quadros = html_elem_table.gera([ ht_elems_quadros ], None)
 
-  ht_bloco += ht_tabela_thumbs + "\n"
+  ht_bloco += ht_tabela_quadros + "\n"
   
   # Acrescenta botões para ver outras coisas do vídeo, se for o caso:
   if(not vid_atrs['bloqueado']):

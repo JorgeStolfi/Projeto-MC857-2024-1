@@ -46,7 +46,7 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_
   # ----------------------------------------------------------------------
   # Botões:
 
-  cmd_args = { 'pai': com_id }
+  cmd_args = { 'comentario': com_id }
   ht_botoes = ""
 
   if bt_conversa:
