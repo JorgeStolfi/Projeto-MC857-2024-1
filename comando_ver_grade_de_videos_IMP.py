@@ -8,15 +8,20 @@ def processa(ses, cmd_args):
   assert isinstance(cmd_args, dict)
   
   erros = []
+  
+  arg_ordem = cmd_args.pop('ordem', None)
+    
+  if arg_ordem is not None:
+    operator = arg_ordem[0]
+    chave_de_ordenacao = arg_ordem[1:]
 
-  chave_de_ordenacao = 'nota'
-  ordem = 0
-
-  ordenacao = cmd_args.pop('ordem', None)
-
-  if ordenacao is not None:
-    ordem = -1 if ordenacao[0] == '-' else 1
-    chave_de_ordenacao = ordenacao[1:]
+    if arg_ordem[0] == '+':
+      ordem = +1
+    elif arg_ordem[0] == '-':
+      ordem = -1
+    else:
+      ordem = 0
+    chave_de_ordenacao = arg_ordem[1:]
   
   assert len(cmd_args) == 0, f"argumentos inválidos = {cmd_args}"
 
