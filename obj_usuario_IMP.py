@@ -1,5 +1,6 @@
 import obj_raiz
 import obj_usuario
+import obj_video
 
 import util_nome_de_usuario
 import util_senha
@@ -383,3 +384,26 @@ def modifica_obj_mem(usr, atrs_mod_SQL):
       erro_prog("tipo do campo '" + chave + "' incorreto")
     usr.atrs[chave] = val_mem
   return usr
+
+def recalcula_vnota(usr_id):
+  assert usr_id != None
+
+  videos = obj_video.busca_por_autor(usr_id)
+  usr = obtem_objeto(usr_id)
+  # Numerador e denominador da média
+  numerador = 2
+  denominador = 1
+
+  for video in videos:
+    video_obj = obj_video.obtem_objeto(video)
+    nota = obj_video.obtem_atributo(video_obj, 'nota')
+    visualizacoes = obj_video.obtem_atributo(video_obj, 'vistas')
+    numerador += nota * visualizacoes
+    denominador += visualizacoes
+  
+  mods = {
+    'vnota': round(numerador / denominador, 2)
+  }
+
+  muda_atributos(usr, mods)
+  return mods['vnota']
