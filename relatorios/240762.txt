@@ -1,1 +1,13 @@
-# relatorio da aula de 2024-05-31
+# relatorio da aula de 2024-06-07
+
+No módulo html_bloco_grade_de_videos alterei a geração dos botões ht_bt_melhores, ht_bt_aleatorios e ht_bt_piores para passar "+nota", vazio e "-nota" como valor do argumento "ordem".
+
+Depois, ainda no html_bloco_grade_de_videos, adicionei os botões ht_bt_mais_vistos e ht_bt_menos_vistos, ambos disparando o comando "ver_grade_de_videos", passando a ordem como argumento.
+
+Rodei o comando "./testa.sh html_bloco_grade_de_videos" e vi que não haviam testes para esse módulo. Implementei dois testes, um testando um cenário normal e outro com uma lista vazia de vídeos. Ambos terminaram normalmente.
+
+Alterei o módulo comando_ver_grade_de_videos para deixar de tratar o argumento "ordem" como inteiro e passar a extrair o primeiro caractere e usá-lo para definir a ordem, e tratar o resto dos caracteres como a chave e ordenação. Alterei a chamada do ordena_identificadores para receber a chave de ordenação variável.
+
+Depois, alterei a descrição do módulo comando_ver_grade_de_videos, para condizer com a implementação.
+
+Por fim, adicionei cenários de teste passando do módulo comando_ver_grade_de_videos passando o argumento "ordem" das quatro maneiras que ele é utilizado, +nota, -nota, +vistas e -vistas. Os testes passaram normalmente.

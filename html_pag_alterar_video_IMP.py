@@ -26,8 +26,8 @@ def gera(ses, vid_id, atrs_mod, erros):
   para_admin = obj_usuario.eh_administrador(ses_dono)
   
   # Cria o formulário básico:
-  ed_nota = para_admin
-  ht_form = html_form_alterar_video.gera(vid_id, atrs_mod, ed_nota)
+  eh_adm = para_admin
+  ht_form = html_form_alterar_video.gera(vid_id, atrs_mod, eh_adm)
     
   ht_conteudo = ht_form
 

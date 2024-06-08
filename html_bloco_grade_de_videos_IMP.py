@@ -6,11 +6,23 @@ import html_elem_button_simples
 def gera_form_botoes_de_ordenacao():
   cor_bt_ordem = "#eeccff"
 
-  ht_bt_melhores = html_elem_button_simples.gera("Melhores", 'ver_grade_de_videos', { 'ordem': "-1" }, cor_bt_ordem)
-  ht_bt_aleatorios = html_elem_button_simples.gera("Aleatórios", 'ver_grade_de_videos', { 'ordem': "0" }, cor_bt_ordem)
-  ht_bt_piores = html_elem_button_simples.gera("Piores", 'ver_grade_de_videos', { 'ordem': "+1" }, cor_bt_ordem)
+  ht_bt_melhores = html_elem_button_simples.gera("Melhores", 'ver_grade_de_videos', { 'ordem': "-nota" }, cor_bt_ordem)
+  ht_bt_piores = html_elem_button_simples.gera("Piores", 'ver_grade_de_videos', { 'ordem': "+nota" }, cor_bt_ordem)
 
-  ht_botoes = ht_bt_melhores + " " + ht_bt_aleatorios + " " + ht_bt_piores
+  ht_bt_melhores = html_elem_button_simples.gera("Mais antigos", 'ver_grade_de_videos', { 'ordem': "-data" }, cor_bt_ordem)
+  ht_bt_aleatorios = html_elem_button_simples.gera("Aleatórios", 'ver_grade_de_videos', {}, cor_bt_ordem)
+  ht_bt_piores = html_elem_button_simples.gera("Mais recentes", 'ver_grade_de_videos', { 'ordem': "+data" }, cor_bt_ordem)
+
+  ht_bt_mais_vistos = html_elem_button_simples.gera("Mais vistos", 'ver_grade_de_videos', { 'ordem': "+vistas" }, cor_bt_ordem)
+  ht_bt_menos_vistos = html_elem_button_simples.gera("Menos vistos", 'ver_grade_de_videos', { 'ordem': "-vistas" }, cor_bt_ordem)
+
+  ht_botoes = \
+    ht_bt_melhores + " " + \
+    ht_bt_aleatorios + " " + \
+    ht_bt_piores + " " + \
+    ht_bt_mais_vistos + " " + \
+    ht_bt_menos_vistos
+  
   return ht_botoes
 
 def gera(vid_ids, ncols):

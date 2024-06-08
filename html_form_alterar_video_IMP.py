@@ -40,9 +40,7 @@ def gera(vid_id, atrs_mod, eh_adm):
   # Titulo sempre aparece, possivelmente editável:
   dados_linhas.append( ( "Título",  "textarea",  'titulo',  True,  None, False, ) )
 
-  # Nota opcionalmente editável:
   if eh_adm:
-    dados_linhas.append( ( "Nota",  "number",  'nota', True,  "0.00 a 4.00", True, ) )
     dados_linhas.append( ( "Bloqueado",  "checkbox",  'bloqueado', True,  None, False, ) )
  
   ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_mod)
@@ -52,15 +50,19 @@ def gera(vid_id, atrs_mod, eh_adm):
       mostra_nota = (not eh_adm), mostra_dims = True
     )
 
+  cmd_args = { 'video': vid_id }
+
   # Botões do formulário:
   ht_bt_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_video', None, None)
   ht_bt_cancel = html_elem_button_simples.gera("Cancelar", "pag_principal", None, None)
+  ht_bt_calcnota = html_elem_button_simples.gera("Recalcular nota", "recalcular_nota", cmd_args, '#ff5555')
 
   ht_conteudo = \
     ht_cabeca + "\n" + \
     ht_video + "\n" + \
     ht_tabela + "\n" + \
     ht_rodape + "\n" + \
+    ht_bt_calcnota + " " + \
     ht_bt_submit + " " + \
     ht_bt_cancel
  
