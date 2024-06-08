@@ -38,23 +38,23 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   if usr_id != None:
     # Mostra identificador do usuário como readonly:
     atrs_tab['usuario'] =  usr_id
-    dados_linhas.append( ( "Identificador", "text",  'usuario',  False, None, ) )
+    dados_linhas.append( ( "Identificador", "textarea",  'usuario',  editavel, None, ) )
 
   # Nome sempre aparece, possivelmente editável:
-  dados_linhas.append( ( "Nome", "text", 'nome',  editavel, None, ) )
+  dados_linhas.append( ( "Nome", "textarea", 'nome',  editavel, None, ) )
 
   # Email aparece, possivelmente editável, só na criação ou para admin ou próprio:
   if usr_id == None or para_admin or para_proprio:
-    dados_linhas.append( ( "E-mail", "email", 'email', editavel,  "xxx@xxx.xxx.xx", ) )
+    dados_linhas.append( ( "E-mail", "textarea", 'email', editavel,  "xxx@xxx.xxx.xx", ) )
     
   # Senha, conf-senha sempre aparecem se usuário é editável:
-  if editavel:
-    dados_linhas.append( ( "Senha",            "password", 'senha',       True, None, ) )
-    dados_linhas.append( ( "Confirme senha",   "password", 'conf-senha',  True, None, ) )
+  # if editavel:
+  #   dados_linhas.append( ( "Senha",            "password", 'senha',       True, None, ) )
+  #   dados_linhas.append( ( "Confirme senha",   "password", 'conf-senha',  True, None, ) )
     
   # Atributo 'administrador' sempre aparece, mas é editável só para administrador:
-  edt_admin = (editavel and para_admin)
-  dados_linhas.append( ( "Administrador", "checkbox", 'administrador', edt_admin, None ) )
+  # edt_admin = (editavel and para_admin)
+  dados_linhas.append( ( "Administrador", "checkbox", 'administrador', para_admin, None ) )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_tab)
 
@@ -63,10 +63,9 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   ht_bt_sessoes = None # A menos que tenha.
   ht_bt_videos = None # A menos que tenha.
   ht_bt_comentarios = None # A menos que tenha.
-  if usr_id != None:
+  if para_admin or para_proprio:
     cmd_args = {'usuario': usr_id}
-    if editavel:
-      ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_usuario", cmd_args, None)
+    ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_usuario", cmd_args, None)
 
     if not para_proprio:
       # Não tem estes botões no menu:
