@@ -9,6 +9,7 @@ import html_elem_link_text
 import util_bloqueado
 import util_nota
 import util_testes
+import obj_sessao
 
 def gera(vid, mostra_autor):
 
@@ -18,7 +19,7 @@ def gera(vid, mostra_autor):
   itens_resumo = []
 
   colunas = [ 'capa','video', 'autor', 'nota', 'vistas', 'data', 'duracao', 'tamanho', 'titulo', 'bloqueado']
-  
+
   cor_fundo = None
   cor_texto = None
   alinha = "left"
@@ -84,5 +85,21 @@ def gera(vid, mostra_autor):
     bt_args = { 'video': obj_video.obtem_identificador(vid) }
     bt_ver = html_elem_button_simples.gera("Ver", "ver_video", bt_args, None)
     itens_resumo.append("<td>" + bt_ver + "</td>")
+
+    # Se o usuário é administrador, adicionar botões Bloquear/Desbloquear
+    objeto_usr = obj_usuario.obtem_objeto(autor_id)
+    para_admin = obj_usuario.eh_administrador(objeto_usr)
+    if para_admin:
+      bt_bloq_args = { 'video': vid_id, 'bloqueado': str(not atrs['bloqueado']) }
+    
+      if atrs['bloqueado']:
+        bt_bloq_texto = 'Desbloquear'
+        bt_bloq_cor = '#11dd11'
+      else:
+        bt_bloq_texto = 'Bloquear'
+        bt_bloq_cor = '#fb1528'
+
+      ht_bt_bloquear = html_elem_button_simples.gera(bt_bloq_texto, "buscar_videos", bt_bloq_args, bt_bloq_cor)
+      itens_resumo.append("<td>" + ht_bt_bloquear + "</td>") 
 
   return itens_resumo
