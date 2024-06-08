@@ -11,7 +11,6 @@ import util_nome_de_usuario
 from util_erros import ErroAtrib
 
 def processa(ses, cmd_args):
-
   # Comando emitido por página do site deveria satisfazer isto:
   assert ses == None or isinstance(ses, obj_sessao.Classe)
   assert cmd_args != None and type(cmd_args) is dict
@@ -44,11 +43,19 @@ def processa(ses, cmd_args):
       if len(item_erros) == 0: atrs_busca[chave] = util_booleano.converte(val)
     elif chave == 'senha':
       item_erros = [ f"Busca por '{chave}' não é permitida" ]
+    elif chave == 'vnotaMin' or chave == 'vnotaMax':
+      if float(val) > 4:
+        assert False, f"Chave inválida '{chave}'"
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
 
     erros += item_erros
+
+  atrs_busca['vnota'] = (
+    max(float(cmd_args.get('vnotaMin', 0)), 0),
+    min(float(cmd_args.get('vnotaMax', 4)), 4)
+  )
 
   usr_res_ids = []
   if len(erros) == 0:

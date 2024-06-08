@@ -48,6 +48,10 @@ for ses in None, sesA, sesC:
 
   admin = obj_sessao.de_administrador(ses) if ses != None else False
   rad = "sesN_" if ses == None else f"ses{str(admin)[0]}_"
+  
+  # Testa com busca por notas
+  args_notas = {'vnotaMin': 2.5, 'vnotaMax': 3}
+  testa_processa(rad + "notas",    str, ses, args_notas)
 
   # Testa com busca por identificador_que existe:
   args_id_usr = {'usuario': "U-00000002"}

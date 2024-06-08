@@ -187,6 +187,10 @@ def cria_testes(verb):
     ]
   for atrs in lista_atrs:
     atrs['vnota'] = 2.00
+    if atrs['id'] == 'U-00000009':
+      atrs['vnota'] = 3.00
+    if atrs['id'] == 'U-00000001':
+      atrs['vnota'] = 2.8 
     usr_id_esp = atrs['id']; del atrs['id']
     usr = cria(atrs)
     assert usr != None and type(usr) is obj_usuario.Classe
