@@ -1,1 +1,7 @@
 # relatorio da aula de 2024-05-31
+
+Minha tarefa era corrigir a visualização de respostas de comentários para que toda a árvore de comentários estivesse visível.
+Para isso, notei que em 'comando_ver_conversa_IMP' os parâmetros 'max_coms' e 'max_nivels' que são usados na função 'obtem_conversa'
+para definir o número máximo de comentários e níveis da árvore estavam sendo passados como 0, causando o problema. Para corrigir,
+alterei seus valores para 100, verificando que o problema foi corrigido e rodando os testes sem nenhuma falha. A correção não
+altera as funções que chamam o módulo 'comando_ver_conversa_IMP'.

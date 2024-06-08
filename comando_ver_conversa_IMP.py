@@ -15,8 +15,8 @@ def processa(ses, cmd_args):
   # Obtém o identificador do vídeo ou comentário a ver:
   vid_id = cmd_args.pop('video', None)
   com_id = cmd_args.pop('comentario', None)
-  max_coms = cmd_args.pop('max_coms', 0)
-  max_nivels = cmd_args.pop('max_nivels', 0)
+  max_coms = cmd_args.pop('max_coms', 100)
+  max_nivels = cmd_args.pop('max_nivels', 100)
   
   if vid_id == None and com_id == None:
     erros.append("O identificador do video ou comentário raiz não foi especificado")
