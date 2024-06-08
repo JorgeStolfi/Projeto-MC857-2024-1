@@ -24,7 +24,7 @@ def processa(ses, cmd_args):
 
   cmd_args = cmd_args.copy() # Para não alterar o original.
   erros = [] # Mensagens de erro.
-
+  
   ses_dono = None
   if ses == None:
     erros.append("É preciso estar logado para executar este comando")
@@ -65,11 +65,10 @@ def processa(ses, cmd_args):
       erros.append(f"Você não tem permissão para alterar este comentário")
 
     # Verifica campos inalteráveis:
-    alteraveis = { 'texto', 'nota', 'voto'}
+    alteraveis = { 'texto', 'nota', 'voto', 'bloqueado'}
     for chave in cmd_args.keys():
       if not chave in alteraveis:
-        erros.append(f"O atributo '{chave}' não pode ser alterado")
-
+        erros.append(f"O atributo '{chave}' não pode ser alterado")   #aqui está a mensagem
     if 'nota' in cmd_args:
       # Somente administrador pode alterar a nota:
       if not para_admin:
@@ -79,6 +78,10 @@ def processa(ses, cmd_args):
       # Somente administrador ou o dono do comentário pode altera-lo
       if not editavel:
         erros.append("Você não tem permissão para alterar o voto do comentário")
+    if 'bloqueado' in cmd_args:
+        if not editavel:
+          erros.append("Você não pode desbloquear esse comentário")
+    
       
         
 
@@ -94,6 +97,12 @@ def processa(ses, cmd_args):
       erros+= util_voto.valida('voto', atrs_mod['voto'], False)
       if len(erros) == 0:
         atrs_mod['voto'] = int(atrs_mod['voto'])
+    if 'bloqueado' in atrs_mod:
+      if len(erros) == 0:
+        if(atrs_mod['bloqueado'] == 'True'):
+          atrs_mod['bloqueado'] = True
+        else:
+          atrs_mod['bloqueado'] = False
     if caco_debug: sys.stderr.write("    chamando {obj_comentario.muda_atributos}...\n")
     try:
       obj_comentario.muda_atributos(com, atrs_mod)
