@@ -25,7 +25,7 @@ def processa(ses, cmd_args):
   Atributos de {obj_usuario.Classe} que tem valor {None} em
   {cmd_args} (ou estão omitidos) serão ignorados na busca.
   
-  No casos dos campos 'usuario', 'email' e 'data', a busca será feita
+  No casos dos campos 'usuario', 'email', 'vnota' e 'data', a busca será feita
   pelo valor exato. Nos caso do campo 'nome', será feita uma busca por
   valor aproximado. Especificamente, será usado o operador SQL "LIKE"
   com argumento "%{nm}%" onde {nm} é o valor de {cmd_args['nome']}

@@ -1,1 +1,18 @@
 # relatorio da aula de 2024-05-31
+Para a tarefa dada, foi necessário alteras alguns módulos. 
+
+Um dos módulos alterados foi o comando_buscar_comentarios, onde adicionamos os processamos os campos de seleção de nota
+mínima e máxima para um formato aceito pela função obj_usuario.busca_por_campos.
+
+O módulo html_form_buscar_comentarios também foi alterado, onde adicionamos os campos necessários
+para busca por nota ao formulário da página de busca por usuários.
+
+Por fim, foram adicionados novos testes para testar se a busca de usuários por nota estava funcional.
+Todos os módulos tiveram seus testes executados e finalizados normalmente.
+
+
+Observação: O servidor não estava executando corretamente, devido a um problema no módulo
+"processa_comando_http", onde a função faz uma checagem se todos os cookies são do formato 
+{chave}={valor}. Como o módulo fugia do escopo da tarefa dada, efetuei uma correção temporária
+(comentei o trecho de código 'assert len(cook_pair) == 2') que me permitiu executar o servidor e testar minha tarefa, 
+e logo após ter tudo finalizado, retornei o módulo para o código inicial.
