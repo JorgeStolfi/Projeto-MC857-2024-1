@@ -9,7 +9,7 @@ def gera(admin, usr):
 
   ht_campos = []
   
-  colunas = [ 'usuario', 'admin', 'email', 'nome' ]
+  colunas = [ 'usuario', 'admin', 'email', 'nome' , 'vnota']
 
   for chave in colunas:
     if chave == 'usuario':
@@ -24,7 +24,9 @@ def gera(admin, usr):
         texto = str(atrs[chave]) if usr != None else chave.capitalize()
       else:
         mostra = False
-
+    elif chave == 'vnota':
+      mostra = True
+      texto = str(atrs['vnota']) if usr != None else "Nota"
     else:
       mostra = True
       texto = str(atrs[chave]) if usr != None else chave.capitalize()
