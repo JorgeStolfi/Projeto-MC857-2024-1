@@ -26,32 +26,32 @@ def processa(ses, cmd_args):
     autor = ses_dono
     autor_id = obj_usuario.obtem_identificador(ses_dono)
     
-  # Determina o vídeo e possivelmente o comentário pai:
+  # Determina o vídeo e possivelmente o comentário comentario:
   vid_id = cmd_args.pop('video', None)
-  pai_id = cmd_args.pop('pai', None)
-  pai_vid_id = None # For now, redefined if exists.
-  if pai_id == None and vid_id == None:
-    erros.append("Nem o vídeo nem o comentário pai foram especificados")
+  comentario_id = cmd_args.pop('comentario', None)
+  comentario_vid_id = None # For now, redefined if exists.
+  if comentario_id == None and vid_id == None:
+    erros.append("Nem o vídeo nem o comentário comentario foram especificados")
   else:
-    # Valida {vid_id,pai_id}:
-    if pai_id != None:
-      pai = obj_comentario.obtem_objeto(pai_id)
-      if pai == None:
-        erros.append(f"O comentário \"{pai_id}\" não existe")
+    # Valida {vid_id,comentario_id}:
+    if comentario_id != None:
+      comentario = obj_comentario.obtem_objeto(comentario_id)
+      if comentario == None:
+        erros.append(f"O comentário \"{comentario_id}\" não existe")
       else:
-        pai_vid = obj_comentario.obtem_atributo(pai, 'video')
-        assert pai_vid != None
-        pai_vid_id = obj_video.obtem_identificador(pai_vid)
+        comentario_vid = obj_comentario.obtem_atributo(comentario, 'video')
+        assert comentario_vid != None
+        comentario_vid_id = obj_video.obtem_identificador(comentario_vid)
         if vid_id == None:
-          vid_id = pai_vid_id 
+          vid_id = comentario_vid_id 
 
     if vid_id != None:
       vid = obj_video.obtem_objeto(vid_id)
       if vid == None:
         erros.append(f"O vídeo \"{vid_id}\" não existe")
 
-    if pai_vid_id != None and vid_id != None and pai_vid_id != vid_id:
-      erros.append(f"O comentário \"{pai_id}\" é do vídeo \"{pai_vid_id}\" e não de \"{vid_id}\"")
+    if comentario_vid_id != None and vid_id != None and comentario_vid_id != vid_id:
+      erros.append(f"O comentário \"{comentario_id}\" é do vídeo \"{comentario_vid_id}\" e não de \"{vid_id}\"")
     
   assert len(cmd_args) == 0, f"Argumentos espúrios \"{cmd_args}\""
 
@@ -61,7 +61,7 @@ def processa(ses, cmd_args):
     assert autor_id != None
     assert vid_id != None
     atrs = { 'autor': autor_id, 'video': vid_id }
-    if pai_id != None: atrs['pai'] = pai_id
+    if comentario_id != None: atrs['comentario'] = comentario_id
     pag = html_pag_postar_comentario.gera(ses, atrs, None)
   return pag
 

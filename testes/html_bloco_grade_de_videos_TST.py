@@ -28,8 +28,11 @@ def testa_gera(rot_teste, res_esp, *args):
   ok_global = ok_global and ok
   return ok
 
-sys.stderr.write("  ** !!! O programa de testes ainda não foi escrito !!!\n")
-ok_global = False
+# Teste de módulo testa_funcao_que_gera_html com uma lista de vídeos
+testa_gera("com_videos", str, ["V-00000001", "V-00000004", "V-00000003", "V-00000005"], 2)
+
+# Teste de módulo testa_funcao_que_gera_html com uma lista vazia de vídeos
+testa_gera("lista_vazia", str, [], 2)
   
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

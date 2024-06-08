@@ -3,13 +3,13 @@
 # Este programa pode ser usado para testar funções que
 # escrevem formulários HTML5.
 
+from util_erros import aviso_prog
 import db_base_sql
 import db_tabelas_do_sistema
 import html_bloco_cabecalho_de_comentario
 import obj_comentario
-import obj_sessao
-import obj_usuario
 import obj_video
+from util_erros import aviso_prog
 import util_identificador
 import util_testes
 
@@ -59,6 +59,41 @@ for mostra_id in False, True:
           ( "C1" + tag, str, 
             com1_id, com1_atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
           )
+          
+# Valida a truncagem dos título e do comentário
+
+## Validação do título
+### Comentário sem pai e título do vídeo pequeno (menos de 40 caracteres, não precisa ser truncado)
+com2_id = "C-00000008"
+com2 = obj_comentario.obtem_objeto(com2_id)
+assert com2 != None
+com2_atrs = obj_comentario.obtem_atributos(com2)
+testa_gera("ComentarioSemPai_TituloPequeno", str, com2_id, com2_atrs, largura, True, True, True, True)
+
+### Comentário sem pai e título grande (precisa ser truncado!)
+video_do_comentario = com2_atrs['video']
+titulo_original = obj_video.obtem_atributo(video_do_comentario, 'titulo')
+titulo_grande = "Eu sou um título de vídeo muito grande mesmo!! Me trunque!"
+obj_video.muda_atributos(video_do_comentario, { 'titulo': titulo_grande })
+testa_gera("ComentarioSemPai_TituloGrande", str, com2_id, com2_atrs, largura, True, True, True, True)
+obj_video.muda_atributos(video_do_comentario, { 'titulo': titulo_original }) # Volta o título original para manter a consistência nos outros testes!
+
+
+## Validação do texto do comentário
+### Comentário com pai e texto pequeno (não precisa ser truncado)
+com3_id = "C-00000009"
+com3 = obj_comentario.obtem_objeto(com3_id)
+assert com3 != None
+com3_atrs = obj_comentario.obtem_atributos(com3)
+testa_gera("ComentarioComPai_TextoPequeno", str, com3_id, com3_atrs, largura, True, True, True, True)
+
+### Comentário com pai e texto grande (precisa ser truncado!)
+comentario_pai = obj_comentario.obtem_atributo(com3, 'pai')
+comentario_original = obj_comentario.obtem_atributo(comentario_pai, 'texto')
+comentario_grande = "Um comentário muito grande, que passa dos limites!"
+obj_comentario.muda_atributos(comentario_pai, { 'texto': comentario_grande })
+testa_gera("ComentarioComPai_TextoGrande", str, com3_id, com3_atrs, largura, True, True, True, True)
+obj_comentario.muda_atributos(comentario_pai, { 'texto': comentario_original }) # Volta ao comentário original para manter consistência!
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

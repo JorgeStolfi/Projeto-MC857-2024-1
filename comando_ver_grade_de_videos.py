@@ -11,8 +11,10 @@ def processa(ses, cmd_args):
   
   O parãmetro {cmd_args} deve ser um dicionário com os argumentos do
   comando. Pode ser vazio, ou conter um único argumento 'ordem' cujo
-  valor deve ser um string conversível para inteiro que especifica a
-  ordenação dos vídeos por nota: "+1" = crescente, "-1" = decrescente,
-  "0" = aleatória (o default).
+  valor deve ser um string cujo primeiro caractere deve ser "+" ou "-"
+  e os caracteres seguintes a chave de ordenação. Por exemplo:
+  "+nota" = por nota em ordem crescente, "-vistas" = por visualizações
+  em ordem decrescente. Caso o mapa esteja vazio, a amostra será
+  ordenada de maneira aleatória.
   """
   return comando_ver_grade_de_videos_IMP.processa(ses, cmd_args)

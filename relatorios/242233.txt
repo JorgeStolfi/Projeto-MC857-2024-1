@@ -1,1 +1,20 @@
 # relatorio da aula de 2024-05-31
+
+Minha tarefa foi:
+
+Na página de alterar vídeo, remover o campo de alterar nota e adicionar um botão de "Recalcular nota", igual ao que existe na página
+de ver vídeo.
+
+No módulo {html_form_alterar_video_IMP} removi o campo de alterar nota e adicionei o botão de Recalcular nota, me baseando na forma como ele foi feito
+em {html_bloco_video_IMP}. Ele está sempre visível pois esta página de alterar vídeo só pode ser acessada por um administrador e pelo dono do vídeo,
+e ambos devem ser capazes de recalcular a nota do vídeo.
+
+Também arrumei uma inconsistência entre a interface e implementação do módulo {html_form_alterar_video}, na implementação existia um parâmetro "eh_adm"
+para controlar se o atributo "bloqueado" do vídeo deveria ser visível ou não, enquanto na interface havia um parâmetro "ed_nota", que supostamente controlava
+quando a nota podia ser editada(que não fazia mais sentido pois atualmente a nota não pode nunca ser editada diretamente), portanto ajustei a interface para 
+que fique consistente com o estado atual do projeto.
+
+Também mudei a documentação da interface de acordo com as mudanças dos parâmetros e adicionei informações sobre o botão "Recalcular nota" e sobre o campo
+"bloqueado" que também pode ser editado por administradores.
+
+Ao rodar os testes do módulo alterado não tive nenhum erro.

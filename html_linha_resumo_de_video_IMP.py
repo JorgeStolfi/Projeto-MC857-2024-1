@@ -18,7 +18,7 @@ def gera(vid, mostra_autor):
 
   itens_resumo = []
 
-  colunas = [ 'capa','video', 'autor', 'nota', 'data', 'duracao', 'tamanho', 'titulo', 'bloqueado']
+  colunas = [ 'capa','video', 'autor', 'nota', 'vistas', 'data', 'duracao', 'tamanho', 'titulo', 'bloqueado']
 
   cor_fundo = None
   cor_texto = None

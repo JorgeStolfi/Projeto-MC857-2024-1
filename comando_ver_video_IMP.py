@@ -26,6 +26,7 @@ def processa(ses, cmd_args):
   
   if len(erros) == 0:
     assert vid !=None
+    obj_video.muda_atributos(vid, { 'vistas': obj_video.obtem_atributo(vid, 'vistas') + 1 })
     pag = html_pag_ver_video.gera(ses, vid, erros)
   else:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
