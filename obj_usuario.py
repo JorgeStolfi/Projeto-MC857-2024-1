@@ -181,6 +181,14 @@ def confere_e_elimina_conf_senha(args):
   """
   return obj_usuario_IMP.confere_e_elimina_conf_senha(args)
 
+def recalcula_vnota(usr_id):
+  """Recalcula a 'vnota' do usuário com o id {usr_id} como 
+  sendo uma média ponderada das notas dos vídeos do usuário, utilizando 
+  a quantidade de visualizações como peso.
+  
+  Retorna a vnota recalculada"""
+  return obj_usuario_IMP.recalcula_vnota(usr_id)
+
 # FUNÇÕES PARA DEPURAÇÃO
 
 def verifica_criacao(usr, usr_id, atrs):
