@@ -29,10 +29,6 @@ def gera(atrs_novo, ed_nota):
   dados_linhas.append( ( "Arquivo", "file",    'conteudo', True,  None, ) )
   dados_linhas.append( ( "Título", "textarea", 'titulo', True,  None, ) )
 
-  # Nota opcionalmente editável:
-  if ed_nota:
-    dados_linhas.append( ( "Nota",  "number",  'nota', True,  "0.00 a 5.00", ) )
-
   ht_tabela = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_novo)
 
   ht_bt_submit = html_elem_button_submit.gera("Enviar", "fazer_upload_video", None, None)

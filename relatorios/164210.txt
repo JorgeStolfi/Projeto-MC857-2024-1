@@ -1,1 +1,38 @@
 # relatorio da aula de 2024-05-31
+
+Notas do Professor:
+
+- Comentários, mensagens, chaves de dicionários, nomes de módulos, funções, e variáveis em PORTUGUÊS sem acentos.
+- Indentação de DUAS (não quatro) colunas por nível.
+- Sempre que você alterar um módulo, execute o programa de teste correspondente e corrija bugs que ele apontar.
+- Se não existir o programa de testes, escreva.
+- Se você alterar um arquivo "_IMP.py" de alguma maneira que possa afetar as funções que chamam esse módulo:
+(1) documente essa mudança nos comentários da interface, e
+(2) busque todas as chamadas dessa função que você alterou, verificando se foram afetadas pela sua mudança.
+    Se foram, corrija o que for necessário.
+
+
+Tarefa de Hoje:
+ [Logar como administrador ("primeiro@gmail.com", senha "U-00000001")];
+ Botão "Subir video": Não deveria haver um campo "Nota", nem para administradores.
+ Veja se consegue mudar os textos "Choose file" e "No File chosen" para português.
+
+Tasks:
+
+Primeiramente removi o campo de nota no arquivo `html_form_upload_video_IMP.py`
+
+Depois tentei encontrar uma maneira de utilizando somente CSS personalizar o botão de upload de arquivos,
+o estilo até era tranquilo personalizar porém não encontrei meios de traduzir/alterar os textos do componente
+sem fazer uso de javascript. 
+
+Com isso tive que alterar o arquivo `html_elem_input_IMP.py` de modo a incluir a lógica dado se o tipo for
+`file`, então aplicar um estilo css para remover visualmente o input nativo, incluir um botão com o nosso
+estilo e com os textos em portugues, e usar esse nosso botão para clicar no input nativo.
+
+Para isso também tive de editar o arquivo `html_bloco_tabela_de_campos_IMP.py` pois o ident passado era
+sempre forçado para ser None.
+
+Além disso tiive de incluir outro codigo javascript para detectar quando os arquivos são selecionados
+para poder adicionar o nome dele num campo de texto personalizado.
+
+Ficou tudo muito feio e desorganizado, mas não tenho mais tempo hoje.
