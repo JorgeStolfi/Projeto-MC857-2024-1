@@ -7,8 +7,8 @@ import html_estilo_texto
 import html_estilo_div_dados
 import util_nota
 import util_voto
+import util_testes
 import html_elem_link_text
-
 
 def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai):
 
@@ -50,8 +50,6 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
     ht_nota = html_elem_span.gera(estilo_atr, "Nota: " + tx_nota)
     if ht_linha_1 != "": ht_linha_1 += spacer
     ht_linha_1 += ht_nota
-    
-  if ht_linha_1 != "": ht_linha_1 += "<br/>"
   
   # ----------------------------------------------------------------------
   # Linha 2: identificador e nome do autor.
@@ -66,21 +64,18 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
       autor_id = atrs['autor']
       autor = obj_usuario.obtem_objeto(autor_id)
     assert autor != None
-    autor_nome = obj_usuario.obtem_atributo(autor, 'nome')
     assert autor_id != None
+    autor_nome = obj_usuario.obtem_atributo(autor, 'nome')
     assert autor_nome != None
 
-    ht_por = html_elem_span.gera(estilo_atr, "Por: ")
-    texto = html_elem_link_text.gera(autor_id, "ver_usuario", {"usuario": autor_id})
-
-    ht_autor = html_elem_span.gera(estilo_atr, texto)
-    ht_nome = html_elem_span.gera(estilo_atr, " " + autor_nome)
-    ht_linha_2 += ht_por + ht_autor + ht_nome
-  
-  if ht_linha_2 != "": ht_linha_2 += "<br/>"
-
+    ht_link = html_elem_link_text.gera(autor_id, "ver_usuario", {"usuario": autor_id})
+    ht_autor = html_elem_span.gera(estilo_atr, "Por: " + ht_link + " - " + autor_nome)
+    
+    if ht_linha_2 != "": ht_linha_2 += spacer
+    ht_linha_2 += ht_autor
+    
   # ----------------------------------------------------------------------
-  # Linha 3: vídeo e comentário-pai.
+  # Linha 3: vídeo.
   
   ht_linha_3 = ""
 
@@ -93,12 +88,20 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
       video = obj_video.obtem_objeto(video_id)
     assert video != None
     assert video_id != None
-
-    ht_sobre = html_elem_span.gera(estilo_atr, "Sobre: ")
-    texto = html_elem_link_text.gera(video_id, "ver_video", {"video": video_id})
-    ht_video = html_elem_span.gera(estilo_atr, texto)
-    ht_linha_3 += ht_sobre + ht_video
     
+    titulo = obj_video.obtem_atributo(video, 'titulo')
+    titulo_trunc = util_testes.trunca_valor(titulo, 40, None)
+    ht_link = html_elem_link_text.gera(video_id, "ver_video", {"video": video_id})
+    ht_video = html_elem_span.gera(estilo_atr, "Sobre: " + ht_link + " - " + titulo_trunc)
+    
+    if ht_linha_3 != "": ht_linha_3 += spacer
+    ht_linha_3 += ht_video
+ 
+  # ----------------------------------------------------------------------
+  # Linha 4: comentário-pai.
+  
+  ht_linha_4 = ""
+   
   if mostra_pai and 'pai' in atrs and atrs['pai'] != None:
     if isinstance(atrs['pai'], obj_comentario.Classe):
       pai = atrs['pai']
@@ -106,24 +109,37 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
     else:
       pai_id = atrs['pai']
     assert pai_id != None
-        
-    ht_em_resposta = html_elem_span.gera(estilo_atr, "Em resposta a: ")
-    texto = html_elem_link_text.gera(pai_id, "ver_comentario", {"comentario": pai_id})
-    ht_pai = html_elem_span.gera(estilo_atr, texto)
-    
-    if ht_linha_3 != "": ht_linha_3 += " "
-    ht_linha_3 += ht_em_resposta + ht_pai
 
+    pai = obj_comentario.obtem_objeto(pai_id)
+    texto = obj_comentario.obtem_atributo(pai, 'texto')
+    texto_trunc = util_testes.trunca_valor(texto_do_comentario, 40, None)
+    ht_link = html_elem_link_text.gera(pai_id, "ver_comentario", {"comentario": pai_id})
+    ht_pai = html_elem_span.gera(estilo_atr, "Em resposta a: " + ht_link + " - " + texto_trunc)
+    
+    if ht_linha_4 != "": ht_linha_4 += spacer
+    ht_linha_4 += ht_pai
+   
+  # ----------------------------------------------------------------------
+  # Voto, para o vídeo ou para o comentário-pai:
+  
   if 'voto' in atrs and atrs['voto'] != None:    
     tx_voto = util_voto.formata(atrs['voto'])
     ht_voto = html_elem_span.gera(estilo_atr, "Voto: " + tx_voto)
-    if ht_linha_3 != "": ht_linha_3 += spacer
-    ht_linha_3 += ht_voto
+    
+    if ht_linha_4 != "":
+      ht_linha_4 += spacer
+      ht_linha_4 + ht_voto
+    else:
+      if ht_linha_3 != "": ht_linha_3 += spacer
+      ht_linha_3 + ht_voto     
 
-  if ht_linha_3 != "": ht_linha_3 += "<br/>"
-   
   # ----------------------------------------------------------------------
   # Cabeçalho:
+    
+  if ht_linha_1 != "": ht_linha_1 += "<br/>" 
+  if ht_linha_2 != "": ht_linha_2 += "<br/>"
+  if ht_linha_3 != "": ht_linha_3 += "<br/>"
+  if ht_linha_4 != "": ht_linha_4 += "<br/>"
   
   ht_cabeca = html_elem_div.gera(estilo_cabec_div, ht_linha_1 + ht_linha_2 + ht_linha_3)
   
