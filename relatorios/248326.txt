@@ -1,1 +1,8 @@
-# relatorio da aula de 2024-05-31
+# relatorio da aula de 2024-06-07
+
+Nesta aula eu alterar o bloco de dados do usuário na funcionalidade de "ver objeto"
+Alterei o módulo "html_bloco_dados_de_usuario_IMP" para que só apareça o botão de alterar caso 
+o usuário pesquisado for o mesmo da sessão ou para o Admin.
+
+Além disto, mudei o módulo "html_pag_ver_usuario_IMP" para o editável ser sempre 'False',
+esta variável será 'True' somente ao clica no botão 'Alterar' (caso ele esteja visível, claramente).

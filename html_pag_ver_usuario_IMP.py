@@ -25,12 +25,10 @@ def gera(ses, usr, erros):
     
     # Obtem o identificador e atributos do usuário:
     usr_id = obj_usuario.obtem_identificador(usr)
-    atrs_usr = obj_usuario.obtem_atributos(usr)
+    atrs_usr = obj_usuario.obtem_atributos(usr) 
+  
+    editavel = False
     
-    if ses == None:
-      editavel = False
-    else:  
-      editavel = True
     para_proprio = (usr == ses_dono)
     ht_bloco = html_bloco_dados_de_usuario.gera(usr_id, atrs_usr, editavel, para_admin, para_proprio)
     pag = html_pag_generica.gera(ses, ht_bloco, erros)
