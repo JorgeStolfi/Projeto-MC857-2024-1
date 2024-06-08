@@ -12,13 +12,15 @@ def gera(atrs, para_admin):
   # Tupla contendo as seguintes informações: {rot} {tipo} {chave} {editavel} {dica}
   # Para um maior detalhamento, cheque a documentação de `html_bloco_tabela_de_campos.gera`.
   dados_linhas = (
-      ( "ID",         "text",    'video',      True,  "V-NNNNNNNN", ),
-      ( "Título",     "text",    'titulo',     True,  "Bla bla bla", ),
-      ( "Autor",      "text",    'autor',      True,  "U-NNNNNNNN", ),
-      ( "Desde data", "text",    'data_min',   True, "2024-05-20 15:00:00 UTC", ),
-      ( "Até data",   "text",    'data_max',   True, "2024-05-24 15:00:00 UTC", ),
-      ( "Nota min",   "text",    'nota_min',   True, "0.00" ),
-      ( "Nota max",   "text",    'nota_max',   True, "4.00" ),
+      ( "ID",           "text",   'video',      True, "V-NNNNNNNN", ),
+      ( "Título",       "text",   'titulo',     True, "Bla bla bla", ),
+      ( "Autor",        "text",   'autor',      True, "U-NNNNNNNN", ),
+      ( "Desde data",   "text",   'data_min',   True, "2024-05-20 15:00:00 UTC", ),
+      ( "Até data",     "text",   'data_max',   True, "2024-05-24 15:00:00 UTC", ),
+      ( "Nota min",     "text",   'nota_min',   True, "0.00" ),
+      ( "Nota max",     "text",   'nota_max',   True, "4.00" ),
+      ( "Vistas desde", "number", 'vistas_min', True, "0" ),
+      ( "Vistas até",   "number", 'vistas_max', True, "10" ),
     )
     
   # Se que pediu é administardor, deixa fazer busca também por 'bloqueado'.

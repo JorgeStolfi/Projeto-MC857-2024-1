@@ -52,6 +52,21 @@ def teste_normaliza_busca_por_nota():
     global ok_global
     ok_global = testa_funcao(rot, modulo, modulo.normaliza_busca_por_nota, esperado, False, None, None, args)
 
+def teste_normaliza_busca_por_vistas():
+  # TUPLAS DO TIPO ({nome_test}, {args} ,{resultado_esperado})
+  casos_de_teste = [
+    ("SEM_VISTAS", {}, []),
+    ("VISTAS_MIN_E_VISTAS", {"vistas_min": "1", "vistas": "1"}, ["A busca não pode usar 'vistas' com 'vistas_min', 'vistas_max'", "A busca não pode usar 'vistas_min' sem 'vistas_max'"]),
+    ("VISTAS_MIN_SEM_VISTAS_MAX", {"vistas_min": "1"}, ["A busca não pode usar 'vistas_min' sem 'vistas_max'"]),
+    ("VISTAS_MAX_SEM_VISTAS_MIN", {"vistas_max": "2"}, ["A busca não pode usar 'vistas_max' sem 'vistas_min'"] ),
+    ("NORMALIZADO", {"vistas_min": "1", "vistas_max": "2"}, [])
+  ]
+
+  for (rot, args, esperado) in casos_de_teste:
+    global ok_global
+    ok_global = testa_funcao(rot, modulo, modulo.normaliza_busca_por_vistas, esperado, False, None, None, args)
+
+
 def teste_para_identificadores():
   class TestObj(obj_raiz.Classe):
     def __init__(self, id, atrs):
@@ -110,6 +125,7 @@ def teste_para_objetos():
 
 teste_normaliza_busca_por_data()
 teste_normaliza_busca_por_nota()
+teste_normaliza_busca_por_vistas()
 teste_para_identificadores()
 teste_elimina_alteracoes_nulas()
 teste_para_objetos()

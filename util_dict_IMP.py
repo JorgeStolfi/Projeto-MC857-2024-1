@@ -90,3 +90,20 @@ def normaliza_busca_por_nota(atrs):
       # Busca intervalar:
       atrs['nota'] = ( nota_min, nota_max, )
   return erros
+
+def normaliza_busca_por_vistas(atrs):
+  erros = [ ]
+  
+  if 'vistas_min' in atrs or 'vistas_max' in atrs:
+    if 'vistas' in atrs:
+      erros.append("A busca não pode usar 'vistas' com 'vistas_min', 'vistas_max'")
+    vistas_min = atrs.pop('vistas_min', None)
+    vistas_max = atrs.pop('vistas_max', None)
+    if vistas_min == None:
+      erros.append("A busca não pode usar 'vistas_max' sem 'vistas_min'")
+    elif vistas_max == None:
+      erros.append("A busca não pode usar 'vistas_min' sem 'vistas_max'")
+    else:
+      # Busca intervalar:
+      atrs['vistas'] = ( vistas_min, vistas_max, )
+  return erros

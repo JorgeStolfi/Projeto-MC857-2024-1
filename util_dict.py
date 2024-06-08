@@ -63,4 +63,16 @@ def normaliza_busca_por_nota(atrs):
   Se não houver erros, devolve uma lista vazia."""
   return util_dict_IMP.normaliza_busca_por_nota(atrs)
 
+def normaliza_busca_por_vistas(atrs):
+  """Se {atrs} tiver campos 'vistas_min' e 'vistas_max',
+  substitui ambos por 'vistas' cujo valor é a lista
+  {(val_min, val_max)} dos respectivos valores.
+  
+  Se uma dessas duas chaves estiver presente em {atrs},
+  a outra também deve estar, a chave 'vistas' não deve estar.
+  
+  Em caso de erro, devolve uma lista de mensagens (strings).
+  Se não houver erros, devolve uma lista vazia."""
+  return util_dict_IMP.normaliza_busca_por_vistas(atrs)
+
 # !!! Comandos que tratam dados vindos de formularios devem eliminar brancos e newlines inciais e finais de valores de campos antes de validar e usar. !!!

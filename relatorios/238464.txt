@@ -1,1 +1,8 @@
-# relatorio da aula de 2024-05-31
+# relatorio da aula de 2024-06-07
+
+Tarefa:
+    238464 O objeto {obj_video.Classe} tem um novo atributo, 'vistas', o número de vezes que o vídeo foi exibido. No formulario para buscar vídeos, acrescente campos "Vistas: desde [...] até [...]" para fazer busca de intervalo por esse campo.
+
+Inicialmente achei que a tarefa era somente adaptar o formulario para ver os campos de Vistas la. Mas percebi que isso não fazia com que a busca
+pelos campos de Vistas funcionasse. Então percorri todos os arquivos relevantes e alterei as funções (e testes) necessárias até que a busca
+funcionasse.
