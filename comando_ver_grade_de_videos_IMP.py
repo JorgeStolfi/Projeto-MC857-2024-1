@@ -9,7 +9,14 @@ def processa(ses, cmd_args):
   
   erros = []
 
-  ordem = int(cmd_args.pop('ordem', 0))
+  chave_de_ordenacao = 'nota'
+  ordem = 0
+
+  ordenacao = cmd_args.pop('ordem', None)
+
+  if ordenacao is not None:
+    ordem = -1 if ordenacao[0] == '-' else 1
+    chave_de_ordenacao = ordenacao[1:]
   
   assert len(cmd_args) == 0, f"argumentos inválidos = {cmd_args}"
 
@@ -18,7 +25,7 @@ def processa(ses, cmd_args):
   nvids = ncols*nlins  # Total de células na grade.
 
   vid_ids = obj_video.obtem_amostra(nvids)
-  vid_ids = obj_video.ordena_identificadores(vid_ids, 'nota', ordem)
+  vid_ids = obj_video.ordena_identificadores(vid_ids, chave_de_ordenacao, ordem)
       
   if len(erros) == 0:
     pag = html_pag_grade_de_videos.gera(ses, vid_ids, ncols, None)
