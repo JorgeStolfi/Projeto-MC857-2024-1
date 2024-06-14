@@ -30,9 +30,10 @@ def gera(ses, vid, erros):
   
   bt_alterar = para_admin or para_autor
   bt_conversa = True
+  bt_baixar = True
   bt_comentar = ses != None
   bt_calcnota = para_admin or para_autor
-  ht_bloco_vid = html_bloco_video.gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota)
+  ht_bloco_vid = html_bloco_video.gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota, bt_baixar)
   
   ht_conteudo = \
     ht_titulo + "\n" + \

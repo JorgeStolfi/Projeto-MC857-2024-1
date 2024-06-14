@@ -46,12 +46,7 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   # Email aparece, possivelmente editável, só na criação ou para admin ou próprio:
   if usr_id == None or para_admin or para_proprio:
     dados_linhas.append( ( "E-mail", "textarea", 'email', editavel,  "xxx@xxx.xxx.xx", ) )
-    
-  # Senha, conf-senha sempre aparecem se usuário é editável:
-  # if editavel:
-  #   dados_linhas.append( ( "Senha",            "password", 'senha',       True, None, ) )
-  #   dados_linhas.append( ( "Confirme senha",   "password", 'conf-senha',  True, None, ) )
-    
+    html_bloco_tabela_de_campos
   # Atributo 'administrador' sempre aparece, mas é editável só para administrador:
   # edt_admin = (editavel and para_admin)
   dados_linhas.append( ( "Administrador", "checkbox", 'administrador', para_admin, None ) )
