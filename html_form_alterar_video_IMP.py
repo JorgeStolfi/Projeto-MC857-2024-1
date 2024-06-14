@@ -7,6 +7,7 @@ import html_elem_button_simples
 import html_elem_button_submit
 import html_elem_video
 import util_dict
+import html_elem_input
 
 def gera(vid_id, atrs_mod, eh_adm):
 
@@ -65,7 +66,10 @@ def gera(vid_id, atrs_mod, eh_adm):
     ht_bt_calcnota + " " + \
     ht_bt_submit + " " + \
     ht_bt_cancel
- 
+  
+  # Campos hidden para passar os atributos para o comando:
+  ht_video_id = html_elem_input.gera("hidden", 'video', None, vid_id, None, False, None, None, True, None)
+  ht_conteudo += "\n" + ht_video_id
   ht_form = html_elem_form.gera(ht_conteudo, multipart = False)
   
   return ht_form
