@@ -38,14 +38,14 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   if usr_id != None:
     # Mostra identificador do usuário como readonly:
     atrs_tab['usuario'] =  usr_id
-    dados_linhas.append( ( "Identificador", "textarea",  'usuario',  editavel, None, ) )
+    dados_linhas.append( ( "Identificador", "text",  'usuario',  editavel, None, ) )
 
   # Nome sempre aparece, possivelmente editável:
-  dados_linhas.append( ( "Nome", "textarea", 'nome',  editavel, None, ) )
+  dados_linhas.append( ( "Nome", "text", 'nome',  editavel, None, ) )
 
   # Email aparece, possivelmente editável, só na criação ou para admin ou próprio:
   if usr_id == None or para_admin or para_proprio:
-    dados_linhas.append( ( "E-mail", "textarea", 'email', editavel,  "xxx@xxx.xxx.xx", ) )
+    dados_linhas.append( ( "E-mail", "text", 'email', editavel,  "xxx@xxx.xxx.xx", ) )
     
   # Senha, conf-senha sempre aparecem se usuário é editável:
   # if editavel:
