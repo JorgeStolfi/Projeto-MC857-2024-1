@@ -1,1 +1,2 @@
 # Relatorio de 216158 da aula de 2024-06-14
+Mudei a cor do fundo da div de comentario para branco, para dar mais destaque.
