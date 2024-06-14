@@ -1,1 +1,10 @@
 # Relatorio de 248290 da aula de 2024-06-14
+
+    Na aula de hoje me foi designada a seguinte tarefa: implementar e testar a função {util_video.extrai_trecho} usando {ffmpeg}.
+Para isso, inicialmente chequei a interface da função, que exigia tipo float nos intervalos e uma cadeia aleatória de 8 digitos para o arquivo de retorno.
+Sendo assim, utilizei primeiramente a biblioteca randon e string para gerar o nome do arquivo de retorno. Em seguida, estudei os parâmetros do ffmpeg para
+descobrir quais eram os atributos para intervalos de tempo e cópia de arquivo. Após descobertos, os parâmetros foram setados e a função implementada.
+
+    Em seguida, para a função de teste, criei uma função chamada {roda_extrai_trecho} para testar a função implementada passando parâmetros válidos e vídeos
+existentes no repositório. Após rodar a função de teste, os trechos dos arquivos foram extraídos com êxito e salvos no repositório do projeto no formato
+previamente definido. Os testes não apresentaram erro.
