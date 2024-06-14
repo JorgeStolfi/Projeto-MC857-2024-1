@@ -1,1 +1,9 @@
 # Relatorio de 194347 da aula de 2024-06-14
+
+
+Apos entender os comandos da tarefa junto ao professor comecei a analiar o codigo buscando os locais certos para fazer as alterações nos locais certos e encontrei que a solução seria tirar do 
+"html_bloco_cabecalho_de_video_imp.py" a parte de visualiações para o "html_bloco_rodadepe_do_video_imp.py" tomando cuidado para deixar o formato de acordo com a tarefa feito isso o arquivo 
+funcionou normalmente e apos fazer o upload das alterações terminei minha tarefa do dia.
+
+Atenciosamente Arimã Batista
+
