@@ -1,5 +1,1 @@
-# relatorio da aula de 2024-05-31
-
-  Apos analizar o problema creio que é um problema análogo ao solicitado a resolver na ultima aula e apos auxilio do professor identifiquei que tinha um problema de ortografia no "comando_solicita_pag_postar_comentario_imp" e alterando todos os "pai" para "comentario" o problema foi solucionado com exito e assim termino o'que foi solicitado.
-
-Atenciosamente Arimã Batista
+# Relatorio de 194347 da aula de 2024-06-14

@@ -5,6 +5,8 @@ def gera(vid_ids, ncols):
   cujos identificadores estão na lista {vid_ids}.  
   
   A grade terá {ncols} colunas.
+  
+  Haverá botões para mudar a ordem ou escolher o fomato catálogo em vez de grade.
   """
   return html_bloco_grade_de_videos_IMP.gera(vid_ids, ncols)
     

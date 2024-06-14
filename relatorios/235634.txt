@@ -1,8 +1,1 @@
-# relatorio da aula de 2024-06-07
-Nome: Giovanna Magario Adamo RA: 235634
-
-Nessa tarefa, o meu objetivo era incrementar o atributo 'vistas' a cada vez que a página do vídeo é gerada com sucesso (html_pag_ver_video), assim, 
-eu implementei no comando_ver_video_IMP, utilizando o método muda_atributos, já existente no obj_video, e incremento ele toda vez que o bloco de gerar
-o html_pag_ver_video (bloco do if len(erros) == 0) é chamado, usando o obj_video.obtem_atributo para obter o valor atual do atributo 'vistas'. Executei o
-arquivo de testes comando_ver_video_TST e não foram gerados nenhum bug. Não foi necessária nenhuma alteração na descrição do comando_ver_video pois não
-afetou o funcionamento geral do comando.
+# Relatorio de 235634 da aula de 2024-06-14

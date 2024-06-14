@@ -5,6 +5,8 @@ import html_pag_mensagem_de_erro
 import html_pag_upload_video
 import html_pag_ver_video
 
+from util_erros import ErroAtrib
+
 def processa(ses, cmd_args):
   
   # Validação de tipos (paranóia):
@@ -56,6 +58,9 @@ def processa(ses, cmd_args):
   # A nota inicial é sempre 2.0:
   nota = 2.0 
   
+  # O número de vistas começa com 0:
+  vistas = 0
+  
   # Videos começam desbloqueados:
   bloqueado = False
   
@@ -68,6 +73,7 @@ def processa(ses, cmd_args):
       'autor': autor, 
       'titulo': titulo, 
       'nota': nota,
+      'vistas': vistas,
       'bloqueado': bloqueado,
     }
     if conteudo != None: atrs_cria['conteudo'] = conteudo

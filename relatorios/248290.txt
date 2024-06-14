@@ -1,7 +1,1 @@
-# relatorio da aula de 2024-05-31
-
-    Na aula de hoje me foi designada a seguinte tarefa: alterar o retorno do botão "Checar objeto" para argumentos de vídeos, a linha que contém o 
-identificador do usuário deveria ser um link clicável. Para isso, precisei encontrar a página responsável por gerar o html em questão
-{html_bloco_cabecalho_de_video_IMP.py}, após encontrá-la e tomando o arquivo {html_linha_resumo_de_video_IMP} como base, gerei o bloco html
-que contém o link clicável para detalhamento do usuário pelo comando (ver_usuario) e o adicionei no bloco html que contém o texto do autor. O resultado
-foi obtido corretamente sem geração de erros.
+# Relatorio de 248290 da aula de 2024-06-14

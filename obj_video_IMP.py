@@ -11,20 +11,17 @@ import util_identificador
 import util_data
 import util_booleano
 import util_titulo_de_video
+import util_video
+
 from util_erros import ErroAtrib, erro_prog, mostra
 
-import cv2
-import os
 import re
 import time
 import random
-
+import os
+import sys
 from datetime import datetime, timezone
 from math import log, gcd, sin
-import os
-import subprocess
-import json
-import sys
 
 # Uma instância de {db_obj_tabela} descrevendo a tabela de vídeos:
 tabela = None
@@ -85,7 +82,7 @@ def cria(atrs):
 
   conteudo = atrs.pop('conteudo', None)
 
-  duracao, largura, altura, NQ = grava_arquivos(vid_id, conteudo)
+  duracao, largura, altura, NQ = util_video.grava_arquivos(vid_id, conteudo)
   assert NQ == 6 # Por enquanto.
   
   atrs['duracao'] = duracao
@@ -269,9 +266,9 @@ def cria_testes(verb):
 def verifica_criacao(vid, vid_id, atrs):
   ignore = [ 'conteudo' ]
   ok = obj_raiz.verifica_criacao(vid, obj_video.Classe, vid_id, atrs, ignore, tabela, def_obj_mem)
-  if ok: ok = verifica_arquivo(vid_id)
-  if ok: ok = verifica_capa(vid_id)
-  if ok: ok = verifica_quadros(vid_id)
+  if ok: ok = util_video.verifica_arquivo(vid_id)
+  if ok: ok = util_video.verifica_capa(vid_id)
+  if ok: ok = util_video.verifica_quadros(vid_id)
   return ok
 
 def liga_diagnosticos(val):
@@ -355,13 +352,6 @@ def valida_atributos(vid, atrs_mem):
   return erros
 
 def valida_dimensoes(duracao, altura, largura):
-  """ Valida os atributos 'duracao', 'altura', e 'largura' de 
-  um vídeo que está para ser criado.  Exige que os três
-  sejam diferentes de {None} e inteiros, com valores e proporções
-  em certos intervalos.
-  
-  Caso os parâmetros sejam válido, a função devolve uma lista vazia. Senão
-  devolve uma lista de uma ou mais mensagens de erro (strings)."""
   
   # Intervalo dos atributos
   atrs_val = { 'duracao': duracao, 'altura':  altura, 'largura':  largura, }
@@ -436,166 +426,4 @@ def def_obj_mem(obj, vid_id, atrs_SQL):
       obj.atrs[chave] = val
   if tabela.debug: mostra(2, "obj = " + str(obj))
   return obj
-
-def verifica_arquivo(vid_id):
-  """Verifica se o arquivo "videos/{vid_id}.mp4" foi gravado.
-  Em caso afirmativo, devolve {True}. Em caso negativo, implrime 
-  mensagem de erro."""
-  arq_video = f"videos/{vid_id}.mp4"
-  ok = os.path.exists(arq_video)
-  if not ok: aviso_prog(f"arquivo {arq_video} não foi criado", True)
-  return ok
-
-def verifica_capa(vid_id):
-  """Verifica se o arquivo "capas/{vid_id}.png" foi gravado.
-  Em caso afirmativo, devolve {True}. Em caso negativo, implrime 
-  mensagem de erro."""
-  arq_video = f"capas/{vid_id}.png"
-  ok = os.path.exists(arq_quadro)
-  if not ok: aviso_prog(f"arquivo {arq_video} não foi criado", True)
-  return ok
-
-def verifica_quadros(vid_id):
-  """Verifica se os quadros-índice "quadros/{vid_id}-{NNN}.png" existem.
-  Em caso afirmativo, devolve {True}. Em caso negativo, implrime 
-  mensagem de erro."""
-  global tabela
-  if tabela.debug: sys.stderr.write(f"verificando quadros-indice de {vid_id}..\n")
-  NQ = 6
-  ok = True
-  for iq in range(NQ):
-    arq_quadro = f'quadros/{vid_id}-{iq:03d}.png'
-    if not os.path.exists(arq_quadro):
-      aviso_prog(f"arquivo {arq_quadro} não foi criado", True)
-      ok = False
-  return ok
-
-def grava_arquivos(vid_id, conteudo):
-  """
-  Grava os bytes {conteudo} no arquivo "videos/{vid_id}.mp4". Se
-  {conteudo} for {None}, o arquivo já deve existir. Em qualquer caso,
-  também extrai a imagem de capa "capas/{vid_id}.png" e um certo número
-  {NQ} de quadros-indice "quadros/{vid_id}-{NNN}.png" para {NNN}
-  variando de 0 a {NQ-1}. Devolve as dimensões {duracao} (ms), {largura}
-  (px), {altura} (px), e o número de quadros {NQ}.
-  """
-  
-  sys.stderr.write(f"    criando os arquivos do vídeo {vid_id}...\n")
-
-  # Nome do arquivo de vídeo:
-  arq_video = f"videos/{vid_id}.mp4"
-
-  if conteudo != None:
-    # Grava o conteúdo em disco:
-    wr = open(arq_video, 'wb')
-    wr.write(conteudo)
-    wr.close()
-  else:
-    assert os.path.exists(arq_video), f"Item 'conteudo' ausente e arquivo {arq_video} não existe"
-  
-  duracao, largura, altura = obtem_dimensoes_do_arquivo(arq_video)
- 
-  extrai_capa(vid_id)
-  
-  NQ = extrai_quadros_indice(vid_id, duracao,largura,altura)
-
-  return duracao, largura, altura, NQ
-
-def obtem_dimensoes_do_arquivo(arq_video):
-  """Examina o arquivo {arq_video} no disco, que deve ter extensão ".mp4"
-  e devolve as dimensões do vídeo: duração (em ms), largura, e altura (em pixels).
-  Dá erro se não existe arquivo com esse nome."""
-
-  assert os.path.exists(arq_video), f"arquivo {arq_video} não existe"
-
-  command = [
-    "ffprobe",
-    "-v", 
-    "error", 
-    "-select_streams",
-    "v:0",
-    "-show_entries",
-    "stream=width,height,duration",  # Incluindo duração
-    "-of",
-    "json",
-    arq_video
-    ]
-
-  result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-  data = json.loads(result.stdout)
-
-  duracao = int(float(data["streams"][0]["duration"]) * 1000)  # Convertendo para milissegundos
-  largura = int(data["streams"][0]["width"])
-  altura = int(data["streams"][0]["height"])
-  return duracao, largura, altura
-
-def extrai_capa(vid_id):
-  """Extrai o primeiro quadro do arquivo "videos/{vid_id}.mp4",
-  supostamente a capa, e grava como "capas/{vid_id}.png"."""
-  
-  global tabela
-
-  arq_video = f"videos/{vid_id}.mp4"
-  assert os.path.exists(arq_video), f"arquivo {arq_video} não existe"
-
-  diretorio = "capas"
-  if not os.path.exists(diretorio): os.makedirs(diretorio)
-  arq_capa = f"{diretorio}/{vid_id}.png"
-
-  if os.path.exists(arq_capa):
-    if tabela.debug: sys.stderr.write(f"    capa {arq_capa} já existe\n")
-  else:
-    if tabela.debug: sys.stderr.write(f"    extraindo a capa {arq_capa}...\n")
-    # Carrega o video na memória !!! Inteiro? Que desperdício !!!
-    fluxo = cv2.VideoCapture(arq_video)
-    # Obtém o frame 0 do vídeo:
-    successo, capa = fluxo.read()
-    assert successo, "captura de frame falhou"
-    fluxo.release()
-    cv2.imwrite(arq_capa, capa)
-
-def extrai_quadros_indice(vid_id,duracao,largura,altura):
-  """Extrai um certo número {NQ} de quadros igualmente espaçados 
-  do vídeo, com altura padronizada, e grava em "quadros/{vid_id}-{NNN}.png" onde 
-  {NNN} é um índice de 3 algarismos que varia de 0 até {NQ-1}.
-  Devolve o valor de {NQ}."""
- 
-  arq_video = f"videos/{vid_id}.mp4"
-  assert os.path.exists(arq_video), f"arquivo {arq_video} não existe"
-
-  NQ = 6  # Por enquanto.
-
-  diretorio = "quadros"
-  if not os.path.exists(diretorio): os.makedirs(diretorio)
-
-  altura_qdr = 48
-  largura_qdr = int(altura_qdr*largura/altura + 0.5)
-  largura_qdr += (largura_qdr % 2) # Porque o {ffmpeg} não aceita ímpar.
-
-  for iq in range(NQ):
-    arq_quadro = f'{diretorio}/{vid_id}-{iq:03d}.png'
-    if os.path.exists(arq_quadro):
-      if tabela.debug: sys.stderr.write(f"    quadro-índice {arq_quadro} já existe\n")
-    else:
-      if iq == NQ-1:
-        # Tem que pegar um pouco antes do fim para {ffmpeg} funcionar:
-        tempo = round(duracao/1000 - 0.050, 3)
-      else:
-        tempo = round(duracao*iq/(NQ - 1)/1000,3)
-      if tabela.debug: sys.stderr.write(f"    extraindo o quadro {arq_quadro} t = {tempo}s\n")
-      sys.stderr.flush()
-      comando_ffmpeg = [
-          'ffmpeg', 
-          '-y', 
-          '-ss', str(tempo), 
-          '-i', arq_video, 
-          '-vframes', '1', 
-          '-q:v', '2',
-          '-vf', f'scale={largura_qdr}:{altura_qdr}',
-          arq_quadro
-      ]
-      if tabela.debug: xcmd = " ".join(comando_ffmpeg); sys.stderr.write(f"  comando = «{xcmd}»\n")
-      res = subprocess.run(comando_ffmpeg, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-      assert res.returncode == 0, f"erro ao executar ffmpeg"
-  return NQ
 

@@ -57,7 +57,7 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   dados_linhas.append( ( "Administrador", "checkbox", 'administrador', para_admin, None ) )
 
   # Atributo 'vnota' sempre aparece, mas é editável só para administrador:
-  dados_linhas.append( ( "Nota média dos comentarios", "text", 'vnota',  edt_admin, None, ) )
+  dados_linhas.append( ( "Nota média dos comentarios", "text", 'vnota',  para_admin, None, ) )
 
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_tab)
 

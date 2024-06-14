@@ -112,7 +112,7 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
 
     pai = obj_comentario.obtem_objeto(pai_id)
     texto = obj_comentario.obtem_atributo(pai, 'texto')
-    texto_trunc = util_testes.trunca_valor(texto_do_comentario, 40, None)
+    texto_trunc = util_testes.trunca_valor(texto, 40, None)
     ht_link = html_elem_link_text.gera(pai_id, "ver_comentario", {"comentario": pai_id})
     ht_pai = html_elem_span.gera(estilo_atr, "Em resposta a: " + ht_link + " - " + texto_trunc)
     

@@ -1,6 +1,1 @@
-# relatorio da aula de 2024-06-07
-
-- Alterei a documentação de html_bloco_dados_de_usuario.py para descrever o novo atributo 'vnota'.
-- Alterei o código em html_bloco_dados_de_usuario_IMP.py para exibir o novo atributo 'vnota'.
-- Esse atributo é visivel para todos os usuarios porem só é editavel para o administrador.
-- Os testes não apresentaram erros e não foi necessario alterações para o novo atributo.
+# Relatorio de 218996 da aula de 2024-06-14

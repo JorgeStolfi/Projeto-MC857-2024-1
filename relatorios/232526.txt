@@ -1,7 +1,1 @@
-# relatorio da aula de 2024-06-07
-
-Modifiquei html_linha_resumo_de_video_IMP.py para que o atributo 'vistas' seja exibido logo após o atributo 'nota',
-escolha tal porque vejo relevância para o usuário de ter um em mente ao interpretar o valor numérico do outro.
-html_bloco_lista_de_videos_IMP.py tem chamadas para html_linha_resumo_de_video_IMP.py, então o resultado é visível ao
-testar essa também.
-A modificação foi testada e verificada como funcionando.
+# Relatorio de 232526 da aula de 2024-06-14

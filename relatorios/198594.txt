@@ -1,6 +1,1 @@
-# relatorio da aula de 2024-06-07 198594
-
-Verificado funcionamento dos modulos que compoe o html_bloco_video
-Decidido adicionar campo de vistas no modulo do cabecalho
-Modificado o modulo do cabecalho para adicionar campo de vistas
-Testes rodaram sem nenhum erro
+# Relatorio de 198594 da aula de 2024-06-14

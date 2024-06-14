@@ -1,10 +1,1 @@
-# relatorio da aula de 2024-06-07
-
-Comecei primeiramente procurando por qual modulo eu deveria alterar. Desse modo procurei pelo texto "Nota:""
-no projeto e achei o html_bloco_cabecalho_de_comentario. Assim alterei algum texto só para ver se era realmente
-o modulo que eu deveria alterar e confirmei que era. Para fazer a alteração necessária, segui a dica que o 
-professor comentou de olhar o html_linha_resumo_de_comentario.gera. Foi extramamente útil e realizei a alteração
-de maneira semelhante ao arquivo indicado. No entanto, ele ficou fora do padrão do cabeçalho. Assim, li a descrição
-do html_elem_span, e percebi que ele recebia um parametro que seria um html e inseria o estilo correspondente
-e assim deixei o link no formato já existente do cabeçalho. Tudo isso rodando o servidor para ir examinando os
-resultados. No final examinei os testes e finalizei a tarefa.
+# Relatorio de 243433 da aula de 2024-06-14

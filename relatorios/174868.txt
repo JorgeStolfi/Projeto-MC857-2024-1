@@ -1,6 +1,1 @@
-# relatorio da aula de 2024-05-31
-Minha tarefa era criar um novo método "recalcula_vnota" no módulo {obj_usuario}. O método consiste em calcular uma nova {vnota} baseada nas notas dos vídeos do usuário, utilizando as visualizações como peso para a média.
-Realizei então as seguintes alterações:
-1) Criei o método no arquivo base {obj_usuario.py}, recebendo um usr_id e retornando a nota recalculada.
-2) Adicionei o novo método também no arquivo IMP, pegando os vídeos do usuário através de {obj_video.busca_por_autor}, calculando o numerador e o denominador da fração correspondente à média, e por fim arredondando o valor em 2 casas decimais.
-3) Modifiquei o arquivo TST, limpando os usuários criados anteriormente e criando usuários e vídeos padrão através dos métodos {cria_testes} das classes {obj_usuario} e {obj_video}. Depois, utilizei o novo método para recalcular os valores e comparei com o valor esperado, calculado manualmente por mim.
+# Relatorio de 174868 da aula de 2024-06-14

@@ -249,7 +249,3 @@ def liga_diagnosticos(val):
   impressão em {sys.stderr} de mensagens de diagnóstico pelas
   funções deste módulo."""
   obj_video_IMP.liga_diagnosticos(val)
-
-
-def cria_quadros(d_video, n, altura):
-  obj_video_IMP.cria_quadros(d_video, n, altura)
