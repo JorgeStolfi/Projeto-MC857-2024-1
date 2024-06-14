@@ -14,6 +14,8 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   assert type(para_admin) is bool, "{para_admin} inválido"
   assert type(para_proprio) is bool, "{para_proprio} inválido"
   
+  nao_editavel = False
+
   if atrs == None: atrs = { }
 
   # Obtem os atributos {atrs_tab} a mostrar:
@@ -38,7 +40,7 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   if usr_id != None:
     # Mostra identificador do usuário como readonly:
     atrs_tab['usuario'] =  usr_id
-    dados_linhas.append( ( "Identificador", "textarea",  'usuario',  editavel, None, ) )
+    dados_linhas.append( ( "Identificador", "textarea",  'usuario',  nao_editavel, None, ) )
 
   # Nome sempre aparece, possivelmente editável:
   dados_linhas.append( ( "Nome", "textarea", 'nome',  editavel, None, ) )
