@@ -1,1 +1,4 @@
-# Relatorio de 224956 da aula de 2024-06-14
+Ao analisar o código eu percebi que o id do comentário já estava sendo passado no comando_solicitar_pag_postar_comentário, porém utilizando o
+atributo 'comentário' então eu o modifiquei para passar o id do comentário através do atributo 'pai' já que o atributo 'comentário' não estava
+sendo utilizado em nenhuma parte do código. Além disso, também foi necessária uma alteração em html_bloco_cabecalho_de_comentario para adicionar
+a linha 4 que exibe o comentário que está sendo respondido, já que ela não estava sendo utilizada ao gerar a div do cabeçalho

@@ -141,6 +141,6 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
   if ht_linha_3 != "": ht_linha_3 += "<br/>"
   if ht_linha_4 != "": ht_linha_4 += "<br/>"
   
-  ht_cabeca = html_elem_div.gera(estilo_cabec_div, ht_linha_1 + ht_linha_2 + ht_linha_3)
+  ht_cabeca = html_elem_div.gera(estilo_cabec_div, ht_linha_1 + ht_linha_2 + ht_linha_3 + ht_linha_4)
   
   return ht_cabeca
