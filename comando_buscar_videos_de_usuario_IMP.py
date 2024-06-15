@@ -54,7 +54,8 @@ def processa(ses, cmd_args):
       else:
         ht_titulo = html_bloco_titulo.gera(f"Vídeos de {autor_id}")
       
-      ht_tabela = html_bloco_lista_de_videos.gera(videos_ids, mostra_autor)
+      #ht_tabela = html_bloco_lista_de_videos.gera(videos_ids, mostra_autor)#Original
+      ht_tabela = html_bloco_lista_de_videos.gera(videos_ids, mostra_autor, para_admin)#Alterado
       ht_bloco = \
         ht_titulo + "<br/>\n" + \
         ht_tabela

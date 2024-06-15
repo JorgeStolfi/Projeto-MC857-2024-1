@@ -11,7 +11,8 @@ import util_nota
 import util_testes
 import obj_sessao
 
-def gera(vid, mostra_autor):
+#def gera(vid, mostra_autor):#Original
+def gera(vid, mostra_autor, para_admin):#Alterado
 
   vid_id = obj_video.obtem_identificador(vid) if vid != None else None
   atrs = obj_video.obtem_atributos(vid) if vid != None else None
@@ -71,8 +72,14 @@ def gera(vid, mostra_autor):
       mostra = True
       if cab:
         texto = "🔒"
+      ##else:
+        ##texto = util_bloqueado.formata(atrs['bloqueado'])
       else:
-        texto = util_bloqueado.formata(atrs['bloqueado'])
+        if atrs['bloqueado']:
+          texto = "🔒"
+          cor_fundo = "#FFFF55"
+        else:
+          texto = ""
     else:
       mostra = True
       texto = chave.capitalize() if cab else str(atrs[chave])
@@ -88,7 +95,7 @@ def gera(vid, mostra_autor):
 
     # Se o usuário é administrador, adicionar botões Bloquear/Desbloquear
     objeto_usr = obj_usuario.obtem_objeto(autor_id)
-    para_admin = obj_usuario.eh_administrador(objeto_usr)
+    #para_admin = obj_usuario.eh_administrador(objeto_usr)#Original
     if para_admin:
       bt_bloq_args = { 'video': vid_id, 'bloqueado': str(not atrs['bloqueado']) }
     

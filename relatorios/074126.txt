@@ -1,1 +1,5 @@
 # Relatorio de 074126 da aula de 2024-06-14
+- Um dos problemas do módulo html_linha_resumo_de_video é que a variável para_admin estava recebendo o valor booleano de admin do autor do vídeo e não do usuário da sessão, mas não consegui arrumar.
+- Quando roda o teste "./testa.sh html_linha_resumo_de_video" sem alterar nada, ele termina normalmente
+- Desta vez eu demorei e não resolvi o problema.
+- Percebi que o módulo comando_alterar_comentario mostra os botões corretamente. Tentei implementar de forma semelhante, mas o teste deu erro e só mostrou os vídeos com botão bloquear.
