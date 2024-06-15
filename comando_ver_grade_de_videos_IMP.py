@@ -1,6 +1,7 @@
 import html_pag_grade_de_videos 
 import obj_sessao
 import obj_video
+import sys
 
 def processa(ses, cmd_args):
     
@@ -10,7 +11,12 @@ def processa(ses, cmd_args):
   erros = []
   
   arg_ordem = cmd_args.pop('ordem', None)
-    
+  arg_catalogo = cmd_args.pop('catalogo', None)
+
+  # valores default
+  chave_de_ordenacao = 'nota' 
+  ordem = 0
+
   if arg_ordem is not None:
     operator = arg_ordem[0]
     chave_de_ordenacao = arg_ordem[1:]
@@ -33,7 +39,7 @@ def processa(ses, cmd_args):
   vid_ids = obj_video.ordena_identificadores(vid_ids, chave_de_ordenacao, ordem)
       
   if len(erros) == 0:
-    pag = html_pag_grade_de_videos.gera(ses, vid_ids, ncols, None)
+    pag = html_pag_grade_de_videos.gera(ses, vid_ids, ncols, arg_catalogo, None)
   else:
     pag = html_pag_mensagem_de_erro.gera(ses, erros)
   
