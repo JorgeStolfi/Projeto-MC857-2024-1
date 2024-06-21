@@ -6,7 +6,7 @@ import html_linha_resumo_de_usuario
 import db_base_sql
 import db_tabelas_do_sistema
 import obj_usuario
-import obj_sessao
+from util_erros import aviso_prog
 import util_testes
 
 import sys

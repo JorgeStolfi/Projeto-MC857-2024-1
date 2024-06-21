@@ -2,6 +2,7 @@ import obj_usuario
 import html_elem_item_de_resumo
 import html_elem_button_simples
 import html_elem_link_text
+import util_nota
 
 def gera(admin, usr):
   
@@ -9,7 +10,7 @@ def gera(admin, usr):
 
   ht_campos = []
   
-  colunas = [ 'usuario', 'admin', 'email', 'nome' , 'vnota']
+  colunas = [ 'usuario', 'admin', 'email', 'nome' , 'vnota', 'cnota']
 
   for chave in colunas:
     if chave == 'usuario':
@@ -27,6 +28,9 @@ def gera(admin, usr):
     elif chave == 'vnota':
       mostra = True
       texto = str(atrs['vnota']) if usr != None else "Nota"
+    elif chave == 'cnota':
+      mostra = True
+      texto = util_nota.formata(atrs['cnota']) if usr != None else "Nota Comentários"
     else:
       mostra = True
       texto = str(atrs[chave]) if usr != None else chave.capitalize()
