@@ -61,7 +61,7 @@ def processa(ses, cmd_args):
     assert autor_id != None
     assert vid_id != None
     atrs = { 'autor': autor_id, 'video': vid_id }
-    if comentario_id != None: atrs['comentario'] = comentario_id
+    if comentario_id != None: atrs['pai'] = comentario_id
     pag = html_pag_postar_comentario.gera(ses, atrs, None)
   return pag
 
