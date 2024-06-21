@@ -103,6 +103,39 @@ cr1_bytes = open("videos/V-00000002.mp4", 'rb').read()
 
 roda_teste("cr1_ok", cr1_id, cr1_bytes)
 
+# Testando extrai_trecho
+def roda_extrai_trecho(vid_id,inicio,fim):
+  """Teste da funcao extrai trecho."""
+
+  ok = True
+   
+  if not util_video.verifica_arquivo(vid_id):
+    sys.stderr.write("**  {util_video.verifica_arquivo} falhou\n")
+    ok = False
+
+  try:
+    util_video.extrai_trecho(vid_id, inicio, fim)
+  except ErroAtrib as ex:
+    sys.stderr.write(f"  chamada falhou com ErroAtrib ex = {str(ex)}\n")
+    sys.stderr.write(f"  ** devia ter dado certo!\n")
+    ok = False
+
+  except AssertionError as ex:
+    sys.stderr.write(f"  chamada falhou com AssertionError ex = {str(ex)}\n")
+    sys.stderr.write(f"  ** devia ter dado certo!\n")
+    ok = False
+
+  if ok:
+    sys.stderr.write("  CONFERE!\n")
+  else:
+    aviso_prog("  teste falhou",True)
+    ok_global = False
+
+  return ok
+
+roda_extrai_trecho("V-00000002", 2.0, 4.0)
+roda_extrai_trecho("V-00000009", 3.0, 7.0)
+
 # Testando {obj_video.extrai_quadro}:
 duracao, largura, altura, NQ = util_video.grava_arquivos(cr1_id,cr1_bytes)
 

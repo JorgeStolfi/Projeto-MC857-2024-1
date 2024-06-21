@@ -18,6 +18,7 @@ import os
 import re
 import time
 import random
+import string
 
 from datetime import datetime, timezone
 from math import log, gcd, sin
@@ -183,11 +184,27 @@ def extrai_trecho(vid_id,inicio,fim):
   assert type(inicio) is float
   assert type(fim) is float
   assert 0 <= inicio and fim >= inicio + 0.001, "intervalo de tempo inválido"
-  sys.stderr.write("** !!! a função {util_video.extrai_trecho} não está implementada !!!\n")
+  
+  global util_video_debug
 
-  # Resultado tapa-buraco:
-  recho_arq = f"videos/{vid_id}.mp4"
+  rand_str = ''.join(random.choices(string.digits, k=8))
+  video_arq = f"videos/{vid_id}.mp4"
+  trecho_arq = f"videos/{vid_id}-{rand_str}.mp4"
 
+  if util_video_debug: sys.stderr.write(f"    Extraindo o trecho do vídeo {vid_id} no tempo {inicio} a {fim} s\n")
+
+  comando_ffmpeg = [
+          'ffmpeg', 
+          '-ss', str(inicio), 
+          '-to', str(fim), 
+          '-i', video_arq, 
+          '-c', 'copy', 
+          trecho_arq
+      ]
+  res = subprocess.run(comando_ffmpeg, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+  assert res.returncode == 0, f"erro ao executar ffmpeg"
+
+  if util_video_debug: sys.stderr.write(f"    Trecho extraído com sucesso e armazenado no arquivo {trecho_arq}\n")
   return trecho_arq
 
 def extrai_quadro(vid_id,tempo):
