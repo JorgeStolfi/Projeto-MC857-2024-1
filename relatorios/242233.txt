@@ -1,2 +1,8 @@
-# Relatorio de 242233 da aula de 2024-06-14
-Dispensado.
+# Relatorio de 242233 da aula de 2024-06-21
+
+Minha tarefa era adicionar os campos "cnota_min" e "cnota_max" no formulário de busca de usuários(html_form_buscar_usuarios)
+para permitir a busca de usuários de acordo com a nota média de seus comentários.
+
+Adicionei os dois campos me baseando nos campos "vnota_min" e "vnota_max" que já existiam no mesmo módulo.
+
+Executei os testes do módulo e todos os testes terminaram sem problemas.
