@@ -6,8 +6,10 @@ import html_bloco_cabecalho_de_video
 import html_bloco_rodape_de_video
 import html_elem_img
 import html_elem_table
-
-def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
+import html_bloco_tabela_de_campos
+import html_elem_button_submit
+import html_elem_form
+def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota, bt_baixar):
 
   # Validação de tipos (paranóia):
   assert vid != None and isinstance(vid, obj_video.Classe)
@@ -21,12 +23,11 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
   
   ht_cabeca = html_bloco_cabecalho_de_video.gera(vid_id, vid_atrs, largura=600, mostra_id=False, mostra_data=True)
   
-  # Janela do vídeo:
+  # Janela do vídeo:bt_alterar
   if(not vid_atrs['bloqueado']):
     ht_video = html_elem_video.gera(vid_id, altura = 300)
   else:
     ht_video = ""
-  
   ht_rodape = html_bloco_rodape_de_video.gera(vid_id, vid_atrs, largura=600, mostra_nota=True, mostra_dims=True)
 
   ht_bloco = ht_cabeca + "\n" + ht_video + "\n" + ht_rodape + "\n"
@@ -52,8 +53,22 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
     if bt_alterar or bt_conversa or bt_comentar:
       ht_bloco += "<br/>" 
     
+    if  bt_baixar:
+      
+      ht_bt_baixar = html_elem_button_submit.gera("Baixar", 'baixar_video?video={vid}', None, None)
+      linhas =  (( "inicio",     "number",     'inicio',    True,  "00:00" ),
+      ( "fim",     "number",     'fim',    True,  "99:99" ))
+      atrs = {'dica': '00:00'}
+      ht_table = html_bloco_tabela_de_campos.gera(linhas, atrs)
+      conteudo_form = \
+      ( ht_table + "<br/>\n" ) + \
+      ( ht_bt_baixar + " " )
+      ht_form = html_elem_form.gera(conteudo_form, False)
+
+      ht_bloco += ht_form
+
     if bt_alterar:
-      ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_video", cmd_args, '#eeee55')
+      ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_video", cmd_args, '#eeee55')   
       ht_bloco += ht_bt_alterar
 
     if bt_conversa:

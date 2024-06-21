@@ -1,6 +1,6 @@
 import html_bloco_video_IMP
 
-def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
+def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota, bt_baixar ):
   """
   Retorna um fragmento HTML que exibe dados do video {vid}
   (não editáveis) e o vídeo em si.
@@ -33,4 +33,4 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota):
   Em todos estes comandos, os argumentos serão {{ 'video': vid_id }} onde
   {vid_id} é o identificador do vídeo {vid}.
   """
-  return html_bloco_video_IMP.gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota)
+  return html_bloco_video_IMP.gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota, bt_baixar)

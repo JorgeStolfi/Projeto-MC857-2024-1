@@ -53,9 +53,9 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   # if editavel:
   #   dados_linhas.append( ( "Senha",            "password", 'senha',       True, None, ) )
   #   dados_linhas.append( ( "Confirme senha",   "password", 'conf-senha',  True, None, ) )
-    
   # Atributo 'administrador' sempre aparece, mas é editável só para administrador:
   # edt_admin = (editavel and para_admin)
+  
   dados_linhas.append( ( "Administrador", "checkbox", 'administrador', para_admin, None ) )
 
   # Atributo 'vnota' sempre aparece, mas é editável só para administrador:

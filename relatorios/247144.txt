@@ -1,1 +1,31 @@
 # Relatorio de 247144 da aula de 2024-06-14
+
+
+1 - Tarefa:Acrescentar à página de ver video um botão "Baixar" e dois campos editáveis "Início" e "Fim" onde o usuário pode digitar tempos fracionários em segundos. Quando clicado, o botão deve emitir o comando "baixar_video" com parâmetros 'video' (identificador), 'inicio', e 'fim' (valores obtidos desses campos editáveis). Não precisa implementar o comando "baixar_video".
+
+
+passo a passo
+
+1 -  Inicialmente indentifiquei quq a classe HTML_BLOCO_VIDEO era responsável por montar o HTML da página, logo deveria adicionar o botão baixar naquele local.
+
+2 - Fiz uma mudança nos parametros, para que a função recebesse o parametro bt_baixar tanto na interface quanto  na IMP:
+    def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota, bt_baixar):
+
+3 - Depois disso fiz a adição de um formulário, cujo submit é o botão baixar e que tem como parametros inicio e fim e id do video, além disso, também faz uma requisição POST para: baixar_video passando o Id do video como parametro
+
+    if  bt_baixar:
+      
+      ht_bt_baixar = html_elem_button_submit.gera("Baixar", 'baixar_video?video={vid}', None, None)
+      linhas =  (( "inicio",     "number",     'inicio',    True,  "00:00" ),
+      ( "fim",     "number",     'fim',    True,  "99:99" ))
+      atrs = {'dica': '00:00'}
+      ht_table = html_bloco_tabela_de_campos.gera(linhas, atrs)
+      conteudo_form = \
+      ( ht_table + "<br/>\n" ) + \
+      ( ht_bt_baixar + " " )
+      ht_form = html_elem_form.gera(conteudo_form, False)
+
+      ht_bloco += ht_form
+
+
+4 - Bastou isso é está 100% funcional a adição do botão funcionar, com tempo de inicio e fim editaveis onde o usuário pode inserir tempos em segundos
