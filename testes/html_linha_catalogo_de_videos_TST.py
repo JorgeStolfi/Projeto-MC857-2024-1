@@ -1,15 +1,13 @@
-???
 #! /usr/bin/python3
 
 # Interfaces usadas por este script:
 
-import html_linha_resumo_de_video
+import html_linha_catalogo_de_videos
 import db_base_sql
 import db_tabelas_do_sistema
 import obj_video
 import util_testes
 from util_erros import aviso_prog
-
 
 import sys
 
@@ -27,7 +25,7 @@ def testa_gera(rot_teste, res_esp, *args):
   em "testes/saida/{modulo}.{funcao}.{rot_teste}.html"."""
   
   global ok_global
-  modulo = html_linha_resumo_de_video
+  modulo = html_linha_catalogo_de_videos
   funcao = modulo.gera
   frag = True  # Resultado é só um fragmento de página?
   pretty = False # Deve formatar o HTML para facilitar view source?
