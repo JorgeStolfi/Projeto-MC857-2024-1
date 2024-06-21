@@ -12,9 +12,13 @@ def gera(atrs, para_admin):
       ( "Nome",         "text",     "nome",       True,     "Fulano de tal",     ),
       ( "Vnota desde",  "number",   "vnotaMin",   True,     "Nota mínima",   True),
       ( "Vnota até",    "number",   "vnotaMax",   True,     "Nota máxima",   True),
+      ( "Cnota desde",  "number",   "cnotaMin",   True,     "Nota mínima",   True),
+      ( "Cnota até",    "number",   "cnotaMax",   True,     "Nota máxima",   True),
     ]
   atrs["vnotaMin_min"] = 0
   atrs["vnotaMax_min"] = 0
+  atrs["cnotaMin_min"] = 0
+  atrs["cnotaMax_min"] = 0
   
   if para_admin:
     dados_linhas.append( ( "email", "text", "email", True,  "fulano@lugar.com", ) )
