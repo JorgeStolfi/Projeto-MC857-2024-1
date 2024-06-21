@@ -1,1 +1,11 @@
 # Relatorio de 241882 da aula de 2024-06-14
+A tarefa pede para que seja adicionado um campo de busca, na página que executa o comando
+comando_buscar_usuarios, que permita a busca de usuários pelo campo cnota. 
+
+Desta forma, de maneira similar àquela que foi feita para o campo vnota, adicionamos 
+os campos de formulário para busca por cnota no módulo html_form_buscar_usuarios e, após isso,
+adicionamos as devidas validações e formatações dos campos cnotaMin e cnotaMax no módulo
+comando_buscar_usuarios.
+
+Tais alterações foram o suficiente para garantir a funcionalidade pedida. Todos os testes
+foram executados e terminaram normalmente.
