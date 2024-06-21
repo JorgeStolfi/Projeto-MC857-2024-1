@@ -10,6 +10,7 @@ import db_base_sql
 import db_tabelas_do_sistema
 import util_testes
 import util_identificador
+from util_erros import aviso_prog
 
 import sys
 
@@ -90,6 +91,15 @@ for ses_id in None, sesA1_id, sesC1_id:
           xusr = f"_U{usr_a_ver_id[-3:]}" if usr_a_ver_id != None else "_UNone"
           rot_teste = "D" + xatrs + xses + xusr
           testa_gera(rot_teste, str, usr_a_ver_id, atrs, editavel, para_admin, para_proprio)
+
+# Teste para exibir todas as informações textuais em seus tamanhos máximos
+nome_tamanho_maximo = "Nome Muito GrandeParaAvaliacaoDoTeste Da Silva1234567MeuNome"
+email_tamanho_maximo = "umemailmuitograndeeemseutamanhomaximoparavalidaroteste@gmail.com"
+atrs = obj_usuario.obtem_atributos(usrC1)
+atrs.update({ 'nome': nome_tamanho_maximo, 'email': email_tamanho_maximo})
+for editavel in False, True:
+  nome_teste = "TextosNoTamanhoMaximo_Edit" + str(editavel)
+  testa_gera(nome_teste, str, usrC1_id, atrs, editavel, False, True)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")
