@@ -24,8 +24,6 @@ def gera(vid_id, atrs_mod, eh_adm):
   # Converte objetos para identificadores, limpa {atrs_mod}:
   vid_atrs = util_dict.para_identificadores(obj_video.obtem_atributos(vid))
   atrs_mod = util_dict.para_identificadores(atrs_mod)
-  util_dict.elimina_alteracoes_nulas(atrs_mod, vid_atrs)
-  
   # Cabeçalho com atributos do vídeo
   ht_cabeca = html_bloco_cabecalho_de_video.gera \
     ( vid_id, vid_atrs, largura = 600,
@@ -54,7 +52,7 @@ def gera(vid_id, atrs_mod, eh_adm):
   cmd_args = { 'video': vid_id }
 
   # Botões do formulário:
-  ht_bt_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_video', None, None)
+  ht_bt_submit = html_elem_button_submit.gera("Confirmar alterações", 'alterar_video', cmd_args, None)
   ht_bt_cancel = html_elem_button_simples.gera("Cancelar", "pag_principal", None, None)
   ht_bt_calcnota = html_elem_button_simples.gera("Recalcular nota", "recalcular_nota", cmd_args, '#ff5555')
 
