@@ -1,1 +1,10 @@
-# Relatorio de 243433 da aula de 2024-06-14
+# Relatorio de 243433 da aula de 2024-06-21
+
+De inicio tive um problema em que a página inicial não abria. Investigando os logs
+no servidor descobri que era algo relacionado a cookies. Dessa maneira, removi os
+cookies existentes em meu navegador e consegui fazer a página funcionar normalmente.
+Essa tarefa foi tranquila pois bastou adicionar um novo elif para exibir a coluna
+cnota e para mostrar o emoji bastou usar o método util_nota.formata. Depois rodei
+o projeto e me certifiquei que a implementação estava funcionando. Depois rodei os
+testes e me certifiquei novamente.
+
