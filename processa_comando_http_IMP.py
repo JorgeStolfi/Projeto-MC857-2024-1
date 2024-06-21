@@ -30,6 +30,7 @@ import comando_solicitar_pag_buscar_videos
 import comando_buscar_videos
 import comando_buscar_videos_de_usuario
 import comando_ver_grade_de_videos
+import comando_baixar_video
 
 import comando_ver_comentario
 import comando_solicitar_pag_postar_comentario
@@ -496,6 +497,10 @@ def processa_comando(tipo, ses, dados):
     elif cmd == '/fazer_upload_video':
       # Preencheu o formulário de upload de video e quer fazer o upload:
       pag = comando_fazer_upload_video.processa(ses, cmd_args)
+
+    elif cmd == '/baixar_video':
+      # Preencheu dados do trecho desejado e pediu para baixar:
+      pag = comando_baixar_video.processa(ses, cmd_args)
 
     elif cmd == '/solicitar_pag_alterar_video':
       # Quer formulário para alterar atributos de um video:

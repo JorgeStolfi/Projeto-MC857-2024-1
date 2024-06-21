@@ -18,9 +18,10 @@ class Classe(obj_usuario_IMP.Classe_IMP):
     'email'          {str}     Email para identificacao no login.
     'senha'          {str}     Senha do usuário.
     'vnota'          {float}   Nota média dos vídeos do usuário, 0.00 a 4.00.
+    'cnota'          {float}   Nota média dos comentários do usuário, 0.00 a 4.00.
     'administrador'  {bool}    {True} sse o usuário é administrador. 
    
-  Outros atributos (CPF, vídeos, preferências, etc.) poderão ser
+  Outros atributos (CPF, preferências, etc.) poderão ser
   acrescentados no futuro. 
   
   Nenhum destes atributos pode ser {None}.
@@ -183,11 +184,19 @@ def confere_e_elimina_conf_senha(args):
 
 def recalcula_vnota(usr_id):
   """Recalcula a 'vnota' do usuário com o id {usr_id} como 
-  sendo uma média ponderada das notas dos vídeos do usuário, utilizando 
+  sendo uma média ponderada das notas dos vídeos subidos pelo usuário, utilizando 
   a quantidade de visualizações como peso.
   
-  Retorna a vnota recalculada"""
+  Retorna a 'vnota' recalculada"""
   return obj_usuario_IMP.recalcula_vnota(usr_id)
+
+def recalcula_cnota(usr_id):
+  """Recalcula a 'cnota' do usuário com o id {usr_id} como 
+  sendo uma média ponderada das notas dos comentários postados pelo usuário,
+  com pesos iguais.
+  
+  Retorna a 'cnota' recalculada"""
+  return obj_usuario_IMP.recalcula_cnota(usr_id)
 
 # FUNÇÕES PARA DEPURAÇÃO
 

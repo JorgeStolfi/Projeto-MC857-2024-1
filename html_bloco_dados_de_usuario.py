@@ -61,8 +61,8 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
     for {True}; caso contrário esse atributo será omitido, independentemente
     de {para_admin} e {para_proprio}.
 
-    * O atributo 'vnota' é exibido e será editável 
-    apenas se {editavel} e {para_admin} forem ambos {True}.
+    * Os atributos 'vnota' e 'cnota' serão exibidos mas nunca serão
+    editáveis, nem mesmo para administrador ou para o próprio usuário.
       
     * Os demais atributos, como 'nome', serão sempre exibidos; e serão editáveis
     se {editavel} for {True}.

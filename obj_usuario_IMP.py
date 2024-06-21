@@ -46,6 +46,7 @@ def inicializa_modulo(limpa):
       ( 'senha',         type("foo"), 'TEXT',    False ), # Senha de login.
       ( 'email',         type("foo"), 'TEXT',    False ), # Endereço de email.
       ( 'vnota',         type(418.8), 'FLOAT',   False ), # Nota média dos vídeos.
+      ( 'cnota',         type(418.8), 'FLOAT',   False ), # Nota média dos comentários.
       ( 'administrador', type(False), 'INTEGER', False ), # Define se o usuário é administrador (1=administrador)
     )
 
@@ -187,11 +188,16 @@ def cria_testes(verb):
       },
     ]
   for atrs in lista_atrs:
-    atrs['vnota'] = 2.00
+    # Atribui umas notas variadas para testes de busca:
     if atrs['id'] == 'U-00000009':
       atrs['vnota'] = 3.00
-    if atrs['id'] == 'U-00000001':
-      atrs['vnota'] = 2.8 
+      atrs['cnota'] = 1.00
+    elif atrs['id'] == 'U-00000001':
+      atrs['vnota'] = 2.80 
+      atrs['cnota'] = 4.00
+    else:
+      atrs['vnota'] = 2.00
+      atrs['cnota'] = 2.00
     usr_id_esp = atrs['id']; del atrs['id']
     usr = cria(atrs)
     assert usr != None and type(usr) is obj_usuario.Classe
@@ -255,6 +261,8 @@ def valida_atributos(usr, atrs):
     erros += util_email.valida('Email', atrs['email'], nulo_ok)
   if 'vnota' in atrs:
     erros += util_nota.valida('Nota vídeos', atrs['vnota'], nulo_ok)
+  if 'cnota' in atrs:
+    erros += util_nota.valida('Nota comentários', atrs['cnota'], nulo_ok)
   if 'administrador' in atrs:
     erros += util_booleano.valida('Administrador', atrs['administrador'], nulo_ok)
      
@@ -411,3 +419,25 @@ def recalcula_vnota(usr_id):
 
   muda_atributos(usr, mods)
   return mods['vnota']
+
+def recalcula_cnota(usr_id):
+  assert usr_id != None
+
+  comentarios = obj_comentario.busca_por_autor(usr_id)
+  usr = obtem_objeto(usr_id)
+  # Numerador e denominador da média
+  numerador = 2
+  denominador = 1
+
+  for comentario in comentarios:
+    comentario_obj = obj_comentario.obtem_objeto(comentario)
+    nota = obj_comentario.obtem_atributo(comentario_obj, 'nota')
+    numerador += nota
+    denominador += 1
+  
+  mods = {
+    'cnota': round(numerador / denominador, 2)
+  }
+
+  muda_atributos(usr, mods)
+  return mods['cnota']

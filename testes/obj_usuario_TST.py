@@ -55,6 +55,7 @@ usr1_atrs = {
   'senha': "U!00000001", 
   'email': "primeiro@gmail.com",
   'vnota': 2.00,
+  'cnota': 3.00,
   'administrador': False
 }
 uindice1 = 1
@@ -66,6 +67,7 @@ usr2_atrs = {
   'senha': "U!00000002", 
   'email': "segundo@ic.unicamp.br",
   'vnota': 2.00,
+  'cnota': 3.00,
   'administrador': False
 }
 uindice2 = 2
@@ -80,6 +82,7 @@ usr1_mods = {
   'nome': "Josegrosso de Souza",
   'senha': "U!12345678",
   'vnota': 3.00,
+  'cnota': 3.00,
 }
 obj_usuario.muda_atributos(usr1, usr1_mods)
 usr1_d_atrs = usr1_atrs
@@ -98,6 +101,7 @@ if type(usr2) is obj_usuario.Classe:
   usr2_m_atrs['nome'] = 'Mutatis Mutande'
   usr2_m_atrs['senha'] = 'U!87654321'
   usr2_m_atrs['vnota'] = 1.00
+  usr2_m_atrs['cnota'] = 1.50
   obj_usuario.muda_atributos(usr2, usr2_m_atrs)
   verifica_usuario("usr2_m", usr2, uident2, usr2_m_atrs)
 
@@ -113,28 +117,64 @@ obj_video.cria_testes(True)
 usr1_id = "U-00000001"
 sys.stderr.write("  %s\n" % ("-" * 70))
 sys.stderr.write("  recalculando vnota de usuário %s\n" % usr1_id)
-nota1 = obj_usuario.recalcula_vnota(usr1_id)
-sys.stderr.write("  nota recalculada = %s\n" % nota1)
+vnota1 = obj_usuario.recalcula_vnota(usr1_id)
+sys.stderr.write("  vnota recalculada = %s\n" % vnota1)
 
 usr2_id = "U-00000002"
 sys.stderr.write("  %s\n" % ("-" * 70))
 sys.stderr.write("  recalculando vnota de usuário %s\n" % usr2_id)
-nota2 = obj_usuario.recalcula_vnota(usr2_id)
-sys.stderr.write("  nota recalculada = %s\n" % nota2)
+vnota2 = obj_usuario.recalcula_vnota(usr2_id)
+sys.stderr.write("  vnota recalculada = %s\n" % vnota2)
 
 usr3_id = "U-00000003"
 sys.stderr.write("  %s\n" % ("-" * 70))
 sys.stderr.write("  recalculando vnota de usuário %s\n" % usr3_id)
-nota3 = obj_usuario.recalcula_vnota(usr3_id)
-sys.stderr.write("  nota recalculada = %s\n" % nota3)
+vnota3 = obj_usuario.recalcula_vnota(usr3_id)
+sys.stderr.write("  vnota recalculada = %s\n" % vnota3)
 sys.stderr.write("  %s\n" % ("-" * 70))
 
-# Define uma lista com pares (nota, nota_esperada)
-notas = [(nota1, 2.35), (nota2, 2.9), (nota3, 2.0)]
+# Define uma lista com pares (vnota, vnota_esperada)
+vnotas = [(vnota1, 2.35), (vnota2, 2.9), (vnota3, 2.0)]
 
-for nota, nota_esperada in notas:
-  # Valida se a nota gerada é igual a nota esperada
-  if nota != nota_esperada:
+for vnota, vnota_esperada in vnotas:
+  # Valida se a vnota gerada é igual a vnota esperada
+  if vnota != vnota_esperada:
+    ok_global = False
+
+# ----------------------------------------------------------------------
+sys.stderr.write("  testando {obj_usuario.recalcula_cnota}:\n")
+# Limpa os dados dos testes anteriores e inicializa os valores padrão no bd
+db_base_sql.executa_comando_DELETE("usuarios", "email = 'primeiro@gmail.com'")
+db_base_sql.executa_comando_DELETE("usuarios", "email = 'segundo@ic.unicamp.br'")
+obj_usuario.cria_testes(True)
+obj_video.cria_testes(True)
+
+# Para os testes usuaremos os 3 primeiros usuários
+usr1_id = "U-00000001"
+sys.stderr.write("  %s\n" % ("-" * 70))
+sys.stderr.write("  recalculando cnota de usuário %s\n" % usr1_id)
+cnota1 = obj_usuario.recalcula_cnota(usr1_id)
+sys.stderr.write("  cnota recalculada = %s\n" % cnota1)
+
+usr2_id = "U-00000002"
+sys.stderr.write("  %s\n" % ("-" * 70))
+sys.stderr.write("  recalculando cnota de usuário %s\n" % usr2_id)
+cnota2 = obj_usuario.recalcula_cnota(usr2_id)
+sys.stderr.write("  cnota recalculada = %s\n" % cnota2)
+
+usr3_id = "U-00000003"
+sys.stderr.write("  %s\n" % ("-" * 70))
+sys.stderr.write("  recalculando cnota de usuário %s\n" % usr3_id)
+cnota3 = obj_usuario.recalcula_cnota(usr3_id)
+sys.stderr.write("  cnota recalculada = %s\n" % cnota3)
+sys.stderr.write("  %s\n" % ("-" * 70))
+
+# Define uma lista com pares (cnota, cnota_esperada)
+cnotas = [(cnota1, 2.35), (cnota2, 2.9), (cnota3, 2.0)]
+
+for cnota, cnota_esperada in cnotas:
+  # Valida se a cnota gerada é igual a cnota esperada
+  if cnota != cnota_esperada:
     ok_global = False
 
 # ----------------------------------------------------------------------
