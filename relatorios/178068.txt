@@ -1,1 +1,9 @@
 # Relatorio de 178068 da aula de 2024-06-14
+
+Boa noite Professor!
+Hoje fiquei responsável por:
+Criar o módulo {comando_baixar_video}. A função {comando_baixar_video.processa} que recebe como argumentos em {cmd_args} 'video' (un identificador de vídeo), 'inicio', e 'fim' (strings que podem ser convertidos para tempos em segundos, fracionários). O comando deve chamar a função {util_video.extrai_trecho}" se os dois parâmetros forem diferentes, ou {util_video.extrai_quadro} se os parâmetros forem iguais ou o 'fim' for {None}. Estas funções devolvem o nome do arquivo que contém o trecho ou quadro solicitado. A função {comando_baixar_video.processa} deve então devolver uma página com um botão "Baixar", que, quando clicado, pede pro usuário escolher uma pasta e baixa nela o trecho escolhido.
+
+O módulo composto por {comando_baixar_video.py} e {comando_baixar_video_IMP.py} foram criados com base no módulo {comando_alterar_video}, e geram uma página HTML genérica com o botão do link para baixar o trecho ou quadro do vídeo, ou uma página de erro caso algo tenha dado errado.
+O teste para esse módulo, {comando_baixar_video_TST.py} também foi criado na pasta {testes}.
+As funções {util_video.extrai_trecho} e {util_video.extrai_quadro} ainda não estão implementadas no {util_video}, gerando o erro de falta de implementação no momento do teste.
