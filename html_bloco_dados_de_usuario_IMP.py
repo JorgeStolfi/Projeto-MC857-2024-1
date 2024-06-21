@@ -14,6 +14,8 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   assert type(para_admin) is bool, "{para_admin} inválido"
   assert type(para_proprio) is bool, "{para_proprio} inválido"
   
+  nao_editavel = False
+
   if atrs == None: atrs = { }
 
   # Obtem os atributos {atrs_tab} a mostrar:

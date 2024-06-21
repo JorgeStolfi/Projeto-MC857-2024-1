@@ -3,6 +3,8 @@ import html_elem_label
 import html_elem_input
 import html_elem_table
 import html_elem_textarea
+import html_elem_link_text
+import obj_usuario
 import obj_raiz
 from util_erros import erro_prog, aviso_prog
 import sys
@@ -54,6 +56,11 @@ def gera_input_ou_textarea(tipo, chave, ident, val, val_min, dica, editavel, dec
     # Ignora os valores {val}, {val_min}:
     val = None
     val_min = None
+
+  if chave == 'dono':
+    id_usuario = obj_usuario.obtem_identificador(val)
+    ht_val = html_elem_link_text.gera(id_usuario, "ver_usuario", {"usuario": id_usuario})
+    return ht_val
 
   ht_val = converte_valor(val)
     

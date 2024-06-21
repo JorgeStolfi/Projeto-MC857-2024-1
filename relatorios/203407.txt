@@ -1,1 +1,16 @@
 # Relatorio de 203407 da aula de 2024-06-14
+
+Tarefa:
+
+Logar como administrador (primeiro@gmail.com, senha "U-00000001") -> Preencher "Checar objeto" com "S-00000007" -> Botão "Checar objeto":
+O identificador do usuário deveria ser um link com ação "ver_usuario" e esse identificador como argumento.
+
+
+Relatório:
+
+Minha maior dificuldade foi encontrar onde deveria serem feitas as modificações no código.
+Percebi que os dados apresentados na tela eram montados a partir de {html_bloco_dados_de_sessao},
+chamando {html_bloco_tabela_de_campos.gera}. Fiz então, modificações na geração da tabela
+para que, quando a chave recebida fosse "dono", ela retornace um link, apartir de
+{html_elem_link_text.gera}. Por fim, utilizei a documentação e exemplo de chamadas em outras partes
+do projeto para entender como chamar o comando "ver_usuario", completando a tarefa.

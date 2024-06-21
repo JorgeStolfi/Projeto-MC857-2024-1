@@ -25,14 +25,31 @@ def gera(vid_id, atrs, largura, mostra_nota, mostra_dims):
   spacer = "&nbsp;&nbsp;"
   
   # ----------------------------------------------------------------------
-  # Linha 1: nota e dimensões:
+  # Linha 1: Num de visualizacoes.
   
   ht_linha_1 = ""
-
+  
+  if 'vistas' in atrs and atrs['vistas'] != None:
+    vistas = str(atrs['vistas'])
+    assert vistas != None
+    ht_vistas = html_elem_span.gera(estilo_atr, "Visualizações: " + vistas)
+    ht_linha_1 += ht_vistas
+  
   if mostra_nota and 'nota' in atrs and atrs['nota'] != None:
     nota = float(atrs['nota'])
-    ht_nota = html_elem_span.gera(estilo_atr, "Nota: " + f"{nota:.2f}" + " " + util_voto.formata(nota))
+    ht_nota = html_elem_span.gera(estilo_atr, " Nota: " + f"{nota:.2f}" + " " + util_voto.formata(nota))
     ht_linha_1 += ht_nota
+
+
+  if ht_linha_1 != "": ht_linha_1 += "<br/>"
+   
+  # ----------------------------------------------------------------------
+
+  # Linha 1: nota e dimensões:
+  
+  ht_linha_2 = ""
+
+
     
   if mostra_dims:
     # Ou todas as dimensões existem, ou nenhuma existe:
@@ -51,14 +68,14 @@ def gera(vid_id, atrs, largura, mostra_nota, mostra_dims):
       latgura = int(atrs['largura'])
       dims = f"Duracão: {duracao:.3f}s Tamanho: {largura}x{altura}px" 
       ht_dims = html_elem_span.gera(estilo_atr,  dims)
-      if ht_linha_1 != "": ht_linha_1 += " "
-      ht_linha_1 += ht_dims
+      if ht_linha_2 != "": ht_linha_2 += " "
+      ht_linha_2 += ht_dims
   
-  if ht_linha_1 != "": ht_linha_1 += "<br/>"
+  if ht_linha_2 != "": ht_linha_2 += "<br/>"
    
   # ----------------------------------------------------------------------
   # Cabeçalho:
   
-  ht_rodape = html_elem_div.gera(estilo_cabec_div, ht_linha_1)
+  ht_rodape = html_elem_div.gera(estilo_cabec_div, ht_linha_1 + ht_linha_2)
   
   return ht_rodape

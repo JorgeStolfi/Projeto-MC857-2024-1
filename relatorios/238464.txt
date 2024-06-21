@@ -1,1 +1,5 @@
 # Relatorio de 238464 da aula de 2024-06-14
+
+Hoje minha tarefa foi adicionar os botoes de ordenacao dos videos no novo bloco `html_bloco_catalogo_de_videos`.
+
+Pude me basear na implementação já existente dos botões de orgenação do bloco `html_bloco_grade_de_videos` e fazer o mesmo.
