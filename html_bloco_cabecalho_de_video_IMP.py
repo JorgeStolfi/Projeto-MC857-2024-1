@@ -64,21 +64,8 @@ def gera(vid_id, atrs, largura, mostra_id, mostra_data):
   if ht_linha_2 != "": ht_linha_2 += "<br/>"
    
    # ----------------------------------------------------------------------
-  # Linha 3: Num de visualizacoes.
-  
-  ht_linha_3 = ""
-  
-  if 'vistas' in atrs and atrs['vistas'] != None:
-    vistas = str(atrs['vistas'])
-    assert vistas != None
-    ht_vistas = html_elem_span.gera(estilo_atr, "Visualizações: " + vistas)
-    ht_linha_3 += ht_vistas
-  
-  if ht_linha_3 != "": ht_linha_3 += "<br/>"
-   
-  # ----------------------------------------------------------------------
   # Cabeçalho:
   
-  ht_cabeca = html_elem_div.gera(estilo_cabec_div, ht_linha_1 + ht_linha_2 + ht_linha_3)
+  ht_cabeca = html_elem_div.gera(estilo_cabec_div, ht_linha_1 + ht_linha_2)
   
   return ht_cabeca

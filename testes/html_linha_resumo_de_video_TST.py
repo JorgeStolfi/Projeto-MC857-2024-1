@@ -6,6 +6,7 @@ import html_linha_resumo_de_video
 import db_base_sql
 import db_tabelas_do_sistema
 import obj_video
+import obj_sessao #####
 import util_testes
 from util_erros import aviso_prog
 
@@ -33,6 +34,9 @@ def testa_gera(rot_teste, res_esp, *args):
   ok = util_testes.testa_funcao_que_gera_html(rot_teste, modulo, funcao, res_esp, frag, pretty, *args)
   ok_global = ok_global and ok
   return ok
+
+# sessão de admin
+ses1 = obj_sessao.obtem_objeto("S-00000001")
 
 vid_ids = [
   "V-00000001",

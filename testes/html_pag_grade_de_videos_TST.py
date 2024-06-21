@@ -64,8 +64,10 @@ for ses_tag, ses in ("N", None), ("A", sesA), ("C", sesC):
     xncols = f"_ncols{ncols:02d}"
     for erros_tag, erros in ( "E0", None, ), ( "E2", [ "Veja a mensagem abaixo", "Veja a mensagem acima" ], ):
       xerr = f"_erros{erros_tag}"
-      tag = xses + xncols + xerr
-      testa_gera("G1" + tag, str, ses, vidR_ids, ncols, erros)
+      for catalogo in ['False', 'True']:
+        xcatalogo = f"_{catalogo}"
+        tag = xses + xncols + xerr + xcatalogo
+        testa_gera("G1" + tag, str, ses, vidR_ids, ncols, catalogo, erros)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

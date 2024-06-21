@@ -27,7 +27,7 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_
   # ----------------------------------------------------------------------
   # Texto do comentário:
 
-  estilo_texto_div = f"display:block; width: {largura}px; word-wrap:break-word; padding: 5px 0px 10px 10px;"
+  estilo_texto_div = f"display:block; width: {largura}px; word-wrap:break-word; padding: 5px 0px 10px 10px; background-color: #FFFFFF;"
 
   # Caso comentario tenha sido bloqueado, não usar o texto do comentário a não ser que seja admin
   if com_atrs['bloqueado']:
@@ -35,8 +35,8 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_
     estilo_texto = html_estilo_texto.gera("18px", "bold", "#FF0000", None, None)
     ht_texto = html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
     if mostra_bloqueado:
-      texto = com_atrs['texto']
-      estilo_texto = html_estilo_texto.gera("18px", "medium", "#333333", "#FF0000", None)
+      texto = com_atrs['texto']      
+      estilo_texto = html_estilo_texto.gera("18px", "medium", "#000000", "#FF0000", None)
       ht_texto = ht_texto + html_elem_span.gera(estilo_texto, html_elem_div.gera(estilo_texto_div, texto))
   else:
     texto = com_atrs['texto']

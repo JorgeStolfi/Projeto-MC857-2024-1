@@ -1,1 +1,23 @@
 # Relatorio de 218996 da aula de 2024-06-14
+
+- 'comando_ver_grade_de_videos.py': Alterei a descrição da interface para documentar o novo parametro.
+
+- 'comando_ver_grade_de_videos_IMP.py': Passei o parametro para o modulo 'html_pag_grade_de_videos' e 
+  inicializei algumas variaveis pois estavam quebrando os testes.
+
+- 'html_bloco_catalogo_de_videos_IMP.py': Ajustei o nome do modulo utilizado pois estava errado.
+
+- 'html_linha_catalogo_de_videos.py': Alterei a descrição da interface para documentar o novo parametro.
+
+- 'html_linha_catalogo_de_videos_IMP.py': Adicionei o import faltante. O bloco html utilizado nesse arquivo ainda nao foi
+  implementado.
+
+- 'html_pag_grade_de_videos.py': Alterei a descrição da interface para documentar o novo parametro e
+  adicionei ele na função.
+
+- 'html_pag_grade_de_videos_IMP.py': Adicionei o condicional para chamar o bloco correto a depender do valor 
+  do parametro 'catalogo'.
+
+- 'testes/comando_ver_grade_de_videos_TST.py': Ajuestei os testes.
+
+- 'testes/html_pag_grade_de_videos_TST.py': Ajustei os testes.

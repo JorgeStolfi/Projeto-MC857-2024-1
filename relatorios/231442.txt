@@ -1,1 +1,7 @@
 # Relatorio de 231442 da aula de 2024-06-14
+
+Me baseando no arquivo html_form_postar_alterar_comentario_IMP.py eu 
+alterei o html_form_alterar_video_IMP.py para obedecer funcionar a
+alteração do nome do video.
+Deu tudo certo, o nome foi alterado. Testes não precisaram ser 
+alterados, só alegria.

@@ -79,6 +79,20 @@ def verifica_arquivos(rot_teste, vid_id, conteudo, duracao, largura, altura, NQ)
 
   return ok
 
+def extrai_quadros(rot_teste,vid_id,duracao,tempo):
+  """Testa extração de quadros de um vídeo."""
+  ok=True
+
+  if type(tempo) is not float:
+    sys.stderr.write("**  tempo não é um float\n")
+    ok = False
+  if tempo <0:
+    sys.stderr.write("**  tempo é um valor negativo\n")
+    ok = False
+  if tempo > duracao:
+    sys.stderr.write("**  tempo é maior que a duração do vídeo\n")
+    ok = False
+
 # ----------------------------------------------------------------------
 # Testando {obj_video.cria}:
 
@@ -121,6 +135,17 @@ def roda_extrai_trecho(vid_id,inicio,fim):
 
 roda_extrai_trecho("V-00000002", 2.0, 4.0)
 roda_extrai_trecho("V-00000009", 3.0, 7.0)
+
+# Testando {obj_video.extrai_quadro}:
+duracao, largura, altura, NQ = util_video.grava_arquivos(cr1_id,cr1_bytes)
+
+# Testes devem dar False:
+extrai_quadros("cr1_ok",cr1_id,duracao,"10")
+extrai_quadros("cr1_ok",cr1_id,duracao,-10)
+extrai_quadros("cr1_ok",cr1_id,duracao,duracao+10)
+
+# Teste deve dar True:
+extrai_quadros("cr1_ok",cr1_id,duracao,duracao/2)
 
 # ----------------------------------------------------------------------
 # Veredito final:

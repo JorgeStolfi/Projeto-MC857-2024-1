@@ -7,12 +7,14 @@ import sys
 def reshape(image,size):
   pass
 
-def gera(vid_ids, mostra_autor):
+#def gera(vid_ids, mostra_autor):#Original
+def gera(vid_ids, mostra_autor, para_admin):#Alterado
   
   # Linhas da tabela:
   linhas = []
   
-  cabecalhos = html_linha_resumo_de_video.gera(None, mostra_autor)
+  #cabecalhos = html_linha_resumo_de_video.gera(None, mostra_autor)#Original
+  cabecalhos = html_linha_resumo_de_video.gera(None, mostra_autor, para_admin)#Alterado
   linhas.append(cabecalhos)
   
   for vid_id in vid_ids:
@@ -24,7 +26,8 @@ def gera(vid_ids, mostra_autor):
     vid.atrs.update({'capa': capa})
    
     # Gera uma lista de fragmentos HTML com as informacoes desse video
-    linha_vid = html_linha_resumo_de_video.gera(vid, mostra_autor)
+    #linha_vid = html_linha_resumo_de_video.gera(vid, mostra_autor)Original
+    linha_vid = html_linha_resumo_de_video.gera(vid, mostra_autor, para_admin)#Alterado
 
     # Adiciona essa lista à lista de linhas para a tabela HTML.
     linhas.append(linha_vid)

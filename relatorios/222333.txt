@@ -1,1 +1,19 @@
 # Relatorio de 222333 da aula de 2024-06-14
+
+A tarefa que fiquei encarregado hoje foi a de melhorar a visualização de duas páginas do projeto diminuindo o espaçamento dos campos: a página ver_objeto (usando como base o objeto U-00000004) e a página de alteração de usuários (solicitar_pag_alterar_usuario).
+
+Iniciou-se o desenvolvimento executando o projeto e navegando até tal página, constatando-se que realmente havia um espaçamento exagerado entre os campos.
+Investigando um pouco mais a interface, descobriu-se a causa do problema, que também causava o espaçamento inadequado no formulário de alteração usuário: o espaçamento era causado devido o "tipo" do elemento HTML usado para exibir as propriedades "Identificador", "Nome" e "E-mail". 
+Assim, tal espaçamento era realizado para "encaixar" o elemento do tipo "textarea" para tais atributos (um elemento HTML para textos multi-linhas).
+
+Para resolver o problema, pensou-se em duas diferentes soluções:
+1. Adicionar propriedades CSS para os elementos "textarea", para diminuir a altura deles
+2. Modificar o tipo do elemento HTML utilizado para exibir tais propriedades para "text" (elemento para textos de uma linha).
+
+Avaliou-se cada uma das opções, e acabou-se por decidir pela implementação da segunda. Isso foi motivado pela característica das propriedades "Identificador", "Nome" e "E-mail" - São elementos textuais que dificilmente são muito compridos.
+Além disso, como havia limitações para o tamanho permitido de cada uma dessas propriedades (64 caracteres para o email, 60 para o nome de usuário e 10 para o identificador), não se viu motivos para continuar utilizando um elemento de múltiplas linhas, já que uma única linha já era o suficiente para a exibição.
+Realizando a alteração no módulo {html_bloco_dados_de_usuario}, observou-se que o problema do espaçamento exagerado foi resolvido. Assim, a implementação da atividade do dia foi concluída conforme o esperado.
+
+Para garantir uma maior validação da mesma, avaliou-se os textes existentes para a exibição do bloco de dados de usuário. Notou-se que já haviam muitos testes, e todos agora exibiam todos os campos corretamente.
+Apenas para uma última validação, optou-se por implementar um último teste: exibindo as informações de um dado usuário com todas as suas propriedades textuais em seus tamanhos máximos, para avaliar o caso de borda da atividade e confirmar que todos os campos eram exibidos corretamente.
+Realizando o teste para blocos editáveis e não editáveis, notou-se que a exibição estava agora perfeita em ambos os casos, e o espaçamento exagerado foi eliminado.

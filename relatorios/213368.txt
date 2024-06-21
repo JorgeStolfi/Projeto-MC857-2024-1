@@ -1,1 +1,10 @@
-# Relatorio de 213368 da aula de 2024-06-14
+# Relatório de 213368 da aula de 2024-06-14
+Objetivo: ogar como administrador (primeiro@gmail.com, senha "U-00000001") -> Preencher "Checar objeto" 
+com "U-00000004" -> Botão "Checar objeto" -> Botão "Alterar": O identificador do usuário não deveria ser 
+editável, nem mesmo para administradores.
+
+
+
+No arquivo html_bloco_dados_de_usuario_IMP.py foi criada a variável nao_editavel e atribuído Falso a ela. 
+Essa variável é colocada na tupla referente ao identificador na posição que representa o valor  de {editavel}.
+Com essa alteração, o identificador do usuário não pode ser alterado  pelo próprio usuário nem por um administrador.

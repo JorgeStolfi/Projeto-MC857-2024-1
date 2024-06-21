@@ -1,1 +1,10 @@
 # Relatorio de 242080 da aula de 2024-06-14
+
+O dicionário `atrs_mod` estava sendo usado em `html_form_alterar_video_IMP.py` para gerar a tabela do formulário, sendo passado como parâmetro para o método `html_bloco_tabela_de_campos.gera`.
+Porém esse dicionário é limpo pelo método `util_dict.elimina_alteracoes_nulas`, que compara ele com os atributos do vídeo e remove as chaves com valor igual.
+
+Optei por remover essa chamada do método `util_dict.elimina_alteracoes_nulas`, não faz sentido ele ser chamado em um gerador de html, mas sim na hora de validar os parâmetros de um comando, como já é feito.
+
+Também completei a chamada do método que gera o submit button desse formulário, passando o id do vídeo para que o comando não quebre.
+
+Dessa forma o título original do vídeo é exibido na tela de alterar vídeo e a chamada do comando `/alterar_video` está funcionando como esperado.
