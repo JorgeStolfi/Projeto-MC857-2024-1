@@ -50,8 +50,10 @@ for bt_alterar in False, True:
       xcomt = f"_comt{str(bt_comentar)[0]}"
       for calcnota in False, True:
         xcalc = f"_calc{str(calcnota)[0]}"
-        tag = xedit + xconv + xcomt + xcalc
-        testa_gera("exist" + tag, str, vid1, bt_alterar, bt_conversa, bt_comentar, calcnota)
+        for bt_baixar in False, True:
+          xbaixa = f"_calc{str(bt_baixar)[0]}"
+          tag = xedit + xconv + xcomt + xcalc + xbaixa
+        testa_gera("exist" + tag, str, vid1, bt_alterar, bt_conversa, bt_comentar, calcnota, bt_baixar)
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")

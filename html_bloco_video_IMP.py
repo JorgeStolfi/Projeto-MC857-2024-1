@@ -9,6 +9,7 @@ import html_elem_table
 import html_bloco_tabela_de_campos
 import html_elem_button_submit
 import html_elem_form
+import html_elem_input
 def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota, bt_baixar):
 
   # Validação de tipos (paranóia):
@@ -60,9 +61,13 @@ def gera(vid, bt_alterar, bt_conversa, bt_comentar, bt_calcnota, bt_baixar):
       ( "fim",     "number",     'fim',    True,  "99:99" ))
       atrs = {'dica': '00:00'}
       ht_table = html_bloco_tabela_de_campos.gera(linhas, atrs)
+
+      ht_vid_id = html_elem_input.gera("hidden", 'video', None, vid_id, None, False, None, None, True, None)
+
       conteudo_form = \
       ( ht_table + "<br/>\n" ) + \
-      ( ht_bt_baixar + " " )
+      ( ht_bt_baixar + " " ) + \
+      ( ht_vid_id )
       ht_form = html_elem_form.gera(conteudo_form, False)
 
       ht_bloco += ht_form

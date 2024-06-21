@@ -1,1 +1,5 @@
 # Relatorio de 240762 da aula de 2024-06-14
+
+Adicionei o input do tipo hidden ao formulário, com a chave video e o valor vid_id.
+
+Rodei o teste do módulo html_bloco_video, que deu erro porque faltava o argumento bt_baixar na chamada da função "gera". Adicionei mais um "for" aninhado nos testes, para o campo "bt_baixar" e adicionei ele como argumento do "testa_gera".
