@@ -1,2 +1,6 @@
-# Relatorio de 174868 da aula de 2024-06-14
-Dispensado da aula do dia 14/06
+# Relatorio de 174868 da aula de 2024-06-21
+
+Minha tarefa era adicionar um botão de "Bloqueia" ou "Desbloqueia" nos comentários presentes na página "Ver respostas" caso o usuário que solicitou tenha sido um administrador.
+Para fazer isso eu alterei o módulo que gera o bloco de comentários e os botões, {html_bloco_comentario}. Adicionei um novo parâmetro {bt_bloq_desbloq} que diz se este botão deve existir ou não. Neste módulo também alterei a implementação para gerar um novo botão caso este parâmetro seja verdadeiro, e modifiquei os testes para incluirem o botão adicional.
+
+Depois disso modifiquei os módulos que chamavam o módulo {html_bloco_comentario}, mais especificamente as implementações dos módulos {html_pag_ver_comentario} e {html_bloco_conversa}, adicionando o novo parâmetro {bt_bloq_desbloq} com o valor True caso o usuário seja um administrador e False caso contrário.

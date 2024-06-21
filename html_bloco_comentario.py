@@ -1,6 +1,6 @@
 import html_bloco_comentario_IMP
 
-def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota):
+def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota, bt_bloq_desbloq):
   """
   Retorna um fragmento HTML que exibe atributos de um comentário.
  
@@ -29,9 +29,14 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_
   
     * Se {bt_editar} for {True}, haverá um botão "Editar" que, quando clicado,
     emitirá um comando "solicitar_pag_alterar_comentario".
+
+  O parâmetro booleano {bt_calcnota} especifica se deve haver um botão "Recalcular nota".
+
+  O parâmetro booleano {bt_bloq_desbloq} especifica se deve haver um botão "Bloquear" 
+  ou "Desbloquear", de acordo com o estado atual do comentário.
     
   Os argumentos dos comandos emitidos por esses botões serão
   {{ 'comentário': com_id }}.
   """
-  return html_bloco_comentario_IMP.gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota)
+  return html_bloco_comentario_IMP.gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota, bt_bloq_desbloq)
 

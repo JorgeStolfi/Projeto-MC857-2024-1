@@ -7,7 +7,7 @@ import html_elem_div
 import html_elem_span
 import html_estilo_texto
 
-def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota):
+def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado, bt_conversa, bt_responder, bt_editar, bt_calcnota, bt_bloq_desbloq):
 
   # Validação de tipos (paranóia):
   assert com != None and isinstance(com, obj_comentario.Classe)
@@ -64,6 +64,15 @@ def gera(com, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_
   if bt_calcnota:
     ht_bt_calcnota = html_elem_button_simples.gera("Recalcular nota", "recalcular_nota", cmd_args, '#ff5555')
     ht_botoes += ht_bt_calcnota
+
+  if bt_bloq_desbloq:
+    bloqueado = com_atrs['bloqueado']
+    cmd_args['bloqueado'] = str(not bloqueado)
+    if bloqueado:
+      ht_bt_bloq_desbloq = html_elem_button_simples.gera("Desbloquear", "alterar_comentario", cmd_args, '#11dd11')
+    else:
+      ht_bt_bloq_desbloq = html_elem_button_simples.gera("Bloquear", "alterar_comentario", cmd_args, '#fb1528')
+    ht_botoes += ht_bt_bloq_desbloq
     
   ht_bloco = ht_cabeca + ht_texto + ht_botoes
 
