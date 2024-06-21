@@ -9,6 +9,7 @@ import util_bloqueado
 import util_nota
 import util_testes
 import obj_sessao
+import html_elem_img
 
 def gera(vid, mostra_autor):
 

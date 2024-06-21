@@ -1,4 +1,4 @@
-import html_linha_catalogo_de_video_IMP
+import html_linha_catalogo_de_videos_IMP
 
 def gera(vid, mostra_autor):
   """
@@ -17,5 +17,5 @@ def gera(vid, mostra_autor):
   Se {vid} não é {None}, resultado inclui também um botão "Ver" que dispara um comando
   HTTP "ver_video".  O argumento desse comando será {{ 'video': vid_id }}.
   """
-  return html_linha_catalogo_de_video_IMP.gera(vid, mostra_autor)
+  return html_linha_catalogo_de_videos_IMP.gera(vid, mostra_autor)
   

@@ -10,11 +10,13 @@ def processa(ses, cmd_args):
   está logado).
   
   O parãmetro {cmd_args} deve ser um dicionário com os argumentos do
-  comando. Pode ser vazio, ou conter um único argumento 'ordem' cujo
+  comando. Pode ser vazio, ou conter os seguintes argumentos: 'ordem' cujo
   valor deve ser um string cujo primeiro caractere deve ser "+" ou "-"
   e os caracteres seguintes a chave de ordenação, 'nota', 'vistas', ou 'data'. Por exemplo:
   "+nota" = por nota em ordem crescente, "-vistas" = por visualizações
   em ordem decrescente. Caso a chave 'ordem' esteja ausente ou tenha valor {None},
-  a amostra será ordenada de maneira aleatória.
+  a amostra será ordenada de maneira aleatória. Outro argumento e o 'catalogo' 
+  que e um booleano que indica se deve exibir uma grade de videos ou um
+  catalogo de videos. Se True, ele deve exibir o catalogo de videos.
   """
   return comando_ver_grade_de_videos_IMP.processa(ses, cmd_args)
