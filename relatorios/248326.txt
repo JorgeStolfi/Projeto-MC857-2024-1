@@ -1,1 +1,4 @@
 # Relatorio de 248326 da aula de 2024-06-14
+
+Escrevi a função "extrai_quadros" no arquivo "util_video_TST"
+e rodei a função para os três casos de False e um para o caso de True (passou nos teste)
