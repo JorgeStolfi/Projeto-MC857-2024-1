@@ -1,5 +1,9 @@
-# Relatorio de 240013 da aula de 2024-06-14
+# Relatorio de 240013 da aula de 2024-06-21
 Nome: Lucas Jacinto Gonçalves
 RA: 240013
 
-Eu fui dispensado da minha tarefa no dia de hoje 14/06.
+Eu realizei a alteração no arquivo de nome: comando_alterar_video_IMP.py. A correção que eu fiz foi selecionar o índice do primeiro elemento de vid_id para selecionar o identificador do vídeo.
+A correção feita é: vid = obj_video.obtem_objeto(vid_id[0]).
+Com essa alteração no código, ele funciona para a alteração do título de um vídeo. Testado e funcionou corretamente.
+
+
