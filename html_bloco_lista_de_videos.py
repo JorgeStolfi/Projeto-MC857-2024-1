@@ -1,7 +1,8 @@
 
 import html_bloco_lista_de_videos_IMP
 
-def gera(vid_ids, mostra_autor):
+#def gera(vid_ids, mostra_autor):#Original
+def gera(vid_ids, mostra_autor, para_admin):#Alterado
   """Retorna um trecho de HTML que descreve os videos cujos identificadores
   estão na lista {vid_ids}.
   
@@ -10,4 +11,5 @@ def gera(vid_ids, mostra_autor):
   
   Cada linha terá um botão "Ver" que dispara o comando "ver_video"
   com o dentificador do vídeo como argumento (chave 'video')."""
-  return html_bloco_lista_de_videos_IMP.gera(vid_ids, mostra_autor)
+  #return html_bloco_lista_de_videos_IMP.gera(vid_ids, mostra_autor)#Original
+  return html_bloco_lista_de_videos_IMP.gera(vid_ids, mostra_autor, para_admin)#Alterado

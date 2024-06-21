@@ -13,6 +13,7 @@ import util_dict
 import util_booleano
 import util_nota
 import util_vistas
+import obj_usuario #############
 
 from util_erros import ErroAtrib
 
@@ -22,6 +23,20 @@ def processa(ses, cmd_args):
   assert isinstance(cmd_args, dict)
 
   erros = []
+
+################
+  # Obtem o usuário {ses_dono} dono da sessão:
+  if ses != None and obj_sessao.aberta(ses):
+    ses_dono = obj_sessao.obtem_dono(ses); 
+    assert ses_dono != None
+    ses_dono_id = obj_usuario.obtem_identificador(ses_dono)
+    para_admin = obj_usuario.eh_administrador(ses_dono)
+  else:
+    ses_dono = None
+    ses_dono_id = None
+    para_admin = None
+##################
+
 
   # Valida os valores dos atributos da busca, excluindo campos {None}:
   atrs_busca = {}
@@ -93,7 +108,10 @@ def processa(ses, cmd_args):
   else:
     ht_titulo = html_bloco_titulo.gera("Vídeos encontrados")
 
-  ht_tabela = html_bloco_lista_de_videos.gera(vid_ids, mostra_autor = True)
+  #ht_tabela = html_bloco_lista_de_videos.gera(vid_ids, mostra_autor = True)#Original
+  mostra_autor = True #Alterado
+  ht_tabela = html_bloco_lista_de_videos.gera(vid_ids, mostra_autor, para_admin)#Alterado
+
   ht_bloco = \
     ht_titulo + "<br/>\n" + \
     ht_tabela
