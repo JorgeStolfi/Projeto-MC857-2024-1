@@ -14,6 +14,7 @@ def gera(ses, bt_ver, bt_fechar, mostra_dono):
   ht_campos = []
   
   colunas = [ 'sessao', 'aberta', 'dono', 'criacao', 'cookie' ]
+  cor_texto = "gray"
   
   for chave in colunas:
     if chave == 'sessao':
@@ -25,6 +26,7 @@ def gera(ses, bt_ver, bt_fechar, mostra_dono):
     elif chave == 'aberta':
       mostra = True
       texto = ("Aberta" if atrs['aberta'] else "Fechada") if ses != None else "Estado"
+      cor_texto = "black" if ses != None and atrs['aberta'] else cor_texto
     elif chave == 'criacao':
       mostra = True
       texto = atrs[chave] if ses != None else "Data de criação"
@@ -35,7 +37,6 @@ def gera(ses, bt_ver, bt_fechar, mostra_dono):
     if mostra:
       cab = (ses == None)
       cor_fundo = None # !!! Precisariamos saber a sessão atual !!!
-      cor_texto = None 
       alinha = "left"
       ht_item = html_elem_item_de_resumo.gera(texto, cab, cor_fundo, alinha, cor_texto)
       ht_campos.append(ht_item)
