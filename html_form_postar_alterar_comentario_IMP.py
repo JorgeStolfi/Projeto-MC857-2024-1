@@ -44,9 +44,10 @@ def gera(com_id, atrs, ed_nota, ed_voto):
 
   # Voto opcionalmente editável:
   if ed_voto:
+    com_voto = atrs.get('voto', 0)
     ht_voto = "<br/>" + \
       html_elem_label.gera("Voto:", " ") + \
-      html_elem_input.gera("number", 'voto', 'voto', 0, 0, True, None, None, False, False )
+      html_elem_input.gera("number", 'voto', 'voto', com_voto, 0, True, None, None, False, False )
   else:
     ht_voto = ""
  
@@ -69,12 +70,12 @@ def gera(com_id, atrs, ed_nota, ed_voto):
   # Campos hidden para passar os atributos para o comando:
   video_id = atrs.get('video', None)
   if video_id != None:
-    ht_video_id = html_elem_input.gera("hidden", 'video', None, video_id, None, False, None, None, True, None)
+    ht_video_id = html_elem_input.gera("hidden", 'video', None, video_id, None, False, None, None, True, None, True)
     ht_form_conteudo += "\n" + ht_video_id
   
   pai_id = atrs.get('pai', None)
   if pai_id != None:
-    ht_pai_id = html_elem_input.gera("hidden", 'pai', None, pai_id, None, False, None, None, True, None)
+    ht_pai_id = html_elem_input.gera("hidden", 'pai', None, pai_id, None, False, None, None, True, None, True)
     ht_form_conteudo += "\n" + ht_pai_id
 
   ht_form = html_elem_form.gera(ht_form_conteudo, False)

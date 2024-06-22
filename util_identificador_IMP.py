@@ -11,7 +11,7 @@ def de_indice(let, indice):
 
 def para_indice(let, id_obj):
   assert type(let) is str and len(let) == 1
-  assert type(id_obj) is str and len(id_obj) == 10 
+  assert type(id_obj) is str and len(id_obj) == 10
   assert id_obj[0:1] == let 
   assert id_obj[1:2] == "-"
   indice = int(id_obj[2:])

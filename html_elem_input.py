@@ -1,6 +1,6 @@
 import html_elem_input_IMP
 
-def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal):
+def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal, force_disabled = False):
   """
   Gera o HTML para um campo de dados "<input type='{tipo}' ... />" com atributos dados.
   Este fragmento geralmente é incluído em um formulário "<form>...</form>".
@@ -65,5 +65,8 @@ def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio,
   O parâmetro {decimal} é relevante quando {tipo} for 'number' e determina se o
   campo aceitará valores decimais. No momento estão sendo considerados valores de até
   2 casas decimais.
+
+  O parâmetro {force_disabled} é relevante quando queremos que um elemento do formulário
+  não seja enviado na requisição da próxima página.
   """  
-  return html_elem_input_IMP.gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal)
+  return html_elem_input_IMP.gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal, force_disabled)

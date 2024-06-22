@@ -15,14 +15,14 @@ import sys
 
 caco_debug = False  # Deve imprimir mensagens para depuração?
 
-def processa(ses, cmd_args):
+def processa(ses, cmd_args_original):
 
   # Estas condições deveriam ser garantidas para comandos emitidos
   # pelas páginas do sistema:
   assert ses == None or isinstance(ses, obj_sessao.Classe)
-  assert isinstance(cmd_args, dict)
+  assert isinstance(cmd_args_original, dict)
 
-  cmd_args = cmd_args.copy() # Para não alterar o original.
+  cmd_args = cmd_args_original.copy() # Para não alterar o original.
   erros = [] # Mensagens de erro.
   
   ses_dono = None
@@ -82,9 +82,6 @@ def processa(ses, cmd_args):
         if not editavel:
           erros.append("Você não pode desbloquear esse comentário")
     
-      
-        
-
   pag = None
   if (len(erros) == 0):
     # Tenta modificar os atributos do vídeo:
@@ -117,6 +114,6 @@ def processa(ses, cmd_args):
 
   if pag == None:
     # Repete a página de alterar comentário com os mesmos argumentos, mais as mens de erro:
-    pag = html_pag_alterar_comentario.gera(ses, com, cmd_args, erros)
+    pag = html_pag_alterar_comentario.gera(ses, com, cmd_args_original, erros)
 
   return pag
