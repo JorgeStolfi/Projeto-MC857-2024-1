@@ -1,1 +1,24 @@
-# Relatorio de 164210 da aula de 2024-06-14
+# Relatorio de 164210 da aula de 2024-06-21
+Tarefa de Hoje:
+
+164210 Implementar e testar o módulo {html_linha_catalogo_de_video} que é uma espécie de combinação
+de {html_bloco_video} e {html_linha_resumo_de_video}. A função {gera} desse módulo deve gerar um trecho
+de HTML mostrando os dados de um vídeo especificado nos parãmetros; exceto que a capa do vídeo aparece à
+esquerda, em tamanho "médio", e todas as outras informações (cabeçalho e rodapé) estão juntas à direita dessa janela,
+em várias linhas. Tipo uma entrada do "History" do YouTube. Deve haver um botão de "Ver" em cada entrada.
+
+
+Relatório:
+
+Demorei uma hora para perceber que o arquivo de teste `html_linha_catalogo_de_videos_TST` estava testando
+o módulo `html_linha_resumo_de_video` ao inves de `html_linha_catalogo_de_videos`. Deveras frustrante, mas é erro
+da minha atenção...
+
+Alterei somente o arquivo `html_linha_catalogo_de_videos_IMP` fora o arquivo de teste. Passei boa parte do tempo gerando
+as funcoes para criar um grid css e poder organizar as informacoes dentro de um layout. Precisaria ainda extrair essas funções
+para um arquivo separado dedicado a geração de containers css grid em algum momento.
+A função que gera o arquivo de estilos recebe uma matriz com o nome das areas desejadas no grid css e cria o container
+e as classes para cada area.
+
+Alterei `ht_janela` para conter a informacao de duracão do vídeo no canto inferior direito, parecido com o youtube.
+
