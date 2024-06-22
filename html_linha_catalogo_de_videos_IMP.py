@@ -3,6 +3,7 @@ import html_elem_span
 import html_elem_button_simples
 import html_estilo_texto
 import html_elem_div
+import obj_usuario
 
 # --------------------------------------------------------------------------------
 #
@@ -56,13 +57,26 @@ def gera(vid, mostra_autor):
   atrs = obj_video.obtem_atributos(vid)
   
   titulo = atrs['titulo']
-  autor = atrs['autor'] if mostra_autor else 'Anônimo'
   data = atrs['data']
   vistas = atrs['vistas']
   nota = atrs['nota']
   segundos = str((int(atrs['duracao'])//1000) % 60)
   segundos = segundos if len(segundos) == 2 else f"0{segundos}"
   minutos = str((int(atrs['duracao'])//1000) // 60)
+
+  # Extrai nome do autor
+  autor_nome = 'Anônimo'
+  if 'autor' in atrs and atrs['autor'] != None:
+    if isinstance(atrs['autor'], obj_usuario.Classe):
+      autor = atrs['autor']
+      autor_id = obj_usuario.obtem_identificador(autor)
+    else:
+      autor_id = atrs['autor']
+      autor = obj_usuario.obtem_objeto(autor_id)
+    assert autor != None
+    assert autor_id != None
+    autor_nome = obj_usuario.obtem_atributo(autor, 'nome') if mostra_autor else autor_nome
+    assert autor_nome != None
 
   # --------------------------------------------------------------------------------
   #
@@ -102,7 +116,7 @@ def gera(vid, mostra_autor):
   # Area do Conteudo
   # --------------------------------------------------------------------------------
   estilo_conteudo = html_estilo_texto.gera("14px", "medium", "#000000", "#FF0000", None)
-  ht_conteudo = html_elem_span.gera(estilo_conteudo, html_elem_div.gera(estilo_texto_div, f'Por: {autor}, em {data}.'))
+  ht_conteudo = html_elem_span.gera(estilo_conteudo, html_elem_div.gera(estilo_texto_div, f'Por: {autor_nome}, em {data}.'))
   ht_conteudo += html_elem_span.gera(estilo_conteudo, html_elem_div.gera(estilo_texto_div, f'Visto {vistas} vezes.'))
   ht_conteudo = gera_div_com_classe("conteudo", ht_conteudo)
 
