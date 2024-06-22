@@ -1,1 +1,21 @@
-# Relatorio de 174928 da aula de 2024-06-14
+# Relatorio de 174928 da aula de 2024-06-21
+
+Tarefa: Logar como administrador -> Botão "Buscar sessões": capota. Consertar.
+
+    Ao logar como administrado e clicar no botão "Buscar sessões", é possível visualizar que o botão encaminha o usuário para a página com URL correta, porém no lugar da página aparece a seguinte mensagem:
+    
+        "This page isn't working 
+        127.0.0.0 didn’t send any data.
+        ERR_EMPTY_RESPONSE"
+
+    O erro nos indica que nenhuma página está sendo retornada para a URL requisitada.
+    Por isso, foram realizados os testes dos módulos {comando_solicitar_pag_buscar_sessoes} e {html_pag_buscar_sessoes}.
+    Ambos os testes falharam, resultando em um erro devido à um "assert" na linha 85 do arquivo obj_usuario_IMP.py:
+
+        "assert usr != None and isinstance(usr, obj_usuario.Classe)"
+
+    Com os resultado dos testes, sabe-se então que em algum momento o argumento usr é passado de maneira incorreta, sendo nulo ou de uma classe indevida.
+    Observando ainda as saídas dos testes, é possível observar as chamadas das funções que levaram até o erro.
+    Desse modo, foi encontrado que no arquivo html_bloco_tabela_de_campo_IMP.py, na linha 60, é realizada a checagem da chave 'dono', mas não é conferido se a mesma tem valor atribuido.
+    Foi acrescentado então, nessa mesma testagem condicional, se o valor "val" referente à chave 'dono' é nulo ou não.
+    Após essa alteração, após logar como administrador e clicar no botão "Buscar sessões", é possível visualizar a página corretamente. Os testes dos dois módulos que falhavam anteriormente também passaram a terminar sem problemas.
