@@ -4,6 +4,7 @@ import html_bloco_tabela_de_campos
 import obj_usuario
 import obj_sessao
 import html_elem_form
+import util_nota
 
 def gera(usr_id, atrs, editavel, para_admin, para_proprio):
 
@@ -57,10 +58,12 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   # edt_admin = (editavel and para_admin)
   
   dados_linhas.append( ( "Administrador", "checkbox", 'administrador', para_admin, None ) )
-
+  
+  # formata a nota para exibição com emoji:
+  atrs_tab['vnota'] = util_nota.formata(atrs['vnota'])
   # Atributo 'vnota' sempre aparece, mas é editável só para administrador:
-  dados_linhas.append( ( "Nota média dos comentarios", "text", 'vnota',  para_admin, None, ) )
-
+  dados_linhas.append( ( "Nota dos vídeos", "text", 'vnota',  None, None, ) )
+  
   ht_table = html_bloco_tabela_de_campos.gera(dados_linhas, atrs_tab)
 
   # Acrescenta botões para ver outras coisas do usuário, se for o caso:
@@ -71,7 +74,7 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
   if para_admin or para_proprio:
     cmd_args = {'usuario': usr_id}
     ht_bt_alterar = html_elem_button_simples.gera(f"Alterar", "solicitar_pag_alterar_usuario", cmd_args, None)
-
+    ht_bt_recalcular = html_elem_button_simples.gera("Recalcular notas", "recalcular_notas_de_usuario", cmd_args, None)
     if not para_proprio:
       # Não tem estes botões no menu:
       # Somente administrador ou o próprio podem ver as sessões de {usr}:
@@ -89,6 +92,7 @@ def gera(usr_id, atrs, editavel, para_admin, para_proprio):
     ( ht_bt_alterar + " " if ht_bt_alterar != None else "") + \
     ( ht_bt_sessoes + " " if ht_bt_sessoes != None else "") + \
     ( ht_bt_videos  + " " if ht_bt_videos != None else "") + \
-    ( ht_bt_comentarios  + " " if ht_bt_comentarios != None else "")
+    ( ht_bt_comentarios  + " " if ht_bt_comentarios != None else "") + \
+    ( ht_bt_recalcular  + " " if ht_bt_comentarios != None else "")
 
   return ht_bloco

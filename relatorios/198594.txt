@@ -1,1 +1,7 @@
-# Relatorio de 198594 da aula de 2024-06-14
+# Relatorio de 198594 da aula de 2024-06-21
+
+Verificado funcionamento dos modulos html_bloco_tabela_de_campos, html_elem_textarea que compoe o html_bloco_dados_de_usuario
+Alterado texto que mostra notas dos videos e valor formatado utilizando a util_nota
+Verificado funcionamento html_elem_button_simples que compoe o rodape do html_bloco_dados_de_usuario
+Adicionado novo botao Recalcular notas que chama a funcao ainda nao implementada recalcular_notas_de_usuário
+Testes rodaram sem nenhum erro
