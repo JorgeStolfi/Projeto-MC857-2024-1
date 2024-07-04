@@ -34,7 +34,7 @@ def processa(ses, cmd_args):
   # Obtém o vídeo {vid} a alterar, e elimina 'video' de {cmd_args}:
   vid_id = cmd_args.pop('video', None)
   if vid_id != None:
-    vid = obj_video.obtem_objeto(vid_id)
+    vid = obj_video.obtem_objeto(vid_id[0])
     if vid == None:
       erros.append(f"O vídeo \"{vid_id}\" não existe")
   else:
