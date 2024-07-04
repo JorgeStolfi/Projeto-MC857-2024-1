@@ -1,1 +1,11 @@
 # Relatorio de 214777 da aula de 2024-06-14
+
+Tarefa: Logar como administrador -> Botão "Minhas sessões": as linhas com sessões fechadas deveriam aparecer com texto cinza em vez de preto, e a lista deveria ser ordenada por data de criação decrescente. Corrigir.
+
+Se resume em 2 tarefas:
+    1. Mudar a cor de umas linhas dependendo do campo "Aberta"
+    2. Inverter a ordem atual das sessões (está crescente, precisa ser decrescente)
+
+Para resolver a tarefa 1 eu mexi internamente na classe "html_linha_resumo_de_sessao_IMP.py" para ter o valor padrão da cor como "gray" (cinza) e caso ela esteja aberta então é alterado para "black" (preto).
+
+Para resolver a tarefa 2 eu inverti o vetor pelo qual percorremos para instanciar as linhas, pois a ordenação temporal já está vindo na ordem crescente via banco de dados, então consigo salvar um tempo de tentar ordenar o vetor se eu assumir isso e apenas criar as linhas na ordem inversa.

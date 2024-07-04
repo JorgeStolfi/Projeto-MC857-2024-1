@@ -15,7 +15,7 @@ def gera(ses_ids, bt_ver, bt_fechar, mostra_dono):
   cabecalhos = html_linha_resumo_de_sessao.gera(None, False, False, mostra_dono)
   linhas.append(cabecalhos)
   
-  for ses_id in ses_ids:
+  for ses_id in ses_ids[::-1]:
     # busca por identificador da sessao no banco
     ses = obj_sessao.obtem_objeto(ses_id)
 
