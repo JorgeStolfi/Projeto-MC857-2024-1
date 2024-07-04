@@ -57,7 +57,7 @@ def input_file_wrapper(ht_input, ident, txt_botao):
   ht_input_wrapper_fim = "</div>"
   return gerar_estilo_visualmente_escondido() + ht_input_wrapper_inicio + ht_input + ht_input_wrapper_fim + script_on_click_botao + script_on_change_file
 
-def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal):
+def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio, decimal, force_disabled = False):
   if tipo == "hidden" and editavel:
     erro_prog("chave '%s': campo de tipo 'hidden' não pode ser editável" % chave)
     
@@ -101,6 +101,7 @@ def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio,
   ht_cmd = ( " onchange=\"window.location.href=" + cmd + "\"" if cmd != None else "" )
   ht_estilo = ( " style=\"background-color:#c7c7c7\"" if not editavel else "" )
   ht_decimal = (" step=\"0.01\"" if decimal else "" )
+  ht_disabled = (" disabled=\"disabled\"" if force_disabled else "" )
   # Se for input de upload de arquivo, esconder estilo do browser e utilizar o nosso
   ht_classe = ("class=\"visualmente-escondido\"" if tipo == "file" else "")
   ht_input = \
@@ -118,6 +119,7 @@ def gera(tipo, chave, ident, val_ini, val_min, editavel, dica, cmd, obrigatorio,
       ht_obrigatorio + \
       ht_estilo + \
       ht_decimal + \
+      ht_disabled + \
       ht_classe + \
     "/>"
   

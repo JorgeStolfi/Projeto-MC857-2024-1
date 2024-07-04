@@ -1,1 +1,9 @@
 # Relatorio de 224466 da aula de 2024-06-14
+Adicionei uma opção no método html_elem_input.py para desabilitar um campo do formulário
+quando ele não deve ser enviado na requisição.
+
+Isso corrigiu o problema ao alterar o voto de um comentário, porque o campo 'video' e o campo 
+'pai' estavam sendo enviados incorretamente na url.
+
+Por fim, ainda configurei o campo voto para vir com default do voto atualmente computado e não
+mais como 0, como vinha anteriormente.
