@@ -31,7 +31,8 @@ def gera(ses, com, erros):
       bt_conversa = True, 
       bt_responder = (ses != None), 
       bt_editar  = (para_admin or para_autor),
-      bt_calcnota = (para_admin or para_autor)
+      bt_calcnota = (para_admin or para_autor),
+      bt_bloq_desbloq = para_admin
     )
     
   ht_conteudo = ht_pag_tit + "\n" + ht_bloco

@@ -64,21 +64,24 @@ for mostra_id in False, True:
             xbots = f"_bots{str(botoes)[0]}"
             for calcnota in False, True:
               xcalc = f"_calc{str(calcnota)[0]}"
-              tag = xmide + xmdat + xmvid + xmpai + xm_bloqueado + xbots + xcalc
-              bt_conversa = botoes
-              bt_responder = botoes
-              bt_editar = botoes
-              bt_calcnota = calcnota
-              testa_gera(
-                "C9" + tag, str, 
-                com9, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado,
-                bt_conversa, bt_responder, bt_editar, bt_calcnota
-              )
-              testa_gera(
-                "C1" + tag, str, 
-                com1, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado,
-                bt_conversa, bt_responder, bt_editar, bt_calcnota
-              )
+              for bloq in False, True:
+                xbloq = f"_bloq_desbloq{str(bloq)[0]}"
+                tag = xmide + xmdat + xmvid + xmpai + xm_bloqueado + xbots + xcalc + xbloq
+                bt_conversa = botoes
+                bt_responder = botoes
+                bt_editar = botoes
+                bt_calcnota = calcnota
+                bt_bloq_desbloq = bloq
+                testa_gera(
+                  "C9" + tag, str, 
+                  com9, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado,
+                  bt_conversa, bt_responder, bt_editar, bt_calcnota, bt_bloq_desbloq
+                )
+                testa_gera(
+                  "C1" + tag, str, 
+                  com1, largura, mostra_id, mostra_data, mostra_video, mostra_pai, mostra_bloqueado,
+                  bt_conversa, bt_responder, bt_editar, bt_calcnota, bt_bloq_desbloq
+                )
 
 if ok_global:
   sys.stderr.write("Testes terminaram normalmente.\n")
