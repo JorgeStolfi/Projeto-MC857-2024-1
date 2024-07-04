@@ -57,7 +57,7 @@ def gera_input_ou_textarea(tipo, chave, ident, val, val_min, dica, editavel, dec
     val = None
     val_min = None
 
-  if chave == 'dono':
+  if chave == 'dono' and val != None:
     id_usuario = obj_usuario.obtem_identificador(val)
     ht_val = html_elem_link_text.gera(id_usuario, "ver_usuario", {"usuario": id_usuario})
     return ht_val
