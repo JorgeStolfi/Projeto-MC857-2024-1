@@ -41,7 +41,8 @@ def gera(com_id, atrs, largura, mostra_id, mostra_data, mostra_video, mostra_pai
       ht_linha_1 += ht_data
  
   if mostra_id and com_id != None:
-    ht_com_id = html_elem_span.gera(estilo_atr, com_id)
+    ht_com_link = html_elem_link_text.gera(com_id, "ver_comentario", {"comentario": com_id})
+    ht_com_id = html_elem_span.gera(estilo_atr, ht_com_link)
     if ht_linha_1 != "": ht_linha_1 += spacer
     ht_linha_1 += ht_com_id
     

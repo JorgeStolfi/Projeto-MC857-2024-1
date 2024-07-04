@@ -3,6 +3,7 @@ import html_elem_div
 import obj_video
 import obj_usuario
 import obj_comentario
+from util_erros import erro_prog
 
 def gera(conversa, ses_dono):
 

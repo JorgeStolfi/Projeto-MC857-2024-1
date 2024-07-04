@@ -1,3 +1,5 @@
-# Relatorio de 232526 da aula de 2024-06-14
+# Relatorio de 232526 da aula de 2024-06-21
 
-Dispensado hoje
+Adicionado e testado link que emite o comando ver_comentario em
+html_bloco_cabecalho_de_comentario_IMP.py seguindo a formatação dos arredores.
+Adicionado import faltante de erro_prog em html_bloco_conversa_IMP.py
