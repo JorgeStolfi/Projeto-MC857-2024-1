@@ -46,6 +46,9 @@ def processa(ses, cmd_args):
     elif chave == 'vnotaMin' or chave == 'vnotaMax':
       if float(val) > 4:
         assert False, f"Chave inválida '{chave}'"
+    elif chave == 'cnotaMin' or chave == 'cnotaMax':
+      if float(val) > 4:
+        assert False, f"Chave inválida '{chave}'"
     else:
       # Comando emitido por página do site não deveria ter outros campos:
       assert False, f"Chave inválida '{chave}'"
@@ -55,6 +58,10 @@ def processa(ses, cmd_args):
   atrs_busca['vnota'] = (
     max(float(cmd_args.get('vnotaMin', 0)), 0),
     min(float(cmd_args.get('vnotaMax', 4)), 4)
+  )
+  atrs_busca['cnota'] = (
+    max(float(cmd_args.get('cnotaMin', 0)), 0),
+    min(float(cmd_args.get('cnotaMax', 4)), 4)
   )
 
   usr_res_ids = []
